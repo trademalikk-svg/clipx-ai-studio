@@ -89,6 +89,17 @@ footer{text-align:center;padding:28px;color:#777;font-size:12px}
 
 <body>
 <header>
+ <div id="authBox" class="card" style="display:none">
+ <h2 id="authTitle">Login</h2>
+ <input id="authEmail" type="email" placeholder="Email address">
+ <input id="authPassword" type="password" placeholder="Password">
+ <button class="primary" onclick="handleAuth()">Continue</button>
+ <p id="authMessage"></p>
+ </div>
+ <div style="display:flex;gap:8px">
+ <button onclick="showAuth('login')" class="option">Login</button>
+ <button onclick="showAuth('signup')" class="option">Sign Up</button>
+</div>
  <div class="logo">CLIPX <span>AI STUDIO</span></div>
  <div class="vip">✦ VIP EDITION</div>
 </header>
@@ -220,8 +231,25 @@ setupOptions("ratio");
 document.getElementById("processBtn").addEventListener("click",()=>{
  document.getElementById("message").textContent=
  "AI backend is not connected yet. Processing will be available after backend setup.";
-});const SUPABASE_URL = "https://qmoxfzgiwamblpouxitn.supabase.co/rest/v1/
+});
+ const SUPABASE_URL = "https://qmoxfzgiwamblpouxitn.supabase.co/rest/v1/
 const SUPABASE_KEY = "sb_publishable_dsVQ5-5VuIG5n_m0qqNjqw__i5sogpL
+ let authMode = "login";
+
+function showAuth(mode) {
+  authMode = mode;
+  document.getElementById("authBox").style.display = "block";
+  document.getElementById("authTitle").textContent =
+    mode === "login" ? "Login" : "Create Account";
+  document.getElementById("authBox").scrollIntoView({
+    behavior: "smooth"
+  });
+}
+
+async function handleAuth() {
+  document.getElementById("authMessage").textContent =
+    "Supabase connection setup is still pending.";
+}
 </script>
 </body>
 </html>
