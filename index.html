@@ -186,7 +186,7 @@ footer{text-align:center;padding:28px;color:#777;font-size:12px}
 <footer>
  © 2026 ClipX AI Studio · Personal Video Workspace
 </footer>
-
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const videoInput=document.getElementById("video");
 const preview=document.getElementById("preview");
@@ -247,9 +247,47 @@ function showAuth(mode) {
   });
 }
 
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
 async function handleAuth() {
-  document.getElementById("authMessage").textContent =
-    "Supabase connection setup is still pending.";
+  const email = document.getElementById("authEmail").value.trim();
+  const password = document.getElementById("authPassword").value;
+  const message = document.getElementById("authMessage");
+
+  if (!email || !password) {
+    message.textContent = "Email और Password भरें।";
+    return;
+  }
+
+  message.textContent = "Please wait...";
+
+  try {
+    let result;
+
+    if (authMode === "signup") {
+      result = await supabaseClient.auth.signUp({
+        email,
+        password
+      });
+    } else {
+      result = await supabaseClient.auth.signInWithPassword({
+        email,
+        password
+      });
+    }
+
+    if (result.error) throw result.error;
+
+    message.textContent = authMode === "signup"
+      ? "Account बन गया! Email confirmation जाँचें।"
+      : "Login successful!";
+
+  } catch (error) {
+    message.textContent = error.message;
+  }
 }
 </script>
 </body>
