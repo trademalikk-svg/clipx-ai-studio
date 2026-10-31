@@ -97,8 +97,9 @@ footer{text-align:center;padding:28px;color:#777;font-size:12px}
  <p id="authMessage"></p>
  </div>
  <div style="display:flex;gap:8px">
- <button onclick="showAuth('login')" class="option">Login</button>
- <button onclick="showAuth('signup')" class="option">Sign Up</button>
+  <button type="button" onclick="document.getElementById('authBox').style.display='block'; document.getElementById('authTitle').textContent='Login'">Login</button>
+
+  <button type="button" onclick="document.getElementById('authBox').style.display='block'; document.getElementById('authTitle').textContent='Create Account'">Sign Up</button>
 </div>
  <div class="logo">CLIPX <span>AI STUDIO</span></div>
  <div class="vip">✦ VIP EDITION</div>
