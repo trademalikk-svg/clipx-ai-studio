@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#090611">
+<title>ClipX AI Studio | VIP Video Editor</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;background:#090611;color:#fff;
+ font-family:Arial,sans-serif;
+}
+header{
+ padding:18px 6%;display:flex;justify-content:space-between;
+ align-items:center;background:#100b1c;
+ border-bottom:1px solid #302044;
+}
+.logo{font-size:25px;font-weight:900;letter-spacing:1px}
+.logo span{color:#d6a4ff}
+.vip{color:#ffc75e;font-size:12px;border:1px solid #a77b36;padding:6px 10px;border-radius:20px}
+main{max-width:1100px;margin:auto;padding:25px 17px}
+.hero{text-align:center;padding:35px 5px}
+.hero h1{font-size:clamp(28px,5vw,45px);margin:10px 0}
+.hero h1 span{color:#c58aff}
+.hero p{color:#aaa;line-height:1.6}
+.card{
+ background:linear-gradient(145deg,#1b1428,#100c19);
+ border:1px solid #49315f;border-radius:18px;
+ padding:22px;margin:20px 0;
+ box-shadow:0 10px 35px #0005;
+}
+.card h2{font-size:19px;color:#e3c5ff;margin-top:0}
+.step{color:#bd82fa;margin-right:8px}
+.upload{
+ border:2px dashed #8654b7;border-radius:15px;
+ padding:30px 12px;text-align:center;background:#130e20;
+}
+.upload .symbol{font-size:38px}
+input[type=file]{width:100%;margin-top:15px;color:#ccc}
+#fileInfo{color:#d5a9ff;font-size:13px;margin-top:12px;overflow-wrap:anywhere}
+label{display:block;color:#ccc;margin-top:17px;font-size:14px}
+select{
+ width:100%;padding:13px;margin-top:8px;
+ background:#21182f;color:white;border:1px solid #65457e;
+ border-radius:10px;font-size:15px;
+}
+.options{display:flex;gap:9px;flex-wrap:wrap;margin-top:10px}
+.option{
+ flex:1;min-width:90px;padding:12px 9px;
+ background:#21182f;border:1px solid #65457e;
+ color:white;border-radius:10px;cursor:pointer;
+}
+.option.active{
+ background:linear-gradient(120deg,#7133b2,#a85ee1);
+ border-color:#d7aaff;box-shadow:0 0 14px #9c55d455;
+}
+.primary{
+ width:100%;padding:15px;margin-top:18px;
+ background:linear-gradient(100deg,#843bc5,#bd79eb);
+ border:0;border-radius:11px;color:white;
+ font-size:16px;font-weight:bold;cursor:pointer;
+}
+.preview{
+ min-height:190px;background:#08060e;border:1px solid #403052;
+ border-radius:13px;display:flex;align-items:center;
+ justify-content:center;text-align:center;color:#aaa;
+ padding:15px;overflow:hidden;
+}
+.preview video{max-width:100%;max-height:360px;border-radius:10px}
+.feature-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.feature{
+ background:#21182f;border:1px solid #49315f;
+ padding:14px;border-radius:11px;color:#e8dafa;font-size:14px;
+}
+.notice{
+ color:#ffc96b;background:#2a2116;
+ border:1px solid #71542a;padding:13px;
+ border-radius:10px;font-size:13px;line-height:1.6;
+}
+footer{text-align:center;padding:28px;color:#777;font-size:12px}
+@media(min-width:700px){
+ .feature-grid{grid-template-columns:repeat(3,1fr)}
+ .card{padding:28px}
+}
+</style>
+</head>
+
+<body>
+<header>
+ <div class="logo">CLIPX <span>AI STUDIO</span></div>
+ <div class="vip">✦ VIP EDITION</div>
+</header>
+
+<main>
+ <section class="hero">
+  <div class="vip">YOUR PERSONAL AI VIDEO WORKSPACE</div>
+  <h1>Turn Long Videos Into <span>Shorts</span></h1>
+  <p>Create content for YouTube Shorts, Instagram Reels and Facebook Reels.</p>
+ </section>
+
+ <section class="card">
+  <h2><span class="step">01.</span> Upload Your Video</h2>
+  <div class="upload">
+   <div class="symbol">📁</div>
+   <h3>Select Your Video</h3>
+   <p style="color:#aaa">Choose a video from your device</p>
+   <input type="file" id="video" accept="video/*">
+   <div id="fileInfo">No video selected</div>
+  </div>
+ </section>
+
+ <section class="card">
+  <h2><span class="step">02.</span> Clip Settings</h2>
+
+  <label>Clip Duration</label>
+  <div class="options" id="duration">
+   <button class="option active" data-value="30">30 Seconds</button>
+   <button class="option" data-value="60">60 Seconds</button>
+   <button class="option" data-value="90">90 Seconds</button>
+  </div>
+
+  <label>Video Aspect Ratio</label>
+  <div class="options" id="ratio">
+   <button class="option active" data-value="9:16">9:16 Shorts</button>
+   <button class="option" data-value="16:9">16:9 Landscape</button>
+   <button class="option" data-value="1:1">1:1 Square</button>
+  </div>
+
+  <label>Caption Language</label>
+  <select id="language">
+   <option value="Hindi">Hindi</option>
+   <option value="English">English</option>
+   <option value="Both">Hindi + English</option>
+  </select>
+
+  <label>Number of Clips</label>
+  <select id="clipCount">
+   <option value="3">3 Clips</option>
+   <option value="5">5 Clips</option>
+   <option value="10">10 Clips</option>
+  </select>
+ </section>
+
+ <section class="card">
+  <h2><span class="step">03.</span> Video Preview</h2>
+  <div class="preview" id="preview">
+   <div>
+    <div style="font-size:35px">▶</div>
+    Your selected video preview will appear here.
+   </div>
+  </div>
+ </section>
+
+ <section class="card">
+  <h2><span class="step">04.</span> AI Studio Features</h2>
+  <div class="feature-grid">
+   <div class="feature">✦ AI Highlight Detection</div>
+   <div class="feature">✦ Auto Captions</div>
+   <div class="feature">✦ Face Tracking</div>
+   <div class="feature">✦ Animated Subtitles</div>
+   <div class="feature">✦ AI Titles & Hashtags</div>
+   <div class="feature">✦ Multiple Short Clips</div>
+  </div>
+  <p class="notice" style="margin-top:18px">
+   AI processing, cloud uploads and final video exports will work after the backend is connected. This dashboard currently provides video selection, preview and editing settings only.
+  </p>
+  <button class="primary" id="processBtn">✦ AI PROCESSING — COMING SOON</button>
+  <p id="message" style="color:#d6a4ff;text-align:center;font-size:13px"></p>
+ </section>
+</main>
+
+<footer>
+ © 2026 ClipX AI Studio · Personal Video Workspace
+</footer>
+
+<script>
+const videoInput=document.getElementById("video");
+const preview=document.getElementById("preview");
+const fileInfo=document.getElementById("fileInfo");
+let videoURL=null;
+
+videoInput.addEventListener("change",function(){
+ const file=this.files[0];
+ if(!file)return;
+
+ if(!file.type.startsWith("video/")){
+  fileInfo.textContent="Please select a video file.";
+  return;
+ }
+
+ if(videoURL)URL.revokeObjectURL(videoURL);
+ videoURL=URL.createObjectURL(file);
+
+ const size=(file.size/1024/1024).toFixed(2);
+ fileInfo.textContent=file.name+" · "+size+" MB";
+
+ preview.innerHTML="";
+ const player=document.createElement("video");
+ player.src=videoURL;
+ player.controls=true;
+ player.playsInline=true;
+ preview.appendChild(player);
+});
+
+function setupOptions(id){
+ const group=document.getElementById(id);
+ group.querySelectorAll(".option").forEach(button=>{
+  button.addEventListener("click",()=>{
+   group.querySelectorAll(".option").forEach(b=>b.classList.remove("active"));
+   button.classList.add("active");
+  });
+ });
+}
+
+setupOptions("duration");
+setupOptions("ratio");
+
+document.getElementById("processBtn").addEventListener("click",()=>{
+ document.getElementById("message").textContent=
+ "AI backend is not connected yet. Processing will be available after backend setup.";
+});
+</script>
+</body>
+</html>
