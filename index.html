@@ -173,7 +173,7 @@ footer{color:#b39ac7}
   <a class="shortcut green" href="#autoShorts" data-toolview="shorts"><span class="symbol">⚡</span><span>Automatic Shorts Maker<small>वीडियो को छोटे clips में बाँटें</small></span></a>
   <a class="shortcut orange" href="#captionStudio" data-toolview="captions"><span class="symbol">CC</span><span>Caption Studio<small>Hindi, Urdu और English subtitles</small></span></a>
   <a class="shortcut red" href="#youtubeClips" data-toolview="youtube"><span class="symbol">▶</span><span>YouTube Clip Maker<small>अनुमति वाली वीडियो का preview</small></span></a>
-  <a class="shortcut purple" href="#autoShorts" data-toolview="highlights"><span class="symbol">✦</span><span>Smart Highlight Finder<small>वीडियो के महत्वपूर्ण दृश्य खोजें</small></span></a>
+  <a class="shortcut purple" href="#smartHighlights" data-toolview="highlights"><span class="symbol">✦</span><span>Smart Highlight Finder<small>वीडियो के महत्वपूर्ण दृश्य खोजें</small></span></a>
   <a class="shortcut blue" href="#backendConnection" data-toolview="backend"><span class="symbol">✓</span><span>Backend Connection Test<small>सेवा कनेक्शन जाँचें</small></span></a>
  </section>
 
@@ -277,12 +277,15 @@ footer{color:#b39ac7}
   <button class="primary" id="autoShortsButton" type="button" onclick="makeAutomaticShorts()">Create Shorts Automatically</button>
   <p id="autoShortsStatus" class="muted" aria-live="polite">तैयार होने वाली क्लिप्स यहाँ दिखाई देंगी।</p>
   <div id="autoShortsResults" class="result">No clips created yet.</div>
-  <hr>
+
+ </section>
+
+ <section class="card" id="smartHighlights">
   <h3>Smart Highlight Finder (On-device)</h3>
-  <p class="muted">यह वीडियो के दृश्यों में बदलाव और गतिविधि के आधार पर सुझाव देता है। यह semantic AI नहीं है; वीडियो आपके डिवाइस पर ही analyze होती है।</p>
-  <button class="primary" type="button" id="highlightScanButton" onclick="findSmartHighlights()">Find Highlight Moments</button>
-  <p id="highlightStatus" class="muted" aria-live="polite">पहले अपनी वीडियो अपलोड करें।</p>
-  <div id="highlightResults" class="result">अभी कोई सुझाव नहीं।</div>
+    <p class="muted">यह वीडियो के दृश्यों में बदलाव और गतिविधि के आधार पर सुझाव देता है। यह semantic AI नहीं है; वीडियो आपके डिवाइस पर ही analyze होती है।</p>
+    <button class="primary" type="button" id="highlightScanButton" onclick="findSmartHighlights()">Find Highlight Moments</button>
+    <p id="highlightStatus" class="muted" aria-live="polite">पहले अपनी वीडियो अपलोड करें।</p>
+    <div id="highlightResults" class="result">अभी कोई सुझाव नहीं।</div>
  </section>
 
  <section class="card" id="backendConnection">
@@ -359,7 +362,7 @@ function showWorkspaceView(view) {
   shorts:["upload","clipSettings","autoShorts"],
   captions:["upload","captionStudio"],
   youtube:["youtubeClips"],
-  highlights:["upload","autoShorts"],
+  highlights:["upload","smartHighlights"],
   backend:["backendConnection"],
   prompts:["promptStudio"],
   studio:["upload"],
