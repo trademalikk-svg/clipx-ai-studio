@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -143,6 +143,13 @@ footer{color:#b39ac7}
 <body>
 <header>
  <div class="logo">CLIPX <span>AI STUDIO</span></div>
+ <div style="display:flex;align-items:center;gap:7px">
+  <label for="clipxLanguage" style="margin:0;color:#fff;font-size:12px">Language</label>
+  <select id="clipxLanguage" aria-label="Select language" style="width:auto;padding:8px 10px;font-size:13px" onchange="clipxSetLanguage(this.value)">
+   <option value="en" selected>English</option><option value="hi">हिंदी</option>
+  </select>
+ </div>
+ <div id="google_translate_element" style="display:none"></div>
  <div class="auth-buttons" id="authControls">
   <button type="button" id="loginNavButton" onclick="showAuth('login')">Login</button>
   <button type="button" class="secondary" id="signupNavButton" onclick="showAuth('signup')">Sign Up</button>
@@ -1177,5 +1184,29 @@ window.clipxMakeHindiCaptions = async function () {
  } finally { button.disabled = false; }
 };
 </script>
+<script>
+window.clipxSetLanguage=function(lang){
+ const apply=()=>{
+  const combo=document.querySelector(".goog-te-combo");
+  if(!combo)return false;
+  combo.value=lang==="hi"?"hi":"en";
+  combo.dispatchEvent(new Event("change"));
+  document.documentElement.lang=lang;
+  return true;
+ };
+ if(apply())return;
+ if(lang==="en"&&window.google?.translate){setTimeout(apply,500);return;}
+ const status=document.getElementById("clipxLanguage");
+ if(status)status.value="en";
+ alert("Language service is still loading. Please try again in a moment.");
+};
+function googleTranslateElementInit(){
+ new google.translate.TranslateElement({pageLanguage:"hi",includedLanguages:"en,hi",autoDisplay:false}, "google_translate_element");
+ const picker=document.getElementById("clipxLanguage");
+ if(picker)picker.value="en";
+ setTimeout(()=>window.clipxSetLanguage("en"),900);
+}
+</script>
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>
