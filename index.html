@@ -1172,7 +1172,7 @@ async function testBackendConnection() {
   if (!sessionData.session) {
    throw new Error("पहले Login करें, फिर connection test दबाएँ।");
   }
-  const { data, error } = await supabaseClient.functions.invoke("generate-video", {
+  const { data, error } = await supabaseClient.functions.invoke("generate-video-", {
    body: { action: "health" }
   });
   if (error) throw error;
@@ -1403,14 +1403,14 @@ window.clipxRunwayGenerate = async function(){
   const {data:{session},error:sessionError}=await supabaseClient.auth.getSession();
   if(sessionError) throw sessionError;
   if(!session){status.textContent="पहले Login करें।";showAuth("login");return;}
-  const {data,error}=await supabaseClient.functions.invoke("generate-video",{body:{action:"create",prompt,ratio}});
+  const {data,error}=await supabaseClient.functions.invoke("generate-video-",{body:{action:"create",prompt,ratio}});
   if(error) throw error;
   if(!data?.taskId) throw new Error(data?.error||"AI provider ने task ID नहीं दी।");
   status.textContent="AI video बन रही है… इस काम में कुछ मिनट लग सकते हैं।";
   result.textContent="Task ID: "+data.taskId;
   for(let attempt=0;attempt<40;attempt++){
    await new Promise(resolve=>setTimeout(resolve,8000));
-   const {data:check,error:checkError}=await supabaseClient.functions.invoke("generate-video",{body:{action:"status",taskId:data.taskId}});
+   const {data:check,error:checkError}=await supabaseClient.functions.invoke("generate-video-",{body:{action:"status",taskId:data.taskId}});
    if(checkError) throw checkError;
    if(check?.status==="SUCCEEDED" && check?.videoUrl){
     status.textContent="AI video तैयार है।";
