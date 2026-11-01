@@ -198,6 +198,50 @@ footer{color:#b39ac7}
  #upload>.preview{min-height:60px}
 }
 
+
+/* Mobile full-screen layout: use the whole phone viewport */
+@media (max-width: 760px) {
+ html, body { width:100%; min-height:100%; margin:0; }
+ body { min-height:100vh; min-height:100dvh; overflow-x:hidden; }
+ header { width:100%; padding:12px 14px; gap:10px; }
+ header .logo { font-size:21px; }
+ header .vip { display:none; }
+ .auth-buttons { gap:6px; }
+ .auth-buttons button { padding:9px 10px; font-size:12px; }
+ main {
+  display:flex !important; flex-direction:column; align-items:stretch;
+  width:100%; max-width:none; min-height:calc(100vh - 54px);
+  min-height:calc(100dvh - 54px); margin:0; padding:12px 10px 28px;
+  gap:12px;
+ }
+ .sidebar { width:100%; max-width:100%; margin:0; }
+ .hero, main>section:not(.sidebar), .dashboard-shortcuts {
+  display:block; width:100%; max-width:none; min-width:0; margin-left:0; margin-right:0;
+ }
+ .hero { min-height:210px; padding:24px 17px; }
+ .hero h1 { font-size:clamp(30px,8vw,42px); }
+ .hero p { font-size:15px; }
+ .dashboard-shortcuts {
+  display:grid; grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:9px; margin:0;
+ }
+ .dashboard-shortcuts .menu-heading,
+ .dashboard-shortcuts>.muted { grid-column:1 / -1; margin:0 0 3px; }
+ .shortcut { width:100%; min-width:0; min-height:108px; padding:12px 10px; }
+ .shortcut span:last-child { min-width:0; overflow-wrap:anywhere; }
+ .card { width:100%; max-width:none; padding:14px; margin:0; }
+ input, select, textarea, button { max-width:100%; }
+ .options { width:100%; }
+ .option { min-width:0; padding:11px 8px; }
+ .preview { width:100%; min-height:120px; }
+ footer { padding:22px 12px; }
+}
+@media (max-width:360px) {
+ .dashboard-shortcuts { grid-template-columns:1fr; }
+ header .logo { font-size:18px; }
+ .hero { min-height:190px; }
+}
+
 </style>
 </head>
 <body>
