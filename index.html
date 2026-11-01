@@ -654,18 +654,23 @@ const editorCrop = document.getElementById("editorCrop");
 const editorStatus = document.getElementById("editorStatus");
 function applyEditorControls() {
  const player=document.querySelector("#preview video");
- if(!player){editorStatus.textContent="पहले वीडियो अपलोड करें।";return;}
- player.playbackRate=Number(editorSpeed.value)||1;
- player.volume=Number(editorVolume.value);
- player.muted=editorMute.checked;
- editorStatus.textContent="Preview controls applied: "+player.playbackRate+"x speed · "+(player.muted?"Muted":"Volume "+Math.round(player.volume*100)+"%");
+ if(!player){if(editorStatus)editorStatus.textContent="पहले वीडियो अपलोड करें।";return;}
+ if(editorSpeed)player.playbackRate=Number(editorSpeed.value)||1;
+ if(editorVolume)player.volume=Number(editorVolume.value);
+ if(editorMute)player.muted=editorMute.checked;
+ if(editorStatus)editorStatus.textContent="Preview controls applied: "+player.playbackRate+"x speed · "+(player.muted?"Muted":"Volume "+Math.round(player.volume*100)+"%");
 }
-[editorSpeed,editorVolume,editorMute].forEach(control=>control.addEventListener("input",applyEditorControls));
-[editorRotate,editorCrop].forEach(control=>control.addEventListener("change",()=>{
+[editorSpeed,editorVolume,editorMute].filter(Boolean).forEach(control=>control.addEventListener("input",applyEditorControls));
+editorRotate?.addEventListener("change",()=>{
  const player=document.querySelector("#preview video");
- if(player){player.style.transform="rotate("+editorRotate.value+"deg)";player.style.objectFit=editorCrop.value==="fit"?"contain":"cover";}
- editorStatus.textContent="Rotation/frame mode selected; export to apply it permanently.";
-}));
+ if(player)player.style.transform="rotate("+editorRotate.value+"deg)";
+ if(editorStatus)editorStatus.textContent="Rotation selected; export to apply it permanently.";
+});
+editorCrop?.addEventListener("change",()=>{
+ const player=document.querySelector("#preview video");
+ if(player)player.style.objectFit=editorCrop.value==="fit"?"contain":"cover";
+ if(editorStatus)editorStatus.textContent="Frame mode selected; export to apply it permanently.";
+});
 
 const videoInput = document.getElementById("video");
 const preview = document.getElementById("preview");
