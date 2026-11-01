@@ -1112,6 +1112,9 @@ let supabaseClient = null;
 function showAuth(mode) {
  authMode = mode;
  const box = document.getElementById("authBox");
+ // The home-view router hides inactive sections with .view-hidden.
+ // Remove that class as well as the native hidden state before showing auth.
+ box.classList.remove("view-hidden");
  box.hidden = false;
  document.getElementById("authTitle").textContent =
   mode === "signup" ? "Create Account" : "Login";
