@@ -901,6 +901,22 @@ async function clipxRecordVideo(player,start,duration,status,ratio) {
   if(sourceStream)sourceStream.getTracks().forEach(t=>t.stop());
  }
 }
+async function clipxCreateProcessingVideo(){
+ const file=clipxInputFile();
+ const url=URL.createObjectURL(file);
+ const player=document.createElement("video");
+ player.src=url;player.preload="auto";player.playsInline=true;player.muted=false;player.volume=1;
+ try{
+  await new Promise((resolve,reject)=>{
+   const timer=setTimeout(()=>reject(new Error("वीडियो metadata load नहीं हुआ।")),20000);
+   player.addEventListener("loadedmetadata",()=>{clearTimeout(timer);resolve();},{once:true});
+   player.addEventListener("error",()=>{clearTimeout(timer);reject(new Error("मूल वीडियो पढ़ी नहीं जा सकी।"));},{once:true});
+   player.load();
+  });
+  if(!Number.isFinite(player.duration)||player.duration<=0)throw new Error("वीडियो की अवधि नहीं पढ़ी जा सकी।");
+  return {player,cleanup:()=>{player.pause();player.removeAttribute("src");player.load();URL.revokeObjectURL(url);}};
+ }catch(error){URL.revokeObjectURL(url);throw error;}
+}
 function clipxExportExtension(blob){return blob.type&&blob.type.toLowerCase().includes("mp4")?"mp4":"webm";}
 function clipxExportLabel(blob){return clipxExportExtension(blob)==="mp4"?"MP4":"WebM";}
 function clipxInputFile() {
@@ -929,27 +945,30 @@ function clipxShowVideo(blob,container,downloadLink,filename) {
  }
 }
 async function exportTrimmedVideo() {
- const player=document.querySelector("#preview video");
+ const previewPlayer=document.querySelector("#preview video");
  const start=Number(document.getElementById("trimStart").value);
  const end=Number(document.getElementById("trimEnd").value);
  const status=document.getElementById("trimStatus");
  const button=document.getElementById("trimExportButton");
  const output=document.getElementById("trimPreview");
  const download=document.getElementById("trimDownload");
- if(!player){status.textContent="पहले वीडियो अपलोड करें।";return;}
- if(!Number.isFinite(start)||!Number.isFinite(end)||start<0||end<=start||end>player.duration){status.textContent="Start/End समय सही भरें। End वीडियो की अवधि से अधिक न हो।";return;}
+ if(!previewPlayer){status.textContent="पहले वीडियो अपलोड करें।";return;}
+ if(!Number.isFinite(start)||!Number.isFinite(end)||start<0||end<=start){status.textContent="Start/End समय सही भरें।";return;}
  button.disabled=true;download.hidden=true;status.textContent="Trimmed video बन रही है...";
+ let source=null;
  try {
-  const blob=await clipxRecordVideo(player,start,end-start,status,selectedValue("ratio")||"9:16");
+  source=await clipxCreateProcessingVideo();
+  if(end>source.player.duration)throw new Error("End समय मूल वीडियो की अवधि से अधिक है।");
+  const blob=await clipxRecordVideo(source.player,start,end-start,status,selectedValue("ratio")||"9:16");
   clipxShowVideo(blob,output,download,"clipx-trimmed.webm");
   status.textContent="Trim पूरा हुआ। "+clipxExportLabel(blob)+" डाउनलोड कर सकते हैं।";
  } catch(e){status.textContent="Export नहीं हुआ: "+(e.message||String(e));}
- finally{button.disabled=false;}
+ finally{if(source)source.cleanup();button.disabled=false;}
 }
 async function makeManualClip() {
  const status = document.getElementById("cutStatus");
  const button = document.getElementById("makeClipButton");
- const player = document.querySelector("#preview video");
+ const previewPlayer = document.querySelector("#preview video");
  const start = Number(document.getElementById("cutStart").value);
  const end = Number(document.getElementById("cutEnd").value);
  const output = document.getElementById("cutPreview");
@@ -962,15 +981,18 @@ async function makeManualClip() {
  button.disabled = true;
  download.hidden = true;
  output.textContent = "क्लिप तैयार हो रही है...";
+ let source=null;
  try {
-  clipxInputFile();
-  const blob=await clipxRecordVideo(player,start,end-start,status,selectedValue("ratio")||"9:16");
+  source=await clipxCreateProcessingVideo();
+  if(end>source.player.duration)throw new Error("End समय मूल वीडियो की अवधि से अधिक है।");
+  const blob=await clipxRecordVideo(source.player,start,end-start,status,selectedValue("ratio")||"9:16");
   clipxShowVideo(blob,output,download,"clipx-clip."+clipxExportExtension(blob));
   status.textContent="क्लिप तैयार है। चुना हुआ अनुपात और उपलब्ध captions वीडियो में लगाए गए हैं। "+clipxExportLabel(blob)+" डाउनलोड करें।";
  } catch (error) {
   status.textContent = "क्लिप नहीं बन सकी: " + (error.message || String(error)) + "। इंटरनेट और खाली स्टोरेज जाँचें।";
  } finally {
-button.disabled = false;
+  if(source)source.cleanup();
+  button.disabled = false;
  }
 }
 async function findSmartHighlights(){
@@ -1040,11 +1062,12 @@ async function makeAutomaticShorts() {
  const status = document.getElementById("autoShortsStatus");
  const results = document.getElementById("autoShortsResults");
  const button = document.getElementById("autoShortsButton");
- const player = document.querySelector("#preview video");
- if (!player || !Number.isFinite(player.duration) || player.duration <= 0) {
+ const previewPlayer = document.querySelector("#preview video");
+ if (!previewPlayer) {
   status.textContent = "पहले ऊपर वीडियो चुनें और Upload Video दबाएँ।";
   return;
  }
+ let source=null;
  const duration = Number(selectedValue("duration"));
  const requestedCount = Number(document.getElementById("clipCount").value);
  const ratio = selectedValue("ratio") || "9:16";
@@ -1052,11 +1075,12 @@ async function makeAutomaticShorts() {
   status.textContent = "Clip Settings में duration और clips की संख्या चुनें।";
   return;
  }
- const total = Math.min(requestedCount,Math.ceil(player.duration/duration));
  button.disabled = true;
  results.replaceChildren();
  try {
-  clipxInputFile();
+  source=await clipxCreateProcessingVideo();
+  const player=source.player;
+  const total=Math.min(requestedCount,Math.ceil(player.duration/duration));
   for (let i=0;i<total;i++) {
    const from = i*duration;
    const clipDuration = Math.min(duration,player.duration-from);
@@ -1080,7 +1104,8 @@ async function makeAutomaticShorts() {
  } catch (error) {
   status.textContent = "Shorts बनाते समय समस्या: " + (error.message || String(error)) + "। इंटरनेट, स्टोरेज और वीडियो फ़ाइल जाँचें।";
  } finally {
-button.disabled = false;
+  if(source)source.cleanup();
+  button.disabled = false;
  }
 }
 
