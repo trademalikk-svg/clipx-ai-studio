@@ -237,8 +237,8 @@ footer{color:#b39ac7}
   <button class="primary" type="button" onclick="loadYouTubeClip()">Preview YouTube Video</button>
   <div id="youtubePreview" class="preview">YouTube preview यहाँ दिखाई देगा।</div>
   <label class="consentRow"><input id="youtubeRightsConfirm" type="checkbox"> मैं इस वीडियो का मालिक हूँ या इसे डाउनलोड और एडिट करने की स्पष्ट अनुमति रखता/रखती हूँ।</label>
-  <p class="muted">अगले चरण में मूल वीडियो फ़ाइल upload करें। YouTube URL से सीधे डाउनलोड उपलब्ध नहीं है।</p>
-  <button class="primary" type="button" onclick="startAuthorizedYouTubeClipFlow()">Upload permitted source video</button>
+  <p class="muted">Preview में “Video unavailable” आए तो creator ने embedding बंद की हो सकती है। YouTube URL से सीधे डाउनलोड उपलब्ध नहीं है। अपनी/अनुमति-प्राप्त मूल वीडियो फ़ाइल चुनें; फिर ऊपर Upload Video दबाएँ।</p>
+  <button class="primary" type="button" onclick="startAuthorizedYouTubeClipFlow()">Choose permitted source video</button>
   <p id="youtubeClipStatus" class="muted" aria-live="polite">YouTube link डालें, preview देखें और अनुमति की पुष्टि करें।</p>
  </section>
  <section class="card" id="autoShorts">
@@ -510,12 +510,12 @@ function makeSrtCaptions() {
 function getYouTubeVideoId(raw) {
  try {
   const url=new URL(raw.trim());
-  const host=url.hostname.replace(/^www\\./,"").toLowerCase();
+  const host=url.hostname.replace(/^www\./,"").toLowerCase();
   if(host==="youtu.be") return url.pathname.split("/").filter(Boolean)[0]||"";
-  if(host==="youtube.com"||host==="m.youtube.com"||host==="music.youtube.com") {
+  if(host==="youtube.com"||host==="m.youtube.com"||host==="music.youtube.com"||host==="youtube-nocookie.com") {
    if(url.pathname==="/watch") return url.searchParams.get("v")||"";
    const parts=url.pathname.split("/").filter(Boolean);
-   if(["shorts","embed","live"].includes(parts[0])) return parts[1]||"";
+   if(["shorts","embed","live","v"].includes(parts[0])) return parts[1]||"";
   }
  } catch(e) {}
  return "";
