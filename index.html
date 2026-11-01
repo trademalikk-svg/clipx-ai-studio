@@ -310,7 +310,7 @@ footer{color:#b39ac7}
  </section>
 </main>
 
-<footer>© 2026 ClipX AI Studio · Personal Video Workspace</footer>
+<footer>© 2026 ClipX AI Studio · Personal Video Workspace<br><a href="about.html">About</a> · <a href="contact.html">Support</a> · <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a></footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
@@ -649,17 +649,20 @@ async function makeManualClip() {
  button.disabled = true;
  download.hidden = true;
  output.textContent = "क्लिप तैयार हो रही है...";
+ let inputName = null;
  try {
   const file = clipxInputFile();
   const ffmpeg = await getClipxFFmpeg(status);
-  const inputName = await clipxWriteInput(ffmpeg,file);
+  inputName = await clipxWriteInput(ffmpeg,file);
   const blob = await clipxExport(ffmpeg,inputName,start,end-start,"source","clipx_manual.mp4");
   clipxShowVideo(blob,output,download,"clipx-clip.mp4");
   status.textContent = "क्लिप तैयार है। MP4 फ़ाइल डाउनलोड करें।";
-  await ffmpeg.deleteFile(inputName);
  } catch (error) {
   status.textContent = "क्लिप नहीं बन सकी: " + (error.message || String(error)) + "। इंटरनेट और खाली स्टोरेज जाँचें।";
  } finally {
+  if (typeof inputName !== "undefined" && inputName) {
+   try { const ffmpeg = await clipxFFmpegPromise; await ffmpeg.deleteFile(inputName); } catch (_) {}
+  }
   button.disabled = false;
  }
 }
