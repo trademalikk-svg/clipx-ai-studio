@@ -568,11 +568,30 @@ async function getClipxFFmpeg(status) {
    const workerURL = URL.createObjectURL(new Blob([workerSource], {type:"text/javascript"}));
    try {
     status.textContent = "वीडियो इंजन शुरू हो रहा है...";
-    await ffmpeg.load({
-     classWorkerURL: workerURL,
-     coreURL: "https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.6/dist/umd/ffmpeg-core.js",
-     wasmURL: "https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.6/dist/umd/ffmpeg-core.wasm"
-    });
+    // FFmpeg core must be served from Blob URLs on GitHub Pages.
+    // Loading the CDN script directly inside the worker can fail with
+    // "failed to import ffmpeg-core.js" because of cross-origin restrictions.
+    const coreBase = "https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.6/dist/umd/";
+    const [coreResponse, wasmResponse] = await Promise.all([
+     fetch(coreBase + "ffmpeg-core.js"),
+     fetch(coreBase + "ffmpeg-core.wasm")
+    ]);
+    if (!coreResponse.ok || !wasmResponse.ok) {
+     throw new Error("FFmpeg core डाउनलोड नहीं हुआ (HTTP " +
+      (!coreResponse.ok ? coreResponse.status : wasmResponse.status) + ")");
+    }
+    const [coreSource, wasmData] = await Promise.all([
+     coreResponse.text(),
+     wasmResponse.arrayBuffer()
+    ]);
+    const coreURL = URL.createObjectURL(new Blob([coreSource], {type:"text/javascript"}));
+    const wasmURL = URL.createObjectURL(new Blob([wasmData], {type:"application/wasm"}));
+    try {
+     await ffmpeg.load({classWorkerURL:workerURL, coreURL, wasmURL});
+    } finally {
+     URL.revokeObjectURL(coreURL);
+     URL.revokeObjectURL(wasmURL);
+    }
    } finally {
     URL.revokeObjectURL(workerURL);
    }
