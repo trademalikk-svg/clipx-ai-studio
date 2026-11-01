@@ -203,12 +203,6 @@ footer{color:#b39ac7}
 <body>
 <header>
  <div class="logo">CLIPX <span>AI STUDIO</span></div>
- <div style="display:flex;align-items:center;gap:7px">
-  <label for="clipxLanguage" style="margin:0;color:#fff;font-size:12px">Language</label>
-  <select id="clipxLanguage" aria-label="Select language" style="width:auto;padding:8px 10px;font-size:13px" onchange="clipxSetLanguage(this.value)">
-   <option value="en" selected>English</option><option value="hi">हिंदी</option>
-  </select>
- </div>
  <div class="auth-buttons" id="authControls">
   <button type="button" id="loginNavButton" onclick="showAuth('login')">Login</button>
   <button type="button" class="secondary" id="signupNavButton" onclick="showAuth('signup')">Sign Up</button>
@@ -1332,13 +1326,6 @@ window.clipxMakeHindiCaptions = async function () {
  } catch (error) {
   status.textContent = "Auto captions नहीं बन पाए: " + (error.message || String(error)) + "। यह मॉडल कुछ मोबाइल browsers में RAM की कमी से रुक सकता है।";
  } finally { button.disabled = false; }
-};
-</script>
-<script>
-window.clipxSetLanguage=function(lang){
- document.documentElement.lang=lang==="hi"?"hi":"en";
- const note=document.getElementById("languageStatus");
- if(note) note.textContent="Language preference saved. Full interface translation is being prepared.";
 };
 </script>
 
