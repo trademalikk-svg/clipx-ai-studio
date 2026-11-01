@@ -25,11 +25,11 @@ jobs:
           checked = 0
           for page in pages:
               html = page.read_text(encoding="utf-8")
-              scripts = re.findall(r"<script\\b([^>]*)>(.*?)</script\\s*>", html, re.I | re.S)
+              scripts = re.findall(r"<script\b([^>]*)>(.*?)</script\s*>", html, re.I | re.S)
               for index, (attrs, source) in enumerate(scripts):
-                  if not source.strip() or re.search(r"\\bsrc\\s*=", attrs, re.I) or re.search(r"application/ld\\+json", attrs, re.I):
+                  if not source.strip() or re.search(r"\bsrc\s*=", attrs, re.I) or re.search(r"application/ld\+json", attrs, re.I):
                       continue
-                  is_module = bool(re.search(r"type\\s*=\\s*[\"']module[\"']", attrs, re.I))
+                  is_module = bool(re.search(r"type\s*=\s*[\"']module[\"']", attrs, re.I))
                   suffix = ".mjs" if is_module else ".js"
                   path = pathlib.Path(tempfile.gettempdir()) / f"clipx-{page.stem}-{index}{suffix}"
                   path.write_text(source, encoding="utf-8")
@@ -39,8 +39,8 @@ jobs:
               raise SystemExit("No inline JavaScript blocks were checked.")
           print(f"Syntax OK: {checked} inline JavaScript blocks across {len(pages)} HTML pages.")
           html = pathlib.Path("index.html").read_text(encoding="utf-8")
-          sections = re.findall(r"<section\\b[^>]*\\bid=[\"']([^\"']+)[\"']", html, re.I)
-          groups = re.search(r"const groups = \\{(.*?)\\n \\};", html, re.S)
+          sections = re.findall(r"<section\b[^>]*\bid=[\"']([^\"']+)[\"']", html, re.I)
+          groups = re.search(r"const groups = \{(.*?)\n \};", html, re.S)
           if not groups:
               raise SystemExit("Workspace route map was not found.")
           missing = [section for section in sections if f'"{section}"' not in groups.group(1)]
