@@ -390,60 +390,103 @@ async function makeManualClip() {
   status.textContent = "Start और End सही भरें। End वीडियो की कुल अवधि से अधिक नहीं होना चाहिए (" + player.duration.toFixed(1) + " सेकंड)।";
   return;
  }
- if (!player.captureStream || !window.MediaRecorder) {
-  status.textContent = "इस ब्राउज़र में वीडियो रिकॉर्डिंग समर्थित नहीं है। Chrome के नए संस्करण में कोशिश करें।";
+ const capture = player.captureStream || player.mozCaptureStream;
+ if (!capture || !window.MediaRecorder) {
+  status.textContent = "इस ब्राउज़र में वीडियो रिकॉर्डिंग समर्थित नहीं है। Android Chrome के नए संस्करण में कोशिश करें।";
   return;
  }
- const stream = player.captureStream();
- const mime = ["video/webm;codecs=vp9,opus","video/webm;codecs=vp8,opus","video/webm"].find(type => MediaRecorder.isTypeSupported(type));
+ const mime = ["video/webm;codecs=vp9,opus","video/webm;codecs=vp8,opus","video/webm"]
+  .find(type => MediaRecorder.isTypeSupported(type));
  if (!mime) { status.textContent = "इस डिवाइस पर WebM रिकॉर्डिंग उपलब्ध नहीं है।"; return; }
- let recorder, chunks = [], stopped = false;
  button.disabled = true;
  download.hidden = true;
  output.textContent = "क्लिप तैयार हो रही है...";
- status.textContent = "वीडियो चल रही है—इस पेज को खुला रखें।";
+ status.textContent = "वीडियो तैयार की जा रही है। इस पेज को खुला रखें।";
+ let recorder = null;
+ let chunks = [];
+ let stream = null;
+ let timeoutId = null;
+ let finished = false;
+ const cleanup = () => {
+  clearTimeout(timeoutId);
+  player.removeEventListener("timeupdate", checkEnd);
+  player.removeEventListener("ended", stopRecording);
+  player.ontimeupdate = null;
+ };
+ const finish = (error) => {
+  if (finished) return;
+  finished = true;
+  cleanup();
+  player.pause();
+  if (error) {
+   status.textContent = error;
+   button.disabled = false;
+   return;
+  }
+  const blob = new Blob(chunks, {type:mime});
+  if (!blob.size) {
+   status.textContent = "खाली क्लिप बनी। वीडियो फिर से चुनकर कोशिश करें।";
+   button.disabled = false;
+   return;
+  }
+  const url = URL.createObjectURL(blob);
+  const resultVideo = document.createElement("video");
+  resultVideo.src = url;
+  resultVideo.controls = true;
+  resultVideo.playsInline = true;
+  output.replaceChildren(resultVideo);
+  download.href = url;
+  download.hidden = false;
+  download.style.display = "inline-block";
+  status.textContent = "क्लिप तैयार है। Download Clip दबाकर सेव करें।";
+  button.disabled = false;
+ };
+ const checkEnd = () => {
+  if (player.currentTime >= end - 0.04) stopRecording();
+ };
+ const stopRecording = () => {
+  player.pause();
+  if (recorder && recorder.state === "recording") recorder.stop();
+ };
  try {
   player.pause();
-  player.currentTime = start;
-  await new Promise((resolve, reject) => {
-   const ready = () => { cleanup(); resolve(); };
-   const fail = () => { cleanup(); reject(new Error("Video seek failed")); };
-   const cleanup = () => { player.removeEventListener("seeked", ready); player.removeEventListener("error", fail); };
-   player.addEventListener("seeked", ready, {once:true});
-   player.addEventListener("error", fail, {once:true});
-  });
+  if (Math.abs(player.currentTime - start) > 0.05) {
+   await new Promise((resolve, reject) => {
+    let settled = false;
+    const done = (error) => {
+     if (settled) return;
+     settled = true;
+     clearTimeout(seekTimer);
+     player.removeEventListener("seeked", onSeeked);
+     player.removeEventListener("error", onError);
+     error ? reject(error) : resolve();
+    };
+    const onSeeked = () => done();
+    const onError = () => done(new Error("वीडियो चुने हुए समय पर नहीं जा सकी।"));
+    const seekTimer = setTimeout(() => done(new Error("वीडियो seek होने में समय लग गया। दोबारा कोशिश करें।")), 10000);
+    player.addEventListener("seeked", onSeeked, {once:true});
+    player.addEventListener("error", onError, {once:true});
+    player.currentTime = start;
+   });
+  }
+  stream = capture.call(player);
   recorder = new MediaRecorder(stream, {mimeType:mime});
-  recorder.ondataavailable = event => { if (event.data && event.data.size) chunks.push(event.data); };
-  recorder.onerror = () => { status.textContent = "क्लिप रिकॉर्ड नहीं हो सकी। दोबारा कोशिश करें।"; button.disabled = false; };
-  recorder.onstop = () => {
-   if (stopped) return;
-   stopped = true;
-   const blob = new Blob(chunks, {type:mime});
-   const url = URL.createObjectURL(blob);
-   const resultVideo = document.createElement("video");
-   resultVideo.src = url;
-   resultVideo.controls = true;
-   resultVideo.playsInline = true;
-   output.replaceChildren(resultVideo);
-   download.href = url;
-   download.hidden = false;
-   download.style.display = "inline-block";
-   status.textContent = "क्लिप तैयार है। Download Clip दबाकर सेव करें।";
-   button.disabled = false;
-   player.pause();
+  recorder.ondataavailable = event => {
+   if (event.data && event.data.size) chunks.push(event.data);
   };
-  player.ontimeupdate = () => {
-   if (player.currentTime >= end && recorder.state === "recording") {
-    player.pause();
-    recorder.stop();
-   }
-  };
+  recorder.onerror = () => finish("क्लिप रिकॉर्ड नहीं हो सकी। दोबारा कोशिश करें।");
+  recorder.onstop = () => finish();
+  player.addEventListener("timeupdate", checkEnd);
+  player.addEventListener("ended", stopRecording);
+  timeoutId = setTimeout(() => {
+   if (recorder && recorder.state === "recording") stopRecording();
+  }, Math.max(5000, (end - start) * 1000 + 10000));
   recorder.start(250);
+  status.textContent = "क्लिप रिकॉर्ड हो रही है—इस पेज को खुला रखें।";
   await player.play();
  } catch (error) {
   if (recorder && recorder.state === "recording") recorder.stop();
-  button.disabled = false;
-  status.textContent = "क्लिप शुरू नहीं हो सकी। वीडियो फिर से चुनकर कोशिश करें।";
+  else finish("क्लिप शुरू नहीं हो सकी: " + (error.message || "वीडियो चलाने में समस्या।"));
  }
 }
 
