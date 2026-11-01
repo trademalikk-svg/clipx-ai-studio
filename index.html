@@ -209,6 +209,21 @@ footer{color:#b39ac7}
    <input id="editorVolume" type="range" min="0" max="1" step="0.05" value="1">
    <label><input id="editorMute" type="checkbox"> Mute preview</label>
    <p id="editorStatus" class="muted" aria-live="polite">Upload a video to use editing controls.</p>
+   <label for="editorRotate">Rotate video</label>
+   <select id="editorRotate"><option value="0">0° Original</option><option value="90">90° Clockwise</option><option value="180">180°</option><option value="270">270° Clockwise</option></select>
+   <label for="editorCrop">Frame / Crop mode</label>
+   <select id="editorCrop"><option value="fill">Fill frame (crop edges)</option><option value="fit">Fit whole video (blur-free bars)</option></select>
+   <p class="muted">Rotation and frame mode are applied when you create a clip below.</p>
+  </div>
+  <div class="result">
+   <h3>Trim & Export</h3>
+   <p class="muted">Start और End समय चुनकर वीडियो का हिस्सा काटें। Export WebM format में होगा।</p>
+   <label for="trimStart">Start time (seconds)</label><input id="trimStart" type="number" min="0" step="0.1" value="0">
+   <label for="trimEnd">End time (seconds)</label><input id="trimEnd" type="number" min="0" step="0.1" value="30">
+   <button class="primary" type="button" id="trimExportButton" onclick="exportTrimmedVideo()">Trim & Export Video</button>
+   <p id="trimStatus" class="muted" aria-live="polite">पहले वीडियो अपलोड करें।</p>
+   <div id="trimPreview" class="preview">Trimmed video preview यहाँ दिखेगा।</div>
+   <a id="trimDownload" hidden download="clipx-trimmed.webm">Download trimmed video</a>
   </div>
  </section>
 
@@ -370,6 +385,8 @@ showWorkspaceView("home");
 const editorSpeed = document.getElementById("editorSpeed");
 const editorVolume = document.getElementById("editorVolume");
 const editorMute = document.getElementById("editorMute");
+const editorRotate = document.getElementById("editorRotate");
+const editorCrop = document.getElementById("editorCrop");
 const editorStatus = document.getElementById("editorStatus");
 function applyEditorControls() {
  const player=document.querySelector("#preview video");
@@ -380,6 +397,12 @@ function applyEditorControls() {
  editorStatus.textContent="Preview controls applied: "+player.playbackRate+"x speed · "+(player.muted?"Muted":"Volume "+Math.round(player.volume*100)+"%");
 }
 [editorSpeed,editorVolume,editorMute].forEach(control=>control.addEventListener("input",applyEditorControls));
+[editorRotate,editorCrop].forEach(control=>control.addEventListener("change",()=>{
+ const player=document.querySelector("#preview video");
+ if(player){player.style.transform="rotate("+editorRotate.value+"deg)";player.style.objectFit=editorCrop.value==="fit"?"contain":"cover";}
+ editorStatus.textContent="Rotation/frame mode selected; export to apply it permanently.";
+}));
+
 const videoInput = document.getElementById("video");
 const preview = document.getElementById("preview");
 let videoURL = null;
@@ -618,6 +641,8 @@ async function clipxRecordVideo(player,start,duration,status,ratio) {
  const captionDuration=Math.max(0.5,Number(document.getElementById("captionDuration")?.value||3));
  if(typeof MediaRecorder==="undefined") throw new Error("इस ब्राउज़र में MediaRecorder उपलब्ध नहीं है।");
  const sizes={"9:16":[720,1280],"16:9":[1280,720],"1:1":[1080,1080]};
+ const rotation=Number(editorRotate?.value||0);
+ const cropMode=editorCrop?.value||"fill";
  const [width,height]=sizes[ratio]||sizes["9:16"];
  const canvas=document.createElement("canvas");
  canvas.width=width; canvas.height=height;
@@ -639,10 +664,15 @@ async function clipxRecordVideo(player,start,duration,status,ratio) {
  });
  const draw=()=>{
   if(player.videoWidth&&player.videoHeight) {
-   const scale=Math.max(width/player.videoWidth,height/player.videoHeight);
-   const sw=width/scale,sh=height/scale;
-   const sx=(player.videoWidth-sw)/2,sy=(player.videoHeight-sh)/2;
-   ctx.drawImage(player,sx,sy,sw,sh,0,0,width,height);
+   const quarterTurn=rotation===90||rotation===270;
+   const sourceW=quarterTurn?player.videoHeight:player.videoWidth;
+   const sourceH=quarterTurn?player.videoWidth:player.videoHeight;
+   const scale=cropMode==="fit"?Math.min(width/sourceW,height/sourceH):Math.max(width/sourceW,height/sourceH);
+   const dw=sourceW*scale,dh=sourceH*scale;
+   ctx.save();ctx.translate(width/2,height/2);ctx.rotate(rotation*Math.PI/180);
+   if(cropMode==="fit"){ctx.fillStyle="#080611";ctx.fillRect(-width/2,-height/2,width,height);}
+   ctx.drawImage(player,-dw/2,-dh/2,dw,dh);
+   ctx.restore();
    const elapsed=player.currentTime-start-captionStart;
    const cueIndex=Math.floor(elapsed/captionDuration);
    if(elapsed>=0&&cueIndex>=0&&cueIndex<captionLines.length) {
@@ -723,6 +753,24 @@ function clipxShowVideo(blob,container,downloadLink,filename) {
   downloadLink.hidden = false;
   downloadLink.style.display = "inline-block";
  }
+}
+async function exportTrimmedVideo() {
+ const player=document.querySelector("#preview video");
+ const start=Number(document.getElementById("trimStart").value);
+ const end=Number(document.getElementById("trimEnd").value);
+ const status=document.getElementById("trimStatus");
+ const button=document.getElementById("trimExportButton");
+ const output=document.getElementById("trimPreview");
+ const download=document.getElementById("trimDownload");
+ if(!player){status.textContent="पहले वीडियो अपलोड करें।";return;}
+ if(!Number.isFinite(start)||!Number.isFinite(end)||start<0||end<=start||end>player.duration){status.textContent="Start/End समय सही भरें। End वीडियो की अवधि से अधिक न हो।";return;}
+ button.disabled=true;download.hidden=true;status.textContent="Trimmed video बन रही है...";
+ try {
+  const blob=await clipxRecordVideo(player,start,end-start,status,selectedValue("ratio")||"9:16");
+  clipxShowVideo(blob,output,download,"clipx-trimmed.webm");
+  status.textContent="Trim पूरा हुआ। WebM डाउनलोड कर सकते हैं।";
+ } catch(e){status.textContent="Export नहीं हुआ: "+(e.message||String(e));}
+ finally{button.disabled=false;}
 }
 async function makeManualClip() {
  const status = document.getElementById("cutStatus");
