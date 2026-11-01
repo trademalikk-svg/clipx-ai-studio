@@ -363,6 +363,7 @@ footer{color:#b39ac7}
  </div>
  <div class="vip">✦ CREATOR STUDIO</div>
 </header>
+<div class="notice" role="note" style="max-width:1200px;margin:14px auto;padding:14px 18px;border:1px solid #4b3a70;border-radius:12px;background:#171225;color:#e8def8;line-height:1.6"><strong>FREE BROWSER MODE:</strong> Basic editing and creator tools are available without a subscription. Cloud rendering and paid third-party AI video generation are disabled to avoid unexpected provider charges. Speech tools or model downloads may use internet data and depend on your device/browser.</div>
 
 <main>
 
@@ -424,10 +425,10 @@ footer{color:#b39ac7}
   <progress id="uploadProgress" max="100" value="0"></progress>
   <p id="uploadProgressText" aria-live="polite">0% · No video selected</p>
   <div class="preview" id="preview">Your selected video preview will appear here.</div>
-  <div class="notice" style="margin-top:12px">Cloud processing setup: पहले Supabase migration और Edge Functions deploy होने चाहिए। यह विकल्प लॉगिन के बाद उपलब्ध होगा।</div>
-  <button class="primary secondary" type="button" id="cloudUploadButton" onclick="clipxStartCloudUpload()">Upload to Cloud & Create Clips</button>
-  <p id="cloudUploadStatus" class="muted" aria-live="polite">Cloud upload अभी शुरू नहीं हुआ।</p>
-  <div id="cloudJobResults" class="result">Cloud job results यहाँ दिखाई देंगे।</div>
+  <div class="notice" style="margin-top:12px">Cloud rendering is not part of the free browser version and is currently disabled. Your selected source video preview remains on your device.</div>
+  <button class="primary secondary" type="button" id="cloudUploadButton" disabled aria-disabled="true">Cloud rendering unavailable in Free Mode</button>
+  <p id="cloudUploadStatus" class="muted" aria-live="polite">No cloud upload is started by this free version.</p>
+  <div id="cloudJobResults" class="result" hidden></div>
  </section>
 
  <section class="card" id="clipSettings">
@@ -561,20 +562,20 @@ footer{color:#b39ac7}
    <option value="1:1">1:1 - Square</option>
   </select>
   <button class="primary" type="button" onclick="generatePrompt()">✨ Generate Prompt</button>
-  <div class="card" style="margin-top:14px;background:#100a20">
-   <h3 style="margin-top:0;color:#f2d9ff">AI Video Generator (Runway)</h3>
+  <div class="card" id="runwayPaidPanel" style="margin-top:14px;background:#100a20">
+   <h3 style="margin-top:0;color:#f2d9ff">External AI Video Generator</h3>
    <p class="muted">Text se 5-second AI video banayein. Generation par provider credits lag sakte hain.</p>
    <label for="runwayPrompt">Video prompt (English recommended)</label>
    <textarea id="runwayPrompt" maxlength="1000" placeholder="A cinematic sunrise over the Himalayas, slow camera movement..."></textarea>
    <label for="runwayRatio">Video format</label>
    <select id="runwayRatio"><option value="720:1280">Portrait 9:16</option><option value="1280:720">Landscape 16:9</option><option value="960:960">Square 1:1</option></select>
-   <button class="primary" id="runwayGenerateButton" type="button" onclick="clipxRunwayGenerate()">Generate AI Video</button>
-   <p id="runwayStatus" class="muted" aria-live="polite">Login required. Runway API key stays on the server.</p>
+   <button class="primary" id="runwayGenerateButton" type="button" disabled aria-disabled="true">Unavailable in Free Mode</button>
+   <p id="runwayStatus" class="muted" aria-live="polite">External AI video generation is disabled. No paid API is called from this free version.</p>
    <div id="runwayResult" class="result">Generated video link will appear here when ready.</div>
   </div>
   <div id="promptOutput" class="result" aria-live="polite">Your generated prompt will appear here.</div>
   <button class="primary secondary" type="button" onclick="copyPrompt()">📋 Copy Prompt</button>
-  <p class="muted">यह prompt helper अलग है; ऊपर Runway AI Video Generator से वास्तविक वीडियो बनाने का अनुरोध भेजा जाता है। इसमें provider credits लग सकते हैं।</p>
+  <p class="muted">यह prompt helper केवल text prompt तैयार करता है; यह अपने आप AI video generate नहीं करता और किसी paid API को call नहीं करता।</p>
  </section>
 
  <section class="card" id="features">
@@ -584,7 +585,7 @@ footer{color:#b39ac7}
  </section>
 </main>
 
-<footer>© 2026 ClipX AI Studio · Personal Video Workspace<br><a href="about.html">About</a> · <a href="contact.html">Support</a> · <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a></footer>
+<footer>© 2026 ClipX AI Studio · Free Browser Creator Tools<br><a href="creator-tools.html">Creator Tools</a> · <a href="about.html">About</a> · <a href="contact.html">Support</a> · <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a></footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
