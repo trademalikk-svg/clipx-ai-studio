@@ -22,8 +22,8 @@ drop policy if exists "Users read own clip jobs" on public.clip_jobs;
 create policy "Users read own clip jobs" on public.clip_jobs for select to authenticated using (auth.uid() = user_id);
 drop policy if exists "Users create own clip jobs" on public.clip_jobs;
 create policy "Users create own clip jobs" on public.clip_jobs for insert to authenticated with check (auth.uid() = user_id);
+-- Job state changes are server-managed; clients receive read-only access through RLS.
 drop policy if exists "Users update own queued jobs" on public.clip_jobs;
-create policy "Users update own queued jobs" on public.clip_jobs for update to authenticated using (auth.uid() = user_id and status in ('queued','uploaded')) with check (auth.uid() = user_id);
 
 insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
 values ('clipx-private', 'clipx-private', false, 2147483648, array['video/mp4','video/webm','video/quicktime','video/x-matroska'])
