@@ -539,69 +539,39 @@ async function copyPrompt() {
 }
 
 
-let clipxFFmpegPromise = null;
-async function getClipxFFmpeg(status) {
- if (!clipxFFmpegPromise) {
-  clipxFFmpegPromise = (async () => {
-   status.textContent = "वीडियो प्रोसेसिंग इंजन डाउनलोड हो रहा है...";
-   const packageBase = "https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.10/dist/esm/";
-   const { FFmpeg } = await import(packageBase + "index.js");
-   const ffmpeg = new FFmpeg();
-   ffmpeg.on("progress", ({ progress }) => {
-    if (Number.isFinite(progress)) {
-     status.textContent = "वीडियो प्रोसेस हो रही है: " + Math.max(0,Math.min(100,Math.round(progress*100))) + "%";
-    }
-   });
-   status.textContent = "वीडियो Worker डाउनलोड हो रहा है...";
-   const workerResponse = await fetch(packageBase + "worker.js");
-   if (!workerResponse.ok) throw new Error("FFmpeg Worker डाउनलोड नहीं हुआ: " + workerResponse.status);
-   let workerSource = await workerResponse.text();
-   // Blob workers cannot resolve package-relative imports. Rewrite them to
-   // absolute CDN module URLs before creating the worker.
-   workerSource = workerSource
-    .replaceAll('"./const.js"', '"' + packageBase + 'const.js"')
-    .replaceAll("'./const.js'", "'" + packageBase + "const.js'")
-    .replaceAll('"./errors.js"', '"' + packageBase + 'errors.js"')
-    .replaceAll("'./errors.js'", "'" + packageBase + "errors.js'")
-    .replaceAll('"./utils.js"', '"' + packageBase + 'utils.js"')
-    .replaceAll("'./utils.js'", "'" + packageBase + "utils.js'");
-   const workerURL = URL.createObjectURL(new Blob([workerSource], {type:"text/javascript"}));
-   try {
-    status.textContent = "वीडियो इंजन शुरू हो रहा है...";
-    // FFmpeg core must be served from Blob URLs on GitHub Pages.
-    // Loading the CDN script directly inside the worker can fail with
-    // "failed to import ffmpeg-core.js" because of cross-origin restrictions.
-    const coreBase = "https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.6/dist/umd/";
-    const [coreResponse, wasmResponse] = await Promise.all([
-     fetch(coreBase + "ffmpeg-core.js"),
-     fetch(coreBase + "ffmpeg-core.wasm")
-    ]);
-    if (!coreResponse.ok || !wasmResponse.ok) {
-     throw new Error("FFmpeg core डाउनलोड नहीं हुआ (HTTP " +
-      (!coreResponse.ok ? coreResponse.status : wasmResponse.status) + ")");
-    }
-    const [coreSource, wasmData] = await Promise.all([
-     coreResponse.text(),
-     wasmResponse.arrayBuffer()
-    ]);
-    const coreURL = URL.createObjectURL(new Blob([coreSource], {type:"text/javascript"}));
-    const wasmURL = URL.createObjectURL(new Blob([wasmData], {type:"application/wasm"}));
-    try {
-     await ffmpeg.load({classWorkerURL:workerURL, coreURL, wasmURL});
-    } finally {
-     URL.revokeObjectURL(coreURL);
-     URL.revokeObjectURL(wasmURL);
-    }
-   } finally {
-    URL.revokeObjectURL(workerURL);
-   }
-   return ffmpeg;
-  })().catch(error => {
-   clipxFFmpegPromise = null;
-   throw error;
+async function clipxRecordVideo(player,start,duration,status) {
+ const capture=player.captureStream||player.mozCaptureStream;
+ if(!capture) throw new Error("इस Chrome में वीडियो रिकॉर्डिंग उपलब्ध नहीं है। Chrome अपडेट करें।");
+ if(typeof MediaRecorder==="undefined") throw new Error("इस ब्राउज़र में MediaRecorder उपलब्ध नहीं है।");
+ const stream=capture.call(player);
+ const types=["video/webm;codecs=vp9,opus","video/webm;codecs=vp8,opus","video/webm"];
+ const mimeType=types.find(t=>MediaRecorder.isTypeSupported(t))||"";
+ const recorder=mimeType?new MediaRecorder(stream,{mimeType}):new MediaRecorder(stream);
+ const chunks=[];
+ const finished=new Promise((resolve,reject)=>{
+  recorder.ondataavailable=e=>{if(e.data&&e.data.size)chunks.push(e.data);};
+  recorder.onerror=e=>reject(e.error||new Error("वीडियो रिकॉर्डिंग रुक गई।"));
+  recorder.onstop=resolve;
+ });
+ try {
+  player.pause(); player.currentTime=start;
+  await new Promise((resolve,reject)=>{
+   const timer=setTimeout(()=>reject(new Error("वीडियो seek नहीं हो पाया।")),10000);
+   player.addEventListener("seeked",()=>{clearTimeout(timer);resolve();},{once:true});
   });
- }
- return clipxFFmpegPromise;
+  recorder.start(1000); await player.play();
+  status.textContent="वीडियो रिकॉर्ड हो रही है... कृपया टैब खुला रखें।";
+  await new Promise(resolve=>{
+   const timer=setTimeout(resolve,duration*1000+2000);
+   const check=()=>{if(player.currentTime>=start+duration||player.ended){clearTimeout(timer);resolve();}};
+   player.addEventListener("timeupdate",check);
+  });
+  if(recorder.state!=="inactive")recorder.stop();
+  await finished;
+  const blob=new Blob(chunks,{type:recorder.mimeType||"video/webm"});
+  if(!blob.size)throw new Error("रिकॉर्डिंग खाली बनी।");
+  return blob;
+ } finally {player.pause();stream.getTracks().forEach(t=>t.stop());}
 }
 function clipxInputFile() {
  const file = document.getElementById("video").files[0];
@@ -616,24 +586,6 @@ async function clipxWriteInput(ffmpeg,file) {
  const inputName = "clipx_input." + ext;
  await ffmpeg.writeFile(inputName,new Uint8Array(await file.arrayBuffer()));
  return inputName;
-}
-async function clipxExport(ffmpeg,inputName,start,duration,ratio,outputName) {
- const filters = ratio === "source" ? [] : [
-  "-vf",
-  ratio === "9:16"
-   ? "scale=720:1280:force_original_aspect_ratio=increase,crop=720:1280"
-   : ratio === "1:1"
-    ? "scale=720:720:force_original_aspect_ratio=increase,crop=720:720"
-    : "scale=1280:720:force_original_aspect_ratio=increase,crop=1280:720"
- ];
- const args = ["-ss",String(start),"-i",inputName,"-t",String(duration),"-map","0:v:0","-map","0:a?"];
- args.push(...filters,"-c:v","libx264","-preset","ultrafast","-crf","28","-pix_fmt","yuv420p","-c:a","aac","-b:a","96k","-movflags","+faststart","-y",outputName);
- await ffmpeg.exec(args);
- const data = await ffmpeg.readFile(outputName);
- const blob = new Blob([data],{type:"video/mp4"});
- await ffmpeg.deleteFile(outputName);
- if (!blob.size) throw new Error("खाली वीडियो फ़ाइल बनी।");
- return blob;
 }
 function clipxShowVideo(blob,container,downloadLink,filename) {
  const url = URL.createObjectURL(blob);
@@ -668,21 +620,15 @@ async function makeManualClip() {
  button.disabled = true;
  download.hidden = true;
  output.textContent = "क्लिप तैयार हो रही है...";
- let inputName = null;
  try {
-  const file = clipxInputFile();
-  const ffmpeg = await getClipxFFmpeg(status);
-  inputName = await clipxWriteInput(ffmpeg,file);
-  const blob = await clipxExport(ffmpeg,inputName,start,end-start,"source","clipx_manual.mp4");
-  clipxShowVideo(blob,output,download,"clipx-clip.mp4");
-  status.textContent = "क्लिप तैयार है। MP4 फ़ाइल डाउनलोड करें।";
+  clipxInputFile();
+  const blob=await clipxRecordVideo(player,start,end-start,status);
+  clipxShowVideo(blob,output,download,"clipx-clip.webm");
+  status.textContent="क्लिप तैयार है। WebM फ़ाइल डाउनलोड करें।";
  } catch (error) {
   status.textContent = "क्लिप नहीं बन सकी: " + (error.message || String(error)) + "। इंटरनेट और खाली स्टोरेज जाँचें।";
  } finally {
-  if (typeof inputName !== "undefined" && inputName) {
-   try { const ffmpeg = await clipxFFmpegPromise; await ffmpeg.deleteFile(inputName); } catch (_) {}
-  }
-  button.disabled = false;
+button.disabled = false;
  }
 }
 async function makeAutomaticShorts() {
@@ -704,38 +650,32 @@ async function makeAutomaticShorts() {
  const total = Math.min(requestedCount,Math.ceil(player.duration/duration));
  button.disabled = true;
  results.replaceChildren();
- let inputName = null;
  try {
-  const file = clipxInputFile();
-  const ffmpeg = await getClipxFFmpeg(status);
-  inputName = await clipxWriteInput(ffmpeg,file);
+  clipxInputFile();
   for (let i=0;i<total;i++) {
    const from = i*duration;
    const clipDuration = Math.min(duration,player.duration-from);
    status.textContent = "Short " + (i+1) + "/" + total + " तैयार हो रही है...";
-   const blob = await clipxExport(ffmpeg,inputName,from,clipDuration,ratio,"clipx_short_"+(i+1)+".mp4");
+   const blob = await clipxRecordVideo(player,from,clipDuration,status);
    const item = document.createElement("div");
    item.style.margin = "12px 0";
    const label = document.createElement("p");
    label.textContent = "Short " + (i+1) + " · " + Math.ceil(clipDuration) + " sec · " + ratio;
    const videoBox = document.createElement("div");
    const link = document.createElement("a");
-   link.textContent = "Download Short " + (i+1);
+   link.textContent = "Download Short " + (i+1) + " (WebM)";
    link.style.display = "inline-block";
    link.style.marginTop = "8px";
    link.style.color = "#d6a4ff";
-   clipxShowVideo(blob,videoBox,link,"clipx-short-"+(i+1)+".mp4");
+   clipxShowVideo(blob,videoBox,link,"clipx-short-"+(i+1)+".webm");
    item.append(label,videoBox,link);
    results.appendChild(item);
   }
-  status.textContent = total + " Shorts तैयार हैं। MP4 में डाउनलोड करें।";
+  status.textContent = total + " Shorts तैयार हैं। WebM में डाउनलोड करें। (ratio अभी लागू नहीं होता।)";
  } catch (error) {
   status.textContent = "Shorts बनाते समय समस्या: " + (error.message || String(error)) + "। इंटरनेट, स्टोरेज और वीडियो फ़ाइल जाँचें।";
  } finally {
-  if (inputName) {
-   try { const ffmpeg = await clipxFFmpegPromise; await ffmpeg.deleteFile(inputName); } catch (_) {}
-  }
-  button.disabled = false;
+button.disabled = false;
  }
 }
 
