@@ -1249,13 +1249,15 @@ window.clipxSetLanguage=function(lang){
  const target=lang==="hi"?"hi":"en";
  const picker=document.getElementById("clipxLanguage");
  if(picker)picker.value=target;
- document.documentElement.lang=target;
  let attempts=0;
  const apply=()=>{
   const combo=document.querySelector(".goog-te-combo");
   if(combo){
-   combo.value=target;
+   // The page's original text is Hindi. Empty selection restores the original Hindi;
+   // selecting English translates that Hindi source into English.
+   combo.value=target==="hi"?"":"en";
    combo.dispatchEvent(new Event("change",{bubbles:true}));
+   document.documentElement.lang=target;
    return;
   }
   if(++attempts<30){setTimeout(apply,300);return;}
@@ -1264,12 +1266,11 @@ window.clipxSetLanguage=function(lang){
  apply();
 };
 function googleTranslateElementInit(){
- new google.translate.TranslateElement({pageLanguage:"en",includedLanguages:"hi",autoDisplay:false}, "google_translate_element");
+ new google.translate.TranslateElement({pageLanguage:"hi",includedLanguages:"en",autoDisplay:false}, "google_translate_element");
  const picker=document.getElementById("clipxLanguage");
  if(picker)picker.value="en";
  setTimeout(()=>window.clipxSetLanguage("en"),1200);
-}
-</script>
+}</script>
 <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>
