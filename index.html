@@ -197,6 +197,19 @@ footer{color:#b39ac7}
   <progress id="uploadProgress" max="100" value="0"></progress>
   <p id="uploadProgressText" aria-live="polite">0% · No video selected</p>
   <div class="preview" id="preview">Your selected video preview will appear here.</div>
+  <div class="result" id="editorControls">
+   <h3>Quick Video Editor</h3>
+   <label for="editorSpeed">Playback speed</label>
+   <select id="editorSpeed">
+    <option value="0.5">0.5x Slow</option><option value="0.75">0.75x</option>
+    <option value="1" selected>1x Normal</option><option value="1.25">1.25x</option>
+    <option value="1.5">1.5x</option><option value="2">2x Fast</option>
+   </select>
+   <label for="editorVolume">Volume</label>
+   <input id="editorVolume" type="range" min="0" max="1" step="0.05" value="1">
+   <label><input id="editorMute" type="checkbox"> Mute preview</label>
+   <p id="editorStatus" class="muted" aria-live="polite">Upload a video to use editing controls.</p>
+  </div>
  </section>
 
  <section class="card" id="clipSettings">
@@ -354,6 +367,19 @@ document.querySelectorAll(".dashboard-shortcuts a").forEach(link => {
 showWorkspaceView("home");
 </script>
 <script>
+const editorSpeed = document.getElementById("editorSpeed");
+const editorVolume = document.getElementById("editorVolume");
+const editorMute = document.getElementById("editorMute");
+const editorStatus = document.getElementById("editorStatus");
+function applyEditorControls() {
+ const player=document.querySelector("#preview video");
+ if(!player){editorStatus.textContent="पहले वीडियो अपलोड करें।";return;}
+ player.playbackRate=Number(editorSpeed.value)||1;
+ player.volume=Number(editorVolume.value);
+ player.muted=editorMute.checked;
+ editorStatus.textContent="Preview controls applied: "+player.playbackRate+"x speed · "+(player.muted?"Muted":"Volume "+Math.round(player.volume*100)+"%");
+}
+[editorSpeed,editorVolume,editorMute].forEach(control=>control.addEventListener("input",applyEditorControls));
 const videoInput = document.getElementById("video");
 const preview = document.getElementById("preview");
 let videoURL = null;
