@@ -409,7 +409,7 @@ footer{color:#b39ac7}
   </div>
   <div id="promptOutput" class="result" aria-live="polite">Your generated prompt will appear here.</div>
   <button class="primary secondary" type="button" onclick="copyPrompt()">📋 Copy Prompt</button>
-  <p class="muted">This tool creates a written prompt from your idea. It does not generate a video or connect to an external AI video service.</p>
+  <p class="muted">यह prompt helper अलग है; ऊपर Runway AI Video Generator से वास्तविक वीडियो बनाने का अनुरोध भेजा जाता है। इसमें provider credits लग सकते हैं।</p>
  </section>
 
  <section class="card" id="features">
@@ -1111,6 +1111,8 @@ let supabaseClient = null;
 
 function showAuth(mode) {
  authMode = mode;
+ // Switch the page router to the account view before opening the form.
+ if (typeof showWorkspaceView === "function") showWorkspaceView("settings");
  const box = document.getElementById("authBox");
  // The home-view router hides inactive sections with .view-hidden.
  // Remove that class as well as the native hidden state before showing auth.
@@ -1239,6 +1241,59 @@ async function handleLogout() {
  updateAuthControls(null);
  message.textContent = "आप Logout हो गए हैं।";
  document.getElementById("authBox").hidden = false;
+}
+
+async function clipxRunwayGenerate() {
+ const button = document.getElementById("runwayGenerateButton");
+ const status = document.getElementById("runwayStatus");
+ const resultBox = document.getElementById("runwayResult");
+ const prompt = document.getElementById("runwayPrompt").value.trim();
+ const ratio = document.getElementById("runwayRatio").value;
+ if (!prompt) { status.textContent = "पहले video prompt लिखें।"; return; }
+ if (!supabaseClient) { status.textContent = "Supabase client लोड नहीं हुआ। Internet जाँचकर page refresh करें।"; return; }
+ const { data: sessionData, error: sessionError } = await supabaseClient.auth.getSession();
+ if (sessionError || !sessionData.session) { status.textContent = "AI video बनाने के लिए पहले Login करें।"; showAuth("login"); return; }
+ button.disabled = true;
+ resultBox.textContent = "Runway पर generation request भेजी जा रही है…";
+ try {
+  const { data: created, error: createError } = await supabaseClient.functions.invoke("generate-video-", {
+   body: { action:"create", prompt, ratio }
+  });
+  if (createError) throw createError;
+  if (!created?.taskId) throw new Error(created?.error || "Runway task ID नहीं मिला।");
+  resultBox.textContent = "Task ID: " + created.taskId + "\nGeneration चल रही है…";
+  for (let attempt = 0; attempt < 40; attempt++) {
+   await new Promise(resolve => setTimeout(resolve, 8000));
+   const { data, error } = await supabaseClient.functions.invoke("generate-video-", {
+    body: { action:"status", taskId:created.taskId }
+   });
+   if (error) throw error;
+   const state = String(data?.status || "").toUpperCase();
+   status.textContent = "Runway status: " + (state || "PROCESSING") + " · " + (attempt + 1) + "/40";
+   if (state === "SUCCEEDED" && data.videoUrl) {
+    const safeUrl = String(data.videoUrl);
+    resultBox.innerHTML = "";
+    const video = document.createElement("video");
+    video.controls = true; video.playsInline = true; video.src = safeUrl;
+    video.style.maxWidth = "100%"; video.style.maxHeight = "360px";
+    const link = document.createElement("a");
+    link.href = safeUrl; link.target = "_blank"; link.rel = "noopener noreferrer";
+    link.textContent = "Open / Download generated video";
+    link.style.display = "block"; link.style.marginTop = "10px"; link.style.color = "#d6a4ff";
+    resultBox.append(video, link);
+    status.textContent = "वीडियो तैयार है।";
+    return;
+   }
+   if (state === "FAILED" || state === "CANCELLED") {
+    throw new Error(data.failure || "Runway generation " + state.toLowerCase() + " हुई।");
+   }
+  }
+  status.textContent = "Generation अभी पूरी नहीं हुई। बाद में फिर status जाँचें।";
+ } catch (error) {
+  console.error("Runway generation failed:", error);
+  status.textContent = "Generation नहीं हो सकी: " + (error.message || String(error));
+  resultBox.textContent = "Runway/Supabase configuration, login session और provider credits जाँचें।";
+ } finally { button.disabled = false; }
 }
 
 async function handleAuth() {
