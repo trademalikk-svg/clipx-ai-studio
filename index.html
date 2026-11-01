@@ -599,11 +599,6 @@ async function testBackendConnection() {
  }
 }
 
-const backendTestButton = document.getElementById("backendTestButton");
-if (backendTestButton) {
- backendTestButton.addEventListener("click", testBackendConnection);
-}
-
 async function handleLogout() {
  const message = document.getElementById("authMessage");
  if (!supabaseClient) return;
