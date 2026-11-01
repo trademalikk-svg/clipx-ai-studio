@@ -99,6 +99,9 @@ footer{color:#8d8ba9}
 }
 @media(max-width:390px){.dashboard-shortcuts{grid-template-columns:1fr}}
 
+.sidebar a.active{background:linear-gradient(100deg,#7621ed,#3c16a5);color:#fff}
+main>section.view-hidden{display:none!important}
+@media(max-width:760px){.sidebar{flex-wrap:nowrap}}
 </style>
 </head>
 <body>
@@ -116,9 +119,11 @@ footer{color:#8d8ba9}
 
  <nav class="sidebar" aria-label="Studio navigation">
   <div class="sidebar-title">CLIPX WORKSPACE</div>
-  <a href="#home">⌂ Home</a><a href="#tools">✣ Features</a><a href="#upload">▣ My Studio</a>
-  <a href="#clipSettings">⚙ Clip Settings</a><a href="#captionStudio">字幕 Captions</a>
-  <a href="#promptStudio">✧ Prompt Studio</a><a href="#backendConnection">◉ Support / Status</a>
+  <a href="#home" data-view="home" class="active">⌂ Home</a>
+  <a href="#videoTools" data-view="tools">✣ Video Tools</a>
+  <a href="#promptStudio" data-view="prompts">✧ Prompt Studio</a>
+  <a href="#upload" data-view="studio">▣ My Studio</a>
+  <a href="#backendConnection" data-view="settings">⚙ Settings</a>
  </nav>
  <section class="hero" id="home">
   <div class="vip">YOUR PERSONAL VIDEO WORKSPACE</div>
@@ -270,7 +275,46 @@ footer{color:#8d8ba9}
 
 <footer>© 2026 ClipX AI Studio · Personal Video Workspace</footer>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+function showWorkspaceView(view) {
+ const groups = {
+  home:["home","tools"],
+  tools:["upload","clipSettings","manualCutter","autoShorts","captionStudio"],
+  prompts:["promptStudio"],
+  studio:["upload"],
+  settings:["backendConnection","authBox"]
+ };
+ const main = document.querySelector("main");
+ main.querySelectorAll(":scope > section").forEach(section => {
+  section.classList.toggle("view-hidden", !(groups[view] || groups.home).includes(section.id));
+ });
+ document.querySelectorAll(".sidebar a[data-view]").forEach(link => {
+  const active = link.dataset.view === view;
+  link.classList.toggle("active",active);
+  if(active) link.setAttribute("aria-current","page");
+  else link.removeAttribute("aria-current");
+ });
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+document.querySelectorAll(".sidebar a[data-view]").forEach(link => {
+ link.addEventListener("click",event => {
+  event.preventDefault();
+  showWorkspaceView(link.dataset.view);
+  history.replaceState(null,"",link.getAttribute("href"));
+ });
+});
+document.querySelectorAll(".dashboard-shortcuts a").forEach(link => {
+ link.addEventListener("click",event => {
+  event.preventDefault();
+  const target=link.getAttribute("href")||"";
+  const view=target.includes("promptStudio")?"prompts":target.includes("upload")?"studio":target.includes("backendConnection")?"settings":"tools";
+  showWorkspaceView(view);
+  const section=document.getElementById(target.slice(1));
+  if(section) section.scrollIntoView({behavior:"smooth",block:"start"});
+ });
+});
+showWorkspaceView("home");
+</script>
 <script>
 const videoInput = document.getElementById("video");
 const preview = document.getElementById("preview");
