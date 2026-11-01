@@ -209,7 +209,6 @@ footer{color:#b39ac7}
    <option value="en" selected>English</option><option value="hi">हिंदी</option>
   </select>
  </div>
- <div id="google_translate_element" style="position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;overflow:hidden"></div>
  <div class="auth-buttons" id="authControls">
   <button type="button" id="loginNavButton" onclick="showAuth('login')">Login</button>
   <button type="button" class="secondary" id="signupNavButton" onclick="showAuth('signup')">Sign Up</button>
@@ -1337,32 +1336,12 @@ window.clipxMakeHindiCaptions = async function () {
 </script>
 <script>
 window.clipxSetLanguage=function(lang){
- const target=lang==="hi"?"hi":"en";
- const picker=document.getElementById("clipxLanguage");
- if(picker)picker.value=target;
- let attempts=0;
- const apply=()=>{
-  const combo=document.querySelector(".goog-te-combo");
-  if(combo){
-   // The page's original text is Hindi. Empty selection restores the original Hindi;
-   // selecting English translates that Hindi source into English.
-   combo.value=target==="hi"?"":"en";
-   combo.dispatchEvent(new Event("change",{bubbles:true}));
-   document.documentElement.lang=target;
-   return;
-  }
-  if(++attempts<30){setTimeout(apply,300);return;}
-  alert("Translation service load nahi hui. Internet connection check karke page refresh karein.");
- };
- apply();
+ document.documentElement.lang=lang==="hi"?"hi":"en";
+ const note=document.getElementById("languageStatus");
+ if(note) note.textContent="Language preference saved. Full interface translation is being prepared.";
 };
-function googleTranslateElementInit(){
- new google.translate.TranslateElement({pageLanguage:"hi",includedLanguages:"en",autoDisplay:false}, "google_translate_element");
- const picker=document.getElementById("clipxLanguage");
- if(picker)picker.value="en";
- setTimeout(()=>window.clipxSetLanguage("en"),1200);
-}</script>
-<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</script>
+
 <script>
 let clipxFaceDetectorPromise=null;
 async function getClipxFaceDetector(){
