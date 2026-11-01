@@ -209,7 +209,7 @@ footer{color:#b39ac7}
    <option value="en" selected>English</option><option value="hi">हिंदी</option>
   </select>
  </div>
- <div id="google_translate_element" style="display:none"></div>
+ <div id="google_translate_element" style="position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;overflow:hidden"></div>
  <div class="auth-buttons" id="authControls">
   <button type="button" id="loginNavButton" onclick="showAuth('login')">Login</button>
   <button type="button" class="secondary" id="signupNavButton" onclick="showAuth('signup')">Sign Up</button>
@@ -1246,25 +1246,28 @@ window.clipxMakeHindiCaptions = async function () {
 </script>
 <script>
 window.clipxSetLanguage=function(lang){
+ const target=lang==="hi"?"hi":"en";
+ const picker=document.getElementById("clipxLanguage");
+ if(picker)picker.value=target;
+ document.documentElement.lang=target;
+ let attempts=0;
  const apply=()=>{
   const combo=document.querySelector(".goog-te-combo");
-  if(!combo)return false;
-  combo.value=lang==="hi"?"hi":"en";
-  combo.dispatchEvent(new Event("change"));
-  document.documentElement.lang=lang;
-  return true;
+  if(combo){
+   combo.value=target;
+   combo.dispatchEvent(new Event("change",{bubbles:true}));
+   return;
+  }
+  if(++attempts<30){setTimeout(apply,300);return;}
+  alert("Translation service load nahi hui. Internet connection check karke page refresh karein.");
  };
- if(apply())return;
- if(lang==="en"&&window.google?.translate){setTimeout(apply,500);return;}
- const status=document.getElementById("clipxLanguage");
- if(status)status.value="en";
- alert("Language service is still loading. Please try again in a moment.");
+ apply();
 };
 function googleTranslateElementInit(){
- new google.translate.TranslateElement({pageLanguage:"hi",includedLanguages:"en,hi",autoDisplay:false}, "google_translate_element");
+ new google.translate.TranslateElement({pageLanguage:"en",includedLanguages:"hi",autoDisplay:false}, "google_translate_element");
  const picker=document.getElementById("clipxLanguage");
  if(picker)picker.value="en";
- setTimeout(()=>window.clipxSetLanguage("en"),900);
+ setTimeout(()=>window.clipxSetLanguage("en"),1200);
 }
 </script>
 <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
