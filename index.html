@@ -623,6 +623,22 @@ document.querySelectorAll(".dashboard-shortcuts a").forEach(link => {
  });
 });
 showWorkspaceView("home");
+
+// Route the mobile bottom bar and hero CTA through the same workspace controller.
+function handleWorkspaceNavigation(event) {
+ const link = event.target.closest("a[data-view], a[data-toolview]");
+ if (!link) return;
+ const view = link.dataset.view || link.dataset.toolview;
+ if (!view) return;
+ event.preventDefault();
+ showWorkspaceView(view);
+ document.querySelectorAll(".mobile-bottom-nav a").forEach(item => {
+  item.classList.toggle("bottom-active", item === link);
+ });
+ history.replaceState(null, "", link.getAttribute("href") || "#"+view);
+}
+document.getElementById("mobileBottomNav")?.addEventListener("click", handleWorkspaceNavigation);
+document.querySelector(".hero-cta[data-toolview]")?.addEventListener("click", handleWorkspaceNavigation);
 </script>
 <script>
 const editorSpeed = document.getElementById("editorSpeed");
