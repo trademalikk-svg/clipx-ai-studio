@@ -120,8 +120,17 @@ footer{text-align:center;padding:25px;color:#777;font-size:12px}
   <a id="downloadClip" hidden download="clipx-short.webm" style="display:inline-block;margin-top:14px;color:#d6a4ff">Download Clip</a>
  </section>
 
+ <section class="card" id="autoShorts">
+  <h2>05. Automatic Shorts Maker</h2>
+  <p class="muted">वीडियो को चुनी हुई अवधि के अलग-अलग हिस्सों में बाँटें। यह AI highlight selection नहीं है।</p>
+  <p class="muted">ऊपर वीडियो चुनकर Upload Video करें। Clip Settings में Duration और Number of Clips चुनें, फिर नीचे बटन दबाएँ।</p>
+  <button class="primary" id="autoShortsButton" type="button" onclick="makeAutomaticShorts()">Create Shorts Automatically</button>
+  <p id="autoShortsStatus" class="muted" aria-live="polite">तैयार होने वाली क्लिप्स यहाँ दिखाई देंगी।</p>
+  <div id="autoShortsResults" class="result">No clips created yet.</div>
+ </section>
+
  <section class="card">
-  <h2>05. AI Video Prompt Generator</h2>
+  <h2>06. AI Video Prompt Generator</h2>
   <label for="idea">Describe your video idea</label>
   <textarea id="idea" placeholder="उदाहरण: एक खूबसूरत पहाड़ी इलाके में सूर्योदय का दृश्य..."></textarea>
   <label for="promptLanguage">Prompt Language</label>
@@ -151,7 +160,7 @@ footer{text-align:center;padding:25px;color:#777;font-size:12px}
  </section>
 
  <section class="card">
-  <h2>06. AI Studio Features</h2>
+  <h2>07. AI Studio Features</h2>
   <p class="muted">Planned features: AI highlight detection, automatic captions, face tracking, animated subtitles, titles, hashtags and multiple short clips.</p>
   <p class="notice">Video upload and preview work in your browser. Actual AI clipping, captions and video export need a separate processing backend; those functions are not active yet.</p>
  </section>
@@ -372,6 +381,69 @@ async function makeManualClip() {
   button.disabled = false;
   status.textContent = "क्लिप शुरू नहीं हो सकी। वीडियो फिर से चुनकर कोशिश करें।";
  }
+}
+
+
+async function makeAutomaticShorts() {
+ const status = document.getElementById("autoShortsStatus");
+ const results = document.getElementById("autoShortsResults");
+ const button = document.getElementById("autoShortsButton");
+ const player = document.querySelector("#preview video");
+ if (!player || !Number.isFinite(player.duration) || player.duration <= 0) {
+  status.textContent = "पहले ऊपर वीडियो चुनें और Upload Video दबाएँ।"; return;
+ }
+ if (!player.captureStream || !window.MediaRecorder) {
+  status.textContent = "इस ब्राउज़र में recording समर्थित नहीं है। Chrome में कोशिश करें।"; return;
+ }
+ const duration = Number(selectedValue("duration"));
+ const count = Number(document.getElementById("clipCount").value);
+ if (!duration || !count) { status.textContent = "Clip Settings में duration और clips की संख्या चुनें।"; return; }
+ const mime = ["video/webm;codecs=vp9,opus","video/webm;codecs=vp8,opus","video/webm"].find(type => MediaRecorder.isTypeSupported(type));
+ if (!mime) { status.textContent = "इस डिवाइस पर WebM recording उपलब्ध नहीं है।"; return; }
+ const total = Math.min(count, Math.ceil(player.duration / duration));
+ button.disabled = true;
+ results.replaceChildren();
+ let completed = 0;
+ const stream = player.captureStream();
+ try {
+  player.pause();
+  for (let i = 0; i < total; i++) {
+   const start = i * duration;
+   const end = Math.min(start + duration, player.duration);
+   status.textContent = "क्लिप " + (i+1) + "/" + total + " रिकॉर्ड हो रही है। पेज खुला रखें।";
+   player.currentTime = start;
+   await new Promise((resolve, reject) => {
+    if (Math.abs(player.currentTime-start)<0.05 && player.readyState>=2) return resolve();
+    const ok=()=>{clean();resolve();}, fail=()=>{clean();reject(new Error("Seek failed"));};
+    const clean=()=>{player.removeEventListener("seeked",ok);player.removeEventListener("error",fail);};
+    player.addEventListener("seeked",ok,{once:true}); player.addEventListener("error",fail,{once:true});
+   });
+   const blob = await new Promise(async (resolve,reject) => {
+    const chunks=[];
+    const recorder=new MediaRecorder(stream,{mimeType:mime});
+    let done=false;
+    const stop=()=>{if(!done){done=true;if(recorder.state==="recording")recorder.stop();}};
+    recorder.ondataavailable=e=>{if(e.data&&e.data.size)chunks.push(e.data);};
+    recorder.onerror=()=>reject(new Error("Recording failed"));
+    recorder.onstop=()=>resolve(new Blob(chunks,{type:mime}));
+    const tick=()=>{if(player.currentTime>=end){player.pause();stop();}};
+    player.addEventListener("timeupdate",tick);
+    recorder.addEventListener("stop",()=>player.removeEventListener("timeupdate",tick),{once:true});
+    try { recorder.start(250); await player.play(); tick(); }
+    catch(e){player.removeEventListener("timeupdate",tick);if(recorder.state==="recording")recorder.stop();reject(e);}
+   });
+   if(!blob.size) throw new Error("Empty clip");
+   const url=URL.createObjectURL(blob);
+   const link=document.createElement("a");
+   link.href=url; link.download="clipx-short-"+(i+1)+".webm";
+   link.textContent="Download Short "+(i+1)+" ("+Math.round(end-start)+" sec)";
+   link.style.display="block"; link.style.margin="10px 0"; link.style.color="#d6a4ff";
+   results.appendChild(link); completed++;
+  }
+  status.textContent=completed+" Shorts तैयार हैं। हर Download लिंक दबाकर क्लिप सेव करें।";
+ } catch(error) {
+  status.textContent="क्लिप बनाते समय समस्या आई। "+completed+" क्लिप तैयार हुईं। Chrome में दोबारा कोशिश करें।";
+ } finally { player.pause(); button.disabled=false; }
 }
 
 /* Existing Supabase project connection retained. */
