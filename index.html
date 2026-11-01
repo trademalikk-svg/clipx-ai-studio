@@ -303,7 +303,7 @@ footer{color:#b39ac7}
   <p class="muted">This tool creates a written prompt from your idea. It does not generate a video or connect to an external AI video service.</p>
  </section>
 
- <section class="card">
+ <section class="card" id="features">
   <h2>08. AI Studio Features</h2>
   <p class="muted">Planned features: automatic speech-to-text captions, AI highlight detection, face tracking, animated subtitles, titles, hashtags and multiple short clips.</p>
   <p class="notice">Video upload and preview work in your browser. Automatic speech recognition, AI clipping, face tracking and burned-in caption video export need a separate processing backend; those functions are not active yet. Caption Studio can create a downloadable SRT file from text you enter.</p>
@@ -317,7 +317,7 @@ footer{color:#b39ac7}
 function showWorkspaceView(view) {
  const groups = {
   home:["home","tools"],
-  tools:["upload","clipSettings","manualCutter","autoShorts","captionStudio"],
+  tools:["upload","clipSettings","manualCutter","autoShorts","captionStudio","backendConnection","features"],
   prompts:["promptStudio"],
   studio:["upload"],
   settings:["backendConnection","authBox"]
@@ -478,7 +478,7 @@ function srtTime(seconds) {
 
 function makeSrtCaptions() {
  const lines = document.getElementById("captionText").value
-  .split(/\\r?\\n/).map(line => line.trim()).filter(Boolean);
+  .split(/\r?\n/).map(line => line.trim()).filter(Boolean);
  const start = Number(document.getElementById("captionStart").value);
  const duration = Number(document.getElementById("captionDuration").value);
  const status = document.getElementById("captionStatus");
@@ -548,30 +548,44 @@ async function clipxRecordVideo(player,start,duration,status) {
  const mimeType=types.find(t=>MediaRecorder.isTypeSupported(t))||"";
  const recorder=mimeType?new MediaRecorder(stream,{mimeType}):new MediaRecorder(stream);
  const chunks=[];
+ let timeCheck=null,seekTimer=null;
  const finished=new Promise((resolve,reject)=>{
   recorder.ondataavailable=e=>{if(e.data&&e.data.size)chunks.push(e.data);};
   recorder.onerror=e=>reject(e.error||new Error("वीडियो रिकॉर्डिंग रुक गई।"));
   recorder.onstop=resolve;
  });
  try {
-  player.pause(); player.currentTime=start;
-  await new Promise((resolve,reject)=>{
-   const timer=setTimeout(()=>reject(new Error("वीडियो seek नहीं हो पाया।")),10000);
-   player.addEventListener("seeked",()=>{clearTimeout(timer);resolve();},{once:true});
-  });
-  recorder.start(1000); await player.play();
+  player.pause();
+  if(Math.abs(player.currentTime-start)>0.05) {
+   await new Promise((resolve,reject)=>{
+    const onSeek=()=>{clearTimeout(seekTimer);resolve();};
+    player.addEventListener("seeked",onSeek,{once:true});
+    seekTimer=setTimeout(()=>{player.removeEventListener("seeked",onSeek);reject(new Error("वीडियो seek नहीं हो पाया।"));},10000);
+    player.currentTime=start;
+   });
+  }
+  recorder.start(1000);
+  await player.play();
   status.textContent="वीडियो रिकॉर्ड हो रही है... कृपया टैब खुला रखें।";
   await new Promise(resolve=>{
-   const timer=setTimeout(resolve,duration*1000+2000);
-   const check=()=>{if(player.currentTime>=start+duration||player.ended){clearTimeout(timer);resolve();}};
+   const finish=()=>{clearTimeout(timeCheck);player.removeEventListener("timeupdate",check);resolve();};
+   const check=()=>{if(player.currentTime>=start+duration||player.ended)finish();};
+   timeCheck=setTimeout(finish,duration*1000+3000);
    player.addEventListener("timeupdate",check);
+   check();
   });
   if(recorder.state!=="inactive")recorder.stop();
   await finished;
   const blob=new Blob(chunks,{type:recorder.mimeType||"video/webm"});
   if(!blob.size)throw new Error("रिकॉर्डिंग खाली बनी।");
   return blob;
- } finally {player.pause();stream.getTracks().forEach(t=>t.stop());}
+ } catch(error) {
+  if(recorder.state!=="inactive")recorder.stop();
+  throw error;
+ } finally {
+  clearTimeout(seekTimer);clearTimeout(timeCheck);
+  player.pause();stream.getTracks().forEach(t=>t.stop());
+ }
 }
 function clipxInputFile() {
  const file = document.getElementById("video").files[0];
@@ -580,12 +594,6 @@ function clipxInputFile() {
 }
 function clipxSafeName(name) {
  return (name.split(".").slice(0,-1).join(".") || "source").replace(/[^a-zA-Z0-9_-]/g,"_").slice(0,40);
-}
-async function clipxWriteInput(ffmpeg,file) {
- const ext = (file.name.split(".").pop() || "mp4").toLowerCase().replace(/[^a-z0-9]/g,"") || "mp4";
- const inputName = "clipx_input." + ext;
- await ffmpeg.writeFile(inputName,new Uint8Array(await file.arrayBuffer()));
- return inputName;
 }
 function clipxShowVideo(blob,container,downloadLink,filename) {
  const url = URL.createObjectURL(blob);
