@@ -101,8 +101,21 @@ footer{text-align:center;padding:25px;color:#777;font-size:12px}
   <div id="settingsResult" class="result">Your selected settings will appear here.</div>
  </section>
 
+ <section class="card" id="manualCutter">
+  <h2>04. Manual Video Cutter</h2>
+  <p class="muted">Upload a video above, then choose the start and end time for your clip.</p>
+  <label for="cutStart">Start time (seconds)</label>
+  <input id="cutStart" type="number" min="0" step="0.1" value="0" inputmode="decimal">
+  <label for="cutEnd">End time (seconds)</label>
+  <input id="cutEnd" type="number" min="0" step="0.1" placeholder="Example: 30" inputmode="decimal">
+  <button class="primary" id="makeClipButton" type="button" onclick="makeManualClip()">Create Clip</button>
+  <p id="cutStatus" class="muted" aria-live="polite">The clip is recorded in real time while the selected section plays. Keep this page open.</p>
+  <div class="preview" id="cutPreview">Your finished clip will appear here.</div>
+  <a id="downloadClip" hidden download="clipx-short.webm" style="display:inline-block;margin-top:14px;color:#d6a4ff">Download Clip</a>
+ </section>
+
  <section class="card">
-  <h2>03. AI Video Prompt Generator</h2>
+  <h2>05. AI Video Prompt Generator</h2>
   <label for="idea">Describe your video idea</label>
   <textarea id="idea" placeholder="उदाहरण: एक खूबसूरत पहाड़ी इलाके में सूर्योदय का दृश्य..."></textarea>
   <label for="promptLanguage">Prompt Language</label>
@@ -132,7 +145,7 @@ footer{text-align:center;padding:25px;color:#777;font-size:12px}
  </section>
 
  <section class="card">
-  <h2>04. AI Studio Features</h2>
+  <h2>06. AI Studio Features</h2>
   <p class="muted">Planned features: AI highlight detection, automatic captions, face tracking, animated subtitles, titles, hashtags and multiple short clips.</p>
   <p class="notice">Video upload and preview work in your browser. Actual AI clipping, captions and video export need a separate processing backend; those functions are not active yet.</p>
  </section>
