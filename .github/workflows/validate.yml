@@ -25,7 +25,7 @@ jobs:
           scripts = re.findall(r"<script\b([^>]*)>(.*?)</script\s*>", html, re.I | re.S)
           checked = 0
           for index, (attrs, source) in enumerate(scripts):
-              if not source.strip() or re.search(r"\bsrc\s*=", attrs, re.I):
+              if not source.strip() or re.search(r"\bsrc\s*=", attrs, re.I) or re.search(r"application/ld\+json", attrs, re.I):
                   continue
               is_module = bool(re.search(r"type\s*=\s*[\"']module[\"']", attrs, re.I))
               suffix = ".mjs" if is_module else ".js"
