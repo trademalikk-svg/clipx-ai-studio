@@ -304,7 +304,8 @@ footer{color:#b39ac7}
   <input id="youtubeUrl" type="url" placeholder="https://www.youtube.com/watch?v=..." inputmode="url">
   <button class="primary" type="button" onclick="loadYouTubeClip()">Preview YouTube Video</button>
   <div id="youtubePreview" class="preview">YouTube preview यहाँ दिखाई देगा।</div>
-  <p class="muted">Preview में “Video unavailable” आए तो creator ने embedding बंद की हो सकती है। YouTube लिंक यहाँ preview के लिए है; वीडियो फ़ाइल चुनकर clips बनाएँ।</p>
+  <p class="muted">Preview में “Video unavailable” आए तो creator ने embedding बंद की हो सकती है। YouTube लिंक यहाँ preview के लिए है; Shorts बनाने के लिए अपनी या उपयोग की अनुमति वाली वीडियो फ़ाइल चुनें।</p>
+  <button class="primary" type="button" onclick="document.getElementById('upload').scrollIntoView({behavior:'smooth'});document.getElementById('video').focus({preventScroll:true});">अपनी वीडियो चुनें और Shorts बनाएँ</button>
  </section>
  <section class="card" id="autoShorts">
   <h2>Automatic Shorts Maker</h2>
