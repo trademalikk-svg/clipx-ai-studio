@@ -8,7 +8,7 @@ const URL = process.env.SUPABASE_URL;
 const KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const BUCKET = process.env.SUPABASE_BUCKET || "clipx-private";
 const POLL_MS = Number(process.env.POLL_MS || 8000);
-const CLIP_SECONDS = Math.min(90, Math.max(10, Number(process.env.CLIP_SECONDS || 30)));
+const DEFAULT_CLIP_SECONDS = Math.min(90, Math.max(10, Number(process.env.CLIP_SECONDS || 30)));
 if (!URL || !KEY) throw new Error("SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are required.");
 const db = createClient(URL, KEY, { auth: { persistSession: false } });
 
@@ -41,7 +41,11 @@ async function processJob(job) {
       child.on("close", code => code === 0 ? resolve(Number(out.trim())) : reject(new Error("Unable to read video duration.")));
     });
     if (!Number.isFinite(duration) || duration <= 0) throw new Error("Video duration is invalid.");
-    const total = Math.min(20, Math.ceil(duration / CLIP_SECONDS));
+    const requestedSeconds = Number(job.options?.clipSeconds || DEFAULT_CLIP_SECONDS);
+    const clipSeconds = Math.min(90, Math.max(10, Number.isFinite(requestedSeconds) ? requestedSeconds : DEFAULT_CLIP_SECONDS));
+    const ratio = ["9:16", "16:9", "1:1"].includes(job.options?.aspectRatio) ? job.options.aspectRatio : "9:16";
+    const dimensions = ratio === "16:9" ? [1920,1080] : ratio === "1:1" ? [1080,1080] : [1080,1920];
+    const total = Math.min(20, Math.ceil(duration / clipSeconds));
     const results = [];
     for (let i = 0; i < total; i++) {
       const start = i * CLIP_SECONDS;
@@ -49,7 +53,7 @@ async function processJob(job) {
       if (length < 2) continue;
       const filename = "clip-" + String(i + 1).padStart(2,"0") + ".mp4";
       const file = path.join(outputDir, filename);
-      await run("ffmpeg", ["-y","-ss",String(start),"-i",input,"-t",String(length),"-vf","scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920","-c:v","libx264","-preset","veryfast","-crf","23","-c:a","aac","-b:a","128k","-movflags","+faststart",file]);
+      await run("ffmpeg", ["-y","-ss",String(start),"-i",input,"-t",String(length),"-vf",`scale=${dimensions[0]}:${dimensions[1]}:force_original_aspect_ratio=increase,crop=${dimensions[0]}:${dimensions[1]}`,"-c:v","libx264","-preset","veryfast","-crf","23","-c:a","aac","-b:a","128k","-movflags","+faststart",file]);
       const content = await fs.readFile(file);
       const target = job.user_id + "/" + job.id + "/clips/" + filename;
       const { error: uploadError } = await db.storage.from(BUCKET).upload(target, content, { contentType:"video/mp4", upsert:true });
@@ -60,7 +64,7 @@ async function processJob(job) {
     }
     const { error: updateError } = await db.from("clip_jobs").update({
       status:"completed",
-      result:{ mode:"sequential_ffmpeg_v1", clips:results, note:"Sequential clips only; AI highlight detection and speaker tracking are not enabled." },
+      result:{ mode:"sequential_ffmpeg_v1", clipSeconds, aspectRatio:ratio, clips:results, note:"Sequential clips only; AI highlight detection and speaker tracking are not enabled." },
       error_message:null
     }).eq("id",job.id).eq("status","processing");
     if (updateError) throw updateError;
