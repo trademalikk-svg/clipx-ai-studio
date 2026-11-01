@@ -643,7 +643,7 @@ async function makeManualClip() {
   timeoutId = setTimeout(() => {
    if (recorder && recorder.state === "recording") stopRecording();
   }, Math.max(5000, (end - start) * 1000 + 10000));
-  recorder.start();
+  recorder.start(1000);
   status.textContent = "क्लिप रिकॉर्ड हो रही है—इस पेज को खुला रखें।";
   await player.play();
  } catch (error) {
@@ -772,7 +772,7 @@ async function makeAutomaticShorts() {
    player.addEventListener("ended",stop);
    timer = setTimeout(stop,Math.max(6000,(to-from)*1000+8000));
    try {
-    recorder.start();
+    recorder.start(1000);
     await player.play();
     checkEnd();
    } catch (error) {
