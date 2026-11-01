@@ -797,7 +797,7 @@ async function clipxRecordVideo(player,start,duration,status,ratio) {
  const mimeType=types.find(t=>MediaRecorder.isTypeSupported(t))||"";
  const recorder=mimeType?new MediaRecorder(canvasStream,{mimeType}):new MediaRecorder(canvasStream);
  const chunks=[];
- let raf=0,timeCheck=null,seekTimer=null;
+ let raf=0,timeCheck=null,seekTimer=null,progressFrame=0;
  const finished=new Promise((resolve,reject)=>{
   recorder.ondataavailable=e=>{if(e.data&&e.data.size)chunks.push(e.data);};
   recorder.onerror=e=>reject(e.error||new Error("वीडियो रिकॉर्डिंग रुक गई।"));
@@ -863,17 +863,29 @@ async function clipxRecordVideo(player,start,duration,status,ratio) {
     player.currentTime=start;
    });
   }
+  player.playbackRate=1;
+  await player.play();
+  // Attach audio after playback starts: some mobile browsers expose audio tracks only then.
+  if(sourceStream){
+   const audioTracks=sourceStream.getAudioTracks();
+   audioTracks.forEach(track=>{if(!canvasStream.getAudioTracks().some(t=>t.id===track.id))canvasStream.addTrack(track);});
+  }
   draw();
   recorder.start(1000);
-  await player.play();
-  draw();
   status.textContent="वीडियो रिकॉर्ड हो रही है ("+ratio+")... कृपया टैब खुला रखें।";
-  await new Promise(resolve=>{
-   const finish=()=>{clearTimeout(timeCheck);player.removeEventListener("timeupdate",check);resolve();};
-   const check=()=>{if(player.currentTime>=start+duration||player.ended)finish();};
-   timeCheck=setTimeout(finish,duration*1000+4000);
-   player.addEventListener("timeupdate",check);
-   check();
+  await new Promise((resolve,reject)=>{
+   let settled=false;
+   const finish=()=>{if(settled)return;settled=true;cancelAnimationFrame(progressFrame);clearTimeout(timeCheck);player.removeEventListener("ended",onEnded);resolve();};
+   const onEnded=()=>finish();
+   const checkProgress=()=>{
+    if(player.currentTime>=start+duration-0.04||player.ended){finish();return;}
+    if(player.paused){reject(new Error("वीडियो playback बीच में रुक गया।"));return;}
+    progressFrame=requestAnimationFrame(checkProgress);
+   };
+   let progressFrame=requestAnimationFrame(checkProgress);
+   player.addEventListener("ended",onEnded,{once:true});
+   // Safety timeout only; never use it as the normal end condition.
+   timeCheck=setTimeout(finish,Math.max(15000,duration*2500+10000));
   });
   if(recorder.state!=="inactive")recorder.stop();
   await finished;
