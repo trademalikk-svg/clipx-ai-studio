@@ -13,7 +13,7 @@ Browser-based video editing prototype hosted with GitHub Pages.
 - Creator title/description/hashtag templates and prompt helper
 
 ## Important limitations
-- Cloud AI video generation is **not implemented**. The current Supabase `generate-video` function only checks backend/secret connectivity; it does not call a video model.
+- Experimental Runway text-to-video UI is present. It requires a separately deployed Supabase Edge Function named exactly as configured in the frontend (`generate-video-`), a server-side `RUNWAY_API_KEY` secret, a valid signed-in Supabase session, and available Runway credits. End-to-end generation has not been independently verified.
 - Automatic Shorts currently splits the source video by duration. It does not understand speech, story, or semantic highlights.
 - Smart Highlights uses visual frame-change scoring and may select poor segments.
 - Whisper Tiny runs in the browser, may download a large model, and can be inaccurate or fail on memory-limited phones.
