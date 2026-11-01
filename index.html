@@ -223,7 +223,7 @@ footer{color:#b39ac7}
    <button class="primary" type="button" id="trimExportButton" onclick="exportTrimmedVideo()">Trim & Export Video</button>
    <p id="trimStatus" class="muted" aria-live="polite">पहले वीडियो अपलोड करें।</p>
    <div id="trimPreview" class="preview">Trimmed video preview यहाँ दिखेगा।</div>
-   <a id="trimDownload" hidden download="clipx-trimmed.webm">Download trimmed video</a>
+   <a id="trimDownload" hidden download="clipx-trimmed."+clipxExportExtension(blob)>Download trimmed video</a>
   </div>
  </section>
 
@@ -293,7 +293,8 @@ footer{color:#b39ac7}
 
  <section class="card" id="captionStudio">
   <h2>Caption Studio</h2>
-  <p class="muted">हर लाइन एक subtitle बनेगी। यह tool आपके लिखे captions की SRT file बनाता है। Shorts export में यही captions वीडियो पर भी लगाए जाते हैं; आवाज़ की automatic transcription अभी उपलब्ध नहीं है।</p>
+  <p class="muted">हर लाइन एक subtitle बनेगी। यह tool आपके लिखे captions की SRT file बनाता है।</p>
+  <div class="notice">Hindi Auto Captions के लिए speech-to-text AI service/backend अभी उपलब्ध नहीं है। इस version में automatic transcription का बटन नहीं दिखाया जा रहा, ताकि नकली सुविधा का दावा न हो।</div>
   <label for="captionText">Captions लिखें (हर नई लाइन पर अगला caption)</label>
   <textarea id="captionText" placeholder="नमस्कार दोस्तों!&#10;आज हम एक नई वीडियो बनाने वाले हैं।&#10;वीडियो पसंद आए तो Like करें।"></textarea>
   <label for="captionStart">पहला caption कितने सेकंड पर शुरू हो? (seconds)</label>
@@ -658,7 +659,7 @@ async function clipxRecordVideo(player,start,duration,status,ratio) {
  const sourceStream=sourceCapture?sourceCapture.call(player):null;
  const canvasStream=canvas.captureStream(30);
  if(sourceStream) sourceStream.getAudioTracks().forEach(track=>canvasStream.addTrack(track));
- const types=["video/webm;codecs=vp9,opus","video/webm;codecs=vp8,opus","video/webm"];
+ const types=["video/mp4;codecs=avc1.42E01E,mp4a.40.2","video/mp4","video/webm;codecs=vp9,opus","video/webm;codecs=vp8,opus","video/webm"];
  const mimeType=types.find(t=>MediaRecorder.isTypeSupported(t))||"";
  const recorder=mimeType?new MediaRecorder(canvasStream,{mimeType}):new MediaRecorder(canvasStream);
  const chunks=[];
@@ -735,6 +736,8 @@ async function clipxRecordVideo(player,start,duration,status,ratio) {
   if(sourceStream)sourceStream.getTracks().forEach(t=>t.stop());
  }
 }
+function clipxExportExtension(blob){return blob.type&&blob.type.toLowerCase().includes("mp4")?"mp4":"webm";}
+function clipxExportLabel(blob){return clipxExportExtension(blob)==="mp4"?"MP4":"WebM";}
 function clipxInputFile() {
  const file = document.getElementById("video").files[0];
  if (!file) throw new Error("पहले ऊपर अपनी मूल वीडियो दोबारा चुनें।");
@@ -774,7 +777,7 @@ async function exportTrimmedVideo() {
  try {
   const blob=await clipxRecordVideo(player,start,end-start,status,selectedValue("ratio")||"9:16");
   clipxShowVideo(blob,output,download,"clipx-trimmed.webm");
-  status.textContent="Trim पूरा हुआ। WebM डाउनलोड कर सकते हैं।";
+  status.textContent="Trim पूरा हुआ। "+clipxExportLabel(blob)+" डाउनलोड कर सकते हैं।";
  } catch(e){status.textContent="Export नहीं हुआ: "+(e.message||String(e));}
  finally{button.disabled=false;}
 }
@@ -797,8 +800,8 @@ async function makeManualClip() {
  try {
   clipxInputFile();
   const blob=await clipxRecordVideo(player,start,end-start,status,selectedValue("ratio")||"9:16");
-  clipxShowVideo(blob,output,download,"clipx-clip.webm");
-  status.textContent="क्लिप तैयार है। चुना हुआ अनुपात और उपलब्ध captions वीडियो में लगाए गए हैं। WebM डाउनलोड करें।";
+  clipxShowVideo(blob,output,download,"clipx-clip."+clipxExportExtension(blob));
+  status.textContent="क्लिप तैयार है। चुना हुआ अनुपात और उपलब्ध captions वीडियो में लगाए गए हैं। "+clipxExportLabel(blob)+" डाउनलोड करें।";
  } catch (error) {
   status.textContent = "क्लिप नहीं बन सकी: " + (error.message || String(error)) + "। इंटरनेट और खाली स्टोरेज जाँचें।";
  } finally {
@@ -862,7 +865,7 @@ async function exportSmartHighlight(start,duration,index,button){
  try{
   const blob=await clipxRecordVideo(player,start,duration,status,selectedValue("ratio")||"9:16");
   const url=URL.createObjectURL(blob);const a=document.createElement("a");
-  a.href=url;a.download="clipx-highlight-"+index+".webm";a.textContent="Download highlight "+index;
+  a.href=url;a.download="clipx-highlight-"+index+"."+clipxExportExtension(blob);a.textContent="Download highlight "+index;
   a.style.display="inline-block";a.style.margin="8px";document.getElementById("highlightResults").append(a);
   status.textContent="Highlight export तैयार है।";
  }catch(e){status.textContent="Export failed: "+(e.message||String(e));}
