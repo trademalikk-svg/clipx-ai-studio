@@ -174,6 +174,7 @@ footer{color:#b39ac7}
   <a class="shortcut orange" href="#captionStudio" data-toolview="captions"><span class="symbol">CC</span><span>Caption Studio<small>Hindi, Urdu और English subtitles</small></span></a>
   <a class="shortcut red" href="#youtubeClips" data-toolview="youtube"><span class="symbol">▶</span><span>YouTube Clip Maker<small>अनुमति वाली वीडियो का preview</small></span></a>
   <a class="shortcut purple" href="#smartHighlights" data-toolview="highlights"><span class="symbol">✦</span><span>Smart Highlight Finder<small>वीडियो के महत्वपूर्ण दृश्य खोजें</small></span></a>
+  <a class="shortcut cyan" href="#freeCreatorKit" data-toolview="creatorKit"><span class="symbol">✍</span><span>Titles & Hashtags<small>वीडियो के लिए title, description और hashtags</small></span></a>
   <a class="shortcut blue" href="#backendConnection" data-toolview="backend"><span class="symbol">✓</span><span>Backend Connection Test<small>सेवा कनेक्शन जाँचें</small></span></a>
  </section>
 
@@ -288,6 +289,19 @@ footer{color:#b39ac7}
     <div id="highlightResults" class="result">अभी कोई सुझाव नहीं।</div>
  </section>
 
+ <section class="card" id="freeCreatorKit">
+  <h2>Free Creator Kit — Titles & Hashtags</h2>
+  <p class="muted">यह टूल आपके topic और platform के आधार पर local templates से title, description और hashtags सुझाता है। इंटरनेट/API की जरूरत नहीं।</p>
+  <label for="creatorTopic">वीडियो किस बारे में है?</label>
+  <textarea id="creatorTopic" placeholder="जैसे: मोबाइल से वीडियो editing सीखें"></textarea>
+  <label for="creatorPlatform">Platform</label>
+  <select id="creatorPlatform"><option>YouTube Shorts</option><option>Instagram Reels</option><option>Facebook Reels</option></select>
+  <button class="primary" type="button" onclick="clipxGenerateCreatorKit()">Generate titles & hashtags</button>
+  <div class="result" id="creatorKitResult" aria-live="polite">आपके सुझाव यहाँ दिखेंगे।</div>
+  <button class="primary secondary" type="button" onclick="clipxCopyCreatorKit()">Copy suggestions</button>
+  <p class="notice">यह template-based सुविधा है, generative AI नहीं।</p>
+ </section>
+
  <section class="card" id="backendConnection">
   <h2>Backend Connection Test</h2>
   <p class="muted">Supabase Edge Function और saved secret की connection जाँचें। यह टेस्ट वीडियो नहीं बनाता और Runway credits खर्च नहीं करता।</p>
@@ -344,15 +358,39 @@ footer{color:#b39ac7}
  </section>
 
  <section class="card" id="features">
-  <h2>08. AI Studio Features</h2>
-  <p class="muted">Planned features: AI highlight detection, face tracking, animated subtitles, titles, hashtags and multiple short clips.</p>
-  <p class="notice">Video upload and preview work in your browser. Automatic speech recognition runs in your browser using a multilingual Whisper model; language auto-detection may make mistakes. AI clipping, face tracking and burned-in caption video export need a separate processing backend; those functions are not active yet.</p>
+  <h2>Feature Status & Roadmap</h2>
+  <p class="muted">Free tools: video preview, trim/export, clip splitting, activity-based highlight suggestions, manual SRT subtitles and title/hashtag templates.</p>
+  <p class="notice">Video upload and preview work in your browser. Automatic speech recognition runs in your browser using a multilingual Whisper model; language auto-detection may make mistakes. Face tracking, true semantic AI highlights, AI video generation and permanently burned-in animated subtitles are not active yet. These require extra processing or an AI service. Do not treat the activity-based highlight finder as semantic AI.</p>
  </section>
 </main>
 
 <footer>© 2026 ClipX AI Studio · Personal Video Workspace<br><a href="about.html">About</a> · <a href="contact.html">Support</a> · <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a></footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+function clipxGenerateCreatorKit(){
+ const topic=document.getElementById("creatorTopic").value.trim();
+ const platform=document.getElementById("creatorPlatform").value;
+ const out=document.getElementById("creatorKitResult");
+ if(!topic){out.textContent="पहले वीडियो का topic लिखें।";return;}
+ const clean=topic.replace(/[<>]/g,"").slice(0,180);
+ const tags=clean.toLowerCase().match(/[\\p{L}\\p{N}]+/gu)||[];
+ const unique=[...new Set(tags.filter(x=>x.length>2))].slice(0,5);
+ const hash=unique.map(x=>"#"+x.replace(/[^\\p{L}\\p{N}_]/gu,"")).join(" ");
+ const titles=[
+  clean+" | आसान तरीके से समझें",
+  platform+" के लिए "+clean,
+  "ये बातें जानना जरूरी है: "+clean
+ ];
+ out.textContent="TITLE IDEAS\\n"+titles.map((x,i)=>(i+1)+". "+x).join("\\n")+"\\n\\nDESCRIPTION\\n"+clean+" — पूरी वीडियो देखें और अपनी राय comment में बताएँ।\\n\\nHASHTAGS\\n"+(hash||"#Video #Creator #ClipX")+" #ClipXAIStudio";
+}
+function clipxCopyCreatorKit(){
+ const text=document.getElementById("creatorKitResult").textContent;
+ if(!text||text.includes("यहाँ दिखेंगे"))return;
+ if(navigator.clipboard?.writeText) navigator.clipboard.writeText(text).then(()=>alert("Copied")).catch(()=>alert("Copy नहीं हुआ; text select करके copy करें।"));
+ else alert("इस browser में clipboard उपलब्ध नहीं है; text select करके copy करें।");
+}
+</script>
 <script>
 function showWorkspaceView(view) {
  const groups = {
@@ -364,6 +402,7 @@ function showWorkspaceView(view) {
   youtube:["youtubeClips"],
   highlights:["upload","smartHighlights"],
   backend:["backendConnection"],
+  creatorKit:["freeCreatorKit"],
   prompts:["promptStudio"],
   studio:["upload"],
   settings:["backendConnection","authBox"]
