@@ -342,7 +342,10 @@ footer{color:#b39ac7}
  <section class="card" id="autoShorts">
   <h2>Automatic Shorts Maker</h2>
   <p class="muted">वीडियो को चुनी हुई अवधि के अलग-अलग हिस्सों में बाँटें। यह AI highlight selection नहीं है।</p>
-  <p class="muted">ऊपर वीडियो चुनकर Upload Video करें। Clip Settings में Duration और Number of Clips चुनें, फिर नीचे बटन दबाएँ।</p>
+  <p class="muted">ऊपर वीडियो चुनकर Upload Video करें। Clip Settings में Duration और Number of Clips चुनें, फिर नीचे बटन दबाएँ। 2 घंटे तक की वीडियो चुनी जा सकती है; वास्तविक सीमा आपके डिवाइस और ब्राउज़र पर निर्भर है।</p>
+  <label for="shortsExportMode">Export speed</label>
+  <select id="shortsExportMode"><option value="fast" selected>Fast · 540p · 24 FPS</option><option value="standard">Standard · 720p · 30 FPS</option></select>
+  <p class="muted">Fast मोड में फाइल छोटी और एक्सपोर्ट हल्का होगा; वीडियो की स्पष्टता थोड़ी कम हो सकती है।</p>
   <button class="primary" id="autoShortsButton" type="button" onclick="makeAutomaticShorts()">Create Shorts Automatically</button>
   <p id="autoShortsStatus" class="muted" aria-live="polite">तैयार होने वाली क्लिप्स यहाँ दिखाई देंगी।</p>
   <div id="autoShortsResults" class="result">No clips created yet.</div>
@@ -770,7 +773,7 @@ async function copyPrompt() {
 }
 
 
-async async function clipxRecordVideo(player,start,duration,status,ratio) {
+async function clipxRecordVideo(player,start,duration,status,ratio,fastMode=false) {
  const captionLines=document.getElementById("captionText")?.value.split(/\r?\n/).map(s=>s.trim()).filter(Boolean)||[];
  const captionStart=Number(document.getElementById("captionStart")?.value||0);
  const captionDuration=Math.max(0.5,Number(document.getElementById("captionDuration")?.value||3));
@@ -784,18 +787,23 @@ async async function clipxRecordVideo(player,start,duration,status,ratio) {
  const faceFollow=!!document.getElementById("faceFollowExport")?.checked&&rotation===0&&cropMode!=="fit";
  let faceDetector=null,lastFaceCheck=0,trackedFace=null;
  if(faceFollow){status.textContent="Face-follow model लोड हो रहा है…";faceDetector=await getClipxFaceDetector();}
- const [width,height]=sizes[ratio]||sizes["9:16"];
+ const [baseWidth,baseHeight]=sizes[ratio]||sizes["9:16"];
+ const width=fastMode?Math.round(baseWidth*0.75):baseWidth;
+ const height=fastMode?Math.round(baseHeight*0.75):baseHeight;
+ const exportFps=fastMode?24:30;
  const canvas=document.createElement("canvas");
  canvas.width=width; canvas.height=height;
  const ctx=canvas.getContext("2d");
  if(!ctx) throw new Error("Canvas video export उपलब्ध नहीं है।");
  const sourceCapture=player.captureStream||player.mozCaptureStream;
  const sourceStream=sourceCapture?sourceCapture.call(player):null;
- const canvasStream=canvas.captureStream(30);
+ const canvasStream=canvas.captureStream(exportFps);
  if(sourceStream) sourceStream.getAudioTracks().forEach(track=>canvasStream.addTrack(track));
  const types=["video/mp4;codecs=avc1.42E01E,mp4a.40.2","video/mp4","video/webm;codecs=vp9,opus","video/webm;codecs=vp8,opus","video/webm"];
  const mimeType=types.find(t=>MediaRecorder.isTypeSupported(t))||"";
- const recorder=mimeType?new MediaRecorder(canvasStream,{mimeType}):new MediaRecorder(canvasStream);
+ const recorderOptions={videoBitsPerSecond:fastMode?1800000:4000000};
+ if(mimeType)recorderOptions.mimeType=mimeType;
+ const recorder=new MediaRecorder(canvasStream,recorderOptions);
  const chunks=[];
  let raf=0,timeCheck=null,seekTimer=null,progressFrame=0;
  const finished=new Promise((resolve,reject)=>{
@@ -1086,6 +1094,7 @@ async function makeAutomaticShorts() {
  const duration = Number(selectedValue("duration"));
  const requestedCount = Number(document.getElementById("clipCount").value);
  const ratio = selectedValue("ratio") || "9:16";
+ const fastMode=document.getElementById("shortsExportMode").value==="fast";
  if (!duration || !requestedCount) {
   status.textContent = "Clip Settings में duration और clips की संख्या चुनें।";
   return;
@@ -1100,8 +1109,8 @@ async function makeAutomaticShorts() {
   for (let i=0;i<total;i++) {
    const from = i*duration;
    const clipDuration = Math.min(duration,player.duration-from);
-   status.textContent = "Short " + (i+1) + "/" + total + " तैयार हो रही है...";
-   const blob = await clipxRecordVideo(player,from,clipDuration,status,ratio);
+   status.textContent = "Short " + (i+1) + "/" + total + " तैयार हो रही है... ("+(fastMode?"Fast":"Standard")+" export)";
+   const blob = await clipxRecordVideo(player,from,clipDuration,status,ratio,fastMode);
    const item = document.createElement("div");
    item.style.margin = "12px 0";
    const label = document.createElement("p");
