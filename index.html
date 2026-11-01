@@ -158,6 +158,7 @@ footer{color:#b39ac7}
   <a href="#home" data-view="home" class="active">⌂ Home</a>
   <a href="#videoTools" data-view="tools">✣ Video Tools</a>
   <a href="#promptStudio" data-view="prompts">✧ Prompt Studio</a>
+  <a href="#freeCreatorKit" data-view="creatorKit">✍ Titles & Hashtags</a>
   <a href="#upload" data-view="studio">▣ My Studio</a>
   <a href="./creator-tools.html">✦ Creator Tools</a>
   <a href="#backendConnection" data-view="settings">⚙ Settings</a>
@@ -374,15 +375,11 @@ function clipxGenerateCreatorKit(){
  const out=document.getElementById("creatorKitResult");
  if(!topic){out.textContent="पहले वीडियो का topic लिखें।";return;}
  const clean=topic.replace(/[<>]/g,"").slice(0,180);
- const tags=clean.toLowerCase().match(/[\\p{L}\\p{N}]+/gu)||[];
+ const tags=clean.toLowerCase().match(/[\p{L}\p{N}]+/gu)||[];
  const unique=[...new Set(tags.filter(x=>x.length>2))].slice(0,5);
- const hash=unique.map(x=>"#"+x.replace(/[^\\p{L}\\p{N}_]/gu,"")).join(" ");
- const titles=[
-  clean+" | आसान तरीके से समझें",
-  platform+" के लिए "+clean,
-  "ये बातें जानना जरूरी है: "+clean
- ];
- out.textContent="TITLE IDEAS\\n"+titles.map((x,i)=>(i+1)+". "+x).join("\\n")+"\\n\\nDESCRIPTION\\n"+clean+" — पूरी वीडियो देखें और अपनी राय comment में बताएँ।\\n\\nHASHTAGS\\n"+(hash||"#Video #Creator #ClipX")+" #ClipXAIStudio";
+ const hash=unique.map(x=>"#"+x.replace(/[^\p{L}\p{N}_]/gu,"")).join(" ");
+ const titles=[clean+" | आसान तरीके से समझें",platform+" के लिए "+clean,"ये बातें जानना जरूरी है: "+clean];
+ out.textContent="TITLE IDEAS\n"+titles.map((x,i)=>(i+1)+". "+x).join("\n")+"\n\nDESCRIPTION\n"+clean+" — पूरी वीडियो देखें और अपनी राय comment में बताएँ।\n\nHASHTAGS\n"+(hash||"#Video #Creator #ClipX")+" #ClipXAIStudio";
 }
 function clipxCopyCreatorKit(){
  const text=document.getElementById("creatorKitResult").textContent;
