@@ -223,7 +223,77 @@ async function copyPrompt() {
  }
 }
 
-/* Existing Supabase project connection retained. */
+
+async function makeManualClip() {
+ const status = document.getElementById("cutStatus");
+ const button = document.getElementById("makeClipButton");
+ const player = document.querySelector("#preview video");
+ const start = Number(document.getElementById("cutStart").value);
+ const end = Number(document.getElementById("cutEnd").value);
+ const output = document.getElementById("cutPreview");
+ const download = document.getElementById("downloadClip");
+ if (!player) { status.textContent = "पहले ऊपर अपनी वीडियो अपलोड करें।"; return; }
+ if (!Number.isFinite(start) || !Number.isFinite(end) || start < 0 || end <= start || end > player.duration) {
+  status.textContent = "Start और End सही भरें। End वीडियो की कुल अवधि से अधिक नहीं होना चाहिए (" + player.duration.toFixed(1) + " सेकंड)।";
+  return;
+ }
+ if (!player.captureStream || !window.MediaRecorder) {
+  status.textContent = "इस ब्राउज़र में वीडियो रिकॉर्डिंग समर्थित नहीं है। Chrome के नए संस्करण में कोशिश करें।";
+  return;
+ }
+ const stream = player.captureStream();
+ const mime = ["video/webm;codecs=vp9,opus","video/webm;codecs=vp8,opus","video/webm"].find(type => MediaRecorder.isTypeSupported(type));
+ if (!mime) { status.textContent = "इस डिवाइस पर WebM रिकॉर्डिंग उपलब्ध नहीं है।"; return; }
+ let recorder, chunks = [], stopped = false;
+ button.disabled = true;
+ download.hidden = true;
+ output.textContent = "क्लिप तैयार हो रही है...";
+ status.textContent = "वीडियो चल रही है—इस पेज को खुला रखें।";
+ try {
+  player.pause();
+  player.currentTime = start;
+  await new Promise((resolve, reject) => {
+   const ready = () => { cleanup(); resolve(); };
+   const fail = () => { cleanup(); reject(new Error("Video seek failed")); };
+   const cleanup = () => { player.removeEventListener("seeked", ready); player.removeEventListener("error", fail); };
+   player.addEventListener("seeked", ready, {once:true});
+   player.addEventListener("error", fail, {once:true});
+  });
+  recorder = new MediaRecorder(stream, {mimeType:mime});
+  recorder.ondataavailable = event => { if (event.data && event.data.size) chunks.push(event.data); };
+  recorder.onerror = () => { status.textContent = "क्लिप रिकॉर्ड नहीं हो सकी। दोबारा कोशिश करें।"; button.disabled = false; };
+  recorder.onstop = () => {
+   if (stopped) return;
+   stopped = true;
+   const blob = new Blob(chunks, {type:mime});
+   const url = URL.createObjectURL(blob);
+   const resultVideo = document.createElement("video");
+   resultVideo.src = url;
+   resultVideo.controls = true;
+   resultVideo.playsInline = true;
+   output.replaceChildren(resultVideo);
+   download.href = url;
+   download.hidden = false;
+   download.style.display = "inline-block";
+   status.textContent = "क्लिप तैयार है। Download Clip दबाकर सेव करें।";
+   button.disabled = false;
+   player.pause();
+  };
+  player.ontimeupdate = () => {
+   if (player.currentTime >= end && recorder.state === "recording") {
+    player.pause();
+    recorder.stop();
+   }
+  };
+  recorder.start(250);
+  await player.play();
+ } catch (error) {
+  if (recorder && recorder.state === "recording") recorder.stop();
+  button.disabled = false;
+  status.textContent = "क्लिप शुरू नहीं हो सकी। वीडियो फिर से चुनकर कोशिश करें।";
+ }
+}
+\n/* Existing Supabase project connection retained. */
 const SUPABASE_URL = "https://qmoxfzgiwamblpouxitn.supabase.co";
 const SUPABASE_KEY = "sb_publishable_dsVQ5-5VuIG5n_m0qqNjqw__i5sogpL";
 let authMode = "login";
