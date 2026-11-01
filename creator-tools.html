@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="hi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#080a20"><title>ClipX Creator Tools</title>
 <style>
-*{box-sizing:border-box}body{margin:0;background:#050719;color:#fff;font:16px Arial,sans-serif}header{padding:18px;background:#080a20;border-bottom:1px solid #34316b}main{max-width:900px;margin:auto;padding:18px}.card{background:#121633;border:1px solid #34316b;border-radius:16px;padding:18px;margin:14px 0}h1,h2{color:#e7d7ff}p{color:#b9bad0;line-height:1.5}label{display:block;margin:12px 0 6px;color:#ddd}input,textarea,select{width:100%;padding:12px;border-radius:9px;border:1px solid #4b4782;background:#10152e;color:white;font-size:16px}textarea{min-height:90px}button{border:0;border-radius:9px;padding:12px 15px;margin:8px 6px 4px 0;background:#813bd0;color:white;font-weight:bold}button.alt{background:#40365e}a{color:#d6a4ff}canvas{width:100%;height:auto;background:#10152e;border-radius:10px;margin-top:10px}.result{white-space:pre-wrap;background:#090d22;padding:12px;border-radius:9px;overflow-wrap:anywhere}.muted{font-size:13px;color:#a9a8c2}
+*{box-sizing:border-box}body{margin:0;background:#050719;color:#fff;font:16px Arial,sans-serif}header{padding:18px;background:#080a20;border-bottom:1px solid #34316b}main{max-width:900px;margin:auto;padding:18px}.card{background:#121633;border:1px solid #34316b;border-radius:16px;padding:18px;margin:14px 0}h1,h2{color:#e7d7ff}p{color:#b9bad0;line-height:1.5}label{display:block;margin:12px 0 6px;color:#ddd}input,textarea,select{width:100%;padding:12px;border-radius:9px;border:1px solid #4b4782;background:#10152e;color:white;font-size:16px}textarea{min-height:90px}button{border:0;border-radius:9px;padding:12px 15px;margin:8px 6px 4px 0;background:#813bd0;color:white;font-weight:bold}button.alt{background:#40365e}a{color:#d6a4ff}canvas{width:100%;height:auto;background:#10152e;border-radius:14px;margin-top:14px;box-shadow:0 18px 55px #0009,0 0 28px #9b4dff55;border:1px solid #8d65ff66}.card{position:relative;overflow:hidden;box-shadow:0 12px 35px #0006;transition:transform .25s,border-color .25s}.card:hover{transform:translateY(-3px);border-color:#a66bff}h1{font-size:clamp(30px,6vw,46px);text-shadow:0 0 24px #a855f788}h2{font-size:23px;text-shadow:0 0 15px #a855f755}button{background:linear-gradient(135deg,#a855f7,#6425c5 65%,#32136f);box-shadow:0 5px 18px #8b35dc55;cursor:pointer;transition:transform .2s,filter .2s}button:hover{transform:translateY(-2px);filter:brightness(1.2)}button.alt{background:linear-gradient(135deg,#554477,#292044)}input:focus,textarea:focus,select:focus{outline:2px solid #bd75ff;box-shadow:0 0 18px #963cff55}#thumbLink{display:inline-block;margin-top:12px;padding:12px 18px;border-radius:10px;background:linear-gradient(110deg,#ffe08a,#d69b24);color:#241400;font-weight:bold;text-decoration:none;box-shadow:0 5px 22px #e7b84c55}.result{white-space:pre-wrap;background:#090d22;padding:12px;border-radius:9px;overflow-wrap:anywhere}.muted{font-size:13px;color:#a9a8c2}
 </style></head><body><header><b>CLIPX AI STUDIO · CREATOR TOOLS</b> · <a href="./">मुख्य Studio</a></header><main><h1>Creator Tools</h1><p>ये टूल आपके ब्राउज़र में चलते हैं। कुछ सुविधाएँ डिवाइस और ब्राउज़र सपोर्ट पर निर्भर हैं।</p>
 <section class="card"><h2>1. AI Voice Preview</h2><label for="voiceText">टेक्स्ट</label><textarea id="voiceText" placeholder="यहाँ हिंदी या अंग्रेज़ी टेक्स्ट लिखें"></textarea><label for="voiceLang">भाषा</label><select id="voiceLang"><option value="hi-IN">हिंदी</option><option value="en-IN">English India</option><option value="en-US">English US</option></select><button onclick="speak()">आवाज़ सुनें</button><button class="alt" onclick="speechSynthesis.cancel()">रोकें</button><p class="muted">डिवाइस में उपलब्ध आवाज़ इस्तेमाल होगी; यह ऑडियो फाइल डाउनलोड नहीं करता।</p><div id="voiceStatus" class="result">तैयार</div></section>
 <section class="card"><h2>2. Speech to Text</h2><p>माइक्रोफोन से बोलकर टेक्स्ट पहचानें (सपोर्टेड ब्राउज़र में)।</p><button onclick="startSpeech()">🎙 बोलना शुरू करें</button><button class="alt" onclick="stopSpeech()">रोकें</button><textarea id="speechText" placeholder="पहचाना गया टेक्स्ट यहाँ आएगा"></textarea><button onclick="sendCaptions()">Caption में भेजें</button><div id="speechStatus" class="result">माइक्रोफोन अनुमति की जरूरत हो सकती है।</div></section>
@@ -42,18 +42,18 @@ function thumbnail(){
   x.strokeStyle=p.accent2;x.lineWidth=2;x.strokeRect(31,31,1218,658);
   x.fillStyle=p.accent;x.fillRect(55,62,12,590);
   // VIP badge
-  x.fillStyle=p.accent;x.beginPath();x.moveTo(930,55);x.lineTo(1215,55);x.lineTo(1185,118);x.lineTo(930,118);x.closePath();x.fill();
-  x.fillStyle=p.dark;x.font='bold 31px Arial';x.textAlign='center';x.fillText('✦ VIP EDITION',1070,98);
+  x.save();x.shadowColor=p.accent;x.shadowBlur=28;x.fillStyle=p.accent;x.beginPath();x.moveTo(930,55);x.lineTo(1215,55);x.lineTo(1185,118);x.lineTo(930,118);x.closePath();x.fill();
+  x.fillStyle=p.dark;x.font='bold 31px Arial';x.textAlign='center';x.fillText('✦ VIP EDITION',1070,98);x.restore();
   // Small eyebrow
   x.textAlign='left';x.fillStyle=p.accent2;x.font='bold 27px Arial';x.fillText('CLIPX  •  EXCLUSIVE',95,165);
   // Dynamic multi-line title
-  let words=title.split(/\s+/),lines=[],line='';
+  x.font='900 90px Arial';let words=title.split(/\s+/),lines=[],line='';
   for(const word of words){const test=line?line+' '+word:word;if(x.measureText(test).width>980&&line){lines.push(line);line=word}else line=test}
   if(line)lines.push(line);
   if(lines.length>3)lines=[lines[0],lines[1],lines.slice(2).join(' ')];
   let fontSize=lines.length===1?104:lines.length===2?91:76;
   x.font='900 '+fontSize+'px Arial';x.shadowColor='#000';x.shadowBlur=22;x.shadowOffsetX=4;x.shadowOffsetY=5;
-  let y=350;lines.forEach((ln,i)=>{x.fillStyle=i===0?p.accent2:'#ffffff';x.fillText(ln,95,y,1030);y+=fontSize*1.08});
+  let y=350;lines.forEach((ln,i)=>{x.lineWidth=7;x.strokeStyle='rgba(0,0,0,.72)';x.strokeText(ln,95,y,1030);x.fillStyle=i===0?p.accent2:'#ffffff';x.fillText(ln,95,y,1030);y+=fontSize*1.08});
   x.shadowBlur=0;x.shadowOffsetX=0;x.shadowOffsetY=0;
   // Bottom information ribbon
   x.fillStyle=p.accent;x.fillRect(65,590,1150,78);
