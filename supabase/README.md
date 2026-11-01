@@ -22,11 +22,23 @@ supabase secrets set SUPABASE_ANON_KEY=YOUR_PROJECT_ANON_KEY
 supabase secrets set SUPABASE_SERVICE_ROLE_KEY=YOUR_PROJECT_SERVICE_ROLE_KEY
 supabase functions deploy create-clip-job
 supabase functions deploy complete-clip-upload
+supabase functions deploy generate-video
 ```
 
 Get the real keys from **Supabase Dashboard → Project Settings → API**. Enter them only in the CLI prompt/secure terminal. Never paste the service-role key into ChatGPT, GitHub, the website, or browser code. If your CLI version does not accept a secret assignment as written, use the Dashboard's Edge Function Secrets page.
 
-## 3. Run the FFmpeg worker
+## 3. Configure optional Runway AI video generation
+
+If you want the Runway text-to-video feature, have the account owner configure the provider secret in Supabase (never in GitHub or browser code):
+
+```sh
+supabase secrets set RUNWAY_API_KEY=YOUR_RUNWAY_API_KEY
+supabase functions deploy generate-video
+```
+
+This is a Runway integration, not an OpenAI integration. Runway may charge provider credits. The website cannot generate videos until this secret and the provider account are configured.
+
+## 4. Run the FFmpeg worker
 
 Build the Docker image from the repository root:
 
@@ -42,7 +54,7 @@ Run it on a trusted Docker host with secrets configured in that host's secret ma
 
 Start with exactly one replica. The worker honors each job's selected 30/60/90-second duration and 9:16/16:9/1:1 aspect ratio. It creates sequential clips, up to 20 per job. It does not identify highlights, transcribe speech, or generate captions.
 
-## 4. Verify
+## 5. Verify
 
 1. Confirm both Functions show as deployed in Supabase.
 2. Confirm the `clip_jobs` table and private bucket exist.
