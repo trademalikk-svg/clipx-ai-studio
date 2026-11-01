@@ -48,8 +48,8 @@ async function processJob(job) {
     const total = Math.min(20, Math.ceil(duration / clipSeconds));
     const results = [];
     for (let i = 0; i < total; i++) {
-      const start = i * CLIP_SECONDS;
-      const length = Math.min(CLIP_SECONDS, duration - start);
+      const start = i * clipSeconds;
+      const length = Math.min(clipSeconds, duration - start);
       if (length < 2) continue;
       const filename = "clip-" + String(i + 1).padStart(2,"0") + ".mp4";
       const file = path.join(outputDir, filename);
