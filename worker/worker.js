@@ -1,6 +1,8 @@
 import { createClient } from "@supabase/supabase-js";
 import { spawn } from "node:child_process";
-import { promises as fs } from "node:fs";
+import { promises as fs, createWriteStream } from "node:fs";
+import { Readable, Transform } from "node:stream";
+import { pipeline } from "node:stream/promises";
 import os from "node:os";
 import path from "node:path";
 
@@ -31,10 +33,20 @@ async function processJob(job) {
     const { data: signed, error: signedError } = await db.storage.from(BUCKET).createSignedUrl(job.source_path, 300);
     if (signedError || !signed?.signedUrl) throw new Error("Could not create source download URL.");
     const response = await fetch(signed.signedUrl);
-    if (!response.ok) throw new Error("Source download failed: HTTP " + response.status);
-    const bytes = Buffer.from(await response.arrayBuffer());
-    if (!bytes.length || bytes.length > 2 * 1024 * 1024 * 1024) throw new Error("Source file size is invalid.");
-    await fs.writeFile(input, bytes);
+    if (!response.ok || !response.body) throw new Error("Source download failed: HTTP " + response.status);
+    let downloadedBytes = 0;
+    await pipeline(
+      Readable.fromWeb(response.body),
+      new Transform({
+        transform(chunk, encoding, callback) {
+          downloadedBytes += chunk.length;
+          if (downloadedBytes > 2 * 1024 * 1024 * 1024) return callback(new Error("Source file exceeds the 2 GB processing limit."));
+          callback(null, chunk);
+        }
+      }),
+      createWriteStream(input)
+    );
+    if (!downloadedBytes) throw new Error("Source file is empty.");
     const duration = await new Promise((resolve, reject) => {
       const child = spawn("ffprobe", ["-v","error","-show_entries","format=duration","-of","default=noprint_wrappers=1:nokey=1",input]);
       let out = ""; child.stdout.on("data", d => out += d); child.on("error", reject);
