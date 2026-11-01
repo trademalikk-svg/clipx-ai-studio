@@ -237,11 +237,9 @@ footer{color:#b39ac7}
  </section>
  <section class="dashboard-shortcuts" id="tools" aria-label="Video tools menu">
   <h2 class="menu-heading">Video Tools</h2><p class="muted">एक फीचर चुनें। हर टूल अलग स्क्रीन में खुलेगा।</p>
-  <a class="shortcut cyan" href="#upload" data-toolview="editor"><span class="symbol">✂</span><span>Video Editor<small>Upload, preview, trim, rotate और crop</small></span></a>
   <a class="shortcut green" href="#autoShorts" data-toolview="shorts"><span class="symbol">⚡</span><span>Automatic Shorts Maker<small>वीडियो को छोटे clips में बाँटें</small></span></a>
   <a class="shortcut orange" href="#captionStudio" data-toolview="captions"><span class="symbol">CC</span><span>Caption Studio<small>Hindi, Urdu और English subtitles</small></span></a>
   <a class="shortcut red" href="#youtubeClips" data-toolview="youtube"><span class="symbol">▶</span><span>YouTube Clip Maker<small>अनुमति वाली वीडियो का preview</small></span></a>
-  <a class="shortcut purple" href="#smartHighlights" data-toolview="highlights"><span class="symbol">✦</span><span>Smart Highlight Finder<small>वीडियो के महत्वपूर्ण दृश्य खोजें</small></span></a>
   <a class="shortcut cyan" href="#freeCreatorKit" data-toolview="creatorKit"><span class="symbol">✍</span><span>Titles & Hashtags<small>वीडियो के लिए title, description और hashtags</small></span></a>
   <a class="shortcut blue" href="#backendConnection" data-toolview="backend"><span class="symbol">✓</span><span>Backend Connection Test<small>सेवा कनेक्शन जाँचें</small></span></a>
  </section>
@@ -267,34 +265,6 @@ footer{color:#b39ac7}
   <progress id="uploadProgress" max="100" value="0"></progress>
   <p id="uploadProgressText" aria-live="polite">0% · No video selected</p>
   <div class="preview" id="preview">Your selected video preview will appear here.</div>
-  <div class="result" id="editorControls">
-   <h3>Quick Video Editor</h3>
-   <label for="editorSpeed">Playback speed</label>
-   <select id="editorSpeed">
-    <option value="0.5">0.5x Slow</option><option value="0.75">0.75x</option>
-    <option value="1" selected>1x Normal</option><option value="1.25">1.25x</option>
-    <option value="1.5">1.5x</option><option value="2">2x Fast</option>
-   </select>
-   <label for="editorVolume">Volume</label>
-   <input id="editorVolume" type="range" min="0" max="1" step="0.05" value="1">
-   <label><input id="editorMute" type="checkbox"> Mute preview</label>
-   <p id="editorStatus" class="muted" aria-live="polite">Upload a video to use editing controls.</p>
-   <label for="editorRotate">Rotate video</label>
-   <select id="editorRotate"><option value="0">0° Original</option><option value="90">90° Clockwise</option><option value="180">180°</option><option value="270">270° Clockwise</option></select>
-   <label for="editorCrop">Frame / Crop mode</label>
-   <select id="editorCrop"><option value="fill">Fill frame (crop edges)</option><option value="fit">Fit whole video (blur-free bars)</option></select>
-   <p class="muted">Rotation and frame mode are applied when you create a clip below.</p>
-  </div>
-  <div class="result">
-   <h3>Trim & Export</h3>
-   <p class="muted">Start और End समय चुनकर वीडियो का हिस्सा काटें। Export WebM format में होगा।</p>
-   <label for="trimStart">Start time (seconds)</label><input id="trimStart" type="number" min="0" step="0.1" value="0">
-   <label for="trimEnd">End time (seconds)</label><input id="trimEnd" type="number" min="0" step="0.1" value="30">
-   <button class="primary" type="button" id="trimExportButton" onclick="exportTrimmedVideo()">Trim & Export Video</button>
-   <p id="trimStatus" class="muted" aria-live="polite">पहले वीडियो अपलोड करें।</p>
-   <div id="trimPreview" class="preview">Trimmed video preview यहाँ दिखेगा।</div>
-   <a id="trimDownload" hidden download="clipx-trimmed."+clipxExportExtension(blob)>Download trimmed video</a>
-  </div>
  </section>
 
  <section class="card" id="clipSettings">
@@ -351,15 +321,6 @@ footer{color:#b39ac7}
   <div id="autoShortsResults" class="result">No clips created yet.</div>
 
  </section>
-
- <section class="card" id="smartHighlights">
-  <h3>Smart Highlight Finder (On-device)</h3>
-    <p class="muted">यह वीडियो के दृश्यों में बदलाव और गतिविधि के आधार पर सुझाव देता है। यह semantic AI नहीं है; वीडियो आपके डिवाइस पर ही analyze होती है।</p>
-    <button class="primary" type="button" id="highlightScanButton" onclick="findSmartHighlights()">Find Highlight Moments</button>
-    <p id="highlightStatus" class="muted" aria-live="polite">पहले अपनी वीडियो अपलोड करें।</p>
-    <div id="highlightResults" class="result">अभी कोई सुझाव नहीं।</div>
- </section>
-
  <section class="card" id="faceTrackingLab">
   <h3>Face Tracking Lab — Free On-device Test</h3>
   <p class="muted">MediaPipe से वीडियो के चुने हुए frames में चेहरे खोजें। यह शुरुआती परीक्षण है। Face-follow crop Export में checkbox चालू करने पर लागू करने की कोशिश करता है; परिणाम वीडियो और डिवाइस पर निर्भर करेगा। पहली बार मॉडल इंटरनेट से लोड होगा।</p>
@@ -482,7 +443,6 @@ function showWorkspaceView(view) {
   shorts:["upload","clipSettings","autoShorts"],
   captions:["upload","captionStudio"],
   youtube:["youtubeClips"],
-  highlights:["upload","smartHighlights","faceTrackingLab"],
   backend:["backendConnection"],
   creatorKit:["freeCreatorKit"],
   prompts:["promptStudio"],
