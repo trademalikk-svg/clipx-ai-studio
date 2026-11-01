@@ -453,63 +453,125 @@ async function makeAutomaticShorts() {
  const results = document.getElementById("autoShortsResults");
  const button = document.getElementById("autoShortsButton");
  const player = document.querySelector("#preview video");
+ const capture = player && (player.captureStream || player.mozCaptureStream);
  if (!player || !Number.isFinite(player.duration) || player.duration <= 0) {
-  status.textContent = "पहले ऊपर वीडियो चुनें और Upload Video दबाएँ।"; return;
+  status.textContent = "पहले ऊपर वीडियो चुनें और Upload Video दबाएँ।";
+  return;
  }
- if (!player.captureStream || !window.MediaRecorder) {
-  status.textContent = "इस ब्राउज़र में recording समर्थित नहीं है। Chrome में कोशिश करें।"; return;
+ if (!capture || !window.MediaRecorder) {
+  status.textContent = "इस ब्राउज़र में वीडियो रिकॉर्डिंग समर्थित नहीं है। Chrome के नए संस्करण में कोशिश करें।";
+  return;
  }
  const duration = Number(selectedValue("duration"));
  const count = Number(document.getElementById("clipCount").value);
- if (!duration || !count) { status.textContent = "Clip Settings में duration और clips की संख्या चुनें।"; return; }
- const mime = ["video/webm;codecs=vp9,opus","video/webm;codecs=vp8,opus","video/webm"].find(type => MediaRecorder.isTypeSupported(type));
- if (!mime) { status.textContent = "इस डिवाइस पर WebM recording उपलब्ध नहीं है।"; return; }
+ if (!duration || !count) {
+  status.textContent = "Clip Settings में duration और clips की संख्या चुनें।";
+  return;
+ }
+ const mime = ["video/webm;codecs=vp9,opus","video/webm;codecs=vp8,opus","video/webm"]
+  .find(type => MediaRecorder.isTypeSupported(type));
+ if (!mime) {
+  status.textContent = "इस डिवाइस पर WebM recording उपलब्ध नहीं है।";
+  return;
+ }
  const total = Math.min(count, Math.ceil(player.duration / duration));
  button.disabled = true;
  results.replaceChildren();
  let completed = 0;
- const stream = player.captureStream();
+ const stream = capture.call(player);
+ const seekTo = (time) => new Promise((resolve, reject) => {
+  if (Math.abs(player.currentTime - time) < 0.05 && player.readyState >= 2) {
+   resolve();
+   return;
+  }
+  const timer = setTimeout(() => {
+   cleanup();
+   reject(new Error("वीडियो seek होने में समय लग गया।"));
+  }, 10000);
+  const cleanup = () => {
+   clearTimeout(timer);
+   player.removeEventListener("seeked", onSeeked);
+   player.removeEventListener("error", onError);
+  };
+  const onSeeked = () => { cleanup(); resolve(); };
+  const onError = () => { cleanup(); reject(new Error("वीडियो seek नहीं हो सकी।")); };
+  player.addEventListener("seeked", onSeeked, {once:true});
+  player.addEventListener("error", onError, {once:true});
+  player.currentTime = time;
+ });
+ const recordPart = (end) => new Promise(async (resolve, reject) => {
+  const chunks = [];
+  let finished = false;
+  let timer;
+  let recorder;
+  const finish = (error) => {
+   if (finished) return;
+   finished = true;
+   clearTimeout(timer);
+   player.removeEventListener("timeupdate", checkEnd);
+   player.removeEventListener("ended", stopRecorder);
+   if (error) reject(error);
+  };
+  const checkEnd = () => {
+   if (player.currentTime >= end - 0.03) stopRecorder();
+  };
+  const stopRecorder = () => {
+   player.pause();
+   if (recorder && recorder.state === "recording") recorder.stop();
+  };
+  try {
+   recorder = new MediaRecorder(stream, {mimeType:mime});
+   recorder.ondataavailable = event => {
+    if (event.data && event.data.size) chunks.push(event.data);
+   };
+   recorder.onerror = () => finish(new Error("Recording failed"));
+   recorder.onstop = () => {
+    if (finished) return;
+    finished = true;
+    clearTimeout(timer);
+    player.removeEventListener("timeupdate", checkEnd);
+    player.removeEventListener("ended", stopRecorder);
+    resolve(new Blob(chunks, {type:mime}));
+   };
+   player.addEventListener("timeupdate", checkEnd);
+   player.addEventListener("ended", stopRecorder);
+   timer = setTimeout(stopRecorder, Math.max(5000, (end - player.currentTime) * 1000 + 5000));
+   recorder.start(250);
+   await player.play();
+   checkEnd();
+  } catch (error) {
+   if (recorder && recorder.state === "recording") recorder.stop();
+   finish(error);
+  }
+ });
  try {
   player.pause();
   for (let i = 0; i < total; i++) {
-   const start = i * duration;
-   const end = Math.min(start + duration, player.duration);
-   status.textContent = "क्लिप " + (i+1) + "/" + total + " रिकॉर्ड हो रही है। पेज खुला रखें।";
-   player.currentTime = start;
-   await new Promise((resolve, reject) => {
-    if (Math.abs(player.currentTime-start)<0.05 && player.readyState>=2) return resolve();
-    const ok=()=>{clean();resolve();}, fail=()=>{clean();reject(new Error("Seek failed"));};
-    const clean=()=>{player.removeEventListener("seeked",ok);player.removeEventListener("error",fail);};
-    player.addEventListener("seeked",ok,{once:true}); player.addEventListener("error",fail,{once:true});
-   });
-   const blob = await new Promise(async (resolve,reject) => {
-    const chunks=[];
-    const recorder=new MediaRecorder(stream,{mimeType:mime});
-    let done=false;
-    const stop=()=>{if(!done){done=true;if(recorder.state==="recording")recorder.stop();}};
-    recorder.ondataavailable=e=>{if(e.data&&e.data.size)chunks.push(e.data);};
-    recorder.onerror=()=>reject(new Error("Recording failed"));
-    recorder.onstop=()=>resolve(new Blob(chunks,{type:mime}));
-    const tick=()=>{if(player.currentTime>=end){player.pause();stop();}};
-    player.addEventListener("timeupdate",tick);
-    recorder.addEventListener("stop",()=>player.removeEventListener("timeupdate",tick),{once:true});
-    try { recorder.start(250); await player.play(); tick(); }
-    catch(e){player.removeEventListener("timeupdate",tick);if(recorder.state==="recording")recorder.stop();reject(e);}
-   });
-   if(!blob.size) throw new Error("Empty clip");
-   const url=URL.createObjectURL(blob);
-   const link=document.createElement("a");
-   link.href=url; link.download="clipx-short-"+(i+1)+".webm";
-   link.textContent="Download Short "+(i+1)+" ("+Math.round(end-start)+" sec)";
-   link.style.display="block"; link.style.margin="10px 0"; link.style.color="#d6a4ff";
-   results.appendChild(link); completed++;
+   const from = i * duration;
+   const to = Math.min(from + duration, player.duration);
+   status.textContent = "क्लिप " + (i + 1) + "/" + total + " रिकॉर्ड हो रही है। पेज खुला रखें।";
+   await seekTo(from);
+   const blob = await recordPart(to);
+   if (!blob.size) throw new Error("खाली क्लिप मिली।");
+   const url = URL.createObjectURL(blob);
+   const link = document.createElement("a");
+   link.href = url;
+   link.download = "clipx-short-" + (i + 1) + ".webm";
+   link.textContent = "Download Short " + (i + 1) + " (" + Math.ceil(to - from) + " sec)";
+   link.style.display = "block";
+   link.style.margin = "10px 0";
+   link.style.color = "#d6a4ff";
+   results.appendChild(link);
+   completed++;
   }
-  status.textContent=completed+" Shorts तैयार हैं। हर Download लिंक दबाकर क्लिप सेव करें।";
- } catch(error) {
-  status.textContent="क्लिप बनाते समय समस्या आई। "+completed+" क्लिप तैयार हुईं। Chrome में दोबारा कोशिश करें।";
- } finally { player.pause(); button.disabled=false; }
+  status.textContent = completed + " Shorts तैयार हैं। हर Download लिंक दबाकर क्लिप सेव करें।";
+ } catch (error) {
+  status.textContent = "क्लिप बनाते समय समस्या आई। " + completed + " क्लिप तैयार हुईं। " + (error.message || "");
+ } finally {
+  player.pause();
+  button.disabled = false;
+ }
 }
-
 /* Existing Supabase project connection retained. */
 const SUPABASE_URL = "https://qmoxfzgiwamblpouxitn.supabase.co";
 const SUPABASE_KEY = "sb_publishable_dsVQ5-5VuIG5n_m0qqNjqw__i5sogpL";
