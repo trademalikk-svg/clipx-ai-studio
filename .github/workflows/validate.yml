@@ -22,12 +22,12 @@ jobs:
           python3 - <<'PY'
           import pathlib, re, subprocess, tempfile
           html = pathlib.Path("index.html").read_text(encoding="utf-8")
-          scripts = re.findall(r"<script\\b([^>]*)>(.*?)</script\\s*>", html, re.I | re.S)
+          scripts = re.findall(r"<script\b([^>]*)>(.*?)</script\s*>", html, re.I | re.S)
           checked = 0
           for index, (attrs, source) in enumerate(scripts):
-              if not source.strip() or re.search(r"\\bsrc\\s*=", attrs, re.I):
+              if not source.strip() or re.search(r"\bsrc\s*=", attrs, re.I):
                   continue
-              is_module = bool(re.search(r"type\\s*=\\s*[\"']module[\"']", attrs, re.I))
+              is_module = bool(re.search(r"type\s*=\s*[\"']module[\"']", attrs, re.I))
               suffix = ".mjs" if is_module else ".js"
               path = pathlib.Path(tempfile.gettempdir()) / f"clipx-inline-{index}{suffix}"
               path.write_text(source, encoding="utf-8")
