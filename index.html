@@ -70,6 +70,7 @@ footer{text-align:center;padding:25px;color:#777;font-size:12px}
   <label for="video">Select a video from your device</label>
   <input type="file" id="video" accept="video/*">
   <p id="fileInfo" class="muted">No video selected</p>
+  <button class="primary" type="button" id="uploadVideoButton" onclick="uploadSelectedVideo()">Upload Video</button>
   <label for="uploadProgress">Video loading progress (this stays on your device)</label>
   <progress id="uploadProgress" max="100" value="0"></progress>
   <p id="uploadProgressText" aria-live="polite">0% · No video selected</p>
@@ -163,60 +164,86 @@ footer{text-align:center;padding:25px;color:#777;font-size:12px}
 const videoInput = document.getElementById("video");
 const preview = document.getElementById("preview");
 let videoURL = null;
+let selectedVideoFile = null;
 
 const uploadProgress = document.getElementById("uploadProgress");
 const uploadProgressText = document.getElementById("uploadProgressText");
+const uploadVideoButton = document.getElementById("uploadVideoButton");
 
 function updateVideoLoadingProgress(player) {
  if (!player.duration || !Number.isFinite(player.duration)) return;
- let percent = 0;
  if (player.buffered.length) {
-  percent = Math.min(99, Math.round((player.buffered.end(player.buffered.length - 1) / player.duration) * 100));
+  const percent = Math.min(99, Math.round((player.buffered.end(player.buffered.length - 1) / player.duration) * 100));
+  uploadProgress.value = percent;
+  uploadProgressText.textContent = percent + "% · Video is loading on your device...";
  }
- uploadProgress.value = percent;
- uploadProgressText.textContent = percent + "% · Video is loading on your device...";
 }
 
 videoInput.addEventListener("change", function () {
- const file = this.files && this.files[0];
+ selectedVideoFile = this.files && this.files[0] ? this.files[0] : null;
  uploadProgress.value = 0;
- uploadProgressText.textContent = "0% · Checking selected video...";
- if (!file) {
+ preview.textContent = "Upload Video दबाएँ, फिर आपका preview यहाँ दिखाई देगा।";
+ if (!selectedVideoFile) {
   document.getElementById("fileInfo").textContent = "No video selected";
   uploadProgressText.textContent = "0% · No video selected";
+  uploadVideoButton.disabled = true;
   return;
  }
- if (!file.type.startsWith("video/")) {
+ if (!selectedVideoFile.type.startsWith("video/")) {
   document.getElementById("fileInfo").textContent = "Please select a video file.";
-  uploadProgressText.textContent = "Unable to load: please select a video file.";
+  uploadProgressText.textContent = "Please select a valid video file.";
+  uploadVideoButton.disabled = true;
+  selectedVideoFile = null;
   return;
  }
- if (videoURL) URL.revokeObjectURL(videoURL);
- videoURL = URL.createObjectURL(file);
  document.getElementById("fileInfo").textContent =
-  file.name + " · " + (file.size / 1024 / 1024).toFixed(2) + " MB";
- uploadProgressText.textContent = "0% · Video selected; loading preview...";
- preview.replaceChildren();
- const player = document.createElement("video");
- player.src = videoURL;
- player.preload = "auto";
- player.controls = true;
- player.playsInline = true;
- player.addEventListener("progress", () => updateVideoLoadingProgress(player));
- player.addEventListener("loadedmetadata", () => updateVideoLoadingProgress(player));
- player.addEventListener("loadeddata", () => {
-  uploadProgress.value = 100;
-  uploadProgressText.textContent = "100% · Video ready to preview (stored only on this device).";
- });
- player.addEventListener("canplay", () => {
-  uploadProgress.value = 100;
-  uploadProgressText.textContent = "100% · Video ready to preview (stored only on this device).";
- });
- player.addEventListener("error", () => {
-  uploadProgressText.textContent = "Video could not be loaded. Try another video format.";
- });
- preview.appendChild(player);
+  selectedVideoFile.name + " · " + (selectedVideoFile.size / 1024 / 1024).toFixed(2) + " MB";
+ uploadProgressText.textContent = "0% · Video selected. अब Upload Video दबाएँ।";
+ uploadVideoButton.disabled = false;
 });
+
+async function uploadSelectedVideo() {
+ if (!selectedVideoFile) {
+  uploadProgressText.textContent = "पहले Choose File से वीडियो चुनें।";
+  return;
+ }
+ uploadVideoButton.disabled = true;
+ uploadProgress.value = 0;
+ uploadProgressText.textContent = "0% · वीडियो तैयार हो रही है...";
+ try {
+  if (videoURL) URL.revokeObjectURL(videoURL);
+  videoURL = URL.createObjectURL(selectedVideoFile);
+  preview.replaceChildren();
+  const player = document.createElement("video");
+  player.src = videoURL;
+  player.preload = "auto";
+  player.controls = true;
+  player.playsInline = true;
+  player.addEventListener("progress", () => updateVideoLoadingProgress(player));
+  player.addEventListener("loadedmetadata", () => {
+   uploadProgressText.textContent = "वीडियो की जानकारी पढ़ ली गई है...";
+  });
+  player.addEventListener("loadeddata", () => {
+   uploadProgress.value = 100;
+   uploadProgressText.textContent = "100% · Video ready to preview!";
+   uploadVideoButton.disabled = false;
+  });
+  player.addEventListener("canplay", () => {
+   uploadProgress.value = 100;
+   uploadProgressText.textContent = "100% · Video ready to preview!";
+   uploadVideoButton.disabled = false;
+  });
+  player.addEventListener("error", () => {
+   uploadProgressText.textContent = "Video load नहीं हुई। दूसरी video file चुनकर कोशिश करें।";
+   uploadVideoButton.disabled = false;
+  });
+  preview.appendChild(player);
+  player.load();
+ } catch (error) {
+  uploadProgressText.textContent = "वीडियो लोड नहीं हो सकी। दोबारा कोशिश करें।";
+  uploadVideoButton.disabled = false;
+ }
+}
 
 function setupOptions(id) {
  const group = document.getElementById(id);
