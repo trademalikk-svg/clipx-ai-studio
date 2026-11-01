@@ -294,8 +294,8 @@ footer{color:#b39ac7}
  <section class="card" id="captionStudio">
   <h2>Caption Studio</h2>
   <p class="muted">हर लाइन एक subtitle बनेगी। यह tool आपके लिखे captions की SRT file बनाता है।</p>
-  <div class="notice">Hindi Auto Captions आपके डिवाइस के browser में Whisper मॉडल से बनेंगे। पहली बार मॉडल डाउनलोड होगा (लगभग 150 MB या अधिक); अच्छा इंटरनेट, खाली RAM और स्टोरेज चाहिए। वीडियो आपके डिवाइस पर process होगी; transcription के लिए वीडियो किसी server पर upload नहीं होगी।</div>
-  <button class="primary" id="autoCaptionButton" type="button" onclick="window.clipxMakeHindiCaptions()">Generate Hindi Auto Captions</button>
+  <div class="notice">Multilingual Auto Captions आपके डिवाइस के browser में Whisper मॉडल से बनेंगे। Hindi, Urdu और English में भाषा अपने-आप पहचानने की कोशिश होगी। पहली बार मॉडल डाउनलोड होगा (लगभग 150 MB या अधिक); अच्छा इंटरनेट, खाली RAM और स्टोरेज चाहिए। वीडियो transcription के लिए किसी server पर upload नहीं होगी।</div>
+  <button class="primary" id="autoCaptionButton" type="button" onclick="window.clipxMakeHindiCaptions()">Generate Auto Captions (Hindi + Urdu + English)</button>
   <p id="autoCaptionStatus" class="muted" aria-live="polite">पहले अपनी वीडियो upload करें। पहली बार मॉडल लोड होने में समय लग सकता है।</p>
   <label for="captionText">Captions लिखें (हर नई लाइन पर अगला caption)</label>
   <textarea id="captionText" placeholder="नमस्कार दोस्तों!&#10;आज हम एक नई वीडियो बनाने वाले हैं।&#10;वीडियो पसंद आए तो Like करें।"></textarea>
@@ -341,8 +341,8 @@ footer{color:#b39ac7}
 
  <section class="card" id="features">
   <h2>08. AI Studio Features</h2>
-  <p class="muted">Planned features: automatic speech-to-text captions, AI highlight detection, face tracking, animated subtitles, titles, hashtags and multiple short clips.</p>
-  <p class="notice">Video upload and preview work in your browser. Automatic speech recognition, AI clipping, face tracking and burned-in caption video export need a separate processing backend; those functions are not active yet. Caption Studio can create a downloadable SRT file from text you enter.</p>
+  <p class="muted">Planned features: AI highlight detection, face tracking, animated subtitles, titles, hashtags and multiple short clips.</p>
+  <p class="notice">Video upload and preview work in your browser. Automatic speech recognition runs in your browser using a multilingual Whisper model; language auto-detection may make mistakes. AI clipping, face tracking and burned-in caption video export need a separate processing backend; those functions are not active yet.</p>
  </section>
 </main>
 
@@ -1072,7 +1072,7 @@ window.clipxMakeHindiCaptions = async function () {
  if (file.size > 150 * 1024 * 1024) { status.textContent = "यह browser-based version 150 MB तक की फ़ाइल के लिए बनाया गया है। छोटी फ़ाइल चुनें।"; return; }
  button.disabled = true;
  try {
-  status.textContent = "Whisper Hindi model लोड हो रहा है। पहली बार लगभग 150 MB या अधिक डाउनलोड हो सकता है…";
+  status.textContent = "Whisper multilingual model लोड हो रहा है। पहली बार लगभग 150 MB या अधिक डाउनलोड हो सकता है…";
   if (!clipxWhisper) clipxWhisper = await pipeline("automatic-speech-recognition", "Xenova/whisper-tiny", { quantized: true });
   status.textContent = "वीडियो की audio तैयार हो रही है…";
   const audioContext = new AudioContext();
@@ -1087,7 +1087,6 @@ window.clipxMakeHindiCaptions = async function () {
   const samples = rendered.getChannelData(0);
   const result = await clipxWhisper(samples, {
    sampling_rate: 16000,
-   language: "hindi",
    task: "transcribe",
    chunk_length_s: 30,
    stride_length_s: 5,
@@ -1119,8 +1118,8 @@ window.clipxMakeHindiCaptions = async function () {
   const blob = new Blob([srt], {type:"text/plain;charset=utf-8"});
   const url = URL.createObjectURL(blob);
   const link = document.getElementById("downloadSrt");
-  link.href = url; link.download = "clipx-hindi-auto-captions.srt"; link.hidden = false;
-  status.textContent = "Hindi transcription तैयार है। SRT डाउनलोड करें। शब्दों और timestamps को जाँच लें—AI से गलती हो सकती है।";
+  link.href = url; link.download = "clipx-multilingual-auto-captions.srt"; link.hidden = false;
+  status.textContent = "Transcription तैयार है। Hindi, Urdu और English के शब्दों व timestamps को जाँच लें—AI से गलती हो सकती है।";
  } catch (error) {
   status.textContent = "Auto captions नहीं बन पाए: " + (error.message || String(error)) + "। यह मॉडल कुछ मोबाइल browsers में RAM की कमी से रुक सकता है।";
  } finally { button.disabled = false; }
