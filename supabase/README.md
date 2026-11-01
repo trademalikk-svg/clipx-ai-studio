@@ -1,5 +1,7 @@
 # ClipX cloud backend setup
 
+> **Optional experimental backend — not needed for the free public website.** The public Free Browser Mode disables cloud rendering and external AI video generation. Supabase and a Docker worker are separate services; their free-tier limits, hosting availability and provider charges can change. Do not follow these steps unless you explicitly decide to enable cloud features and accept any costs.
+
 The repository contains a private upload queue, two authenticated Supabase Edge Functions, and a Docker/FFmpeg worker. This is sequential clip rendering, **not AI highlight detection**.
 
 ## 1. Apply the database migration
