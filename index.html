@@ -770,7 +770,7 @@ async function copyPrompt() {
 }
 
 
-async function clipxRecordVideo(player,start,duration,status,ratio) {
+async async function clipxRecordVideo(player,start,duration,status,ratio) {
  const captionLines=document.getElementById("captionText")?.value.split(/\r?\n/).map(s=>s.trim()).filter(Boolean)||[];
  const captionStart=Number(document.getElementById("captionStart")?.value||0);
  const captionDuration=Math.max(0.5,Number(document.getElementById("captionDuration")?.value||3));
@@ -879,13 +879,13 @@ async function clipxRecordVideo(player,start,duration,status,ratio) {
    const onEnded=()=>finish();
    const checkProgress=()=>{
     if(player.currentTime>=start+duration-0.04||player.ended){finish();return;}
-    if(player.paused){reject(new Error("वीडियो playback बीच में रुक गया।"));return;}
+    if(player.paused){progressFrame=requestAnimationFrame(checkProgress);return;}
     progressFrame=requestAnimationFrame(checkProgress);
    };
    let progressFrame=requestAnimationFrame(checkProgress);
    player.addEventListener("ended",onEnded,{once:true});
    // Safety timeout only; never use it as the normal end condition.
-   timeCheck=setTimeout(finish,Math.max(15000,duration*2500+10000));
+   timeCheck=setTimeout(()=>reject(new Error("Export बहुत देर तक रुका रहा। फिर से कोशिश करें।")),Math.max(180000,duration*10000));
   });
   if(recorder.state!=="inactive")recorder.stop();
   await finished;
