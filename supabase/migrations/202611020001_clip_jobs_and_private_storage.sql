@@ -27,7 +27,7 @@ drop policy if exists "Users update own queued jobs" on public.clip_jobs;
 
 insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
 values ('clipx-private', 'clipx-private', false, 2147483648, array['video/mp4','video/webm','video/quicktime','video/x-matroska'])
-on conflict (id) do update set public=false, file_size_limit=2147483648;
+on conflict (id) do update set public=false, file_size_limit=2147483648, allowed_mime_types=excluded.allowed_mime_types;
 
 drop policy if exists "Users upload own ClipX files" on storage.objects;
 create policy "Users upload own ClipX files" on storage.objects for insert to authenticated
