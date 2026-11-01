@@ -40,9 +40,10 @@ footer{text-align:center;padding:25px;color:#777;font-size:12px}
 <body>
 <header>
  <div class="logo">CLIPX <span>AI STUDIO</span></div>
- <div class="auth-buttons">
-  <button type="button" onclick="showAuth('login')">Login</button>
-  <button type="button" class="secondary" onclick="showAuth('signup')">Sign Up</button>
+ <div class="auth-buttons" id="authControls">
+  <button type="button" id="loginNavButton" onclick="showAuth('login')">Login</button>
+  <button type="button" class="secondary" id="signupNavButton" onclick="showAuth('signup')">Sign Up</button>
+  <button type="button" class="secondary" id="logoutNavButton" onclick="handleLogout()" hidden>Logout</button>
  </div>
  <div class="vip">✦ CREATOR STUDIO</div>
 </header>
@@ -472,6 +473,48 @@ try {
  console.error("Supabase initialization failed:", error);
 }
 
+function updateAuthControls(user) {
+ const loggedIn = Boolean(user);
+ document.getElementById("loginNavButton").hidden = loggedIn;
+ document.getElementById("signupNavButton").hidden = loggedIn;
+ document.getElementById("logoutNavButton").hidden = !loggedIn;
+ const title = document.getElementById("authTitle");
+ if (loggedIn) {
+  title.textContent = "Account";
+  document.getElementById("authMessage").textContent =
+   "Logged in: " + (user.email || "Account active");
+  document.getElementById("authButton").hidden = true;
+  document.getElementById("authEmail").hidden = true;
+  document.getElementById("authPassword").hidden = true;
+ } else {
+  document.getElementById("authButton").hidden = false;
+  document.getElementById("authEmail").hidden = false;
+  document.getElementById("authPassword").hidden = false;
+ }
+}
+
+if (supabaseClient) {
+ supabaseClient.auth.getSession().then(({data}) => {
+  updateAuthControls(data.session ? data.session.user : null);
+ });
+ supabaseClient.auth.onAuthStateChange((_event, session) => {
+  updateAuthControls(session ? session.user : null);
+ });
+}
+
+async function handleLogout() {
+ const message = document.getElementById("authMessage");
+ if (!supabaseClient) return;
+ const { error } = await supabaseClient.auth.signOut();
+ if (error) {
+  message.textContent = error.message || "Logout नहीं हो सका।";
+  return;
+ }
+ updateAuthControls(null);
+ message.textContent = "आप Logout हो गए हैं।";
+ document.getElementById("authBox").hidden = false;
+}
+
 async function handleAuth() {
  const email = document.getElementById("authEmail").value.trim();
  const password = document.getElementById("authPassword").value;
@@ -492,9 +535,14 @@ async function handleAuth() {
    ? await supabaseClient.auth.signUp({email, password})
    : await supabaseClient.auth.signInWithPassword({email, password});
   if (result.error) throw result.error;
-  message.textContent = authMode === "signup"
-   ? "Signup request सफल हुई। Email confirmation की जरूरत हो सकती है।"
-   : "Login successful!";
+  if (authMode === "signup") {
+   message.textContent = result.data.session
+    ? "Account बन गया और आप login हैं।"
+    : "Signup request सफल हुई। Email confirmation करें, फिर Login करें।";
+  } else {
+   message.textContent = "Login successful!";
+  }
+  updateAuthControls(result.data.user || null);
  } catch (error) {
   message.textContent = error.message || "Authentication failed.";
  } finally {
