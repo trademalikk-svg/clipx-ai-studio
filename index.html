@@ -130,6 +130,13 @@ footer{text-align:center;padding:25px;color:#777;font-size:12px}
   <div id="autoShortsResults" class="result">No clips created yet.</div>
  </section>
 
+ <section class="card" id="backendConnection">
+  <h2>06. Backend Connection Test</h2>
+  <p class="muted">Supabase Edge Function और saved secret की connection जाँचें। यह टेस्ट वीडियो नहीं बनाता और Runway credits खर्च नहीं करता।</p>
+  <button class="primary" id="backendTestButton" type="button" onclick="testBackendConnection()">Test Backend Connection</button>
+  <div id="backendTestResult" class="result" aria-live="polite">अभी connection test नहीं हुआ है।</div>
+ </section>
+
  <section class="card" id="captionStudio">
   <h2>06. Caption Studio</h2>
   <p class="muted">हर लाइन एक subtitle बनेगी। यह tool आपके लिखे हुए captions की SRT subtitle file तैयार करता है; यह अभी आवाज़ को अपने-आप पहचानकर transcription नहीं करता।</p>
