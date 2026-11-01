@@ -299,15 +299,14 @@ footer{color:#b39ac7}
 
  <section class="card" id="youtubeClips">
   <h2>YouTube Link Clip Maker</h2>
-  <p class="muted">YouTube URL से वीडियो preview करें। Clip बनाने के लिए उसी वीडियो की मूल फ़ाइल अपने डिवाइस से upload करें। केवल अपनी या स्पष्ट अनुमति वाली वीडियो इस्तेमाल करें।</p>
+  <p class="muted">YouTube लिंक का preview देखें। Shorts बनाने के लिए वीडियो फ़ाइल अपने डिवाइस से चुनें।</p>
   <label for="youtubeUrl">YouTube video link</label>
   <input id="youtubeUrl" type="url" placeholder="https://www.youtube.com/watch?v=..." inputmode="url">
   <button class="primary" type="button" onclick="loadYouTubeClip()">Preview YouTube Video</button>
   <div id="youtubePreview" class="preview">YouTube preview यहाँ दिखाई देगा।</div>
-  <label class="consentRow"><input id="youtubeRightsConfirm" type="checkbox"> मैं इस वीडियो का मालिक हूँ या इसे डाउनलोड और एडिट करने की स्पष्ट अनुमति रखता/रखती हूँ।</label>
-  <p class="muted">Preview में “Video unavailable” आए तो creator ने embedding बंद की हो सकती है। YouTube URL से सीधे डाउनलोड उपलब्ध नहीं है। अपनी/अनुमति-प्राप्त मूल वीडियो फ़ाइल चुनें; फिर ऊपर Upload Video दबाएँ।</p>
-  <button class="primary" type="button" onclick="startAuthorizedYouTubeClipFlow()">Choose permitted source video</button>
-  <p id="youtubeClipStatus" class="muted" aria-live="polite">YouTube link डालें, preview देखें और अनुमति की पुष्टि करें।</p>
+  <p class="muted">Preview में “Video unavailable” आए तो creator ने embedding बंद की हो सकती है। YouTube लिंक यहाँ preview के लिए है; वीडियो फ़ाइल चुनकर clips बनाएँ।</p>
+  <button class="primary" type="button" onclick="startYouTubeClipFlow()">वीडियो चुनें और Clips बनाएँ</button>
+  <p id="youtubeClipStatus" class="muted" aria-live="polite">YouTube लिंक का preview देखें या सीधे अपने डिवाइस से वीडियो चुनें।</p>
  </section>
  <section class="card" id="autoShorts">
   <h2>Automatic Shorts Maker</h2>
@@ -687,12 +686,12 @@ function loadYouTubeClip() {
  status.textContent="वीडियो preview लोड हो गया। YouTube link से यहाँ clip file export उपलब्ध नहीं है।";
 }
 
-function startAuthorizedYouTubeClipFlow() {
- const id=getYouTubeVideoId(document.getElementById("youtubeUrl").value);
- const status=document.getElementById("youtubeClipStatus");
- if(!/^[a-zA-Z0-9_-]{11}$/.test(id)) {
-  status.textContent="पहले सही YouTube video link डालें और Preview करें।";return;
- }
+function startYouTubeClipFlow() {
+  const status=document.getElementById("youtubeClipStatus");
+  status.textContent="अपने डिवाइस से वीडियो चुनें। Upload के बाद Automatic Shorts Maker से clips बनाएँ।";
+  document.getElementById("video").click();
+  document.getElementById("upload").scrollIntoView({behavior:"smooth",block:"start"});
+}
  if(!document.getElementById("youtubeRightsConfirm").checked) {
   status.textContent="आगे बढ़ने के लिए वीडियो के मालिक होने या स्पष्ट अनुमति की पुष्टि जरूरी है।";return;
  }
