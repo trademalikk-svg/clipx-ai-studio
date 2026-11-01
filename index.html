@@ -968,7 +968,7 @@ async function exportTrimmedVideo() {
   unbindPreview=clipxSyncProcessingWithPreview(previewPlayer,source.player);
   if(end>source.player.duration)throw new Error("End समय मूल वीडियो की अवधि से अधिक है।");
   const blob=await clipxRecordVideo(source.player,start,end-start,status,selectedValue("ratio")||"9:16");
-  clipxShowVideo(blob,output,download,"clipx-trimmed.webm");
+  clipxShowVideo(blob,output,download,"clipx-trimmed."+clipxExportExtension(blob));
   status.textContent="Trim पूरा हुआ। "+clipxExportLabel(blob)+" डाउनलोड कर सकते हैं।";
  } catch(e){status.textContent="Export नहीं हुआ: "+(e.message||String(e));}
  finally{if(unbindPreview)unbindPreview();
@@ -1057,17 +1057,21 @@ async function findSmartHighlights(){
  finally{try{player.currentTime=originalTime;}catch(e){}button.disabled=false;}
 }
 async function exportSmartHighlight(start,duration,index,button){
- const player=document.querySelector("#preview video");
+ const previewPlayer=document.querySelector("#preview video");
  const status=document.getElementById("highlightStatus");
+ if(!previewPlayer){status.textContent="पहले वीडियो अपलोड करें।";return;}
  button.disabled=true;status.textContent="Highlight export हो रहा है…";
+ let source=null,unbindPreview=null;
  try{
-  const blob=await clipxRecordVideo(player,start,duration,status,selectedValue("ratio")||"9:16");
+  source=await clipxCreateProcessingVideo();
+  unbindPreview=clipxSyncProcessingWithPreview(previewPlayer,source.player);
+  const blob=await clipxRecordVideo(source.player,start,duration,status,selectedValue("ratio")||"9:16");
   const url=URL.createObjectURL(blob);const a=document.createElement("a");
   a.href=url;a.download="clipx-highlight-"+index+"."+clipxExportExtension(blob);a.textContent="Download highlight "+index;
   a.style.display="inline-block";a.style.margin="8px";document.getElementById("highlightResults").append(a);
   status.textContent="Highlight export तैयार है।";
  }catch(e){status.textContent="Export failed: "+(e.message||String(e));}
- finally{button.disabled=false;}
+ finally{if(unbindPreview)unbindPreview();if(source)source.cleanup();button.disabled=false;}
 }
 async function makeAutomaticShorts() {
  const status = document.getElementById("autoShortsStatus");
