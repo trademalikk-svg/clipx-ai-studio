@@ -102,6 +102,20 @@ footer{color:#8d8ba9}
 .sidebar a.active{background:linear-gradient(100deg,#7621ed,#3c16a5);color:#fff}
 main>section.view-hidden{display:none!important}
 @media(max-width:760px){.sidebar{flex-wrap:nowrap}}
+/* Compact mobile spacing */
+.card{padding:18px;margin-bottom:12px}
+.card h2{margin-bottom:12px}
+label{margin:10px 0 5px;line-height:1.35}
+input,select,textarea{margin-top:2px}
+.result{margin-top:9px;padding:11px}
+.preview{min-height:110px;padding:10px}
+.primary{margin-top:10px;padding:12px}
+@media(max-width:760px){
+ main{gap:10px}
+ .card{padding:14px;margin-bottom:10px}
+ .result{padding:10px}
+}
+
 
 /* Purple Neon premium refresh */
 :root{color-scheme:dark;--neon:#b45cff;--pink:#ed48ff;--cyan:#55d9ff}
@@ -405,7 +419,7 @@ function showWorkspaceView(view) {
  const groups = {
   home:["home","tools"],
   tools:["tools"],
-  editor:["upload","clipSettings"],
+  editor:["upload"],
   shorts:["upload","clipSettings","autoShorts"],
   captions:["upload","captionStudio"],
   youtube:["youtubeClips"],
