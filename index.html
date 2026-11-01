@@ -917,6 +917,13 @@ async function clipxCreateProcessingVideo(){
   return {player,cleanup:()=>{player.pause();player.removeAttribute("src");player.load();URL.revokeObjectURL(url);}};
  }catch(error){URL.revokeObjectURL(url);throw error;}
 }
+function clipxSyncProcessingWithPreview(previewPlayer,processingPlayer){
+ const pauseBoth=()=>{if(!processingPlayer.paused)processingPlayer.pause();};
+ const resumeBoth=()=>{if(processingPlayer.paused)processingPlayer.play().catch(()=>{});};
+ previewPlayer.addEventListener("pause",pauseBoth);
+ previewPlayer.addEventListener("play",resumeBoth);
+ return ()=>{previewPlayer.removeEventListener("pause",pauseBoth);previewPlayer.removeEventListener("play",resumeBoth);};
+}
 function clipxExportExtension(blob){return blob.type&&blob.type.toLowerCase().includes("mp4")?"mp4":"webm";}
 function clipxExportLabel(blob){return clipxExportExtension(blob)==="mp4"?"MP4":"WebM";}
 function clipxInputFile() {
@@ -955,15 +962,17 @@ async function exportTrimmedVideo() {
  if(!previewPlayer){status.textContent="पहले वीडियो अपलोड करें।";return;}
  if(!Number.isFinite(start)||!Number.isFinite(end)||start<0||end<=start){status.textContent="Start/End समय सही भरें।";return;}
  button.disabled=true;download.hidden=true;status.textContent="Trimmed video बन रही है...";
- let source=null;
+ let source=null,unbindPreview=null;
  try {
   source=await clipxCreateProcessingVideo();
+  unbindPreview=clipxSyncProcessingWithPreview(previewPlayer,source.player);
   if(end>source.player.duration)throw new Error("End समय मूल वीडियो की अवधि से अधिक है।");
   const blob=await clipxRecordVideo(source.player,start,end-start,status,selectedValue("ratio")||"9:16");
   clipxShowVideo(blob,output,download,"clipx-trimmed.webm");
   status.textContent="Trim पूरा हुआ। "+clipxExportLabel(blob)+" डाउनलोड कर सकते हैं।";
  } catch(e){status.textContent="Export नहीं हुआ: "+(e.message||String(e));}
- finally{if(source)source.cleanup();button.disabled=false;}
+ finally{if(unbindPreview)unbindPreview();
+  if(source)source.cleanup();button.disabled=false;}
 }
 async function makeManualClip() {
  const status = document.getElementById("cutStatus");
@@ -981,9 +990,10 @@ async function makeManualClip() {
  button.disabled = true;
  download.hidden = true;
  output.textContent = "क्लिप तैयार हो रही है...";
- let source=null;
+ let source=null,unbindPreview=null;
  try {
   source=await clipxCreateProcessingVideo();
+  unbindPreview=clipxSyncProcessingWithPreview(previewPlayer,source.player);
   if(end>source.player.duration)throw new Error("End समय मूल वीडियो की अवधि से अधिक है।");
   const blob=await clipxRecordVideo(source.player,start,end-start,status,selectedValue("ratio")||"9:16");
   clipxShowVideo(blob,output,download,"clipx-clip."+clipxExportExtension(blob));
@@ -991,6 +1001,7 @@ async function makeManualClip() {
  } catch (error) {
   status.textContent = "क्लिप नहीं बन सकी: " + (error.message || String(error)) + "। इंटरनेट और खाली स्टोरेज जाँचें।";
  } finally {
+  if(unbindPreview)unbindPreview();
   if(source)source.cleanup();
   button.disabled = false;
  }
@@ -1067,7 +1078,7 @@ async function makeAutomaticShorts() {
   status.textContent = "पहले ऊपर वीडियो चुनें और Upload Video दबाएँ।";
   return;
  }
- let source=null;
+ let source=null,unbindPreview=null;
  const duration = Number(selectedValue("duration"));
  const requestedCount = Number(document.getElementById("clipCount").value);
  const ratio = selectedValue("ratio") || "9:16";
@@ -1079,6 +1090,7 @@ async function makeAutomaticShorts() {
  results.replaceChildren();
  try {
   source=await clipxCreateProcessingVideo();
+  unbindPreview=clipxSyncProcessingWithPreview(previewPlayer,source.player);
   const player=source.player;
   const total=Math.min(requestedCount,Math.ceil(player.duration/duration));
   for (let i=0;i<total;i++) {
@@ -1104,6 +1116,7 @@ async function makeAutomaticShorts() {
  } catch (error) {
   status.textContent = "Shorts बनाते समय समस्या: " + (error.message || String(error)) + "। इंटरनेट, स्टोरेज और वीडियो फ़ाइल जाँचें।";
  } finally {
+  if(unbindPreview)unbindPreview();
   if(source)source.cleanup();
   button.disabled = false;
  }
