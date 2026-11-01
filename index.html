@@ -223,7 +223,7 @@ footer{color:#b39ac7}
  <nav class="sidebar" aria-label="Studio navigation">
   <div class="sidebar-title">CLIPX WORKSPACE</div>
   <a href="#home" data-view="home" class="active">⌂ Home</a>
-  <a href="#videoTools" data-view="tools">✣ Video Tools</a>
+  <a href="#tools" data-view="tools">✣ Video Tools</a>
   <a href="#promptStudio" data-view="prompts">✧ Prompt Studio</a>
   <a href="#freeCreatorKit" data-view="creatorKit">✍ Titles & Hashtags</a>
   <a href="#upload" data-view="studio">▣ My Studio</a>
@@ -359,7 +359,7 @@ footer{color:#b39ac7}
 
  <section class="card" id="faceTrackingLab">
   <h3>Face Tracking Lab — Free On-device Test</h3>
-  <p class="muted">MediaPipe से वीडियो के चुने हुए frames में चेहरे खोजें। यह शुरुआती परीक्षण है; अभी auto face-follow crop export नहीं करता। पहली बार मॉडल इंटरनेट से लोड होगा।</p>
+  <p class="muted">MediaPipe से वीडियो के चुने हुए frames में चेहरे खोजें। यह शुरुआती परीक्षण है। Face-follow crop Export में checkbox चालू करने पर लागू करने की कोशिश करता है; परिणाम वीडियो और डिवाइस पर निर्भर करेगा। पहली बार मॉडल इंटरनेट से लोड होगा।</p>
   <button class="primary" type="button" id="faceScanButton" onclick="scanFacesOnDevice()">Test Face Detection</button>
   <p id="faceScanStatus" class="muted" aria-live="polite">पहले वीडियो upload करें।</p>
   <div id="faceScanResults" class="result">अभी कोई परीक्षण नहीं हुआ।</div>
