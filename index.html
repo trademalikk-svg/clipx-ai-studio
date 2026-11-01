@@ -318,6 +318,11 @@ footer{color:#b39ac7}
   <p id="autoCaptionStatus" class="muted" aria-live="polite">पहले अपनी वीडियो upload करें। पहली बार मॉडल लोड होने में समय लग सकता है।</p>
   <label for="captionText">Captions लिखें (हर नई लाइन पर अगला caption)</label>
   <textarea id="captionText" placeholder="नमस्कार दोस्तों!&#10;आज हम एक नई वीडियो बनाने वाले हैं।&#10;वीडियो पसंद आए तो Like करें।"></textarea>
+  <label><input id="burnCaptions" type="checkbox" checked> Export में captions वीडियो पर दिखाएँ</label>
+  <label for="captionLook">Subtitle style</label>
+  <select id="captionLook"><option value="box">Dark background box</option><option value="outline">White text with dark outline</option><option value="plain">Plain white text</option></select>
+  <label for="captionPosition">Subtitle position</label>
+  <select id="captionPosition"><option value="bottom">Bottom</option><option value="middle">Middle</option><option value="top">Top</option></select>
   <label for="captionStart">पहला caption कितने सेकंड पर शुरू हो? (seconds)</label>
   <input id="captionStart" type="number" min="0" step="0.1" value="0">
   <label for="captionDuration">हर caption कितने सेकंड दिखे? (seconds)</label>
@@ -692,6 +697,9 @@ async function clipxRecordVideo(player,start,duration,status,ratio) {
  const captionLines=document.getElementById("captionText")?.value.split(/\r?\n/).map(s=>s.trim()).filter(Boolean)||[];
  const captionStart=Number(document.getElementById("captionStart")?.value||0);
  const captionDuration=Math.max(0.5,Number(document.getElementById("captionDuration")?.value||3));
+ const burnCaptions=document.getElementById("burnCaptions")?.checked!==false;
+ const captionLook=document.getElementById("captionLook")?.value||"box";
+ const captionPosition=document.getElementById("captionPosition")?.value||"bottom";
  if(typeof MediaRecorder==="undefined") throw new Error("इस ब्राउज़र में MediaRecorder उपलब्ध नहीं है।");
  const sizes={"9:16":[720,1280],"16:9":[1280,720],"1:1":[1080,1080]};
  const rotation=Number(editorRotate?.value||0);
@@ -728,7 +736,7 @@ async function clipxRecordVideo(player,start,duration,status,ratio) {
    ctx.restore();
    const elapsed=player.currentTime-start-captionStart;
    const cueIndex=Math.floor(elapsed/captionDuration);
-   if(elapsed>=0&&cueIndex>=0&&cueIndex<captionLines.length) {
+   if(burnCaptions&&elapsed>=0&&cueIndex>=0&&cueIndex<captionLines.length) {
     const words=captionLines[cueIndex];
     const fontSize=Math.max(28,Math.round(width*0.045));
     ctx.font="bold "+fontSize+"px Arial, sans-serif";
@@ -738,10 +746,10 @@ async function clipxRecordVideo(player,start,duration,status,ratio) {
     for(const part of parts){const test=row?row+" "+part:part;if(ctx.measureText(test).width>maxWidth&&row){rows.push(row);row=part;}else row=test;}
     if(row)rows.push(row);
     const lineH=fontSize*1.25,pad=18,boxH=rows.length*lineH+pad*2;
-    const y=height*0.82-boxH/2;
-    ctx.fillStyle="rgba(0,0,0,0.68)";ctx.fillRect(width*0.06,y,width*0.88,boxH);
-    ctx.fillStyle="#ffffff";
-    rows.forEach((line,i)=>ctx.fillText(line,width/2,y+pad+lineH*(i+0.5),maxWidth));
+    const y=captionPosition==="top"?height*0.12:captionPosition==="middle"?(height-boxH)/2:height*0.82-boxH/2;
+    if(captionLook==="box"){ctx.fillStyle="rgba(0,0,0,0.72)";ctx.fillRect(width*0.06,y,width*0.88,boxH);}
+    ctx.fillStyle="#ffffff";ctx.lineWidth=Math.max(3,fontSize*0.12);ctx.strokeStyle="#090611";
+    rows.forEach((line,i)=>{const yy=y+pad+lineH*(i+0.5);if(captionLook==="outline")ctx.strokeText(line,width/2,yy,maxWidth);ctx.fillText(line,width/2,yy,maxWidth);});
    }
   }
   if(!player.paused&&!player.ended) raf=requestAnimationFrame(draw);
