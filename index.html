@@ -284,33 +284,34 @@ function showWorkspaceView(view) {
   studio:["upload"],
   settings:["backendConnection","authBox"]
  };
- const main = document.querySelector("main");
- main.querySelectorAll(":scope > section").forEach(section => {
-  section.classList.toggle("view-hidden", !(groups[view] || groups.home).includes(section.id));
+ const allowed = groups[view] || groups.home;
+ document.querySelectorAll("main > section").forEach(section => {
+  section.hidden = !allowed.includes(section.id);
+  section.classList.toggle("view-hidden", !allowed.includes(section.id));
  });
  document.querySelectorAll(".sidebar a[data-view]").forEach(link => {
   const active = link.dataset.view === view;
-  link.classList.toggle("active",active);
-  if(active) link.setAttribute("aria-current","page");
+  link.classList.toggle("active", active);
+  if (active) link.setAttribute("aria-current","page");
   else link.removeAttribute("aria-current");
  });
- window.scrollTo({top:0,behavior:"smooth"});
+ window.scrollTo(0,0);
 }
 document.querySelectorAll(".sidebar a[data-view]").forEach(link => {
- link.addEventListener("click",event => {
+ link.addEventListener("click", function(event) {
   event.preventDefault();
-  showWorkspaceView(link.dataset.view);
-  history.replaceState(null,"",link.getAttribute("href"));
+  showWorkspaceView(this.dataset.view);
+  history.replaceState(null,"",this.getAttribute("href"));
  });
 });
 document.querySelectorAll(".dashboard-shortcuts a").forEach(link => {
- link.addEventListener("click",event => {
+ link.addEventListener("click", function(event) {
   event.preventDefault();
-  const target=link.getAttribute("href")||"";
-  const view=target.includes("promptStudio")?"prompts":target.includes("upload")?"studio":target.includes("backendConnection")?"settings":"tools";
+  const target = this.getAttribute("href") || "";
+  const view = target.includes("promptStudio") ? "prompts" : target.includes("upload") ? "studio" : target.includes("backendConnection") ? "settings" : "tools";
   showWorkspaceView(view);
-  const section=document.getElementById(target.slice(1));
-  if(section) section.scrollIntoView({behavior:"smooth",block:"start"});
+  const section = document.getElementById(target.slice(1));
+  if (section) section.scrollIntoView({behavior:"smooth",block:"start"});
  });
 });
 showWorkspaceView("home");
