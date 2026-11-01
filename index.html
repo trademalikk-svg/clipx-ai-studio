@@ -56,6 +56,49 @@ main{max-width:1240px;margin:0 auto;padding:22px 16px;display:grid;grid-template
  .card{padding:17px;margin-bottom:14px}
 }
 
+
+/* Visual refresh inspired by the selected dashboard reference */
+body{background:#050719;background-image:radial-gradient(ellipse at 70% 8%,#17104a 0,transparent 38%);font-family:Arial,sans-serif}
+header{position:sticky;top:0;z-index:20;padding:13px 22px;background:#080a20ed;backdrop-filter:blur(14px);border-bottom:1px solid #27245c}
+.logo{font-size:25px}.logo span{background:linear-gradient(90deg,#e52bff,#16d8ff);-webkit-background-clip:text;color:transparent}
+main{max-width:1500px;grid-template-columns:210px minmax(0,1fr);gap:0 20px;padding:18px}
+.sidebar{background:linear-gradient(180deg,#111333,#090b20);border-color:#34306d;border-radius:18px;min-height:calc(100vh - 100px)}
+.sidebar a{padding:13px 12px;font-weight:600;border-radius:11px}
+.sidebar a:first-of-type{background:linear-gradient(100deg,#7621ed,#3c16a5);color:white}
+.hero{position:relative;overflow:hidden;text-align:left;padding:34px 30px;border:1px solid #5a36d8;border-radius:22px;background:radial-gradient(circle at 78% 40%,#1946ba 0,#17205c 28%,transparent 57%),linear-gradient(110deg,#130b42,#090d2b 62%,#111a52);min-height:300px;box-shadow:0 16px 45px #0008}
+.hero:after{content:"▶";position:absolute;right:9%;top:17%;font-size:150px;color:#8e6aff22;transform:rotate(-12deg);pointer-events:none}
+.hero .vip{display:inline-block;background:#5717c8;color:#fff;border:0;border-radius:30px;padding:9px 15px}
+.hero h1{font-size:clamp(34px,5vw,64px);max-width:700px;line-height:1.03}
+.hero h1 span{background:linear-gradient(90deg,#ec23ff,#18d9ff);-webkit-background-clip:text;color:transparent}
+.hero p{font-size:17px;max-width:560px;color:#d6d7f3}
+.dashboard-shortcuts{grid-column:2;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:0 0 20px}
+.shortcut{display:flex;align-items:center;gap:13px;min-height:112px;padding:18px;border-radius:17px;color:#fff;text-decoration:none;font-weight:800;box-shadow:0 10px 25px #0005;border:1px solid #ffffff30}
+.shortcut small{display:block;font-weight:400;font-size:13px;line-height:1.4;margin-top:6px;color:#fff}
+.shortcut .symbol{font-size:32px}
+.shortcut.blue{background:linear-gradient(120deg,#1464df,#073b9d)}
+.shortcut.green{background:linear-gradient(120deg,#11b94e,#08723c)}
+.shortcut.purple{background:linear-gradient(120deg,#9226e9,#4b0bb5)}
+.shortcut.orange{background:linear-gradient(120deg,#ff8a08,#d94a05)}
+.shortcut.cyan{background:linear-gradient(120deg,#08bfc9,#08758e)}
+.shortcut:hover{transform:translateY(-2px);filter:brightness(1.1)}
+.card{background:linear-gradient(145deg,#121633,#0b0e23);border-color:#34316b;box-shadow:0 12px 32px #0006}
+.card h2{color:#f0eaff}
+input,select,textarea{background:#10152e;border-color:#4b4782}
+.preview{background:#06091a;border-color:#39376c}
+.result{background:#090d22;border-color:#403b79}
+footer{color:#8d8ba9}
+@media(max-width:900px){main{grid-template-columns:1fr}.sidebar{grid-column:1;grid-row:auto}.hero,main>section:not(.sidebar),.dashboard-shortcuts{grid-column:1}}
+@media(max-width:760px){
+ main{display:flex;flex-direction:column;padding:12px}
+ .sidebar{min-height:0}
+ .hero{min-height:0;padding:25px 19px}
+ .hero:after{right:4%;top:28%;font-size:85px}
+ .dashboard-shortcuts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:100%;gap:9px}
+ .shortcut{min-height:105px;padding:13px;font-size:14px}
+ .shortcut .symbol{font-size:25px}
+}
+@media(max-width:390px){.dashboard-shortcuts{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
@@ -72,20 +115,23 @@ main{max-width:1240px;margin:0 auto;padding:22px 16px;display:grid;grid-template
 <main>
 
  <nav class="sidebar" aria-label="Studio navigation">
-  <div class="sidebar-title">WORKSPACE</div>
-  <a href="#home">⌂ Overview</a>
-  <a href="#upload">＋ Upload Video</a>
-  <a href="#clipSettings">⚙ Clip Settings</a>
-  <a href="#manualCutter">✂ Manual Cutter</a>
-  <a href="#autoShorts">▣ Auto Shorts</a>
-  <a href="#captionStudio">字幕 Captions</a>
-  <a href="#promptStudio">✧ Prompt Studio</a>
-  <a href="#backendConnection">↗ Connection</a>
+  <div class="sidebar-title">CLIPX WORKSPACE</div>
+  <a href="#home">⌂ Home</a><a href="#tools">✣ Features</a><a href="#upload">▣ My Studio</a>
+  <a href="#clipSettings">⚙ Clip Settings</a><a href="#captionStudio">字幕 Captions</a>
+  <a href="#promptStudio">✧ Prompt Studio</a><a href="#backendConnection">◉ Support / Status</a>
  </nav>
  <section class="hero" id="home">
   <div class="vip">YOUR PERSONAL VIDEO WORKSPACE</div>
   <h1>Turn Ideas Into <span>Content</span></h1>
   <p>Video preview, editing settings and Hindi + English AI video prompts.</p>
+ </section>
+ <section class="dashboard-shortcuts" id="tools" aria-label="Studio tools">
+  <a class="shortcut blue" href="#manualCutter"><span class="symbol">🎬</span><span>Video Cutter<small>Cut and trim your videos</small></span></a>
+  <a class="shortcut green" href="#autoShorts"><span class="symbol">⚡</span><span>Automatic Shorts<small>Split videos into clips</small></span></a>
+  <a class="shortcut purple" href="#promptStudio"><span class="symbol">✦</span><span>Prompt Generator<small>Create video prompts</small></span></a>
+  <a class="shortcut orange" href="#captionStudio"><span class="symbol">CC</span><span>Caption Studio<small>Create SRT subtitles</small></span></a>
+  <a class="shortcut cyan" href="#upload"><span class="symbol">▶</span><span>Video Preview<small>Choose and preview a video</small></span></a>
+  <a class="shortcut blue" href="#backendConnection"><span class="symbol">✓</span><span>Backend Test<small>Check service connection</small></span></a>
  </section>
 
  <section class="card" id="authBox" hidden>
