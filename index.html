@@ -543,18 +543,31 @@ let clipxFFmpegPromise = null;
 async function getClipxFFmpeg(status) {
  if (!clipxFFmpegPromise) {
   clipxFFmpegPromise = (async () => {
-   status.textContent = "वीडियो प्रोसेसिंग इंजन पहली बार डाउनलोड हो रहा है। पेज खुला रखें...";
-   const { FFmpeg } = await import("https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.10/dist/esm/index.js");
+   status.textContent = "वीडियो प्रोसेसिंग इंजन डाउनलोड हो रहा है...";
+   const packageBase = "https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.10/dist/esm/";
+   const { FFmpeg } = await import(packageBase + "index.js");
    const ffmpeg = new FFmpeg();
    ffmpeg.on("progress", ({ progress }) => {
-    if (Number.isFinite(progress)) status.textContent = "वीडियो प्रोसेस हो रही है: " + Math.max(0,Math.min(100,Math.round(progress*100))) + "%";
+    if (Number.isFinite(progress)) {
+     status.textContent = "वीडियो प्रोसेस हो रही है: " + Math.max(0,Math.min(100,Math.round(progress*100))) + "%";
+    }
    });
-   status.textContent = "वीडियो Worker तैयार हो रहा है...";
-   const workerResponse = await fetch("https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.10/dist/esm/worker.js");
+   status.textContent = "वीडियो Worker डाउनलोड हो रहा है...";
+   const workerResponse = await fetch(packageBase + "worker.js");
    if (!workerResponse.ok) throw new Error("FFmpeg Worker डाउनलोड नहीं हुआ: " + workerResponse.status);
-   const workerCode = await workerResponse.blob();
-   const workerURL = URL.createObjectURL(new Blob([workerCode], { type: "text/javascript" }));
+   let workerSource = await workerResponse.text();
+   // Blob workers cannot resolve package-relative imports. Rewrite them to
+   // absolute CDN module URLs before creating the worker.
+   workerSource = workerSource
+    .replaceAll('"./const.js"', '"' + packageBase + 'const.js"')
+    .replaceAll("'./const.js'", "'" + packageBase + "const.js'")
+    .replaceAll('"./errors.js"', '"' + packageBase + 'errors.js"')
+    .replaceAll("'./errors.js'", "'" + packageBase + "errors.js'")
+    .replaceAll('"./utils.js"', '"' + packageBase + 'utils.js"')
+    .replaceAll("'./utils.js'", "'" + packageBase + "utils.js'");
+   const workerURL = URL.createObjectURL(new Blob([workerSource], {type:"text/javascript"}));
    try {
+    status.textContent = "वीडियो इंजन शुरू हो रहा है...";
     await ffmpeg.load({
      classWorkerURL: workerURL,
      coreURL: "https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.6/dist/umd/ffmpeg-core.js",
