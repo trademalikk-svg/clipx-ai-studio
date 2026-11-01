@@ -16,28 +16,31 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Check inline JavaScript syntax
+      - name: Check inline JavaScript syntax in all pages
         shell: bash
         run: |
           python3 - <<'PY'
           import pathlib, re, subprocess, tempfile
-          html = pathlib.Path("index.html").read_text(encoding="utf-8")
-          scripts = re.findall(r"<script\b([^>]*)>(.*?)</script\s*>", html, re.I | re.S)
+          pages = sorted(pathlib.Path(".").glob("*.html"))
           checked = 0
-          for index, (attrs, source) in enumerate(scripts):
-              if not source.strip() or re.search(r"\bsrc\s*=", attrs, re.I) or re.search(r"application/ld\+json", attrs, re.I):
-                  continue
-              is_module = bool(re.search(r"type\s*=\s*[\"']module[\"']", attrs, re.I))
-              suffix = ".mjs" if is_module else ".js"
-              path = pathlib.Path(tempfile.gettempdir()) / f"clipx-inline-{index}{suffix}"
-              path.write_text(source, encoding="utf-8")
-              subprocess.run(["node", "--check", str(path)], check=True)
-              checked += 1
+          for page in pages:
+              html = page.read_text(encoding="utf-8")
+              scripts = re.findall(r"<script\\b([^>]*)>(.*?)</script\\s*>", html, re.I | re.S)
+              for index, (attrs, source) in enumerate(scripts):
+                  if not source.strip() or re.search(r"\\bsrc\\s*=", attrs, re.I) or re.search(r"application/ld\\+json", attrs, re.I):
+                      continue
+                  is_module = bool(re.search(r"type\\s*=\\s*[\"']module[\"']", attrs, re.I))
+                  suffix = ".mjs" if is_module else ".js"
+                  path = pathlib.Path(tempfile.gettempdir()) / f"clipx-{page.stem}-{index}{suffix}"
+                  path.write_text(source, encoding="utf-8")
+                  subprocess.run(["node", "--check", str(path)], check=True)
+                  checked += 1
           if checked == 0:
               raise SystemExit("No inline JavaScript blocks were checked.")
-          print(f"Syntax OK: {checked} inline JavaScript blocks.")
-          sections = re.findall(r"<section\b[^>]*\bid=[\"']([^\"']+)[\"']", html, re.I)
-          groups = re.search(r"const groups = \{(.*?)\n \};", html, re.S)
+          print(f"Syntax OK: {checked} inline JavaScript blocks across {len(pages)} HTML pages.")
+          html = pathlib.Path("index.html").read_text(encoding="utf-8")
+          sections = re.findall(r"<section\\b[^>]*\\bid=[\"']([^\"']+)[\"']", html, re.I)
+          groups = re.search(r"const groups = \\{(.*?)\\n \\};", html, re.S)
           if not groups:
               raise SystemExit("Workspace route map was not found.")
           missing = [section for section in sections if f'"{section}"' not in groups.group(1)]
