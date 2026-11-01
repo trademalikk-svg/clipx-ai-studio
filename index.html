@@ -1297,6 +1297,7 @@ async function makeAutomaticShorts() {
 }
 
 /* Existing Supabase project connection retained. */
+const CLIPX_FREE_MODE = true;
 const SUPABASE_URL = "https://qmoxfzgiwamblpouxitn.supabase.co";
 const SUPABASE_KEY = "sb_publishable_dsVQ5-5VuIG5n_m0qqNjqw__i5sogpL";
 let authMode = "login";
@@ -1360,6 +1361,7 @@ async function testBackendConnection() {
  const button = document.getElementById("backendTestButton");
  const resultBox = document.getElementById("backendTestResult");
  if (!button || !resultBox) return;
+ if (CLIPX_FREE_MODE) { resultBox.textContent = "Backend features are disabled in Free Browser Mode."; return; }
  button.disabled = true;
  resultBox.textContent = "Testing connection... कृपया प्रतीक्षा करें।";
  try {
@@ -1439,6 +1441,7 @@ async function clipxStartCloudUpload() {
  const button = document.getElementById("cloudUploadButton");
  const status = document.getElementById("cloudUploadStatus");
  const results = document.getElementById("cloudJobResults");
+ if (CLIPX_FREE_MODE) { if (status) status.textContent = "Cloud rendering is disabled in Free Browser Mode."; return; }
  const file = document.getElementById("video")?.files?.[0];
  if (!supabaseClient) { status.textContent = "Supabase client उपलब्ध नहीं है।"; return; }
  if (!file) { status.textContent = "पहले अपनी वीडियो फ़ाइल चुनें।"; return; }
@@ -1487,6 +1490,7 @@ async function clipxRunwayGenerate() {
  const button = document.getElementById("runwayGenerateButton");
  const status = document.getElementById("runwayStatus");
  const resultBox = document.getElementById("runwayResult");
+ if (CLIPX_FREE_MODE) { if (status) status.textContent = "External AI video generation is disabled in Free Browser Mode."; return; }
  const prompt = document.getElementById("runwayPrompt").value.trim();
  const ratio = document.getElementById("runwayRatio").value;
  if (!prompt) { status.textContent = "पहले video prompt लिखें।"; return; }
