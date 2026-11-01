@@ -1200,7 +1200,7 @@ async function clipxStartCloudUpload() {
  button.disabled = true;
  results.textContent = "Cloud job तैयार हो रही है…";
  try {
-  const { data: job, error: createError } = await supabaseClient.functions.invoke("create-clip-job", {
+  const { data: job, error: createError } = await supabaseClient.functions.invoke("dynamic-endpoint", {
    body: { fileName:file.name, fileSize:file.size, mimeType:file.type || "video/mp4",
     options:{ clipSeconds:Number(document.querySelector("#duration .active")?.dataset.value || 30), aspectRatio:document.querySelector("#ratio .active")?.dataset.value || "9:16" } }
   });
