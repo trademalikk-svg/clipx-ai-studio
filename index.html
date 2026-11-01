@@ -265,6 +265,10 @@ footer{color:#b39ac7}
   <progress id="uploadProgress" max="100" value="0"></progress>
   <p id="uploadProgressText" aria-live="polite">0% · No video selected</p>
   <div class="preview" id="preview">Your selected video preview will appear here.</div>
+  <div class="notice" style="margin-top:12px">Cloud processing setup: पहले Supabase migration और Edge Functions deploy होने चाहिए। यह विकल्प लॉगिन के बाद उपलब्ध होगा।</div>
+  <button class="primary secondary" type="button" id="cloudUploadButton" onclick="clipxStartCloudUpload()">Upload to Cloud & Create Clips</button>
+  <p id="cloudUploadStatus" class="muted" aria-live="polite">Cloud upload अभी शुरू नहीं हुआ।</p>
+  <div id="cloudJobResults" class="result">Cloud job results यहाँ दिखाई देंगे।</div>
  </section>
 
  <section class="card" id="clipSettings">
@@ -1181,6 +1185,39 @@ async function testBackendConnection() {
  } finally {
   button.disabled = false;
  }
+}
+
+async function clipxStartCloudUpload() {
+ const button = document.getElementById("cloudUploadButton");
+ const status = document.getElementById("cloudUploadStatus");
+ const results = document.getElementById("cloudJobResults");
+ const file = document.getElementById("video")?.files?.[0];
+ if (!supabaseClient) { status.textContent = "Supabase client उपलब्ध नहीं है।"; return; }
+ if (!file) { status.textContent = "पहले अपनी वीडियो फ़ाइल चुनें।"; return; }
+ if (file.size > 2 * 1024 * 1024 * 1024) { status.textContent = "फ़ाइल 2 GB से बड़ी है।"; return; }
+ const { data: sessionData, error: sessionError } = await supabaseClient.auth.getSession();
+ if (sessionError || !sessionData.session) { status.textContent = "पहले Login करें।"; showAuth("login"); return; }
+ button.disabled = true;
+ results.textContent = "Cloud job तैयार हो रही है…";
+ try {
+  const { data: job, error: createError } = await supabaseClient.functions.invoke("create-clip-job", {
+   body: { fileName:file.name, fileSize:file.size, mimeType:file.type || "video/mp4",
+    options:{ clipSeconds:Number(document.querySelector("#duration .active")?.dataset.value || 30), aspectRatio:document.querySelector("#ratio .active")?.dataset.value || "9:16" } }
+  });
+  if (createError) throw createError;
+  if (!job?.jobId || !job?.path || !job?.token) throw new Error(job?.error || "Cloud job response अधूरा है।");
+  status.textContent = "Private cloud storage पर वीडियो upload हो रही है…";
+  const { data: uploaded, error: uploadError } = await supabaseClient.storage.from(job.bucket || "clipx-private").uploadToSignedUrl(job.path, job.token, file, { contentType:file.type || "video/mp4", upsert:false });
+  if (uploadError) throw uploadError;
+  status.textContent = "Upload पूरा। Job confirm हो रही है…";
+  const { data: completed, error: completeError } = await supabaseClient.functions.invoke("complete-clip-upload", { body:{ jobId:job.jobId } });
+  if (completeError) throw completeError;
+  results.textContent = "Cloud job ID: " + completed.jobId + "\nStatus: " + completed.status + "\nवीडियो सुरक्षित रूप से upload हो गई है। FFmpeg worker चालू होने पर clips बनेंगी।";
+  status.textContent = "Cloud upload सफल।";
+ } catch (error) {
+  console.error("ClipX cloud upload failed:",error);
+  status.textContent = "Cloud upload नहीं हो सकी: " + (error.message || String(error)) + "। पहले Supabase migration और दोनों Edge Functions deploy होने की पुष्टि करें।";
+ } finally { button.disabled = false; }
 }
 
 async function handleLogout() {
