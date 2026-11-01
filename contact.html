@@ -87,62 +87,19 @@
 
   <main>
     <div class="panel">
-      <h1>AI Support Chat</h1>
+      <h1>Support & Feedback</h1>
       <p>
-        Welcome to ClipX AI Support. Ask your questions in Hindi or English.
+        यह prototype support page है। अभी कोई live AI chat या email ticket system जुड़ा नहीं है।
       </p>
 
-      <div id="chat" aria-live="polite">
-        <div class="message bot">
-          नमस्ते! ClipX AI Support में आपका स्वागत है।
-          अपनी समस्या लिखें। अभी AI सेवा कनेक्ट नहीं हुई है।
-        </div>
-      </div>
+      <p>किसी feature में समस्या आए तो वेबसाइट का नाम, इस्तेमाल किया गया browser और error का पूरा संदेश अपने पास नोट करें। Password, API key या निजी वीडियो किसी के साथ साझा न करें।</p>
 
-      <form id="chatForm" class="input-area">
-        <input
-          id="question"
-          type="text"
-          placeholder="अपनी समस्या लिखें..."
-          autocomplete="off"
-          required
-        >
-        <button id="sendBtn" type="submit">Send</button>
-      </form>
-
-      <p class="note">
-        AI support is not connected yet. Messages are not being sent to an AI service.
-      </p>
+      <p class="note">यह पेज संदेशों को कहीं भेजता या सेव नहीं करता।</p>
     </div>
   </main>
 
-  <footer>© 2026 ClipX AI Studio</footer>
+  <footer>© 2026 ClipX AI Studio · <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a></footer>
 
-  <script>
-    const form = document.getElementById("chatForm");
-    const input = document.getElementById("question");
-    const chat = document.getElementById("chat");
 
-    form.addEventListener("submit", function(event) {
-      event.preventDefault();
-
-      const question = input.value.trim();
-      if (!question) return;
-
-      const message = document.createElement("div");
-      message.className = "message user";
-      message.textContent = question;
-      chat.appendChild(message);
-
-      const reply = document.createElement("div");
-      reply.className = "message bot";
-      reply.textContent =
-        "AI Support अभी कनेक्ट नहीं है। असली AI जवाब पाने के लिए अगला Backend और AI API सेटअप करना होगा।";
-      chat.appendChild(reply);
-
-      input.value = "";
-      chat.scrollTop = chat.scrollHeight;
-    });
-  </script>
 </body>
 </html>
