@@ -363,6 +363,8 @@ footer{color:#b39ac7}
   <button class="primary" type="button" id="faceScanButton" onclick="scanFacesOnDevice()">Test Face Detection</button>
   <p id="faceScanStatus" class="muted" aria-live="polite">पहले वीडियो upload करें।</p>
   <div id="faceScanResults" class="result">अभी कोई परीक्षण नहीं हुआ।</div>
+  <label class="consentRow"><input type="checkbox" id="faceFollowExport"> Export में चेहरे को frame के बीच रखने की कोशिश करें (Face-follow crop)</label>
+  <p class="muted">चेहरे की स्थिति के अनुसार crop adjust होगा। कमजोर मोबाइल पर export धीमा हो सकता है।</p>
  </section>
 
  <section class="card" id="freeCreatorKit">
@@ -779,6 +781,9 @@ async function clipxRecordVideo(player,start,duration,status,ratio) {
  const sizes={"9:16":[720,1280],"16:9":[1280,720],"1:1":[1080,1080]};
  const rotation=Number(editorRotate?.value||0);
  const cropMode=editorCrop?.value||"fill";
+ const faceFollow=!!document.getElementById("faceFollowExport")?.checked&&rotation===0&&cropMode!=="fit";
+ let faceDetector=null,lastFaceCheck=0,trackedFace=null;
+ if(faceFollow){status.textContent="Face-follow model लोड हो रहा है…";faceDetector=await getClipxFaceDetector();}
  const [width,height]=sizes[ratio]||sizes["9:16"];
  const canvas=document.createElement("canvas");
  canvas.width=width; canvas.height=height;
@@ -805,9 +810,28 @@ async function clipxRecordVideo(player,start,duration,status,ratio) {
    const sourceH=quarterTurn?player.videoWidth:player.videoHeight;
    const scale=cropMode==="fit"?Math.min(width/sourceW,height/sourceH):Math.max(width/sourceW,height/sourceH);
    const dw=sourceW*scale,dh=sourceH*scale;
-   ctx.save();ctx.translate(width/2,height/2);ctx.rotate(rotation*Math.PI/180);
-   if(cropMode==="fit"){ctx.fillStyle="#080611";ctx.fillRect(-width/2,-height/2,width,height);}
-   ctx.drawImage(player,-dw/2,-dh/2,dw,dh);
+   if(faceFollow&&faceDetector&&performance.now()-lastFaceCheck>220){
+    lastFaceCheck=performance.now();
+    try{
+     const detections=faceDetector.detectForVideo(player,Math.round(lastFaceCheck)).detections||[];
+     if(detections.length){
+      const main=detections.slice().sort((a,b)=>(b.boundingBox.width*b.boundingBox.height)-(a.boundingBox.width*a.boundingBox.height))[0];
+      const box=main.boundingBox,target={x:box.originX+box.width/2,y:box.originY+box.height/2};
+      trackedFace=trackedFace?{x:trackedFace.x*0.72+target.x*0.28,y:trackedFace.y*0.72+target.y*0.28}:target;
+     }
+    }catch(e){}
+   }
+   ctx.save();
+   if(cropMode==="fit"){ctx.fillStyle="#080611";ctx.fillRect(0,0,width,height);}
+   if(faceFollow&&trackedFace&&cropMode!=="fit"){
+    const viewW=width/scale,viewH=height/scale;
+    const cx=Math.max(viewW/2,Math.min(sourceW-viewW/2,trackedFace.x));
+    const cy=Math.max(viewH/2,Math.min(sourceH-viewH/2,trackedFace.y));
+    ctx.drawImage(player,width/2-cx*scale,height/2-cy*scale,dw,dh);
+   }else{
+    ctx.translate(width/2,height/2);ctx.rotate(rotation*Math.PI/180);
+    ctx.drawImage(player,-dw/2,-dh/2,dw,dh);
+   }
    ctx.restore();
    const elapsed=player.currentTime-start-captionStart;
    const cueIndex=Math.floor(elapsed/captionDuration);
