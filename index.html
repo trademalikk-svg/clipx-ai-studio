@@ -582,16 +582,16 @@ function clipxCopyCreatorKit(){
 <script>
 function showWorkspaceView(view) {
  const groups = {
-  home:["home","tools"],
+  home:["home","tools","features"],
   tools:["tools"],
-  editor:["upload"],
-  shorts:["upload","clipSettings","autoShorts"],
+  editor:["upload","clipSettings","faceTrackingLab"],
+  shorts:["upload","clipSettings","autoShorts","faceTrackingLab"],
   captions:["upload","captionStudio"],
   youtube:["youtubeClips"],
   backend:["backendConnection"],
   creatorKit:["freeCreatorKit"],
   prompts:["promptStudio"],
-  studio:["upload"],
+  studio:["upload","clipSettings","autoShorts","faceTrackingLab"],
   settings:["backendConnection","authBox"]
  };
  const allowed = groups[view] || groups.home;
@@ -599,11 +599,16 @@ function showWorkspaceView(view) {
   section.hidden = !allowed.includes(section.id);
   section.classList.toggle("view-hidden", !allowed.includes(section.id));
  });
+ const navParent = ({shorts:"tools",captions:"tools",youtube:"tools",backend:"settings",editor:"studio"})[view] || view;
  document.querySelectorAll(".sidebar a[data-view]").forEach(link => {
-  const active = link.dataset.view === view;
+  const active = link.dataset.view === navParent;
   link.classList.toggle("active", active);
   if (active) link.setAttribute("aria-current","page");
   else link.removeAttribute("aria-current");
+ });
+ document.querySelectorAll(".mobile-bottom-nav a").forEach(link => {
+  const linkView = link.dataset.view || link.dataset.toolview;
+  link.classList.toggle("bottom-active", linkView === view || linkView === navParent);
  });
  window.scrollTo(0,0);
 }
@@ -1365,7 +1370,7 @@ async function clipxStartCloudUpload() {
  try {
   const { data: job, error: createError } = await supabaseClient.functions.invoke("create-clip-job", {
    body: { fileName:file.name, fileSize:file.size, mimeType:file.type || "video/mp4",
-    options:{ clipSeconds:Number(document.querySelector("#duration .active")?.dataset.value || 30), aspectRatio:document.querySelector("#ratio .active")?.dataset.value || "9:16" } }
+    options:{ clipSeconds:Number(document.querySelector("#duration .active")?.dataset.value || 30), aspectRatio:document.querySelector("#ratio .active")?.dataset.value || "9:16", requestedCount:Number(document.getElementById("clipCount")?.value || 10) } }
   });
   if (createError) throw createError;
   if (!job?.jobId || !job?.path || !job?.token) throw new Error(job?.error || "Cloud job response अधूरा है।");
@@ -1601,44 +1606,6 @@ async function scanFacesOnDevice(){
  finally{try{player.currentTime=originalTime;}catch(e){}button.disabled=false;}
 }
 </script>
-<script>
-window.clipxRunwayGenerate = async function(){
- const button=document.getElementById("runwayGenerateButton");
- const status=document.getElementById("runwayStatus");
- const result=document.getElementById("runwayResult");
- const prompt=document.getElementById("runwayPrompt").value.trim();
- const ratio=document.getElementById("runwayRatio").value;
- if(!prompt){status.textContent="पहले video prompt लिखें।";return;}
- if(!supabaseClient){status.textContent="Supabase client उपलब्ध नहीं है।";return;}
- button.disabled=true; status.textContent="Login जाँचा जा रहा है…"; result.textContent="AI task शुरू हो रहा है…";
- try{
-  const {data:{session},error:sessionError}=await supabaseClient.auth.getSession();
-  if(sessionError) throw sessionError;
-  if(!session){status.textContent="पहले Login करें।";showAuth("login");return;}
-  const {data,error}=await supabaseClient.functions.invoke("generate-video",{body:{action:"create",prompt,ratio}});
-  if(error) throw error;
-  if(!data?.taskId) throw new Error(data?.error||"AI provider ने task ID नहीं दी।");
-  status.textContent="AI video बन रही है… इस काम में कुछ मिनट लग सकते हैं।";
-  result.textContent="Task ID: "+data.taskId;
-  for(let attempt=0;attempt<40;attempt++){
-   await new Promise(resolve=>setTimeout(resolve,8000));
-   const {data:check,error:checkError}=await supabaseClient.functions.invoke("generate-video",{body:{action:"status",taskId:data.taskId}});
-   if(checkError) throw checkError;
-   if(check?.status==="SUCCEEDED" && check?.videoUrl){
-    status.textContent="AI video तैयार है।";
-    result.innerHTML="";
-    const video=document.createElement("video"); video.controls=true; video.playsInline=true; video.src=check.videoUrl; video.style.maxWidth="100%"; video.style.borderRadius="10px";
-    const link=document.createElement("a"); link.href=check.videoUrl; link.target="_blank"; link.rel="noopener"; link.textContent="Open / Save generated video"; link.style.display="block"; link.style.marginTop="10px"; link.style.color="#d6a4ff";
-    result.append(video,link); return;
-   }
-   if(check?.status==="FAILED" || check?.status==="CANCELED") throw new Error(check.failure||"AI generation failed.");
-   status.textContent="AI processing… ("+(attempt+1)+"/40)";
-  }
-  status.textContent="AI task abhi processing mein hai. Settings se dobara status check karna hoga.";
-  result.textContent="Task ID: "+data.taskId;
- }catch(error){status.textContent="AI error: "+(error.message||String(error));}
- finally{button.disabled=false;}
-};
-</script>
+
 </body>
 </html>
