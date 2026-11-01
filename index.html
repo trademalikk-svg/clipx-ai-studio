@@ -1177,7 +1177,7 @@ async function testBackendConnection() {
   });
   if (error) throw error;
   if (data && data.status === "connected") {
-   resultBox.textContent = "SUCCESS: Supabase Edge Function connected है और RUNWAY_API_KEY secret उपलब्ध है। अभी video generation चालू नहीं है।";
+   resultBox.textContent = "SUCCESS: Supabase Edge Function connected है और RUNWAY_API_KEY secret उपलब्ध है। AI generation endpoint ready है।";
   } else if (data && data.status === "missing_secret") {
    resultBox.textContent = "Secret नहीं मिला: Supabase Edge Function में RUNWAY_API_KEY secret जाँचें।";
   } else {
