@@ -303,9 +303,10 @@ footer{color:#b39ac7}
   <label for="youtubeUrl">YouTube video link</label>
   <input id="youtubeUrl" type="url" placeholder="https://www.youtube.com/watch?v=..." inputmode="url">
   <button class="primary" type="button" onclick="loadYouTubeClip()">Preview YouTube Video</button>
+  <p id="youtubeClipStatus" class="muted" aria-live="polite">YouTube लिंक डालकर Preview दबाएँ।</p>
   <div id="youtubePreview" class="preview">YouTube preview यहाँ दिखाई देगा।</div>
   <p class="muted">Preview में “Video unavailable” आए तो creator ने embedding बंद की हो सकती है। YouTube लिंक यहाँ preview के लिए है; Shorts बनाने के लिए अपनी या उपयोग की अनुमति वाली वीडियो फ़ाइल चुनें।</p>
-  <button class="primary" type="button" onclick="document.getElementById('upload').scrollIntoView({behavior:'smooth'});document.getElementById('video').focus({preventScroll:true});">अपनी वीडियो चुनें और Shorts बनाएँ</button>
+  <button class="primary" type="button" onclick="startYouTubeClipFlow()">अपनी वीडियो चुनें और Shorts बनाएँ</button>
  </section>
  <section class="card" id="autoShorts">
   <h2>Automatic Shorts Maker</h2>
@@ -691,12 +692,12 @@ function startYouTubeClipFlow() {
   document.getElementById("video").click();
   document.getElementById("upload").scrollIntoView({behavior:"smooth",block:"start"});
 }
- if(!document.getElementById("youtubeRightsConfirm").checked) {
-  status.textContent="आगे बढ़ने के लिए वीडियो के मालिक होने या स्पष्ट अनुमति की पुष्टि जरूरी है।";return;
- }
- status.textContent="अब इस वीडियो की अनुमति-प्राप्त मूल फ़ाइल चुनें। Upload के बाद Automatic Shorts Maker इस्तेमाल करें।";
- document.getElementById("video").click();
+function startYouTubeClipFlow() {
+ const input=document.getElementById("video");
+ const status=document.getElementById("youtubeClipStatus");
+ status.textContent="अपने डिवाइस से वीडियो चुनें। फ़ाइल चुनने के बाद ऊपर Upload Video दबाएँ।";
  document.getElementById("upload").scrollIntoView({behavior:"smooth",block:"start"});
+ input.click();
 }
 
 function generatePrompt() {
