@@ -542,7 +542,7 @@ async function handleAuth() {
   } else {
    message.textContent = "Login successful!";
   }
-  updateAuthControls(result.data.user || null);
+  updateAuthControls(result.data.session ? result.data.session.user : null);
  } catch (error) {
   message.textContent = error.message || "Authentication failed.";
  } finally {
