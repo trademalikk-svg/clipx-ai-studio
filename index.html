@@ -231,21 +231,16 @@ footer{color:#b39ac7}
 
  <section class="card" id="youtubeClips">
   <h2>YouTube Link Clip Maker</h2>
-  <p class="muted">YouTube video link डालें और clip का start/end समय चुनें। यह preview और timestamp वाला share link बनाता है; YouTube से video file डाउनलोड नहीं करता। केवल अपने या अनुमति-प्राप्त वीडियो इस्तेमाल करें।</p>
+  <p class="muted">YouTube link डालकर वीडियो का preview देखें। YouTube के सामान्य लिंक से यह page video file लेकर AI clips डाउनलोड नहीं कर सकता। असली clips बनाने के लिए अपनी अनुमति-प्राप्त video file नीचे Upload Video में चुनें और Automatic Shorts Maker इस्तेमाल करें।</p>
   <label for="youtubeUrl">YouTube video link</label>
   <input id="youtubeUrl" type="url" placeholder="https://www.youtube.com/watch?v=..." inputmode="url">
-  <button class="primary" type="button" onclick="loadYouTubeClip()">Load YouTube Video</button>
+  <button class="primary" type="button" onclick="loadYouTubeClip()">Preview YouTube Video</button>
   <div id="youtubePreview" class="preview">YouTube preview यहाँ दिखाई देगा।</div>
-  <label for="youtubeStart">Clip start time (seconds)</label>
-  <input id="youtubeStart" type="number" min="0" step="1" value="0" inputmode="numeric">
-  <label for="youtubeEnd">Clip end time (seconds)</label>
-  <input id="youtubeEnd" type="number" min="1" step="1" value="30" inputmode="numeric">
-  <button class="primary" type="button" onclick="createYouTubeClipLink()">Create Clip Link</button>
-  <p id="youtubeClipStatus" class="muted" aria-live="polite">वीडियो लोड करें और समय चुनें।</p>
-  <a id="youtubeClipLink" hidden target="_blank" rel="noopener noreferrer" style="display:inline-block;margin-top:12px;color:#d6a4ff">Open YouTube Clip</a>
+  <p id="youtubeClipStatus" class="muted" aria-live="polite">Video link डालें।</p>
+  <p class="notice">Automatic Shorts में duration और aspect ratio चुनकर अपनी video file से clips बनाई जा सकती हैं। यह अभी AI highlight detection नहीं करता; video को क्रम से हिस्सों में बाँटता है।</p>
  </section>
  <section class="card" id="autoShorts">
-  <h2>05. Automatic Shorts Maker</h2>
+  <h2>Automatic Shorts Maker</h2>
   <p class="muted">वीडियो को चुनी हुई अवधि के अलग-अलग हिस्सों में बाँटें। यह AI highlight selection नहीं है।</p>
   <p class="muted">ऊपर वीडियो चुनकर Upload Video करें। Clip Settings में Duration और Number of Clips चुनें, फिर नीचे बटन दबाएँ।</p>
   <button class="primary" id="autoShortsButton" type="button" onclick="makeAutomaticShorts()">Create Shorts Automatically</button>
@@ -254,14 +249,14 @@ footer{color:#b39ac7}
  </section>
 
  <section class="card" id="backendConnection">
-  <h2>06. Backend Connection Test</h2>
+  <h2>Backend Connection Test</h2>
   <p class="muted">Supabase Edge Function और saved secret की connection जाँचें। यह टेस्ट वीडियो नहीं बनाता और Runway credits खर्च नहीं करता।</p>
   <button class="primary" id="backendTestButton" type="button" onclick="testBackendConnection()">Test Backend Connection</button>
   <div id="backendTestResult" class="result" aria-live="polite">अभी connection test नहीं हुआ है।</div>
  </section>
 
  <section class="card" id="captionStudio">
-  <h2>06. Caption Studio</h2>
+  <h2>Caption Studio</h2>
   <p class="muted">हर लाइन एक subtitle बनेगी। यह tool आपके लिखे captions की SRT file बनाता है। Shorts export में यही captions वीडियो पर भी लगाए जाते हैं; आवाज़ की automatic transcription अभी उपलब्ध नहीं है।</p>
   <label for="captionText">Captions लिखें (हर नई लाइन पर अगला caption)</label>
   <textarea id="captionText" placeholder="नमस्कार दोस्तों!&#10;आज हम एक नई वीडियो बनाने वाले हैं।&#10;वीडियो पसंद आए तो Like करें।"></textarea>
@@ -542,19 +537,6 @@ function loadYouTubeClip() {
  box.appendChild(frame);
  status.textContent="वीडियो preview लोड हो गया। अब start और end time चुनें।";
 }
-function createYouTubeClipLink() {
- const id=getYouTubeVideoId(document.getElementById("youtubeUrl").value);
- const start=Number(document.getElementById("youtubeStart").value);
- const end=Number(document.getElementById("youtubeEnd").value);
- const status=document.getElementById("youtubeClipStatus");
- const link=document.getElementById("youtubeClipLink");
- if(!/^[a-zA-Z0-9_-]{11}$/.test(id)){status.textContent="पहले सही YouTube URL डालें।";link.hidden=true;return;}
- if(!Number.isInteger(start)||!Number.isInteger(end)||start<0||end<=start){status.textContent="End time, start time से बड़ा पूर्णांक होना चाहिए।";link.hidden=true;return;}
- const url="https://www.youtube.com/watch?v="+id+"&t="+start+"s";
- link.href=url;link.hidden=false;link.textContent="Open clip from "+start+"s (selected end: "+end+"s)";
- status.textContent="Timestamp वाला लिंक तैयार है। YouTube पर playback end time अपने-आप बंद नहीं होगा; यह link चुने हुए start point से खुलेगा।";
-}
-
 function generatePrompt() {
  const idea = document.getElementById("idea").value.trim();
  const output = document.getElementById("promptOutput");
