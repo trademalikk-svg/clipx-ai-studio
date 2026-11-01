@@ -973,9 +973,9 @@ async function makeManualClip() {
  const end = Number(document.getElementById("cutEnd").value);
  const output = document.getElementById("cutPreview");
  const download = document.getElementById("downloadClip");
- if (!player) { status.textContent = "पहले ऊपर अपनी वीडियो अपलोड करें।"; return; }
+ if (!previewPlayer) { status.textContent = "पहले ऊपर अपनी वीडियो अपलोड करें।"; return; }
  if (!Number.isFinite(start) || !Number.isFinite(end) || start < 0 || end <= start) {
-  status.textContent = "Start और End सही भरें। End वीडियो की कुल अवधि से अधिक नहीं होना चाहिए।";
+  status.textContent = "Start और End सही भरें। End समय मूल वीडियो की अवधि से अधिक है।";
   return;
  }
  button.disabled = true;
