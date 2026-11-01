@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Support | ClipX AI Studio</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #090711;
+      color: #f5f3ff;
+    }
+    header {
+      padding: 18px 7%;
+      background: #151023;
+      border-bottom: 1px solid #49336c;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .logo { color: #e5c36d; font-size: 21px; font-weight: bold; }
+    nav a { color: white; text-decoration: none; margin-left: 12px; }
+    main { max-width: 700px; margin: 40px auto; padding: 15px; }
+    .panel {
+      background: #171225;
+      border: 1px solid #49336c;
+      border-radius: 18px;
+      padding: 24px;
+    }
+    h1 { color: #e5c36d; }
+    p { color: #cfc7df; line-height: 1.6; }
+    #chat {
+      height: 320px;
+      overflow-y: auto;
+      background: #0e0b18;
+      border: 1px solid #38265b;
+      border-radius: 12px;
+      padding: 14px;
+      margin: 20px 0;
+    }
+    .message {
+      padding: 11px 14px;
+      margin: 10px 0;
+      border-radius: 12px;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+    .bot { background: #29203e; color: #fff; }
+    .user { background: #49336c; color: #fff; text-align: right; }
+    .input-area { display: flex; gap: 8px; }
+    input {
+      flex: 1;
+      min-width: 0;
+      padding: 14px;
+      border-radius: 10px;
+      border: 1px solid #49336c;
+      background: #0e0b18;
+      color: white;
+      outline: none;
+    }
+    button {
+      padding: 12px 18px;
+      border: none;
+      border-radius: 10px;
+      background: #d8b45a;
+      color: #171225;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:disabled { opacity: .5; cursor: not-allowed; }
+    .note { font-size: 12px; color: #aaa1bd; }
+    footer { text-align: center; padding: 25px; color: #aaa1bd; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">ClipX AI Studio</div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="panel">
+      <h1>AI Support Chat</h1>
+      <p>
+        Welcome to ClipX AI Support. Ask your questions in Hindi or English.
+      </p>
+
+      <div id="chat" aria-live="polite">
+        <div class="message bot">
+          नमस्ते! ClipX AI Support में आपका स्वागत है।
+          अपनी समस्या लिखें। अभी AI सेवा कनेक्ट नहीं हुई है।
+        </div>
+      </div>
+
+      <form id="chatForm" class="input-area">
+        <input
+          id="question"
+          type="text"
+          placeholder="अपनी समस्या लिखें..."
+          autocomplete="off"
+          required
+        >
+        <button id="sendBtn" type="submit">Send</button>
+      </form>
+
+      <p class="note">
+        AI support is not connected yet. Messages are not being sent to an AI service.
+      </p>
+    </div>
+  </main>
+
+  <footer>© 2026 ClipX AI Studio</footer>
+
+  <script>
+    const form = document.getElementById("chatForm");
+    const input = document.getElementById("question");
+    const chat = document.getElementById("chat");
+
+    form.addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      const question = input.value.trim();
+      if (!question) return;
+
+      const message = document.createElement("div");
+      message.className = "message user";
+      message.textContent = question;
+      chat.appendChild(message);
+
+      const reply = document.createElement("div");
+      reply.className = "message bot";
+      reply.textContent =
+        "AI Support अभी कनेक्ट नहीं है। असली AI जवाब पाने के लिए अगला Backend और AI API सेटअप करना होगा।";
+      chat.appendChild(reply);
+
+      input.value = "";
+      chat.scrollTop = chat.scrollHeight;
+    });
+  </script>
+</body>
+</html>
