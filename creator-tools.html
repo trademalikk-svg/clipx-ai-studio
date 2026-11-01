@@ -5,7 +5,7 @@
 </style></head><body><header><b>CLIPX AI STUDIO · CREATOR TOOLS</b> · <a href="./">मुख्य Studio</a></header><main><h1>Creator Tools</h1><p>ये टूल आपके ब्राउज़र में चलते हैं। कुछ सुविधाएँ डिवाइस और ब्राउज़र सपोर्ट पर निर्भर हैं।</p>
 <section class="card"><h2>1. AI Voice Preview</h2><label for="voiceText">टेक्स्ट</label><textarea id="voiceText" placeholder="यहाँ हिंदी या अंग्रेज़ी टेक्स्ट लिखें"></textarea><label for="voiceLang">भाषा</label><select id="voiceLang"><option value="hi-IN">हिंदी</option><option value="en-IN">English India</option><option value="en-US">English US</option></select><button onclick="speak()">आवाज़ सुनें</button><button class="alt" onclick="speechSynthesis.cancel()">रोकें</button><p class="muted">डिवाइस में उपलब्ध आवाज़ इस्तेमाल होगी; यह ऑडियो फाइल डाउनलोड नहीं करता।</p><div id="voiceStatus" class="result">तैयार</div></section>
 <section class="card"><h2>2. Speech to Text</h2><p>माइक्रोफोन से बोलकर टेक्स्ट पहचानें (सपोर्टेड ब्राउज़र में)।</p><button onclick="startSpeech()">🎙 बोलना शुरू करें</button><button class="alt" onclick="stopSpeech()">रोकें</button><textarea id="speechText" placeholder="पहचाना गया टेक्स्ट यहाँ आएगा"></textarea><button onclick="sendCaptions()">Caption में भेजें</button><div id="speechStatus" class="result">माइक्रोफोन अनुमति की जरूरत हो सकती है।</div></section>
-<section class="card"><h2>3. Thumbnail Maker</h2><label for="thumbPhoto">अपनी फोटो चुनें (वैकल्पिक)</label><input id="thumbPhoto" type="file" accept="image/*"><label for="thumbTitle">बड़ा शीर्षक</label><input id="thumbTitle" maxlength="70" placeholder="MY VIDEO"><label for="thumbSub">छोटा विवरण</label><input id="thumbSub" maxlength="90" placeholder="वीडियो का विवरण"><button onclick="thumbnail()">Thumbnail बनाएँ</button><canvas id="thumb" width="1280" height="720"></canvas><a id="thumbLink" hidden download="clipx-thumbnail.png">Thumbnail डाउनलोड करें</a></section>
+<section class="card"><h2>3. VIP Thumbnail Studio ✦</h2><p class="muted">अपनी फोटो और टेक्स्ट से प्रीमियम YouTube thumbnail बनाएँ।</p><label for="thumbPhoto">अपनी फोटो चुनें (वैकल्पिक)</label><input id="thumbPhoto" type="file" accept="image/*"><label for="thumbTitle">बड़ा शीर्षक</label><input id="thumbTitle" maxlength="70" placeholder="आज कुछ बड़ा होने वाला है!"><label for="thumbSub">छोटा विवरण</label><input id="thumbSub" maxlength="90" placeholder="पूरी जानकारी वीडियो में"><label for="thumbStyle">VIP डिजाइन</label><select id="thumbStyle"><option value="gold">VIP Gold Luxury</option><option value="purple">Purple Neon</option><option value="red">Cinematic Red</option></select><button onclick="thumbnail()">✦ VIP Thumbnail बनाएँ</button><canvas id="thumb" width="1280" height="720"></canvas><a id="thumbLink" hidden download="clipx-vip-thumbnail.png">VIP Thumbnail डाउनलोड करें</a></section>
 <section class="card"><h2>4. Script Writer</h2><label for="topic">वीडियो का विषय</label><input id="topic" placeholder="जैसे मोबाइल से वीडियो एडिटिंग"><label for="scriptKind">वीडियो का प्रकार</label><select id="scriptKind"><option value="short">Short / Reel</option><option value="long">YouTube वीडियो</option><option value="ad">विज्ञापन</option></select><button onclick="makeScript()">स्क्रिप्ट बनाएँ</button><div id="scriptOut" class="result">आपकी स्क्रिप्ट यहाँ आएगी।</div><button class="alt" onclick="saveText('स्क्रिप्ट','scriptOut')">My Projects में सेव करें</button></section>
 <section class="card"><h2>5. My Projects</h2><p class="muted">टेक्स्ट प्रोजेक्ट इस डिवाइस के ब्राउज़र में सेव होंगे, cloud पर नहीं।</p><button onclick="saveText('Voice/Script','speechText')">Speech Text सेव करें</button><button class="alt" onclick="showProjects()">Projects दिखाएँ</button><div id="projects" class="result">अभी कोई सेव प्रोजेक्ट नहीं।</div></section>
 <section class="card"><h2>6. Caption helper</h2><label for="captionInput">हर लाइन एक subtitle</label><textarea id="captionInput" placeholder="नमस्कार दोस्तों&#10;आज हम सीखेंगे..."></textarea><button onclick="makeSrt()">SRT subtitle बनाएँ</button><div id="srtOut" class="result">SRT यहाँ बनेगी।</div><a id="srtLink" hidden download="clipx-captions.srt">SRT डाउनलोड करें</a></section>
@@ -14,7 +14,56 @@ function speak(){const t=document.getElementById('voiceText').value.trim(),s=doc
 let recognition=null;function startSpeech(){const R=window.SpeechRecognition||window.webkitSpeechRecognition,s=document.getElementById('speechStatus');if(!R){s.textContent='इस ब्राउज़र में Speech-to-Text उपलब्ध नहीं है। Chrome में कोशिश करें।';return}recognition=new R();recognition.lang='hi-IN';recognition.continuous=true;recognition.interimResults=true;recognition.onresult=e=>{let v='';for(let i=0;i<e.results.length;i++)v+=e.results[i][0].transcript+(e.results[i].isFinal?'\n':'');document.getElementById('speechText').value=v};recognition.onerror=e=>s.textContent='त्रुटि: '+e.error;recognition.onend=()=>s.textContent='रिकॉर्डिंग बंद हुई';try{recognition.start();s.textContent='सुन रहा है...'}catch(e){s.textContent=e.message}}
 function stopSpeech(){if(recognition)recognition.stop()}
 function sendCaptions(){document.getElementById('captionInput').value=document.getElementById('speechText').value}
-function thumbnail(){const c=document.getElementById('thumb'),x=c.getContext('2d'),title=document.getElementById('thumbTitle').value.trim()||'MY VIDEO',sub=document.getElementById('thumbSub').value.trim(),f=document.getElementById('thumbPhoto').files[0];function draw(im){x.fillStyle='#15104b';x.fillRect(0,0,1280,720);if(im){const k=Math.max(1280/im.width,720/im.height),w=im.width*k,h=im.height*k;x.drawImage(im,(1280-w)/2,(720-h)/2,w,h);x.fillStyle='#0008';x.fillRect(0,0,1280,720)}else{const g=x.createLinearGradient(0,0,1280,720);g.addColorStop(0,'#5b1ab2');g.addColorStop(1,'#087caa');x.fillStyle=g;x.fillRect(0,0,1280,720)}x.fillStyle='white';x.textAlign='center';x.font='bold 90px Arial';x.shadowColor='#000';x.shadowBlur=15;x.fillText(title.slice(0,28),640,350,1120);x.font='bold 38px Arial';x.fillText(sub,640,620,1100);x.shadowBlur=0;const a=document.getElementById('thumbLink');a.href=c.toDataURL('image/png');a.hidden=false}if(f){const im=new Image();im.onload=()=>draw(im);im.src=URL.createObjectURL(f)}else draw(null)}
+function thumbnail(){
+ const c=document.getElementById('thumb'),x=c.getContext('2d');
+ const title=document.getElementById('thumbTitle').value.trim()||'MY VIDEO';
+ const sub=document.getElementById('thumbSub').value.trim();
+ const f=document.getElementById('thumbPhoto').files[0];
+ const theme=document.getElementById('thumbStyle').value;
+ const palettes={
+  gold:{a:'#090611',b:'#38200b',accent:'#ffd36a',accent2:'#fff0bd',dark:'#160d08'},
+  purple:{a:'#09051b',b:'#35105e',accent:'#e65cff',accent2:'#75e5ff',dark:'#10051e'},
+  red:{a:'#130407',b:'#650e19',accent:'#ffcf55',accent2:'#fff0d0',dark:'#180408'}
+ };
+ const p=palettes[theme]||palettes.gold;
+ function draw(im){
+  x.clearRect(0,0,1280,720);
+  const bg=x.createLinearGradient(0,0,1280,720);bg.addColorStop(0,p.a);bg.addColorStop(.55,p.b);bg.addColorStop(1,'#05040b');x.fillStyle=bg;x.fillRect(0,0,1280,720);
+  if(im){
+   const scale=Math.max(1280/im.width,720/im.height),w=im.width*scale,h=im.height*scale;
+   x.save();x.globalAlpha=.78;x.drawImage(im,(1280-w)/2,(720-h)/2,w,h);x.restore();
+   const shade=x.createLinearGradient(0,0,1280,0);shade.addColorStop(0,'rgba(0,0,0,.96)');shade.addColorStop(.52,'rgba(0,0,0,.64)');shade.addColorStop(1,'rgba(0,0,0,.08)');x.fillStyle=shade;x.fillRect(0,0,1280,720);
+  }else{
+   const glow=x.createRadialGradient(930,300,20,930,300,620);glow.addColorStop(0,p.accent+'88');glow.addColorStop(1,'transparent');x.fillStyle=glow;x.fillRect(0,0,1280,720);
+   for(let i=0;i<34;i++){x.fillStyle=p.accent+'33';x.beginPath();x.arc((i*173)%1280,(i*97)%720,(i%4)+2,0,Math.PI*2);x.fill()}
+  }
+  // Premium frame and corner details
+  x.strokeStyle=p.accent;x.lineWidth=8;x.strokeRect(18,18,1244,684);
+  x.strokeStyle=p.accent2;x.lineWidth=2;x.strokeRect(31,31,1218,658);
+  x.fillStyle=p.accent;x.fillRect(55,62,12,590);
+  // VIP badge
+  x.fillStyle=p.accent;x.beginPath();x.moveTo(930,55);x.lineTo(1215,55);x.lineTo(1185,118);x.lineTo(930,118);x.closePath();x.fill();
+  x.fillStyle=p.dark;x.font='bold 31px Arial';x.textAlign='center';x.fillText('✦ VIP EDITION',1070,98);
+  // Small eyebrow
+  x.textAlign='left';x.fillStyle=p.accent2;x.font='bold 27px Arial';x.fillText('CLIPX  •  EXCLUSIVE',95,165);
+  // Dynamic multi-line title
+  let words=title.split(/\s+/),lines=[],line='';
+  for(const word of words){const test=line?line+' '+word:word;if(x.measureText(test).width>980&&line){lines.push(line);line=word}else line=test}
+  if(line)lines.push(line);
+  if(lines.length>3)lines=[lines[0],lines[1],lines.slice(2).join(' ')];
+  let fontSize=lines.length===1?104:lines.length===2?91:76;
+  x.font='900 '+fontSize+'px Arial';x.shadowColor='#000';x.shadowBlur=22;x.shadowOffsetX=4;x.shadowOffsetY=5;
+  let y=350;lines.forEach((ln,i)=>{x.fillStyle=i===0?p.accent2:'#ffffff';x.fillText(ln,95,y,1030);y+=fontSize*1.08});
+  x.shadowBlur=0;x.shadowOffsetX=0;x.shadowOffsetY=0;
+  // Bottom information ribbon
+  x.fillStyle=p.accent;x.fillRect(65,590,1150,78);
+  x.fillStyle=p.dark;x.font='bold 31px Arial';x.textAlign='left';
+  const subText=sub||'WATCH NOW  •  FULL VIDEO';x.fillText(subText.length>55?subText.slice(0,52)+'...':subText,95,640,1080);
+  x.fillStyle=p.accent2;x.font='bold 20px Arial';x.textAlign='right';x.fillText('▶ PLAY',1195,690);
+  const a=document.getElementById('thumbLink');a.href=c.toDataURL('image/png');a.hidden=false;
+ }
+ if(f){const im=new Image();im.onload=()=>{draw(im);URL.revokeObjectURL(im.src)};im.onerror=()=>alert('फोटो लोड नहीं हो सकी। दूसरी फोटो चुनें।');im.src=URL.createObjectURL(f)}else draw(null);
+}
 function makeScript(){const t=document.getElementById('topic').value.trim(),k=document.getElementById('scriptKind').value,o=document.getElementById('scriptOut');if(!t){o.textContent='पहले विषय लिखें।';return}const intro=k==='ad'?'क्या आप '+t+' के बारे में जानना चाहते हैं?':'नमस्कार दोस्तों! आज हम बात करेंगे '+t+' के बारे में।';const body=k==='short'?'इसकी तीन जरूरी बातें समझिए। पहली बात, इसकी खासियत जानें। दूसरी बात, इसे सही तरीके से इस्तेमाल करें। तीसरी बात, अपनी जरूरत के अनुसार चुनें।':'आज हम इस विषय को आसान भाषा में समझेंगे। पहले इसकी मुख्य जानकारी, फिर इसके फायदे और उपयोग के तरीके देखेंगे। अंत में जरूरी सुझाव और सावधानियाँ जानेंगे।';o.textContent=intro+'\n\n'+body+'\n\nवीडियो पसंद आए तो Like और Subscribe करें।\n\nनोट: यह template आधारित draft है; रिकॉर्ड करने से पहले तथ्यों की जाँच करें।'}
 function saveText(label,id){const el=document.getElementById(id),v=el.value||el.textContent;if(!v.trim()){alert('पहले सामग्री तैयार करें।');return}let a=[];try{a=JSON.parse(localStorage.getItem('clipxProjects')||'[]')}catch(e){}a.unshift({label,text:v,date:new Date().toLocaleString()});localStorage.setItem('clipxProjects',JSON.stringify(a.slice(0,30)));showProjects()}
 function showProjects(){let a=[];try{a=JSON.parse(localStorage.getItem('clipxProjects')||'[]')}catch(e){}const box=document.getElementById('projects');box.replaceChildren();if(!a.length){box.textContent='अभी कोई सेव प्रोजेक्ट नहीं।';return}a.forEach((p,i)=>{const d=document.createElement('p');d.textContent=p.label+' · '+p.date+'\n'+p.text;box.appendChild(d);const b=document.createElement('button');b.textContent='Delete';b.onclick=()=>{a.splice(i,1);localStorage.setItem('clipxProjects',JSON.stringify(a));showProjects()};box.appendChild(b)})}
