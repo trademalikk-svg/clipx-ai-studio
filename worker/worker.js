@@ -45,7 +45,9 @@ async function processJob(job) {
     const clipSeconds = Math.min(90, Math.max(10, Number.isFinite(requestedSeconds) ? requestedSeconds : DEFAULT_CLIP_SECONDS));
     const ratio = ["9:16", "16:9", "1:1"].includes(job.options?.aspectRatio) ? job.options.aspectRatio : "9:16";
     const dimensions = ratio === "16:9" ? [1920,1080] : ratio === "1:1" ? [1080,1080] : [1080,1920];
-    const total = Math.min(20, Math.ceil(duration / clipSeconds));
+    const requestedCount = Number(job.options?.requestedCount || 20);
+    const safeCount = Math.min(20, Math.max(1, Number.isFinite(requestedCount) ? Math.floor(requestedCount) : 20));
+    const total = Math.min(safeCount, Math.ceil(duration / clipSeconds));
     const results = [];
     for (let i = 0; i < total; i++) {
       const start = i * clipSeconds;
