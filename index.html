@@ -565,6 +565,40 @@ if (supabaseClient) {
  });
 }
 
+async function testBackendConnection() {
+ const button = document.getElementById("backendTestButton");
+ const resultBox = document.getElementById("backendTestResult");
+ if (!button || !resultBox) return;
+ button.disabled = true;
+ resultBox.textContent = "Testing connection... कृपया प्रतीक्षा करें।";
+ try {
+  if (!supabaseClient) {
+   throw new Error("Supabase client load नहीं हुआ। Internet connection जाँचें और page refresh करें।");
+  }
+  const { data: sessionData, error: sessionError } = await supabaseClient.auth.getSession();
+  if (sessionError) throw sessionError;
+  if (!sessionData.session) {
+   throw new Error("पहले Login करें, फिर connection test दबाएँ।");
+  }
+  const { data, error } = await supabaseClient.functions.invoke("generate-video", {
+   body: { action: "health" }
+  });
+  if (error) throw error;
+  if (data && data.status === "connected") {
+   resultBox.textContent = "SUCCESS: Supabase Edge Function connected है और RUNWAY_API_KEY secret उपलब्ध है। अभी video generation चालू नहीं है।";
+  } else if (data && data.status === "missing_secret") {
+   resultBox.textContent = "Secret नहीं मिला: Supabase Edge Function में RUNWAY_API_KEY secret जाँचें।";
+  } else {
+   resultBox.textContent = "Function से जवाब मिला, लेकिन status अपेक्षित नहीं है: " + JSON.stringify(data);
+  }
+ } catch (error) {
+  resultBox.textContent = "TEST FAILED: " + (error.message || String(error));
+  console.error("Backend connection test failed:", error);
+ } finally {
+  button.disabled = false;
+ }
+}
+
 async function handleLogout() {
  const message = document.getElementById("authMessage");
  if (!supabaseClient) return;
