@@ -168,7 +168,7 @@ footer{color:#b39ac7}
   <p>Video preview, editing settings and Hindi + English AI video prompts.</p>
  </section>
  <section class="dashboard-shortcuts" id="tools" aria-label="Studio tools">
-  <a class="shortcut blue" href="#manualCutter"><span class="symbol">🎬</span><span>Video Cutter<small>Cut and trim your videos</small></span></a>
+  <a class="shortcut red" href="#youtubeClips"><span class="symbol">▶</span><span>YouTube Clip Links<small>Create timestamped clip links</small></span></a>
   <a class="shortcut green" href="#autoShorts"><span class="symbol">⚡</span><span>Automatic Shorts<small>Split videos into clips</small></span></a>
   <a class="shortcut purple" href="#promptStudio"><span class="symbol">✦</span><span>Prompt Generator<small>Create video prompts</small></span></a>
   <a class="shortcut orange" href="#captionStudio"><span class="symbol">CC</span><span>Caption Studio<small>Create SRT subtitles</small></span></a>
@@ -229,19 +229,21 @@ footer{color:#b39ac7}
   <div id="settingsResult" class="result">Your selected settings will appear here.</div>
  </section>
 
- <section class="card" id="manualCutter">
-  <h2>04. Manual Video Cutter</h2>
-  <p class="muted">Upload a video above, then choose the start and end time for your clip.</p>
-  <label for="cutStart">Start time (seconds)</label>
-  <input id="cutStart" type="number" min="0" step="0.1" value="0" inputmode="decimal">
-  <label for="cutEnd">End time (seconds)</label>
-  <input id="cutEnd" type="number" min="0" step="0.1" placeholder="Example: 30" inputmode="decimal">
-  <button class="primary" id="makeClipButton" type="button" onclick="makeManualClip()">Create Clip</button>
-  <p id="cutStatus" class="muted" aria-live="polite">The clip is recorded in real time while the selected section plays. Keep this page open.</p>
-  <div class="preview" id="cutPreview">Your finished clip will appear here.</div>
-  <a id="downloadClip" hidden download="clipx-short.webm" style="display:inline-block;margin-top:14px;color:#d6a4ff">Download Clip</a>
+ <section class="card" id="youtubeClips">
+  <h2>YouTube Link Clip Maker</h2>
+  <p class="muted">YouTube video link डालें और clip का start/end समय चुनें। यह preview और timestamp वाला share link बनाता है; YouTube से video file डाउनलोड नहीं करता। केवल अपने या अनुमति-प्राप्त वीडियो इस्तेमाल करें।</p>
+  <label for="youtubeUrl">YouTube video link</label>
+  <input id="youtubeUrl" type="url" placeholder="https://www.youtube.com/watch?v=..." inputmode="url">
+  <button class="primary" type="button" onclick="loadYouTubeClip()">Load YouTube Video</button>
+  <div id="youtubePreview" class="preview">YouTube preview यहाँ दिखाई देगा।</div>
+  <label for="youtubeStart">Clip start time (seconds)</label>
+  <input id="youtubeStart" type="number" min="0" step="1" value="0" inputmode="numeric">
+  <label for="youtubeEnd">Clip end time (seconds)</label>
+  <input id="youtubeEnd" type="number" min="1" step="1" value="30" inputmode="numeric">
+  <button class="primary" type="button" onclick="createYouTubeClipLink()">Create Clip Link</button>
+  <p id="youtubeClipStatus" class="muted" aria-live="polite">वीडियो लोड करें और समय चुनें।</p>
+  <a id="youtubeClipLink" hidden target="_blank" rel="noopener noreferrer" style="display:inline-block;margin-top:12px;color:#d6a4ff">Open YouTube Clip</a>
  </section>
-
  <section class="card" id="autoShorts">
   <h2>05. Automatic Shorts Maker</h2>
   <p class="muted">वीडियो को चुनी हुई अवधि के अलग-अलग हिस्सों में बाँटें। यह AI highlight selection नहीं है।</p>
@@ -260,7 +262,7 @@ footer{color:#b39ac7}
 
  <section class="card" id="captionStudio">
   <h2>06. Caption Studio</h2>
-  <p class="muted">हर लाइन एक subtitle बनेगी। यह tool आपके लिखे captions की SRT file बनाता है। Manual Cutter और Shorts export में यही captions वीडियो पर भी लगाए जाते हैं; आवाज़ की automatic transcription अभी उपलब्ध नहीं है।</p>
+  <p class="muted">हर लाइन एक subtitle बनेगी। यह tool आपके लिखे captions की SRT file बनाता है। Shorts export में यही captions वीडियो पर भी लगाए जाते हैं; आवाज़ की automatic transcription अभी उपलब्ध नहीं है।</p>
   <label for="captionText">Captions लिखें (हर नई लाइन पर अगला caption)</label>
   <textarea id="captionText" placeholder="नमस्कार दोस्तों!&#10;आज हम एक नई वीडियो बनाने वाले हैं।&#10;वीडियो पसंद आए तो Like करें।"></textarea>
   <label for="captionStart">पहला caption कितने सेकंड पर शुरू हो? (seconds)</label>
@@ -505,6 +507,52 @@ function makeSrtCaptions() {
  window.captionSrtUrl = URL.createObjectURL(new Blob([srt], {type:"text/plain;charset=utf-8"}));
  download.href = window.captionSrtUrl;
  download.hidden = false;
+}
+
+
+function getYouTubeVideoId(raw) {
+ try {
+  const url=new URL(raw.trim());
+  const host=url.hostname.replace(/^www\\./,"").toLowerCase();
+  if(host==="youtu.be") return url.pathname.split("/").filter(Boolean)[0]||"";
+  if(host==="youtube.com"||host==="m.youtube.com"||host==="music.youtube.com") {
+   if(url.pathname==="/watch") return url.searchParams.get("v")||"";
+   const parts=url.pathname.split("/").filter(Boolean);
+   if(["shorts","embed","live"].includes(parts[0])) return parts[1]||"";
+  }
+ } catch(e) {}
+ return "";
+}
+function loadYouTubeClip() {
+ const id=getYouTubeVideoId(document.getElementById("youtubeUrl").value);
+ const box=document.getElementById("youtubePreview");
+ const status=document.getElementById("youtubeClipStatus");
+ if(!/^[a-zA-Z0-9_-]{11}$/.test(id)) {
+  status.textContent="सही YouTube video URL डालें।";
+  return;
+ }
+ box.replaceChildren();
+ const frame=document.createElement("iframe");
+ frame.src="https://www.youtube-nocookie.com/embed/"+id;
+ frame.title="YouTube video preview";
+ frame.width="100%";frame.height="240";
+ frame.setAttribute("allow","accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share");
+ frame.setAttribute("allowfullscreen","");
+ frame.style.border="0";frame.style.borderRadius="12px";
+ box.appendChild(frame);
+ status.textContent="वीडियो preview लोड हो गया। अब start और end time चुनें।";
+}
+function createYouTubeClipLink() {
+ const id=getYouTubeVideoId(document.getElementById("youtubeUrl").value);
+ const start=Number(document.getElementById("youtubeStart").value);
+ const end=Number(document.getElementById("youtubeEnd").value);
+ const status=document.getElementById("youtubeClipStatus");
+ const link=document.getElementById("youtubeClipLink");
+ if(!/^[a-zA-Z0-9_-]{11}$/.test(id)){status.textContent="पहले सही YouTube URL डालें।";link.hidden=true;return;}
+ if(!Number.isInteger(start)||!Number.isInteger(end)||start<0||end<=start){status.textContent="End time, start time से बड़ा पूर्णांक होना चाहिए।";link.hidden=true;return;}
+ const url="https://www.youtube.com/watch?v="+id+"&t="+start+"s";
+ link.href=url;link.hidden=false;link.textContent="Open clip from "+start+"s (selected end: "+end+"s)";
+ status.textContent="Timestamp वाला लिंक तैयार है। YouTube पर playback end time अपने-आप बंद नहीं होगा; यह link चुने हुए start point से खुलेगा।";
 }
 
 function generatePrompt() {
