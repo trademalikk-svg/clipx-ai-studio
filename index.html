@@ -539,21 +539,37 @@ async function copyPrompt() {
 }
 
 
-async function clipxRecordVideo(player,start,duration,status) {
- const capture=player.captureStream||player.mozCaptureStream;
- if(!capture) throw new Error("इस Chrome में वीडियो रिकॉर्डिंग उपलब्ध नहीं है। Chrome अपडेट करें।");
+async function clipxRecordVideo(player,start,duration,status,ratio) {
  if(typeof MediaRecorder==="undefined") throw new Error("इस ब्राउज़र में MediaRecorder उपलब्ध नहीं है।");
- const stream=capture.call(player);
+ const sizes={"9:16":[720,1280],"16:9":[1280,720],"1:1":[1080,1080]};
+ const [width,height]=sizes[ratio]||sizes["9:16"];
+ const canvas=document.createElement("canvas");
+ canvas.width=width; canvas.height=height;
+ const ctx=canvas.getContext("2d");
+ if(!ctx) throw new Error("Canvas video export उपलब्ध नहीं है।");
+ const sourceCapture=player.captureStream||player.mozCaptureStream;
+ const sourceStream=sourceCapture?sourceCapture.call(player):null;
+ const canvasStream=canvas.captureStream(30);
+ if(sourceStream) sourceStream.getAudioTracks().forEach(track=>canvasStream.addTrack(track));
  const types=["video/webm;codecs=vp9,opus","video/webm;codecs=vp8,opus","video/webm"];
  const mimeType=types.find(t=>MediaRecorder.isTypeSupported(t))||"";
- const recorder=mimeType?new MediaRecorder(stream,{mimeType}):new MediaRecorder(stream);
+ const recorder=mimeType?new MediaRecorder(canvasStream,{mimeType}):new MediaRecorder(canvasStream);
  const chunks=[];
- let timeCheck=null,seekTimer=null;
+ let raf=0,timeCheck=null,seekTimer=null;
  const finished=new Promise((resolve,reject)=>{
   recorder.ondataavailable=e=>{if(e.data&&e.data.size)chunks.push(e.data);};
   recorder.onerror=e=>reject(e.error||new Error("वीडियो रिकॉर्डिंग रुक गई।"));
   recorder.onstop=resolve;
  });
+ const draw=()=>{
+  if(player.videoWidth&&player.videoHeight) {
+   const scale=Math.max(width/player.videoWidth,height/player.videoHeight);
+   const sw=width/scale,sh=height/scale;
+   const sx=(player.videoWidth-sw)/2,sy=(player.videoHeight-sh)/2;
+   ctx.drawImage(player,sx,sy,sw,sh,0,0,width,height);
+  }
+  if(!player.paused&&!player.ended) raf=requestAnimationFrame(draw);
+ };
  try {
   player.pause();
   if(Math.abs(player.currentTime-start)>0.05) {
@@ -564,13 +580,15 @@ async function clipxRecordVideo(player,start,duration,status) {
     player.currentTime=start;
    });
   }
+  draw();
   recorder.start(1000);
   await player.play();
-  status.textContent="वीडियो रिकॉर्ड हो रही है... कृपया टैब खुला रखें।";
+  draw();
+  status.textContent="वीडियो रिकॉर्ड हो रही है ("+ratio+")... कृपया टैब खुला रखें।";
   await new Promise(resolve=>{
    const finish=()=>{clearTimeout(timeCheck);player.removeEventListener("timeupdate",check);resolve();};
    const check=()=>{if(player.currentTime>=start+duration||player.ended)finish();};
-   timeCheck=setTimeout(finish,duration*1000+3000);
+   timeCheck=setTimeout(finish,duration*1000+4000);
    player.addEventListener("timeupdate",check);
    check();
   });
@@ -583,8 +601,9 @@ async function clipxRecordVideo(player,start,duration,status) {
   if(recorder.state!=="inactive")recorder.stop();
   throw error;
  } finally {
-  clearTimeout(seekTimer);clearTimeout(timeCheck);
-  player.pause();stream.getTracks().forEach(t=>t.stop());
+  cancelAnimationFrame(raf);clearTimeout(seekTimer);clearTimeout(timeCheck);
+  player.pause();canvasStream.getTracks().forEach(t=>t.stop());
+  if(sourceStream)sourceStream.getTracks().forEach(t=>t.stop());
  }
 }
 function clipxInputFile() {
@@ -630,9 +649,9 @@ async function makeManualClip() {
  output.textContent = "क्लिप तैयार हो रही है...";
  try {
   clipxInputFile();
-  const blob=await clipxRecordVideo(player,start,end-start,status);
+  const blob=await clipxRecordVideo(player,start,end-start,status,selectedValue("ratio")||"9:16");
   clipxShowVideo(blob,output,download,"clipx-clip.webm");
-  status.textContent="क्लिप तैयार है। WebM फ़ाइल डाउनलोड करें।";
+  status.textContent="क्लिप तैयार है। चुना हुआ "+(selectedValue("ratio")||"9:16")+" अनुपात लागू किया गया है। WebM डाउनलोड करें।";
  } catch (error) {
   status.textContent = "क्लिप नहीं बन सकी: " + (error.message || String(error)) + "। इंटरनेट और खाली स्टोरेज जाँचें।";
  } finally {
@@ -664,7 +683,7 @@ async function makeAutomaticShorts() {
    const from = i*duration;
    const clipDuration = Math.min(duration,player.duration-from);
    status.textContent = "Short " + (i+1) + "/" + total + " तैयार हो रही है...";
-   const blob = await clipxRecordVideo(player,from,clipDuration,status);
+   const blob = await clipxRecordVideo(player,from,clipDuration,status,ratio);
    const item = document.createElement("div");
    item.style.margin = "12px 0";
    const label = document.createElement("p");
@@ -679,7 +698,7 @@ async function makeAutomaticShorts() {
    item.append(label,videoBox,link);
    results.appendChild(item);
   }
-  status.textContent = total + " Shorts तैयार हैं। WebM में डाउनलोड करें। (ratio अभी लागू नहीं होता।)";
+  status.textContent = total + " Shorts तैयार हैं। चुना हुआ "+ratio+" अनुपात लागू किया गया है। WebM डाउनलोड करें।";
  } catch (error) {
   status.textContent = "Shorts बनाते समय समस्या: " + (error.message || String(error)) + "। इंटरनेट, स्टोरेज और वीडियो फ़ाइल जाँचें।";
  } finally {
