@@ -357,6 +357,14 @@ footer{color:#b39ac7}
     <div id="highlightResults" class="result">अभी कोई सुझाव नहीं।</div>
  </section>
 
+ <section class="card" id="faceTrackingLab">
+  <h3>Face Tracking Lab — Free On-device Test</h3>
+  <p class="muted">MediaPipe से वीडियो के चुने हुए frames में चेहरे खोजें। यह शुरुआती परीक्षण है; अभी auto face-follow crop export नहीं करता। पहली बार मॉडल इंटरनेट से लोड होगा।</p>
+  <button class="primary" type="button" id="faceScanButton" onclick="scanFacesOnDevice()">Test Face Detection</button>
+  <p id="faceScanStatus" class="muted" aria-live="polite">पहले वीडियो upload करें।</p>
+  <div id="faceScanResults" class="result">अभी कोई परीक्षण नहीं हुआ।</div>
+ </section>
+
  <section class="card" id="freeCreatorKit">
   <h2>Free Creator Kit — Titles & Hashtags</h2>
   <p class="muted">यह टूल आपके topic और platform के आधार पर local templates से title, description और hashtags सुझाता है। इंटरनेट/API की जरूरत नहीं।</p>
@@ -433,7 +441,7 @@ footer{color:#b39ac7}
  <section class="card" id="features">
   <h2>Feature Status & Roadmap</h2>
   <p class="muted">Free tools: video preview, trim/export, clip splitting, activity-based highlight suggestions, manual SRT subtitles and title/hashtag templates.</p>
-  <p class="notice">Video upload and preview work in your browser. Automatic speech recognition runs in your browser using a multilingual Whisper model; language auto-detection may make mistakes. Face tracking, true semantic AI highlights, AI video generation and permanently burned-in animated subtitles are not active yet. These require extra processing or an AI service. Do not treat the activity-based highlight finder as semantic AI.</p>
+  <p class="notice">Video upload and preview work in your browser. Automatic speech recognition runs in your browser using a multilingual Whisper model; language auto-detection may make mistakes. Face detection is available as an experimental on-device test; automatic face-follow cropping, true semantic AI highlights and AI video generation are not active yet. These require extra processing or an AI service. Do not treat the activity-based highlight finder as semantic AI.</p>
  </section>
 </main>
 
@@ -469,7 +477,7 @@ function showWorkspaceView(view) {
   shorts:["upload","clipSettings","autoShorts"],
   captions:["upload","captionStudio"],
   youtube:["youtubeClips"],
-  highlights:["upload","smartHighlights"],
+  highlights:["upload","smartHighlights","faceTrackingLab"],
   backend:["backendConnection"],
   creatorKit:["freeCreatorKit"],
   prompts:["promptStudio"],
@@ -1272,5 +1280,54 @@ function googleTranslateElementInit(){
  setTimeout(()=>window.clipxSetLanguage("en"),1200);
 }</script>
 <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+<script>
+let clipxFaceDetectorPromise=null;
+async function getClipxFaceDetector(){
+ if(!clipxFaceDetectorPromise){
+  clipxFaceDetectorPromise=(async()=>{
+   const vision=await import("https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/vision_bundle.mjs");
+   const fileset=await vision.FilesetResolver.forVisionTasks("https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm");
+   return vision.FaceDetector.createFromOptions(fileset,{baseOptions:{modelAssetPath:"https://storage.googleapis.com/mediapipe-models/face_detector/blaze_face_short_range/float16/1/blaze_face_short_range.tflite"},runningMode:"VIDEO",minDetectionConfidence:0.5});
+  })().catch(error=>{clipxFaceDetectorPromise=null;throw error;});
+ }
+ return clipxFaceDetectorPromise;
+}
+async function scanFacesOnDevice(){
+ const player=document.querySelector("#preview video"),status=document.getElementById("faceScanStatus"),results=document.getElementById("faceScanResults"),button=document.getElementById("faceScanButton");
+ if(!player||!Number.isFinite(player.duration)||player.duration<1){status.textContent="पहले कम-से-कम 1 सेकंड की वीडियो upload करें।";return;}
+ button.disabled=true;results.replaceChildren();status.textContent="Free face model लोड हो रहा है…";
+ const originalTime=player.currentTime,canvas=document.createElement("canvas");canvas.width=320;canvas.height=180;
+ const ctx=canvas.getContext("2d");
+ try{
+  const detector=await getClipxFaceDetector(),duration=Math.min(player.duration,120),step=Math.max(1,Math.ceil(duration/30));
+  let scanned=0,detected=0,totalFaces=0,centres=[];
+  for(let t=0;t<duration;t+=step){
+   await new Promise((resolve,reject)=>{
+    const done=()=>{clearTimeout(timer);resolve();};
+    const timer=setTimeout(()=>{player.removeEventListener("seeked",done);reject(new Error("वीडियो frame load नहीं हुआ।"));},7000);
+    player.addEventListener("seeked",done,{once:true});player.currentTime=t;if(Math.abs(player.currentTime-t)<0.02)done();
+   });
+   if(!player.videoWidth||!player.videoHeight)continue;
+   ctx.drawImage(player,0,0,320,180);
+   const found=detector.detectForVideo(canvas,Math.round(t*1000)).detections||[];
+   scanned++;totalFaces+=found.length;
+   if(found.length){
+    detected++;
+    const main=found.slice().sort((a,b)=>(b.boundingBox.width*b.boundingBox.height)-(a.boundingBox.width*a.boundingBox.height))[0],box=main.boundingBox;
+    centres.push({x:(box.originX+box.width/2)/320,y:(box.originY+box.height/2)/180});
+   }
+   status.textContent="Frames जाँचे जा रहे हैं: "+Math.min(100,Math.round((t+step)/duration*100))+"%";
+  }
+  const p=document.createElement("p");p.textContent="जाँचे गए frames: "+scanned+" · चेहरा मिला: "+detected+" frames में · कुल face detections: "+totalFaces;results.append(p);
+  if(centres.length){
+   const avgX=centres.reduce((n,v)=>n+v.x,0)/centres.length,avgY=centres.reduce((n,v)=>n+v.y,0)/centres.length,note=document.createElement("p");
+   note.textContent="मुख्य चेहरे का औसत केंद्र: "+Math.round(avgX*100)+"% चौड़ाई, "+Math.round(avgY*100)+"% ऊँचाई। यह auto-crop के लिए शुरुआती framing संकेत है।";
+   results.append(note);status.textContent="Face detection test पूरा हुआ।";
+  }else status.textContent="इस sample में कोई चेहरा नहीं मिला। साफ रोशनी और सामने दिखते चेहरे वाली वीडियो से दोबारा जाँचें।";
+  const privacy=document.createElement("small");privacy.textContent="वीडियो frames आपके browser में process हुए; मॉडल/CDN पहली बार इंटरनेट से लोड हुआ।";results.append(privacy);
+ }catch(error){status.textContent="Face test नहीं चल पाया: "+(error.message||String(error))+". इंटरनेट connection और browser memory जाँचें।";}
+ finally{try{player.currentTime=originalTime;}catch(e){}button.disabled=false;}
+}
+</script>
 </body>
 </html>
