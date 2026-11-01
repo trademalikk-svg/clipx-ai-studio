@@ -36,8 +36,8 @@ jobs:
           if checked == 0:
               raise SystemExit("No inline JavaScript blocks were checked.")
           print(f"Syntax OK: {checked} inline JavaScript blocks.")
-          sections = re.findall(r"<section\\b[^>]*\\bid=[\"']([^\"']+)[\"']", html, re.I)
-          groups = re.search(r"const groups = \\{(.*?)\\n \\};", html, re.S)
+          sections = re.findall(r"<section\b[^>]*\bid=[\"']([^\"']+)[\"']", html, re.I)
+          groups = re.search(r"const groups = \{(.*?)\n \};", html, re.S)
           if not groups:
               raise SystemExit("Workspace route map was not found.")
           missing = [section for section in sections if f'"{section}"' not in groups.group(1)]
