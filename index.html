@@ -35,6 +35,27 @@ button:disabled{opacity:.6;cursor:not-allowed}
 .notice{color:#ffc96b;background:#2a2116;border:1px solid #71542a;padding:13px;border-radius:10px;font-size:13px;line-height:1.6}
 footer{text-align:center;padding:25px;color:#777;font-size:12px}
 @media(min-width:700px){.card{padding:26px}}
+
+/* Option 3: dark, mobile-first creator dashboard */
+main{max-width:1240px;margin:0 auto;padding:22px 16px;display:grid;grid-template-columns:220px minmax(0,1fr);gap:0 22px;align-items:start}
+.sidebar{grid-column:1;grid-row:1 / span 20;position:sticky;top:12px;background:#100b1c;border:1px solid #302044;border-radius:17px;padding:14px;margin:0}
+.sidebar-title{font-size:12px;color:#9b86ad;letter-spacing:1.5px;margin:5px 8px 12px}
+.sidebar a{display:block;color:#d9cce5;text-decoration:none;padding:11px 12px;border-radius:10px;font-size:14px;margin:4px 0}
+.sidebar a:hover,.sidebar a:focus{background:#2b1c3c;color:#fff;outline:1px solid #76509a}
+.hero,main>section:not(.sidebar){grid-column:2;min-width:0}
+.hero{text-align:left;padding:12px 5px 20px}
+.hero h1{margin:12px 0}
+.card{margin:0 0 17px}
+@media(max-width:760px){
+ main{display:flex;flex-direction:column;padding:14px 12px}
+ .sidebar{position:static;width:100%;display:flex;gap:5px;overflow-x:auto;white-space:nowrap;padding:9px;margin-bottom:16px}
+ .sidebar-title{display:none}
+ .sidebar a{flex:0 0 auto;margin:0;padding:10px;font-size:13px}
+ .hero{width:100%;padding:10px 4px 16px}
+ main>section:not(.sidebar){width:100%}
+ .card{padding:17px;margin-bottom:14px}
+}
+
 </style>
 </head>
 <body>
@@ -49,7 +70,19 @@ footer{text-align:center;padding:25px;color:#777;font-size:12px}
 </header>
 
 <main>
- <section class="hero">
+
+ <nav class="sidebar" aria-label="Studio navigation">
+  <div class="sidebar-title">WORKSPACE</div>
+  <a href="#home">⌂ Overview</a>
+  <a href="#upload">＋ Upload Video</a>
+  <a href="#clipSettings">⚙ Clip Settings</a>
+  <a href="#manualCutter">✂ Manual Cutter</a>
+  <a href="#autoShorts">▣ Auto Shorts</a>
+  <a href="#captionStudio">字幕 Captions</a>
+  <a href="#promptStudio">✧ Prompt Studio</a>
+  <a href="#backendConnection">↗ Connection</a>
+ </nav>
+ <section class="hero" id="home">
   <div class="vip">YOUR PERSONAL VIDEO WORKSPACE</div>
   <h1>Turn Ideas Into <span>Content</span></h1>
   <p>Video preview, editing settings and Hindi + English AI video prompts.</p>
@@ -66,7 +99,7 @@ footer{text-align:center;padding:25px;color:#777;font-size:12px}
   <button class="secondary" type="button" onclick="document.getElementById('authBox').hidden=true">Close</button>
  </section>
 
- <section class="card">
+ <section class="card" id="upload">
   <h2>01. Upload Your Video</h2>
   <label for="video">Select a video from your device</label>
   <input type="file" id="video" accept="video/*">
@@ -78,7 +111,7 @@ footer{text-align:center;padding:25px;color:#777;font-size:12px}
   <div class="preview" id="preview">Your selected video preview will appear here.</div>
  </section>
 
- <section class="card">
+ <section class="card" id="clipSettings">
   <h2>02. Clip Settings</h2>
   <label>Clip Duration</label>
   <div class="options" id="duration">
@@ -152,7 +185,7 @@ footer{text-align:center;padding:25px;color:#777;font-size:12px}
   <a id="downloadSrt" hidden download="clipx-captions.srt" style="display:inline-block;margin-top:14px;color:#d6a4ff">Download SRT Subtitles</a>
  </section>
 
- <section class="card">
+ <section class="card" id="promptStudio">
   <h2>07. AI Video Prompt Generator</h2>
   <label for="idea">Describe your video idea</label>
   <textarea id="idea" placeholder="उदाहरण: एक खूबसूरत पहाड़ी इलाके में सूर्योदय का दृश्य..."></textarea>
