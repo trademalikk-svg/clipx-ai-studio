@@ -1,0 +1,1 @@
+{"name":"clipx-ffmpeg-worker","version":"1.0.0","private":true,"type":"module","scripts":{"start":"node worker.js"},"dependencies":{"@supabase/supabase-js":"^2.57.4"}}
