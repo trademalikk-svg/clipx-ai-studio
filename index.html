@@ -549,10 +549,20 @@ async function getClipxFFmpeg(status) {
    ffmpeg.on("progress", ({ progress }) => {
     if (Number.isFinite(progress)) status.textContent = "वीडियो प्रोसेस हो रही है: " + Math.max(0,Math.min(100,Math.round(progress*100))) + "%";
    });
-   await ffmpeg.load({
-    coreURL: "https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.6/dist/umd/ffmpeg-core.js",
-    wasmURL: "https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.6/dist/umd/ffmpeg-core.wasm"
-   });
+   status.textContent = "वीडियो Worker तैयार हो रहा है...";
+   const workerResponse = await fetch("https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.10/dist/esm/worker.js");
+   if (!workerResponse.ok) throw new Error("FFmpeg Worker डाउनलोड नहीं हुआ: " + workerResponse.status);
+   const workerCode = await workerResponse.blob();
+   const workerURL = URL.createObjectURL(new Blob([workerCode], { type: "text/javascript" }));
+   try {
+    await ffmpeg.load({
+     classWorkerURL: workerURL,
+     coreURL: "https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.6/dist/umd/ffmpeg-core.js",
+     wasmURL: "https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.6/dist/umd/ffmpeg-core.wasm"
+    });
+   } finally {
+    URL.revokeObjectURL(workerURL);
+   }
    return ffmpeg;
   })().catch(error => {
    clipxFFmpegPromise = null;
