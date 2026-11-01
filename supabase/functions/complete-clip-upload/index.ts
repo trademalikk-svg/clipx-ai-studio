@@ -18,9 +18,11 @@ Deno.serve(async (req) => {
   const admin = createClient(url, service, { auth: { persistSession: false } });
   const { data: job, error } = await admin.from("clip_jobs").select("id,user_id,source_path,status").eq("id", body.jobId).eq("user_id", user.id).maybeSingle();
   if (error || !job) return reply({ error: "Job not found." }, 404);
+  if (job.status !== "queued") return reply({ error: "This job has already been uploaded or processed." }, 409);
   const { data: file, error: fileError } = await admin.storage.from("clipx-private").createSignedUrl(job.source_path, 60);
   if (fileError || !file) return reply({ error: "Uploaded file not found. Upload may still be in progress." }, 409);
-  const { error: updateError } = await admin.from("clip_jobs").update({ status: "uploaded" }).eq("id", job.id).eq("user_id", user.id);
+  const { data: updated, error: updateError } = await admin.from("clip_jobs").update({ status: "uploaded" }).eq("id", job.id).eq("user_id", user.id).eq("status", "queued").select("id").maybeSingle();
   if (updateError) return reply({ error: "Could not update job status." }, 500);
+  if (!updated) return reply({ error: "Job state changed; refresh and check its status." }, 409);
   return reply({ jobId: job.id, status: "uploaded", message: "Secure upload confirmed. Cloud processing provider is not yet connected." });
 });
