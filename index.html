@@ -395,6 +395,17 @@ footer{color:#b39ac7}
    <option value="1:1">1:1 - Square</option>
   </select>
   <button class="primary" type="button" onclick="generatePrompt()">✨ Generate Prompt</button>
+  <div class="card" style="margin-top:14px;background:#100a20">
+   <h3 style="margin-top:0;color:#f2d9ff">AI Video Generator (Runway)</h3>
+   <p class="muted">Text se 5-second AI video banayein. Generation par provider credits lag sakte hain.</p>
+   <label for="runwayPrompt">Video prompt (English recommended)</label>
+   <textarea id="runwayPrompt" maxlength="1000" placeholder="A cinematic sunrise over the Himalayas, slow camera movement..."></textarea>
+   <label for="runwayRatio">Video format</label>
+   <select id="runwayRatio"><option value="720:1280">Portrait 9:16</option><option value="1280:720">Landscape 16:9</option><option value="960:960">Square 1:1</option></select>
+   <button class="primary" id="runwayGenerateButton" type="button" onclick="clipxRunwayGenerate()">Generate AI Video</button>
+   <p id="runwayStatus" class="muted" aria-live="polite">Login required. Runway API key stays on the server.</p>
+   <div id="runwayResult" class="result">Generated video link will appear here when ready.</div>
+  </div>
   <div id="promptOutput" class="result" aria-live="polite">Your generated prompt will appear here.</div>
   <button class="primary secondary" type="button" onclick="copyPrompt()">📋 Copy Prompt</button>
   <p class="muted">This tool creates a written prompt from your idea. It does not generate a video or connect to an external AI video service.</p>
@@ -1377,6 +1388,45 @@ async function scanFacesOnDevice(){
  }catch(error){status.textContent="Face test नहीं चल पाया: "+(error.message||String(error))+". इंटरनेट connection और browser memory जाँचें।";}
  finally{try{player.currentTime=originalTime;}catch(e){}button.disabled=false;}
 }
+</script>
+<script>
+window.clipxRunwayGenerate = async function(){
+ const button=document.getElementById("runwayGenerateButton");
+ const status=document.getElementById("runwayStatus");
+ const result=document.getElementById("runwayResult");
+ const prompt=document.getElementById("runwayPrompt").value.trim();
+ const ratio=document.getElementById("runwayRatio").value;
+ if(!prompt){status.textContent="पहले video prompt लिखें।";return;}
+ if(!supabaseClient){status.textContent="Supabase client उपलब्ध नहीं है।";return;}
+ button.disabled=true; status.textContent="Login जाँचा जा रहा है…"; result.textContent="AI task शुरू हो रहा है…";
+ try{
+  const {data:{session},error:sessionError}=await supabaseClient.auth.getSession();
+  if(sessionError) throw sessionError;
+  if(!session){status.textContent="पहले Login करें।";showAuth("login");return;}
+  const {data,error}=await supabaseClient.functions.invoke("generate-video",{body:{action:"create",prompt,ratio}});
+  if(error) throw error;
+  if(!data?.taskId) throw new Error(data?.error||"AI provider ने task ID नहीं दी।");
+  status.textContent="AI video बन रही है… इस काम में कुछ मिनट लग सकते हैं।";
+  result.textContent="Task ID: "+data.taskId;
+  for(let attempt=0;attempt<40;attempt++){
+   await new Promise(resolve=>setTimeout(resolve,8000));
+   const {data:check,error:checkError}=await supabaseClient.functions.invoke("generate-video",{body:{action:"status",taskId:data.taskId}});
+   if(checkError) throw checkError;
+   if(check?.status==="SUCCEEDED" && check?.videoUrl){
+    status.textContent="AI video तैयार है।";
+    result.innerHTML="";
+    const video=document.createElement("video"); video.controls=true; video.playsInline=true; video.src=check.videoUrl; video.style.maxWidth="100%"; video.style.borderRadius="10px";
+    const link=document.createElement("a"); link.href=check.videoUrl; link.target="_blank"; link.rel="noopener"; link.textContent="Open / Save generated video"; link.style.display="block"; link.style.marginTop="10px"; link.style.color="#d6a4ff";
+    result.append(video,link); return;
+   }
+   if(check?.status==="FAILED" || check?.status==="CANCELED") throw new Error(check.failure||"AI generation failed.");
+   status.textContent="AI processing… ("+(attempt+1)+"/40)";
+  }
+  status.textContent="AI task abhi processing mein hai. Settings se dobara status check karna hoga.";
+  result.textContent="Task ID: "+data.taskId;
+ }catch(error){status.textContent="AI error: "+(error.message||String(error));}
+ finally{button.disabled=false;}
+};
 </script>
 </body>
 </html>
