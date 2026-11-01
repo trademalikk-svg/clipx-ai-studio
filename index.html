@@ -4,290 +4,279 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#090611">
-<title>ClipX AI Studio | VIP Video Editor</title>
-
+<title>ClipX AI Studio | Video Creator</title>
 <style>
 *{box-sizing:border-box}
-body{
- margin:0;background:#090611;color:#fff;
- font-family:Arial,sans-serif;
-}
-header{
- padding:18px 6%;display:flex;justify-content:space-between;
- align-items:center;background:#100b1c;
- border-bottom:1px solid #302044;
-}
-.logo{font-size:25px;font-weight:900;letter-spacing:1px}
-.logo span{color:#d6a4ff}
+body{margin:0;background:#090611;color:#fff;font-family:Arial,sans-serif}
+header{padding:18px 6%;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;background:#100b1c;border-bottom:1px solid #302044}
+.logo{font-size:24px;font-weight:900;letter-spacing:1px}.logo span{color:#d6a4ff}
 .vip{color:#ffc75e;font-size:12px;border:1px solid #a77b36;padding:6px 10px;border-radius:20px}
-main{max-width:1100px;margin:auto;padding:25px 17px}
-.hero{text-align:center;padding:35px 5px}
-.hero h1{font-size:clamp(28px,5vw,45px);margin:10px 0}
-.hero h1 span{color:#c58aff}
-.hero p{color:#aaa;line-height:1.6}
-.card{
- background:linear-gradient(145deg,#1b1428,#100c19);
- border:1px solid #49315f;border-radius:18px;
- padding:22px;margin:20px 0;
- box-shadow:0 10px 35px #0005;
-}
+main{max-width:1000px;margin:auto;padding:22px 16px}
+.hero{text-align:center;padding:30px 5px}.hero h1{font-size:clamp(27px,5vw,43px);margin:10px 0}.hero h1 span{color:#c58aff}.hero p,.muted{color:#aaa;line-height:1.6}
+.card{background:linear-gradient(145deg,#1b1428,#100c19);border:1px solid #49315f;border-radius:17px;padding:20px;margin:19px 0;box-shadow:0 10px 35px #0005}
 .card h2{font-size:19px;color:#e3c5ff;margin-top:0}
-.step{color:#bd82fa;margin-right:8px}
-.upload{
- border:2px dashed #8654b7;border-radius:15px;
- padding:30px 12px;text-align:center;background:#130e20;
-}
-.upload .symbol{font-size:38px}
-input[type=file]{width:100%;margin-top:15px;color:#ccc}
-#fileInfo{color:#d5a9ff;font-size:13px;margin-top:12px;overflow-wrap:anywhere}
-label{display:block;color:#ccc;margin-top:17px;font-size:14px}
-select{
- width:100%;padding:13px;margin-top:8px;
- background:#21182f;color:white;border:1px solid #65457e;
- border-radius:10px;font-size:15px;
-}
-.options{display:flex;gap:9px;flex-wrap:wrap;margin-top:10px}
-.option{
- flex:1;min-width:90px;padding:12px 9px;
- background:#21182f;border:1px solid #65457e;
- color:white;border-radius:10px;cursor:pointer;
-}
-.option.active{
- background:linear-gradient(120deg,#7133b2,#a85ee1);
- border-color:#d7aaff;box-shadow:0 0 14px #9c55d455;
-}
-.primary{
- width:100%;padding:15px;margin-top:18px;
- background:linear-gradient(100deg,#843bc5,#bd79eb);
- border:0;border-radius:11px;color:white;
- font-size:16px;font-weight:bold;cursor:pointer;
-}
-.preview{
- min-height:190px;background:#08060e;border:1px solid #403052;
- border-radius:13px;display:flex;align-items:center;
- justify-content:center;text-align:center;color:#aaa;
- padding:15px;overflow:hidden;
-}
+label{display:block;color:#ccc;margin:15px 0 7px;font-size:14px}
+input,select,textarea{width:100%;padding:13px;background:#21182f;color:white;border:1px solid #65457e;border-radius:10px;font-size:15px}
+textarea{min-height:105px;resize:vertical}
+input[type=file]{padding:10px}
+button{padding:12px 15px;background:linear-gradient(100deg,#843bc5,#a85ee1);border:0;border-radius:10px;color:white;font-size:14px;font-weight:bold;cursor:pointer}
+button:disabled{opacity:.6;cursor:not-allowed}
+.auth-buttons{display:flex;gap:8px}.auth-buttons button{padding:9px 12px}
+.primary{width:100%;padding:15px;margin-top:16px;font-size:15px}
+.secondary{background:#49315f}
+.options{display:flex;gap:9px;flex-wrap:wrap;margin-top:9px}
+.option{flex:1;min-width:90px;background:#21182f;border:1px solid #65457e}
+.option.active{background:linear-gradient(120deg,#7133b2,#a85ee1);border-color:#d7aaff}
+.preview{min-height:150px;background:#08060e;border:1px solid #403052;border-radius:13px;display:flex;align-items:center;justify-content:center;text-align:center;color:#aaa;padding:14px;overflow:hidden}
 .preview video{max-width:100%;max-height:360px;border-radius:10px}
-.feature-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-.feature{
- background:#21182f;border:1px solid #49315f;
- padding:14px;border-radius:11px;color:#e8dafa;font-size:14px;
-}
-.notice{
- color:#ffc96b;background:#2a2116;
- border:1px solid #71542a;padding:13px;
- border-radius:10px;font-size:13px;line-height:1.6;
-}
-footer{text-align:center;padding:28px;color:#777;font-size:12px}
-@media(min-width:700px){
- .feature-grid{grid-template-columns:repeat(3,1fr)}
- .card{padding:28px}
-}
+.result{background:#100b1c;border:1px solid #59436e;padding:14px;border-radius:10px;white-space:pre-wrap;line-height:1.6;margin-top:14px;min-height:55px;overflow-wrap:anywhere}
+.notice{color:#ffc96b;background:#2a2116;border:1px solid #71542a;padding:13px;border-radius:10px;font-size:13px;line-height:1.6}
+footer{text-align:center;padding:25px;color:#777;font-size:12px}
+@media(min-width:700px){.card{padding:26px}}
 </style>
 </head>
-
 <body>
 <header>
- <div id="authBox" class="card" style="display:none">
- <h2 id="authTitle">Login</h2>
- <input id="authEmail" type="email" placeholder="Email address">
- <input id="authPassword" type="password" placeholder="Password">
- <button class="primary" onclick="handleAuth()">Continue</button>
- <p id="authMessage"></p>
- </div>
- <div style="display:flex;gap:8px">
-  <button type="button" onclick="document.getElementById('authBox').style.display='block'; document.getElementById('authTitle').textContent='Login'">Login</button>
-
-  <button type="button" onclick="document.getElementById('authBox').style.display='block'; document.getElementById('authTitle').textContent='Create Account'">Sign Up</button>
-</div>
  <div class="logo">CLIPX <span>AI STUDIO</span></div>
- <div class="vip">✦ VIP EDITION</div>
+ <div class="auth-buttons">
+  <button type="button" onclick="showAuth('login')">Login</button>
+  <button type="button" class="secondary" onclick="showAuth('signup')">Sign Up</button>
+ </div>
+ <div class="vip">✦ CREATOR STUDIO</div>
 </header>
 
 <main>
  <section class="hero">
-  <div class="vip">YOUR PERSONAL AI VIDEO WORKSPACE</div>
-  <h1>Turn Long Videos Into <span>Shorts</span></h1>
-  <p>Create content for YouTube Shorts, Instagram Reels and Facebook Reels.</p>
+  <div class="vip">YOUR PERSONAL VIDEO WORKSPACE</div>
+  <h1>Turn Ideas Into <span>Content</span></h1>
+  <p>Video preview, editing settings and Hindi + English AI video prompts.</p>
+ </section>
+
+ <section class="card" id="authBox" hidden>
+  <h2 id="authTitle">Login</h2>
+  <label for="authEmail">Email</label>
+  <input id="authEmail" type="email" autocomplete="email" placeholder="Email address">
+  <label for="authPassword">Password</label>
+  <input id="authPassword" type="password" autocomplete="current-password" placeholder="Password">
+  <button class="primary" id="authButton" type="button" onclick="handleAuth()">Continue</button>
+  <p id="authMessage" class="muted" aria-live="polite"></p>
+  <button class="secondary" type="button" onclick="document.getElementById('authBox').hidden=true">Close</button>
  </section>
 
  <section class="card">
-  <h2><span class="step">01.</span> Upload Your Video</h2>
-  <div class="upload">
-   <div class="symbol">📁</div>
-   <h3>Select Your Video</h3>
-   <p style="color:#aaa">Choose a video from your device</p>
-   <input type="file" id="video" accept="video/*">
-   <div id="fileInfo">No video selected</div>
-  </div>
+  <h2>01. Upload Your Video</h2>
+  <label for="video">Select a video from your device</label>
+  <input type="file" id="video" accept="video/*">
+  <p id="fileInfo" class="muted">No video selected</p>
+  <div class="preview" id="preview">Your selected video preview will appear here.</div>
  </section>
 
  <section class="card">
-  <h2><span class="step">02.</span> Clip Settings</h2>
-
+  <h2>02. Clip Settings</h2>
   <label>Clip Duration</label>
   <div class="options" id="duration">
-   <button class="option active" data-value="30">30 Seconds</button>
-   <button class="option" data-value="60">60 Seconds</button>
-   <button class="option" data-value="90">90 Seconds</button>
+   <button type="button" class="option active" data-value="30">30 Seconds</button>
+   <button type="button" class="option" data-value="60">60 Seconds</button>
+   <button type="button" class="option" data-value="90">90 Seconds</button>
   </div>
-
   <label>Video Aspect Ratio</label>
   <div class="options" id="ratio">
-   <button class="option active" data-value="9:16">9:16 Shorts</button>
-   <button class="option" data-value="16:9">16:9 Landscape</button>
-   <button class="option" data-value="1:1">1:1 Square</button>
+   <button type="button" class="option active" data-value="9:16">9:16 Shorts</button>
+   <button type="button" class="option" data-value="16:9">16:9 Landscape</button>
+   <button type="button" class="option" data-value="1:1">1:1 Square</button>
   </div>
-
-  <label>Caption Language</label>
-  <select id="language">
+  <label for="captionLanguage">Caption Language</label>
+  <select id="captionLanguage">
    <option value="Hindi">Hindi</option>
    <option value="English">English</option>
    <option value="Both">Hindi + English</option>
   </select>
-
-  <label>Number of Clips</label>
+  <label for="clipCount">Number of Clips</label>
   <select id="clipCount">
    <option value="3">3 Clips</option>
    <option value="5">5 Clips</option>
    <option value="10">10 Clips</option>
   </select>
+  <button class="primary" type="button" onclick="showSettings()">Check Selected Settings</button>
+  <div id="settingsResult" class="result">Your selected settings will appear here.</div>
  </section>
 
  <section class="card">
-  <h2><span class="step">03.</span> Video Preview</h2>
-  <div class="preview" id="preview">
-   <div>
-    <div style="font-size:35px">▶</div>
-    Your selected video preview will appear here.
-   </div>
-  </div>
+  <h2>03. AI Video Prompt Generator</h2>
+  <label for="idea">Describe your video idea</label>
+  <textarea id="idea" placeholder="उदाहरण: एक खूबसूरत पहाड़ी इलाके में सूर्योदय का दृश्य..."></textarea>
+  <label for="promptLanguage">Prompt Language</label>
+  <select id="promptLanguage">
+   <option value="English">English</option>
+   <option value="Hindi">Hindi</option>
+   <option value="Both">Hindi + English</option>
+  </select>
+  <label for="style">Video Style</label>
+  <select id="style">
+   <option>Cinematic</option>
+   <option>3D Animation</option>
+   <option>Documentary</option>
+   <option>Anime</option>
+   <option>Advertisement</option>
+  </select>
+  <label for="aspect">Aspect Ratio</label>
+  <select id="aspect">
+   <option value="9:16">9:16 - Shorts / Reels</option>
+   <option value="16:9">16:9 - YouTube</option>
+   <option value="1:1">1:1 - Square</option>
+  </select>
+  <button class="primary" type="button" onclick="generatePrompt()">✨ Generate Prompt</button>
+  <div id="promptOutput" class="result" aria-live="polite">Your generated prompt will appear here.</div>
+  <button class="primary secondary" type="button" onclick="copyPrompt()">📋 Copy Prompt</button>
+  <p class="muted">This tool creates a written prompt from your idea. It does not generate a video or connect to an external AI video service.</p>
  </section>
 
  <section class="card">
-  <h2><span class="step">04.</span> AI Studio Features</h2>
-  <div class="feature-grid">
-   <div class="feature">✦ AI Highlight Detection</div>
-   <div class="feature">✦ Auto Captions</div>
-   <div class="feature">✦ Face Tracking</div>
-   <div class="feature">✦ Animated Subtitles</div>
-   <div class="feature">✦ AI Titles & Hashtags</div>
-   <div class="feature">✦ Multiple Short Clips</div>
-  </div>
-  <p class="notice" style="margin-top:18px">
-   AI processing, cloud uploads and final video exports will work after the backend is connected. This dashboard currently provides video selection, preview and editing settings only.
-  </p>
-  <button class="primary" id="processBtn">✦ AI PROCESSING — COMING SOON</button>
-  <p id="message" style="color:#d6a4ff;text-align:center;font-size:13px"></p>
+  <h2>04. AI Studio Features</h2>
+  <p class="muted">Planned features: AI highlight detection, automatic captions, face tracking, animated subtitles, titles, hashtags and multiple short clips.</p>
+  <p class="notice">Video upload and preview work in your browser. Actual AI clipping, captions and video export need a separate processing backend; those functions are not active yet.</p>
  </section>
 </main>
 
-<footer>
- © 2026 ClipX AI Studio · Personal Video Workspace
-</footer>
+<footer>© 2026 ClipX AI Studio · Personal Video Workspace</footer>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const videoInput=document.getElementById("video");
-const preview=document.getElementById("preview");
-const fileInfo=document.getElementById("fileInfo");
-let videoURL=null;
+const videoInput = document.getElementById("video");
+const preview = document.getElementById("preview");
+let videoURL = null;
 
-videoInput.addEventListener("change",function(){
- const file=this.files[0];
- if(!file)return;
-
- if(!file.type.startsWith("video/")){
-  fileInfo.textContent="Please select a video file.";
+videoInput.addEventListener("change", function () {
+ const file = this.files && this.files[0];
+ if (!file) return;
+ if (!file.type.startsWith("video/")) {
+  document.getElementById("fileInfo").textContent = "Please select a video file.";
   return;
  }
-
- if(videoURL)URL.revokeObjectURL(videoURL);
- videoURL=URL.createObjectURL(file);
-
- const size=(file.size/1024/1024).toFixed(2);
- fileInfo.textContent=file.name+" · "+size+" MB";
-
- preview.innerHTML="";
- const player=document.createElement("video");
- player.src=videoURL;
- player.controls=true;
- player.playsInline=true;
+ if (videoURL) URL.revokeObjectURL(videoURL);
+ videoURL = URL.createObjectURL(file);
+ document.getElementById("fileInfo").textContent =
+  file.name + " · " + (file.size / 1024 / 1024).toFixed(2) + " MB";
+ preview.replaceChildren();
+ const player = document.createElement("video");
+ player.src = videoURL;
+ player.controls = true;
+ player.playsInline = true;
  preview.appendChild(player);
 });
 
-function setupOptions(id){
- const group=document.getElementById(id);
- group.querySelectorAll(".option").forEach(button=>{
-  button.addEventListener("click",()=>{
-   group.querySelectorAll(".option").forEach(b=>b.classList.remove("active"));
+function setupOptions(id) {
+ const group = document.getElementById(id);
+ group.querySelectorAll(".option").forEach(button => {
+  button.addEventListener("click", () => {
+   group.querySelectorAll(".option").forEach(item => item.classList.remove("active"));
    button.classList.add("active");
   });
  });
 }
-
 setupOptions("duration");
 setupOptions("ratio");
 
-document.getElementById("processBtn").addEventListener("click",()=>{
- document.getElementById("message").textContent=
- "AI backend is not connected yet. Processing will be available after backend setup.";
-});
- const SUPABASE_URL = "https://qmoxfzgiwamblpouxitn.supabase.co";
-const SUPABASE_KEY = "sb_publishable_dsVQ5-5VuIG5n_m0qqNjqw__i5sogpL";
- let authMode = "login";
-
-function showAuth(mode) {
-  authMode = mode;
-  document.getElementById("authBox").style.display = "block";
-  document.getElementById("authTitle").textContent =
-    mode === "login" ? "Login" : "Create Account";
-  document.getElementById("authBox").scrollIntoView({
-    behavior: "smooth"
-  });
+function selectedValue(id) {
+ const active = document.querySelector("#" + id + " .option.active");
+ return active ? active.dataset.value : "";
 }
 
-const supabaseClient = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
-);
+function showSettings() {
+ const file = videoInput.files[0];
+ document.getElementById("settingsResult").textContent =
+  "Video: " + (file ? file.name : "Not selected") +
+  "\nDuration: " + selectedValue("duration") + " seconds" +
+  "\nAspect ratio: " + selectedValue("ratio") +
+  "\nCaption language: " + document.getElementById("captionLanguage").value +
+  "\nNumber of clips: " + document.getElementById("clipCount").value;
+}
+
+function generatePrompt() {
+ const idea = document.getElementById("idea").value.trim();
+ const output = document.getElementById("promptOutput");
+ if (!idea) {
+  output.textContent = "Please write your video idea first.";
+  return;
+ }
+ const style = document.getElementById("style").value;
+ const aspect = document.getElementById("aspect").value;
+ const language = document.getElementById("promptLanguage").value;
+ const en = "Create a " + style + " video based on this idea: " + idea +
+  ". Use coherent visuals, professional camera movement, suitable lighting, smooth motion, detailed composition and high visual quality. Aspect ratio: " + aspect + ".";
+ const hi = "इस विचार पर " + style + " शैली में वीडियो बनाएँ: " + idea +
+  "। उपयुक्त रोशनी, स्पष्ट दृश्य, प्रोफेशनल कैमरा मूवमेंट, स्मूद मोशन और बेहतरीन विजुअल क्वालिटी रखें। वीडियो अनुपात: " + aspect + "।";
+ output.textContent = language === "Hindi" ? hi : language === "Both" ? hi + "\n\n" + en : en;
+}
+
+async function copyPrompt() {
+ const text = document.getElementById("promptOutput").textContent;
+ if (!text || text === "Your generated prompt will appear here.") {
+  alert("Generate a prompt first.");
+  return;
+ }
+ try {
+  await navigator.clipboard.writeText(text);
+  alert("Prompt copied!");
+ } catch (error) {
+  alert("Clipboard unavailable. Please select and copy the prompt manually.");
+ }
+}
+
+/* Existing Supabase project connection retained. */
+const SUPABASE_URL = "https://qmoxfzgiwamblpouxitn.supabase.co";
+const SUPABASE_KEY = "sb_publishable_dsVQ5-5VuIG5n_m0qqNjqw__i5sogpL";
+let authMode = "login";
+let supabaseClient = null;
+
+function showAuth(mode) {
+ authMode = mode;
+ const box = document.getElementById("authBox");
+ box.hidden = false;
+ document.getElementById("authTitle").textContent =
+  mode === "signup" ? "Create Account" : "Login";
+ document.getElementById("authButton").textContent =
+  mode === "signup" ? "Create Account" : "Login";
+ document.getElementById("authMessage").textContent = "";
+ box.scrollIntoView({behavior:"smooth", block:"center"});
+}
+
+try {
+ if (window.supabase && window.supabase.createClient) {
+  supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+ }
+} catch (error) {
+ console.error("Supabase initialization failed:", error);
+}
 
 async function handleAuth() {
-  const email = document.getElementById("authEmail").value.trim();
-  const password = document.getElementById("authPassword").value;
-  const message = document.getElementById("authMessage");
-
-  if (!email || !password) {
-    message.textContent = "Email और Password भरें।";
-    return;
-  }
-
-  message.textContent = "Please wait...";
-
-  try {
-    let result;
-
-    if (authMode === "signup") {
-      result = await supabaseClient.auth.signUp({
-        email,
-        password
-      });
-    } else {
-      result = await supabaseClient.auth.signInWithPassword({
-        email,
-        password
-      });
-    }
-
-    if (result.error) throw result.error;
-
-    message.textContent = authMode === "signup"
-      ? "Account बन गया! Email confirmation जाँचें।"
-      : "Login successful!";
-
-  } catch (error) {
-    message.textContent = error.message;
-  }
+ const email = document.getElementById("authEmail").value.trim();
+ const password = document.getElementById("authPassword").value;
+ const message = document.getElementById("authMessage");
+ const button = document.getElementById("authButton");
+ if (!email || !password) {
+  message.textContent = "Email और Password भरें।";
+  return;
+ }
+ if (!supabaseClient) {
+  message.textContent = "Authentication service load नहीं हुई। Internet connection जाँचें।";
+  return;
+ }
+ button.disabled = true;
+ message.textContent = "Please wait...";
+ try {
+  const result = authMode === "signup"
+   ? await supabaseClient.auth.signUp({email, password})
+   : await supabaseClient.auth.signInWithPassword({email, password});
+  if (result.error) throw result.error;
+  message.textContent = authMode === "signup"
+   ? "Signup request सफल हुई। Email confirmation की जरूरत हो सकती है।"
+   : "Login successful!";
+ } catch (error) {
+  message.textContent = error.message || "Authentication failed.";
+ } finally {
+  button.disabled = false;
+ }
 }
 </script>
 </body>
