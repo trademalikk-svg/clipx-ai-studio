@@ -551,8 +551,8 @@ footer{color:#b39ac7}
   <p id="authPasswordHint" class="muted" style="margin:4px 0 8px;font-size:12px" aria-live="polite">Login के लिए अपना password डालें।</p>
   <button class="primary" id="authButton" type="button" onclick="handleAuth()">Continue</button>
   <div class="google-auth-divider" aria-hidden="true"><span>या</span></div>
-  <button class="google-auth-button" id="googleAuthButton" type="button" onclick="handleGoogleAuth()"><span class="google-g" aria-hidden="true">G</span> Continue with Google</button>
-  <p class="muted" style="font-size:12px;margin:8px 0">Google खाते से पहली बार आने पर नया ClipX account बनेगा; पहले से account है तो Login होगा।</p>
+  <button class="google-auth-button" id="googleAuthButton" type="button" disabled aria-disabled="true" title="Google provider setup pending"><span class="google-g" aria-hidden="true">G</span> Google Login — Setup Pending</button>
+  <p class="muted" style="font-size:12px;margin:8px 0">Google Login अभी उपलब्ध नहीं है। इसे Google Cloud OAuth और Supabase Provider setup पूरा होने के बाद चालू किया जाएगा। अभी Email + Password से Login / Sign Up करें।</p>
   <p id="authMessage" class="muted" aria-live="polite"></p>
   <div id="referralDashboard" class="notice" hidden style="margin-top:14px">
    <h3 style="margin:0 0 8px">Your ClipX Referral Rewards</h3>
