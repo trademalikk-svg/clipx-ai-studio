@@ -1476,15 +1476,17 @@ async function makeAutomaticShorts() {
    label.textContent = "Short " + (i+1) + " · " + Math.ceil(clipDuration) + " sec · " + ratio;
    const videoBox = document.createElement("div");
    const link = document.createElement("a");
-   link.textContent = "Download Short " + (i+1) + " (WebM)";
+   const exportFormat=clipxExportLabel(blob);
+   const exportExtension=clipxExportExtension(blob);
+   link.textContent = "Download Short " + (i+1) + " ("+exportFormat+")";
    link.style.display = "inline-block";
    link.style.marginTop = "8px";
    link.style.color = "#d6a4ff";
-   clipxShowVideo(blob,videoBox,link,"clipx-short-"+(i+1)+".webm");
+   clipxShowVideo(blob,videoBox,link,"clipx-short-"+(i+1)+"."+exportExtension);
    item.append(label,videoBox,link);
    results.appendChild(item);
   }
-  status.textContent = total + " Shorts तैयार हैं। चुना हुआ "+ratio+" अनुपात लागू किया गया है। WebM डाउनलोड करें।";
+  status.textContent = total + " Shorts तैयार हैं। चुना हुआ "+ratio+" अनुपात लागू किया गया है। हर डाउनलोड लिंक में सही फ़ाइल format दिया गया है।";
  } catch (error) {
   status.textContent = "Shorts बनाते समय समस्या: " + (error.message || String(error)) + "। इंटरनेट, स्टोरेज और वीडियो फ़ाइल जाँचें।";
  } finally {
