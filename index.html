@@ -551,6 +551,15 @@ footer{color:#b39ac7}
   <p id="authPasswordHint" class="muted" style="margin:4px 0 8px;font-size:12px" aria-live="polite">Login के लिए अपना password डालें।</p>
   <button class="primary" id="authButton" type="button" onclick="handleAuth()">Continue</button>
   <button class="secondary" id="forgotPasswordButton" type="button" onclick="handlePasswordReset()">Forgot Password?</button>
+  <div id="passwordRecoveryPanel" class="notice" hidden style="margin-top:14px">
+   <h3>Set a new password</h3>
+   <label for="recoveryPassword">New password</label>
+   <input id="recoveryPassword" type="password" autocomplete="new-password" minlength="8" placeholder="At least 8 characters">
+   <label for="recoveryPasswordConfirm">Confirm new password</label>
+   <input id="recoveryPasswordConfirm" type="password" autocomplete="new-password" minlength="8" placeholder="Enter the same password again">
+   <button class="primary" type="button" onclick="handlePasswordUpdate()">Update Password</button>
+   <p id="passwordRecoveryMessage" aria-live="polite"></p>
+  </div>
   <div class="google-auth-divider" aria-hidden="true"><span>या</span></div>
   <button class="google-auth-button" id="googleAuthButton" type="button" disabled aria-disabled="true" title="Google provider setup pending"><span class="google-g" aria-hidden="true">G</span> Google Login — Setup Pending</button>
   <p class="muted" style="font-size:12px;margin:8px 0">Google Login अभी उपलब्ध नहीं है। इसे Google Cloud OAuth और Supabase Provider setup पूरा होने के बाद चालू किया जाएगा। अभी Email + Password से Login / Sign Up करें।</p>
@@ -1695,8 +1704,9 @@ if (supabaseClient) {
   document.getElementById("authMessage").textContent =
    "Login status जाँचा नहीं जा सका: " + (error.message || String(error)) + "। Internet जाँचकर refresh करें।";
  });
- supabaseClient.auth.onAuthStateChange((_event, session) => {
+ supabaseClient.auth.onAuthStateChange((event, session) => {
   updateAuthControls(session ? session.user : null);
+  if (event === "PASSWORD_RECOVERY" && session) showPasswordRecoveryPanel();
  });
 } else {
  updateAuthControls(null);
@@ -1905,6 +1915,59 @@ async function handleGoogleAuth() {
   if (error) throw error;
  } catch (error) {
   message.textContent = error.message || "Google Login शुरू नहीं हो सका।";
+  button.disabled = false;
+ }
+}
+
+function showPasswordRecoveryPanel() {
+ showWorkspaceView("settings");
+ const box = document.getElementById("authBox");
+ box.classList.remove("view-hidden");
+ box.hidden = false;
+ document.getElementById("authTitle").textContent = "Set a new password";
+ document.getElementById("authEmail").hidden = true;
+ document.getElementById("authPassword").hidden = true;
+ document.getElementById("referralCodeInput").hidden = true;
+ document.getElementById("referralCodeLabel").hidden = true;
+ document.getElementById("authButton").hidden = true;
+ document.getElementById("forgotPasswordButton").hidden = true;
+ document.getElementById("googleAuthButton").hidden = true;
+ document.getElementById("passwordRecoveryPanel").hidden = false;
+ document.getElementById("passwordRecoveryMessage").textContent =
+  "Recovery link verified. नया password सेट करें।";
+ box.scrollIntoView({behavior:"smooth",block:"center"});
+}
+
+async function handlePasswordUpdate() {
+ const password = document.getElementById("recoveryPassword").value;
+ const confirmation = document.getElementById("recoveryPasswordConfirm").value;
+ const message = document.getElementById("passwordRecoveryMessage");
+ const button = document.querySelector("#passwordRecoveryPanel button");
+ if (password.length < 8) {
+  message.textContent = "Password कम-से-कम 8 characters का होना चाहिए।";
+  return;
+ }
+ if (password !== confirmation) {
+  message.textContent = "दोनों password एक जैसे नहीं हैं।";
+  return;
+ }
+ if (!supabaseClient) {
+  message.textContent = "Authentication service उपलब्ध नहीं है। Page refresh करें।";
+  return;
+ }
+ button.disabled = true;
+ message.textContent = "Password update हो रहा है…";
+ try {
+  const { error } = await supabaseClient.auth.updateUser({password});
+  if (error) throw error;
+  document.getElementById("recoveryPassword").value = "";
+  document.getElementById("recoveryPasswordConfirm").value = "";
+  document.getElementById("passwordRecoveryPanel").hidden = true;
+  document.getElementById("authMessage").textContent = "Password सफलतापूर्वक बदल गया। आपका account login है।";
+  showWorkspaceView("home");
+ } catch (error) {
+  message.textContent = error.message || "Password update नहीं हो सका। Recovery link expired हो सकती है।";
+ } finally {
   button.disabled = false;
  }
 }
