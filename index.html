@@ -50,6 +50,12 @@ input[type=file]{padding:10px}
 button{padding:12px 15px;background:linear-gradient(100deg,#843bc5,#a85ee1);border:0;border-radius:10px;color:white;font-size:14px;font-weight:bold;cursor:pointer}
 button:disabled{opacity:.6;cursor:not-allowed}
 .auth-buttons{display:flex;gap:8px}.auth-buttons button{padding:9px 12px}
+.google-auth-divider{display:flex;align-items:center;gap:12px;margin:14px 0;color:#a99ab9;font-size:12px}
+.google-auth-divider:before,.google-auth-divider:after{content:"";height:1px;flex:1;background:#63417f}
+.google-auth-button{width:100%;display:flex;align-items:center;justify-content:center;gap:11px;background:#fff!important;color:#24212a!important;border:1px solid #ddd!important;box-shadow:0 4px 14px #0004!important}
+.google-auth-button:hover{background:#f2f2f2!important;filter:none!important}
+.google-g{font:bold 21px Arial,sans-serif;color:#4285f4;background:#fff;border-radius:50%;width:25px;height:25px;display:grid;place-items:center}
+
 .primary{width:100%;padding:15px;margin-top:16px;font-size:15px}
 .secondary{background:#49315f}
 .options{display:flex;gap:9px;flex-wrap:wrap;margin-top:9px}
@@ -544,6 +550,9 @@ footer{color:#b39ac7}
   <input id="referralCodeInput" type="text" maxlength="20" autocomplete="off" placeholder="Enter referral code" hidden>
   <p id="authPasswordHint" class="muted" style="margin:4px 0 8px;font-size:12px" aria-live="polite">Login के लिए अपना password डालें।</p>
   <button class="primary" id="authButton" type="button" onclick="handleAuth()">Continue</button>
+  <div class="google-auth-divider" aria-hidden="true"><span>या</span></div>
+  <button class="google-auth-button" id="googleAuthButton" type="button" onclick="handleGoogleAuth()"><span class="google-g" aria-hidden="true">G</span> Continue with Google</button>
+  <p class="muted" style="font-size:12px;margin:8px 0">Google खाते से पहली बार आने पर नया ClipX account बनेगा; पहले से account है तो Login होगा।</p>
   <p id="authMessage" class="muted" aria-live="polite"></p>
   <div id="referralDashboard" class="notice" hidden style="margin-top:14px">
    <h3 style="margin:0 0 8px">Your ClipX Referral Rewards</h3>
@@ -1642,6 +1651,8 @@ function updateAuthControls(user) {
  document.getElementById("loginNavButton").hidden = loggedIn;
  document.getElementById("signupNavButton").hidden = loggedIn;
  document.getElementById("logoutNavButton").hidden = !loggedIn;
+ const googleButton = document.getElementById("googleAuthButton");
+ if (googleButton) googleButton.hidden = loggedIn;
  const title = document.getElementById("authTitle");
  if (loggedIn) {
   title.textContent = "Account";
@@ -1853,6 +1864,29 @@ async function clipxRunwayGenerate() {
   status.textContent = "Generation नहीं हो सकी: " + (error.message || String(error));
   resultBox.textContent = "Runway/Supabase configuration, login session और provider credits जाँचें।";
  } finally { button.disabled = false; }
+}
+
+async function handleGoogleAuth() {
+ const button = document.getElementById("googleAuthButton");
+ const message = document.getElementById("authMessage");
+ if (!supabaseClient) {
+  message.textContent = "Authentication service load नहीं हुई। Internet connection जाँचें।";
+  return;
+ }
+ button.disabled = true;
+ message.textContent = "Google sign-in खोला जा रहा है…";
+ try {
+  const { error } = await supabaseClient.auth.signInWithOAuth({
+   provider: "google",
+   options: {
+    redirectTo: "https://trademalikk-svg.github.io/clipx-ai-studio/"
+   }
+  });
+  if (error) throw error;
+ } catch (error) {
+  message.textContent = error.message || "Google Login शुरू नहीं हो सका।";
+  button.disabled = false;
+ }
 }
 
 async function handleAuth() {
