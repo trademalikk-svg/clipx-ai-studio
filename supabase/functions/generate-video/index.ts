@@ -30,7 +30,7 @@ Deno.serve(async (req) => {
   try { body = await req.json(); } catch { return reply({ error: "Invalid JSON body." }, 400); }
 
   const action = body.action;
-  if (action === "health") return reply({ status: "connected", provider: "Runway", authenticated: true });
+  if (action === "health") return reply({ status: "connected", provider: "Runway", authenticated: true, secretConfigured: true, generationRequested: false });
 
   const headers = {
     "Authorization": `Bearer ${runwayKey}`,
