@@ -20,7 +20,6 @@ Deno.serve(async (req: Request) => {
 
   const supabaseUrl = Deno.env.get("SUPABASE_URL");
   const anonKey = Deno.env.get("SUPABASE_ANON_KEY");
-  const runwayKey = Deno.env.get("RUNWAY_API_KEY");
 
   if (!supabaseUrl || !anonKey) {
     return reply({ error: "Supabase server configuration is incomplete." }, 503);
@@ -42,78 +41,16 @@ Deno.serve(async (req: Request) => {
     return reply({ error: "Invalid JSON body." }, 400);
   }
 
-  if (!runwayKey) {
-    return reply({
-      status: "missing_secret",
-      authenticated: true,
-      secretConfigured: false,
-      generationRequested: false,
-      error: "RUNWAY_API_KEY secret is not configured.",
-    }, 503);
-  }
-
   if (body.action === "health") {
     return reply({
       status: "connected",
       authenticated: true,
-      secretConfigured: true,
       generationEnabled: false,
       generationRequested: false,
     });
   }
 
-  if (body.action === "runway-health") {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 10000);
-    try {
-      const providerResponse = await fetch("https://api.dev.runwayml.com/v1/organization", {
-        method: "GET",
-        headers: {
-          "Authorization": `Bearer ${runwayKey}`,
-          "X-Runway-Version": "2024-11-06",
-          "Accept": "application/json",
-        },
-        signal: controller.signal,
-      });
-      if (providerResponse.status === 401) {
-        return reply({
-          status: "invalid_key",
-          authenticated: true,
-          secretConfigured: true,
-          generationEnabled: false,
-          generationRequested: false,
-        });
-      }
-      if (!providerResponse.ok) {
-        return reply({
-          status: "provider_error",
-          httpStatus: providerResponse.status,
-          generationEnabled: false,
-          generationRequested: false,
-          message: providerResponse.status === 429 ? "Runway rate limit reached; wait before retrying." : "Runway read-only verification endpoint returned an error.",
-        }, 502);
-      }
-      const organization = await providerResponse.json();
-      const creditBalance = Number(organization?.creditBalance);
-      return reply({
-        status: "valid",
-        keyValid: true,
-        creditBalance: Number.isFinite(creditBalance) ? creditBalance : null,
-        generationEnabled: false,
-        generationRequested: false,
-        checkType: "read_only",
-      });
-    } catch (error) {
-      return reply({
-        status: "provider_unreachable",
-        generationEnabled: false,
-        generationRequested: false,
-        message: error instanceof Error && error.name === "AbortError" ? "Runway verification timed out." : "Could not reach Runway verification endpoint.",
-      }, 502);
-    } finally {
-      clearTimeout(timeout);
-    }
-  }
+
 
   return reply({
     error: "Unsupported action. Video generation remains disabled.",
