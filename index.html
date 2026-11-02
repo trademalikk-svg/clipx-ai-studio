@@ -421,6 +421,7 @@ footer{color:#b39ac7}
   <label for="video">Select a video from your device</label>
   <input type="file" id="video" accept="video/*">
   <p id="fileInfo" class="muted">No video selected</p>
+  <p class="muted">अधिकतम फ़ाइल आकार: 3 GB। बड़ी वीडियो का preview और export आपके डिवाइस की RAM, browser और codec पर निर्भर करेगा।</p>
   <button class="primary" type="button" id="uploadVideoButton" onclick="uploadSelectedVideo()">Upload Video</button>
   <label for="uploadProgress">Video loading progress (this stays on your device)</label>
   <progress id="uploadProgress" max="100" value="0"></progress>
@@ -735,6 +736,14 @@ videoInput.addEventListener("change", function () {
   uploadProgressText.textContent = "Please select a valid video file.";
   uploadVideoButton.disabled = true;
   selectedVideoFile = null;
+  return;
+ }
+ if (selectedVideoFile.size > 3 * 1024 * 1024 * 1024) {
+  document.getElementById("fileInfo").textContent = "फ़ाइल 3 GB की अधिकतम सीमा से बड़ी है।";
+  uploadProgressText.textContent = "3 GB से छोटी वीडियो चुनें।";
+  uploadVideoButton.disabled = true;
+  selectedVideoFile = null;
+  this.value = "";
   return;
  }
  document.getElementById("fileInfo").textContent =
@@ -1445,7 +1454,7 @@ async function clipxStartCloudUpload() {
  const file = document.getElementById("video")?.files?.[0];
  if (!supabaseClient) { status.textContent = "Supabase client उपलब्ध नहीं है।"; return; }
  if (!file) { status.textContent = "पहले अपनी वीडियो फ़ाइल चुनें।"; return; }
- if (file.size > 2 * 1024 * 1024 * 1024) { status.textContent = "फ़ाइल 2 GB से बड़ी है।"; return; }
+ if (file.size > 3 * 1024 * 1024 * 1024) { status.textContent = "फ़ाइल 3 GB से बड़ी है।"; return; }
  const { data: sessionData, error: sessionError } = await supabaseClient.auth.getSession();
  if (sessionError || !sessionData.session) { status.textContent = "पहले Login करें।"; showAuth("login"); return; }
  button.disabled = true;
