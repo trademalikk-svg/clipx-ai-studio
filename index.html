@@ -351,18 +351,83 @@ footer{color:#b39ac7}
  .dashboard-shortcuts .shortcut{min-height:170px}
 }
 
+
+/* Reference-matched VIP dashboard layout */
+@media(min-width:901px){
+ body{padding-top:0}
+ header{
+  position:fixed;z-index:50;left:0;top:0;width:306px;height:160px;
+  padding:24px 24px 12px;display:flex;flex-direction:column;align-items:flex-start;
+  justify-content:center;gap:12px;background:linear-gradient(180deg,#0c0b25,#100a25);
+  border-right:1px solid #63318c;border-bottom:0;box-shadow:none
+ }
+ header .logo{font-size:29px;line-height:1.12;align-items:flex-start}
+ header .logo:before{width:55px;height:55px;font-size:27px}
+ header .header-edition{display:block;padding:7px 14px;border-radius:22px;background:#28172e;color:#ffd34e;font-weight:800}
+ header .auth-buttons{position:fixed;left:calc(306px + 24px);right:26px;top:22px;justify-content:flex-end}
+ header .auth-buttons button{padding:10px 18px}
+ .sidebar{
+  position:fixed;z-index:45;left:0;top:160px;bottom:0;width:306px;min-height:0;
+  overflow-y:auto;border-radius:0;border:0;border-right:1px solid #63318c;
+  padding:16px 22px 24px;background:linear-gradient(180deg,#100b25,#09091d)
+ }
+ .sidebar .sidebar-title{font-size:14px;letter-spacing:.2px;font-weight:800;color:#bda8df}
+ .sidebar a{font-size:16px;padding:13px 14px;margin:5px 0}
+ main{
+  display:grid;grid-template-columns:minmax(0,1fr);gap:18px;
+  max-width:none;margin:0 0 0 306px;padding:94px 26px 28px;
+  width:calc(100% - 306px)
+ }
+ main>.sidebar{grid-column:auto}
+ .hero,main>section:not(.sidebar),.dashboard-shortcuts{grid-column:1}
+ .hero{min-height:270px;padding:34px 38px}
+ .hero h1{font-size:clamp(40px,4vw,58px)}
+ .dashboard-shortcuts{grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+ .dashboard-shortcuts .menu-heading,.dashboard-shortcuts>.muted{grid-column:1/-1}
+ .dashboard-shortcuts .shortcut{min-height:190px}
+ .dashboard-support-grid{display:grid;grid-template-columns:1.15fr 1fr;gap:18px;margin:0 0 4px}
+ .support-promo,.quick-access{min-height:205px;padding:23px;border-radius:19px;border:1px solid #63368a;background:linear-gradient(130deg,#24104a,#100c2c);box-shadow:0 14px 35px #0006}
+ .support-promo{display:flex;align-items:center;justify-content:space-between;overflow:hidden}
+ .support-promo h2,.quick-access h2{margin:0 0 12px;font-size:21px;color:#fff}
+ .support-promo h2 span{font-size:14px;color:#19d58a;margin-left:10px}
+ .support-promo p{max-width:390px;color:#e2d8f3;line-height:1.55}
+ .support-promo a{display:inline-block;margin-top:7px;padding:13px 24px;border-radius:30px;background:linear-gradient(100deg,#a52be8,#6526c8);color:white;text-decoration:none;font-weight:800}
+ .support-promo-art{font-size:86px;color:#c878ff;text-shadow:0 0 32px #b44cff;align-self:flex-end}
+ .quick-access-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+ .quick-access-grid a{padding:13px;border-radius:12px;background:#ffffff12;color:#fff;text-decoration:none;font-size:15px}
+ .quick-access-grid a:hover{background:#63368a}
+ .mobile-bottom-nav{display:none!important}
+ .notice[role=note]{margin:0 26px 0 332px!important;max-width:none!important;position:relative;top:74px;z-index:5}
+ footer{margin-left:306px}
+}
+@media(max-width:900px){
+ header{position:relative;display:flex;flex-direction:row;align-items:center;justify-content:space-between}
+ header .header-edition{display:none}
+ .dashboard-support-grid{display:grid;grid-template-columns:1fr;gap:12px;width:100%}
+ .support-promo,.quick-access{padding:16px;border-radius:16px;border:1px solid #63368a;background:linear-gradient(130deg,#24104a,#100c2c)}
+ .support-promo h2,.quick-access h2{margin:0 0 10px;font-size:18px}
+ .support-promo h2 span{font-size:12px;color:#19d58a;margin-left:6px}
+ .support-promo p{color:#e2d8f3;line-height:1.5}
+ .support-promo a{display:inline-block;padding:11px 20px;border-radius:28px;background:linear-gradient(100deg,#a52be8,#6526c8);color:white;text-decoration:none;font-weight:800}
+ .support-promo-art{display:none}
+ .quick-access-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+ .quick-access-grid a{padding:12px 10px;border-radius:10px;background:#ffffff12;color:#fff;text-decoration:none;font-size:13px}
+ .dashboard-shortcuts{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:390px){.dashboard-shortcuts,.quick-access-grid{grid-template-columns:1fr}}
+
 </style>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 </head>
 <body>
 <header>
  <div class="logo">CLIPX <span>AI STUDIO</span></div>
+ <div class="header-edition">♛ VIP EDITION</div>
  <div class="auth-buttons" id="authControls">
   <button type="button" id="loginNavButton" onclick="showAuth('login')">Login</button>
   <button type="button" class="secondary" id="signupNavButton" onclick="showAuth('signup')">Sign Up</button>
   <button type="button" class="secondary" id="logoutNavButton" onclick="handleLogout()" hidden>Logout</button>
  </div>
- <div class="vip">✦ CREATOR STUDIO</div>
 </header>
 <div class="notice" role="note" style="max-width:1200px;margin:14px auto;padding:14px 18px;border:1px solid #4b3a70;border-radius:12px;background:#171225;color:#e8def8;line-height:1.6"><strong>FREE BROWSER MODE:</strong> Basic editing and creator tools are available without a subscription. Cloud rendering and paid third-party AI video generation are disabled to avoid unexpected provider charges. Speech tools or model downloads may use internet data and depend on your device/browser.</div>
 
@@ -410,6 +475,27 @@ footer{color:#b39ac7}
   <a class="shortcut cyan" href="#freeCreatorKit" data-toolview="creatorKit"><span class="symbol">✍</span><span>Titles & Hashtags<small>वीडियो के लिए title, description और hashtags</small></span></a>
   <a class="shortcut purple" href="#promptStudio" data-toolview="prompts"><span class="symbol">🎬</span><span>AI Video Prompt Studio<small>AI video tools के लिए Hindi + English prompts तैयार करें</small></span></a>
   <a class="shortcut blue" href="#backendConnection" data-toolview="backend"><span class="symbol">✓</span><span>Backend Connection Test<small>सेवा कनेक्शन जाँचें</small></span></a>
+ </section>
+ <section class="dashboard-support-grid" aria-label="Support and quick access">
+  <div class="support-promo">
+   <div class="support-promo-copy">
+    <h2>🎧 Contact &amp; Support <span>● Online</span></h2>
+    <p>Need help? Send a support ticket or check your existing tickets.</p>
+    <a href="contact.html">✉ Open Support</a>
+   </div>
+   <div class="support-promo-art" aria-hidden="true">✦</div>
+  </div>
+  <div class="quick-access">
+   <h2>⚡ Quick Access</h2>
+   <div class="quick-access-grid">
+    <a href="#upload" data-view="studio">▣ My Studio</a>
+    <a href="privacy.html">◈ Privacy Policy</a>
+    <a href="#backendConnection" data-view="settings">⚙ Settings</a>
+    <a href="terms.html">▤ Terms of Use</a>
+    <a href="about.html">ⓘ About ClipX</a>
+    <a href="#" onclick="handleLogout();return false;">⇥ Logout</a>
+   </div>
+  </div>
  </section>
 
  <section class="card" id="authBox">
