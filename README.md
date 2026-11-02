@@ -1,6 +1,6 @@
 # ClipX AI Studio
 
-ClipX AI Studio is a free-to-access, browser-based video and creator-tools prototype hosted on GitHub Pages.
+ClipX AI Studio is a Hindi and English browser-based video creator toolkit for preparing short clips, captions, subtitles, thumbnails and video scripts. It is hosted on GitHub Pages and currently offers a free browser mode.
 
 ## Free Browser Mode
 
