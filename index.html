@@ -376,6 +376,7 @@ footer{color:#b39ac7}
   <a href="#freeCreatorKit" data-view="creatorKit">✍ Titles & Hashtags</a>
   <a href="#upload" data-view="studio">▣ My Studio</a>
   <a href="./creator-tools.html">✦ Creator Tools</a>
+  <a href="#paymentSandbox" data-view="billing">₹ Payments (Test)</a>
   <a href="#backendConnection" data-view="settings">⚙ Settings</a>
  </nav>
  <nav class="mobile-bottom-nav" id="mobileBottomNav" aria-label="Bottom navigation">
@@ -597,6 +598,32 @@ footer{color:#b39ac7}
   <p class="muted">Free tools: video preview, trim/export, clip splitting, activity-based highlight suggestions, manual SRT subtitles and title/hashtag templates.</p>
   <p class="notice">Video upload and preview work in your browser. Automatic speech recognition runs in your browser using a multilingual Whisper model; language auto-detection may make mistakes. Face detection is available as an experimental on-device test; automatic face-follow cropping, true semantic AI highlights and AI video generation are not active yet. These require extra processing or an AI service. Do not treat the activity-based highlight finder as semantic AI.</p>
  </section>
+ <section class="card" id="paymentSandbox" hidden>
+  <h2>₹ ClipX Payments — Sandbox Test Mode</h2>
+  <p class="muted">यह केवल परीक्षण है। कोई असली भुगतान, कार्ड/UPI विवरण, subscription, premium access या referral purchase reward सक्रिय नहीं होगा।</p>
+  <div class="grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px">
+   <article class="card">
+    <h3>Starter Demo</h3><p>₹99 <small>sample test price</small></p>
+    <button class="primary" type="button" onclick="clipxStartTestPayment('starter_demo')">Test Checkout</button>
+   </article>
+   <article class="card">
+    <h3>Creator Demo</h3><p>₹299 <small>sample test price</small></p>
+    <button class="primary" type="button" onclick="clipxStartTestPayment('creator_demo')">Test Checkout</button>
+   </article>
+   <article class="card">
+    <h3>Pro Demo</h3><p>₹599 <small>sample test price</small></p>
+    <button class="primary" type="button" onclick="clipxStartTestPayment('pro_demo')">Test Checkout</button>
+   </article>
+  </div>
+  <div id="clipxTestPaymentPanel" class="notice" hidden style="margin-top:14px">
+   <p id="clipxTestPaymentStatus" aria-live="polite">Test order ready.</p>
+   <button class="primary" id="clipxTestSuccessButton" type="button" onclick="clipxFinishTestPayment(true)">Simulate Test Success</button>
+   <button class="secondary" id="clipxTestFailButton" type="button" onclick="clipxFinishTestPayment(false)">Simulate Test Failure</button>
+  </div>
+  <h3>Test Order History</h3>
+  <div id="clipxTestOrderHistory" class="muted" aria-live="polite">Login के बाद test orders यहाँ दिखेंगे।</div>
+  <p class="muted">ये demo prices अंतिम कीमतें नहीं हैं। Live gateway, real purchases, commission payout और premium feature unlocking अभी बंद हैं।</p>
+ </section>
 </main>
 
 <footer>© 2026 ClipX AI Studio · Free Browser Creator Tools<br><a href="creator-tools.html">Creator Tools</a> · <a href="about.html">About</a> · <a href="contact.html">Support</a> · <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a></footer>
@@ -635,7 +662,8 @@ function showWorkspaceView(view) {
   creatorKit:["freeCreatorKit"],
   prompts:["promptStudio"],
   studio:["upload","clipSettings","autoShorts","faceTrackingLab"],
-  settings:["backendConnection","authBox"]
+  settings:["backendConnection","authBox","paymentSandbox"],
+  billing:["paymentSandbox"]
  };
  const allowed = groups[view] || groups.home;
  document.querySelectorAll("main > section").forEach(section => {
@@ -1357,6 +1385,77 @@ try {
  console.error("Supabase initialization failed:", error);
 }
 
+let clipxCurrentTestOrderId = null;
+
+async function clipxStartTestPayment(planCode) {
+ const status = document.getElementById("clipxTestPaymentStatus");
+ const panel = document.getElementById("clipxTestPaymentPanel");
+ const history = document.getElementById("clipxTestOrderHistory");
+ try {
+  if (!supabaseClient) throw new Error("Supabase connection उपलब्ध नहीं है।");
+  const { data: sessionData, error: sessionError } = await supabaseClient.auth.getSession();
+  if (sessionError) throw sessionError;
+  if (!sessionData.session) throw new Error("पहले Login करें।");
+  status.textContent = "Test order बनाया जा रहा है…";
+  panel.hidden = false;
+  const { data, error } = await supabaseClient.rpc("clipx_create_test_order", { p_plan_code: planCode });
+  if (error) throw error;
+  clipxCurrentTestOrderId = data.id;
+  status.textContent = "Test Order: " + data.id + " · Amount: ₹" + (Number(data.amount_paise) / 100).toFixed(2) + " · अभी केवल TEST CREATED है।";
+  document.getElementById("clipxTestSuccessButton").disabled = false;
+  document.getElementById("clipxTestFailButton").disabled = false;
+  await clipxLoadTestOrderHistory();
+ } catch (error) {
+  panel.hidden = false;
+  status.textContent = "Test order नहीं बना: " + (error.message || String(error));
+  history.textContent = "Order history load नहीं हुई।";
+ }
+}
+
+async function clipxFinishTestPayment(succeed) {
+ const status = document.getElementById("clipxTestPaymentStatus");
+ if (!clipxCurrentTestOrderId) {
+  status.textContent = "पहले Test Checkout शुरू करें।";
+  return;
+ }
+ try {
+  const { data, error } = await supabaseClient.rpc("clipx_complete_test_order", {
+   p_order_id: clipxCurrentTestOrderId,
+   p_succeed: Boolean(succeed)
+  });
+  if (error) throw error;
+  status.textContent = "TEST ONLY: " + data.payment_status + ". कोई असली पैसा नहीं लिया गया, कोई Paid Feature unlock नहीं हुआ और कोई referral purchase points नहीं दिए गए।";
+  document.getElementById("clipxTestSuccessButton").disabled = true;
+  document.getElementById("clipxTestFailButton").disabled = true;
+  await clipxLoadTestOrderHistory();
+ } catch (error) {
+  status.textContent = "Test result save नहीं हुआ: " + (error.message || String(error));
+ }
+}
+
+async function clipxLoadTestOrderHistory() {
+ const target = document.getElementById("clipxTestOrderHistory");
+ if (!target || !supabaseClient) return;
+ try {
+  const { data, error } = await supabaseClient.from("clipx_payment_orders")
+   .select("id,plan_code,amount_paise,payment_status,created_at")
+   .order("created_at", { ascending: false }).limit(10);
+  if (error) throw error;
+  if (!data?.length) {
+   target.textContent = "अभी कोई test order नहीं है।";
+   return;
+  }
+  target.innerHTML = "";
+  data.forEach(order => {
+   const item = document.createElement("p");
+   item.textContent = order.plan_code + " · ₹" + (Number(order.amount_paise) / 100).toFixed(2) + " · " + order.payment_status + " · " + new Date(order.created_at).toLocaleString();
+   target.appendChild(item);
+  });
+ } catch (error) {
+  target.textContent = "History load नहीं हुई: " + (error.message || String(error));
+ }
+}
+
 async function loadClipXReferralDashboard(user) {
  const codeEl = document.getElementById("myReferralCode");
  const pointsEl = document.getElementById("myReferralPoints");
@@ -1418,6 +1517,7 @@ function updateAuthControls(user) {
   document.getElementById("referralCodeLabel").hidden = true;
   document.getElementById("referralDashboard").hidden = false;
   void loadClipXReferralDashboard(user);
+  void clipxLoadTestOrderHistory();
  } else {
   document.getElementById("referralDashboard").hidden = true;
   document.getElementById("authButton").hidden = false;
