@@ -48,6 +48,45 @@ jobs:
               raise SystemExit("Sections missing from workspace routes: " + ", ".join(missing))
           print(f"Workspace routes OK: {len(sections)} sections.")
           PY
+      - name: Check SEO, sitemap, free-mode and upload safeguards
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import pathlib, re, xml.etree.ElementTree as ET
+          base = "https://trademalikk-svg.github.io/clipx-ai-studio/"
+          sitemap = ET.parse("sitemap.xml").getroot()
+          ns = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"}
+          urls = [node.text for node in sitemap.findall("sm:url/sm:loc", ns)]
+          if not urls or len(urls) != len(set(urls)):
+              raise SystemExit("Sitemap is empty or contains duplicate URLs.")
+          expected = {base, *(base + name for name in ["creator-tools.html", "about.html", "contact.html", "privacy.html", "terms.html"])}
+          if set(urls) != expected:
+              raise SystemExit("Sitemap URLs do not match the expected public pages.")
+          for url in urls:
+              path = "index.html" if url == base else url.removeprefix(base)
+              file = pathlib.Path(path)
+              if not file.is_file():
+                  raise SystemExit(f"Sitemap target is missing: {path}")
+              html = file.read_text(encoding="utf-8")
+              canonical = re.search(r"""<link\b[^>]*rel=["']canonical["'][^>]*href=["']([^"']+)""", html, re.I)
+              if path != "index.html" and (not canonical or canonical.group(1) != url):
+                  raise SystemExit(f"Canonical URL missing or incorrect: {path}")
+              if re.search(r"""<meta\b[^>]*name=["']robots["'][^>]*content=["'][^"']*noindex""", html, re.I):
+                  raise SystemExit(f"Public page is marked noindex: {path}")
+          robots = pathlib.Path("robots.txt").read_text(encoding="utf-8")
+          if "Sitemap: " + base + "sitemap.xml" not in robots:
+              raise SystemExit("robots.txt does not point to the public sitemap.")
+          home = pathlib.Path("index.html").read_text(encoding="utf-8")
+          if not re.search(r"const\s+CLIPX_FREE_MODE\s*=\s*true", home):
+              raise SystemExit("Free Browser Mode is not explicitly enabled.")
+          for fn, guard in [("testBackendConnection", "Backend features are disabled in Free Browser Mode."), ("clipxStartCloudUpload", "Cloud rendering is disabled in Free Browser Mode."), ("clipxRunwayGenerate", "External AI video generation is disabled in Free Browser Mode.")]:
+              match = re.search(rf"async\s+function\s+{fn}\s*\([^)]*\)\s*\{{", home)
+              if not match or guard not in home[match.end():match.end()+500]:
+                  raise SystemExit(f"Free-mode guard missing in {fn}.")
+          if not re.search(r"file\.size\s*>\s*150\s*\*\s*1024\s*\*\s*1024", home):
+              raise SystemExit("Browser upload size safeguard (150 MB) is missing.")
+          print(f"SEO/sitemap OK: {len(urls)} pages; Free Browser Mode guards and 150 MB upload safeguard OK.")
+          PY
       - name: Check FFmpeg worker syntax
         run: node --check worker/worker.js
       - name: Set up Deno
