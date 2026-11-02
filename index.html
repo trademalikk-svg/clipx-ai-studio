@@ -411,6 +411,7 @@ footer{color:#b39ac7}
   <input id="authEmail" type="email" autocomplete="email" placeholder="Email address">
   <label for="authPassword">Password</label>
   <input id="authPassword" type="password" autocomplete="current-password" placeholder="Password">
+  <p id="authPasswordHint" class="muted" style="margin:4px 0 8px;font-size:12px" aria-live="polite">Login के लिए अपना password डालें।</p>
   <button class="primary" id="authButton" type="button" onclick="handleAuth()">Continue</button>
   <p id="authMessage" class="muted" aria-live="polite"></p>
   <button class="secondary" type="button" onclick="document.getElementById('authBox').hidden=true">Close</button>
@@ -1321,6 +1322,13 @@ function showAuth(mode) {
   mode === "signup" ? "Create Account" : "Login";
  document.getElementById("authButton").textContent =
   mode === "signup" ? "Create Account" : "Login";
+ const passwordInput = document.getElementById("authPassword");
+ passwordInput.autocomplete = mode === "signup" ? "new-password" : "current-password";
+ passwordInput.minLength = mode === "signup" ? 8 : 0;
+ passwordInput.placeholder = mode === "signup" ? "Create a password (8+ characters)" : "Password";
+ document.getElementById("authPasswordHint").textContent = mode === "signup"
+  ? "नया password कम-से-कम 8 characters का रखें।"
+  : "Login के लिए अपना password डालें।";
  document.getElementById("authMessage").textContent = "";
  box.scrollIntoView({behavior:"smooth", block:"center"});
 }
@@ -1580,12 +1588,24 @@ async function clipxRunwayGenerate() {
 }
 
 async function handleAuth() {
- const email = document.getElementById("authEmail").value.trim();
- const password = document.getElementById("authPassword").value;
+ const emailInput = document.getElementById("authEmail");
+ const passwordInput = document.getElementById("authPassword");
+ const email = emailInput.value.trim();
+ const password = passwordInput.value;
  const message = document.getElementById("authMessage");
  const button = document.getElementById("authButton");
  if (!email || !password) {
   message.textContent = "Email और Password भरें।";
+  return;
+ }
+ if (emailInput.validity.typeMismatch) {
+  message.textContent = "कृपया सही Email address लिखें।";
+  emailInput.focus();
+  return;
+ }
+ if (authMode === "signup" && password.length < 8) {
+  message.textContent = "नया password कम-से-कम 8 characters का होना चाहिए।";
+  passwordInput.focus();
   return;
  }
  if (!supabaseClient) {
