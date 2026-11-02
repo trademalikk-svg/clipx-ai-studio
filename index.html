@@ -418,13 +418,13 @@ footer{color:#b39ac7}
  </section>
 
  <section class="card" id="upload">
-  <h2>01. Upload Your Video</h2>
+  <h2>01. Select & Load Your Video</h2>
   <label for="video">Select a video from your device</label>
   <input type="file" id="video" accept="video/*">
   <p id="fileInfo" class="muted">No video selected</p>
   <p class="muted">अधिकतम फ़ाइल आकार: 3 GB। बड़ी वीडियो का preview और export आपके डिवाइस की RAM, browser और codec पर निर्भर करेगा।</p>
-  <button class="primary" type="button" id="uploadVideoButton" onclick="uploadSelectedVideo()">Upload Video</button>
-  <label for="uploadProgress">Video loading progress (this stays on your device)</label>
+  <button class="primary" type="button" id="uploadVideoButton" onclick="uploadSelectedVideo()">Load Video on Device</button>
+  <label for="uploadProgress">Loading progress (video stays on your device)</label>
   <progress id="uploadProgress" max="100" value="0"></progress>
   <p id="uploadProgressText" aria-live="polite">0% · No video selected</p>
   <div class="preview" id="preview">Your selected video preview will appear here.</div>
@@ -478,7 +478,7 @@ footer{color:#b39ac7}
  <section class="card" id="autoShorts">
   <h2>Automatic Shorts Maker</h2>
   <p class="muted">वीडियो को चुनी हुई अवधि के अलग-अलग हिस्सों में बाँटें। यह AI highlight selection नहीं है।</p>
-  <p class="muted">ऊपर वीडियो चुनकर Upload Video करें। Clip Settings में Duration और Number of Clips चुनें, फिर नीचे बटन दबाएँ। 2 घंटे तक की वीडियो चुनी जा सकती है; वास्तविक सीमा आपके डिवाइस और ब्राउज़र पर निर्भर है।</p>
+  <p class="muted">ऊपर वीडियो चुनकर Load Video on Device दबाएँ। Clip Settings में Duration और Number of Clips चुनें, फिर नीचे बटन दबाएँ। 2 घंटे तक की वीडियो चुनी जा सकती है; वास्तविक सीमा आपके डिवाइस और ब्राउज़र पर निर्भर है।</p>
   <label for="shortsExportMode">Export speed</label>
   <select id="shortsExportMode"><option value="fast" selected>Fast · 540p · 24 FPS</option><option value="standard">Standard · 720p · 30 FPS</option></select>
   <p class="muted">Fast मोड में फाइल छोटी और एक्सपोर्ट हल्का होगा; वीडियो की स्पष्टता थोड़ी कम हो सकती है।</p>
@@ -512,7 +512,7 @@ footer{color:#b39ac7}
 
  <section class="card" id="backendConnection">
   <h2>Backend Connection Test</h2>
-  <p class="muted">पहला टेस्ट Supabase login और secret की मौजूदगी जाँचता है। दूसरा टेस्ट Runway API key को केवल read-only organization endpoint से verify करता है। कोई वीडियो generate नहीं होगा और credits खर्च नहीं होंगे।</p>
+  <p class="muted">यह टेस्ट आपके login session और Supabase Edge Function का connection जाँचता है। यह किसी AI provider या paid API को call नहीं करता। Cloud processing और AI video generation बंद हैं।</p>
   <button class="primary" id="backendTestButton" type="button" onclick="testBackendConnection()">Test Backend Connection</button>
   <div id="backendTestResult" class="result" aria-live="polite">अभी connection test नहीं हुआ है।</div>
   <button class="primary secondary" id="runwayKeyTestButton" type="button" onclick="testRunwayApiKey()">Verify Runway API Key (Read-only)</button>
@@ -1401,39 +1401,6 @@ async function testBackendConnection() {
  } catch (error) {
   resultBox.textContent = "TEST FAILED: " + (error.message || String(error));
   console.error("Backend connection test failed:", error);
- } finally {
-  button.disabled = false;
- }
-}
-
-async function testRunwayApiKey() {
- const button = document.getElementById("runwayKeyTestButton");
- const resultBox = document.getElementById("runwayKeyTestResult");
- if (!button || !resultBox) return;
- button.disabled = true;
- resultBox.textContent = "Runway API key जाँची जा रही है... कृपया प्रतीक्षा करें।";
- try {
-  if (!supabaseClient) throw new Error("Supabase client load नहीं हुआ। Page refresh करें।");
-  const { data: sessionData, error: sessionError } = await supabaseClient.auth.getSession();
-  if (sessionError) throw sessionError;
-  if (!sessionData.session) throw new Error("पहले Login करें, फिर Runway API key test दबाएँ।");
-  const { data, error } = await supabaseClient.functions.invoke("generate-video", {
-   body: { action: "runway-health" }
-  });
-  if (error) throw error;
-  if (data && data.status === "valid") {
-   const balance = Number.isFinite(Number(data.creditBalance)) ? Number(data.creditBalance).toLocaleString("en-IN") : "Unavailable";
-   resultBox.textContent = "SUCCESS: Runway API key valid है। API credit balance: " + balance + ". यह read-only जाँच थी; कोई वीडियो generate नहीं हुआ और credits खर्च नहीं हुए। Cloud generation अभी भी disabled है।";
-  } else if (data && data.status === "invalid_key") {
-   resultBox.textContent = "Runway API ने key को स्वीकार नहीं किया (401). Key disabled, गलत या गलत project से हो सकती है। Secret को chat में साझा न करें।";
-  } else if (data && data.status === "missing_secret") {
-   resultBox.textContent = "RUNWAY_API_KEY secret Supabase में नहीं मिला। Secret का नाम जाँचें; उसकी value यहाँ न भेजें।";
-  } else {
-   resultBox.textContent = "Runway जाँच पूरी नहीं हुई: " + (data && data.message ? data.message : "Provider response unavailable.") + " कोई generation request नहीं भेजी गई।";
-  }
- } catch (error) {
-  resultBox.textContent = "KEY TEST FAILED: " + (error.message || String(error));
-  console.error("Runway key check failed:", error);
  } finally {
   button.disabled = false;
  }
