@@ -8,6 +8,7 @@ The public site is configured to avoid unexpected paid-provider charges:
 - Cloud video rendering/upload is disabled in the public UI and guarded in its JavaScript.
 - External Runway video generation is disabled in the public UI and guarded in its JavaScript.
 - Basic browser editing and creator utilities do not require a ClipX subscription.
+- Email/password sign-in includes a password-recovery email flow; Google OAuth remains disabled until provider credentials are configured.
 - Some browser tools may download libraries or speech models. This uses internet data and depends on device memory, browser support and network speed.
 
 ## Current browser tools
