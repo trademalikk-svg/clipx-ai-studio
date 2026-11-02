@@ -501,6 +501,7 @@ footer{color:#b39ac7}
   <a href="#promptStudio" data-view="prompts">✧ Prompt Studio</a>
   <a href="#freeCreatorKit" data-view="creatorKit">✍ Titles & Hashtags</a>
   <a href="#upload" data-view="studio">▣ My Studio</a>
+  <a href="#manualCutter" data-view="manualCutter">✂ Manual Cutter</a>
   <a href="./creator-tools.html">✦ Creator Tools</a>
   <a href="#paymentSandbox" data-view="billing">₹ Payments (Test)</a>
   <a href="#backendConnection" data-view="settings">⚙ Settings</a>
@@ -531,6 +532,7 @@ footer{color:#b39ac7}
  <section class="dashboard-shortcuts" id="tools" aria-label="Video tools menu">
   <h2 class="menu-heading">Video Tools</h2><p class="muted">एक फीचर चुनें। हर टूल अलग स्क्रीन में खुलेगा।</p>
   <a class="shortcut green" href="#autoShorts" data-toolview="shorts"><span class="symbol">⚡</span><span>Automatic Shorts Maker<small>वीडियो को छोटे clips में बाँटें</small></span></a>
+  <a class="shortcut blue" href="#manualCutter" data-toolview="manualCutter"><span class="symbol">✂</span><span>Manual Clip Cutter<small>अपनी पसंद का हिस्सा काटें और export करें</small></span></a>
   <a class="shortcut orange" href="#captionStudio" data-toolview="captions"><span class="symbol">CC</span><span>Caption Studio<small>Hindi, Urdu और English subtitles</small></span></a>
   <a class="shortcut red" href="#youtubeClips" data-toolview="youtube"><span class="symbol">▶</span><span>YouTube Clip Maker<small>अनुमति वाली वीडियो का preview</small></span></a>
   <a class="shortcut cyan" href="#freeCreatorKit" data-toolview="creatorKit"><span class="symbol">✍</span><span>Titles & Hashtags<small>वीडियो के लिए title, description और hashtags</small></span></a>
@@ -640,6 +642,19 @@ footer{color:#b39ac7}
   </select>
   <button class="primary" type="button" onclick="showSettings()">Check Selected Settings</button>
   <div id="settingsResult" class="result">Your selected settings will appear here.</div>
+ </section>
+
+ <section class="card" id="manualCutter">
+  <h2>03. Manual Clip Cutter</h2>
+  <p class="muted">ऊपर Load Video on Device से वीडियो खोलें। फिर Start और End समय चुनकर अपनी पसंद का हिस्सा export करें। वीडियो आपके डिवाइस पर ही process होगी।</p>
+  <label for="cutStart">Start time (seconds)</label>
+  <input id="cutStart" type="number" min="0" step="0.1" value="0" inputmode="decimal">
+  <label for="cutEnd">End time (seconds)</label>
+  <input id="cutEnd" type="number" min="0.1" step="0.1" value="30" inputmode="decimal">
+  <button class="primary" id="makeClipButton" type="button" onclick="makeManualClip()">Create Manual Clip</button>
+  <p id="cutStatus" class="muted" aria-live="polite">वीडियो लोड करने के बाद Start और End समय भरें।</p>
+  <div id="cutPreview" class="result">आपकी तैयार clip का preview यहाँ दिखाई देगा।</div>
+  <a id="downloadClip" hidden download="clipx-clip.mp4" style="display:inline-block;margin-top:12px;color:#d6a4ff">Download Manual Clip</a>
  </section>
 
  <section class="card" id="youtubeClips">
@@ -820,14 +835,15 @@ function showWorkspaceView(view) {
  const groups = {
   home:["home","tools","features"],
   tools:["tools"],
-  editor:["upload","clipSettings","faceTrackingLab"],
+  editor:["upload","clipSettings","manualCutter","faceTrackingLab"],
+  manualCutter:["upload","clipSettings","manualCutter"],
   shorts:["upload","clipSettings","autoShorts","faceTrackingLab"],
   captions:["upload","captionStudio"],
   youtube:["youtubeClips"],
   backend:["backendConnection"],
   creatorKit:["freeCreatorKit"],
   prompts:["promptStudio"],
-  studio:["upload","clipSettings","autoShorts","faceTrackingLab"],
+  studio:["upload","clipSettings","manualCutter","autoShorts","faceTrackingLab"],
   settings:["backendConnection","authBox","paymentSandbox"],
   billing:["paymentSandbox"]
  };
