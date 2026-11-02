@@ -515,8 +515,6 @@ footer{color:#b39ac7}
   <p class="muted">यह टेस्ट आपके login session और Supabase Edge Function का connection जाँचता है। यह किसी AI provider या paid API को call नहीं करता। Cloud processing और AI video generation बंद हैं।</p>
   <button class="primary" id="backendTestButton" type="button" onclick="testBackendConnection()">Test Backend Connection</button>
   <div id="backendTestResult" class="result" aria-live="polite">अभी connection test नहीं हुआ है।</div>
-  <button class="primary secondary" id="runwayKeyTestButton" type="button" onclick="testRunwayApiKey()">Verify Runway API Key (Read-only)</button>
-  <div id="runwayKeyTestResult" class="result" aria-live="polite">Runway API key की जाँच अभी नहीं हुई है।</div>
  </section>
 
  <section class="card" id="captionStudio">
@@ -1392,9 +1390,7 @@ async function testBackendConnection() {
   });
   if (error) throw error;
   if (data && data.status === "connected") {
-   resultBox.textContent = "SUCCESS: Supabase Edge Function reachable है, login valid है और RUNWAY_API_KEY secret configured है। यह केवल secret की मौजूदगी जाँचता है, key की वैधता नहीं। कोई वीडियो generate नहीं हुआ और Runway credits खर्च नहीं हुए।";
-  } else if (data && data.status === "missing_secret") {
-   resultBox.textContent = "Supabase Edge Function reachable है, लेकिन RUNWAY_API_KEY secret configured नहीं है। Supabase Dashboard → Edge Functions → Secrets में इसे सेट करें।";
+   resultBox.textContent = "SUCCESS: Supabase Edge Function reachable है और आपका login session valid है। कोई AI provider या paid API call नहीं हुई।";
   } else {
    resultBox.textContent = "Function से जवाब मिला, लेकिन status अपेक्षित नहीं है: " + JSON.stringify(data);
   }
