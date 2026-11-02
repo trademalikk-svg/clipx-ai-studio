@@ -20,6 +20,12 @@ Total target ceiling: INR 1,000 per calendar month across hosting/cloud video pr
 - Add provider-side budget alerts/limits as a second control. Application quotas alone are not a guaranteed INR cap; delayed billing, taxes, storage, bandwidth, and provider rounding can create additional charges.
 - Do not activate paid processing until an adult account owner has selected the providers, reviewed their pricing/terms, configured provider-side billing controls, and explicitly approved activation.
 
+## Admin monitoring
+- The authenticated `clipx-budget-status` Edge Function returns the current UTC month's application-ledger totals.
+- The Support Admin page now shows category-level spent and reserved amounts, with the same INR 500 / 250 / 250 allocations.
+- Access is restricted server-side to users whose server-managed `app_metadata.support_role` is `admin`; normal users cannot read the ledger.
+- The dashboard explicitly labels these values as application-ledger data, not a live provider invoice.
+
 ## Current implementation status
 This file records the agreed budget policy; it does not create a provider billing cap. Cloud processing, semantic AI highlights, and AI video generation remain disabled until their providers, server deployment, pricing, metering, and budget enforcement are configured and tested. Existing browser-side tools and heuristic highlights are not equivalent to those paid cloud features.
 
