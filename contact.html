@@ -21,7 +21,7 @@
     input,select,textarea{width:100%;padding:12px;border-radius:10px;border:1px solid #554477;background:#0e0b19;color:#fff;font:inherit}
     textarea{min-height:145px;resize:vertical}.btn{display:inline-block;padding:12px 18px;background:#d8b45a;color:#171225;text-decoration:none;font-weight:bold;border:0;border-radius:10px;cursor:pointer;margin-top:14px}
     .secondary{background:#34274d;color:#fff}.muted,.note{font-size:13px;color:#aaa1bd}.status{padding:12px;border-radius:10px;background:#100d1c;margin-top:12px;white-space:pre-wrap;overflow-wrap:anywhere}
-    .ticket{padding:12px;border:1px solid #49336c;border-radius:10px;margin:10px 0}.ticket small{color:#aaa1bd}
+    .ticket{padding:12px;border:1px solid #49336c;border-radius:10px;margin:10px 0}.ticket small{color:#aaa1bd}.ticket-actions{margin-top:10px}.ticket-actions button{margin:0 8px 0 0}
     footer{text-align:center;padding:25px;color:#aaa1bd}footer a{color:#e5c36d}
     [hidden]{display:none!important}
   </style>
@@ -57,6 +57,7 @@
     <p class="note">आपके खाते से भेजे गए टिकट और उनकी स्थिति यहाँ दिखाई देगी।</p>
     <div id="ticketList" class="status">Login करने के बाद आपके टिकट दिखाई देंगे।</div>
     <button class="btn secondary" id="refreshTickets" type="button" hidden>Refresh Tickets</button>
+    <div id="ticketDetails" class="ticket" hidden><h2>Ticket Details</h2><p><b>Ticket ID:</b> <span id="detailId"></span></p><p><b>Category:</b> <span id="detailCategory"></span></p><p><b>Subject:</b> <span id="detailSubject"></span></p><p><b>Status:</b> <span id="detailStatus"></span></p><p><b>Submitted:</b> <span id="detailDate"></span></p><h3>आपका पूरा संदेश</h3><div id="detailMessage" class="status"></div><h3>Support Reply</h3><div id="detailReply" class="status">अभी Support Reply उपलब्ध नहीं है।</div><button class="btn secondary" id="closeDetails" type="button">Close Details</button></div>
   </section>
   <section class="panel">
     <h2>सुरक्षा और जवाब</h2>
@@ -104,6 +105,7 @@ async function loadMyTickets() {
     ticketList.textContent = "अभी कोई Support Ticket नहीं है।";
     return;
   }
+  document.getElementById("ticketDetails").hidden = true;
   ticketList.replaceChildren();
   for (const item of data) {
     const card = document.createElement("div");
@@ -112,10 +114,29 @@ async function loadMyTickets() {
     title.textContent = item.subject;
     const meta = document.createElement("small");
     meta.textContent = "Ticket " + item.id.slice(0,8).toUpperCase() + " · " + item.category + " · " + item.status + " · " + new Date(item.created_at).toLocaleString();
-    card.append(title,document.createElement("br"),meta);
-    ticketList.append(card);
+    const actions=document.createElement("div"); actions.className="ticket-actions";
+    const view=document.createElement("button"); view.type="button"; view.className="btn secondary"; view.textContent="View Details";
+    view.addEventListener("click",()=>openTicketDetails(item.id)); actions.append(view);
+    card.append(title,document.createElement("br"),meta,actions); ticketList.append(card);
   }
 }
+async function openTicketDetails(ticketId) {
+  const panel=document.getElementById("ticketDetails");
+  panel.hidden=false;
+  const message=document.getElementById("detailMessage");
+  message.textContent="Ticket details लोड हो रही हैं…";
+  const result=await supportClient.from("support_tickets").select("id,category,subject,message,status,created_at").eq("id",ticketId).single();
+  if(result.error || !result.data){message.textContent="Ticket details लोड नहीं हुईं: "+(result.error ? result.error.message : "Ticket नहीं मिला।");return;}
+  const d=result.data;
+  document.getElementById("detailId").textContent=d.id;
+  document.getElementById("detailCategory").textContent=d.category;
+  document.getElementById("detailSubject").textContent=d.subject;
+  document.getElementById("detailStatus").textContent=d.status;
+  document.getElementById("detailDate").textContent=new Date(d.created_at).toLocaleString();
+  message.textContent=d.message;
+  panel.scrollIntoView({behavior:"smooth",block:"start"});
+}
+document.getElementById("closeDetails").addEventListener("click",()=>{document.getElementById("ticketDetails").hidden=true;});
 supportForm.addEventListener("submit",async function(event){
   event.preventDefault();
   const button=document.getElementById("submitButton");
