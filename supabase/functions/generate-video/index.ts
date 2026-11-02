@@ -108,7 +108,7 @@ Deno.serve(async (req: Request) => {
         status: "provider_unreachable",
         generationEnabled: false,
         generationRequested: false,
-        message: error?.name === "AbortError" ? "Runway verification timed out." : "Could not reach Runway verification endpoint.",
+        message: error instanceof Error && error.name === "AbortError" ? "Runway verification timed out." : "Could not reach Runway verification endpoint.",
       }, 502);
     } finally {
       clearTimeout(timeout);
