@@ -1484,7 +1484,7 @@ async function clipxStartCloudUpload() {
  const file = document.getElementById("video")?.files?.[0];
  if (!supabaseClient) { status.textContent = "Supabase client उपलब्ध नहीं है।"; return; }
  if (!file) { status.textContent = "पहले अपनी वीडियो फ़ाइल चुनें।"; return; }
- if (file.size > 3 * 1024 * 1024 * 1024) { status.textContent = "फ़ाइल 3 GB से बड़ी है।"; return; }
+ if (file.size > 2 * 1024 * 1024 * 1024) { status.textContent = "Cloud upload के लिए फ़ाइल 2 GB से बड़ी नहीं होनी चाहिए।"; return; }
  const { data: sessionData, error: sessionError } = await supabaseClient.auth.getSession();
  if (sessionError || !sessionData.session) { status.textContent = "पहले Login करें।"; showAuth("login"); return; }
  button.disabled = true;
