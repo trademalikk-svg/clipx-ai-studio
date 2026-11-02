@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<title>ClipX Support Admin</title>
+<style>
+:root{color-scheme:dark;--bg:#090611;--panel:#171225;--line:#493568;--accent:#c58aff;--muted:#b7a9ca}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#f7f0ff;font:15px/1.55 system-ui,Arial}header{padding:20px max(18px,calc((100% - 1100px)/2));border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:12px}main{max-width:1100px;margin:28px auto;padding:0 16px}.panel,.ticket{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px;margin:14px 0}h1{font-size:23px}h2{font-size:18px}p,.muted{color:var(--muted)}input,select,textarea,button{font:inherit;border-radius:9px;padding:11px;border:1px solid var(--line);background:#0e0a18;color:#fff;width:100%;margin:5px 0}button{background:#6b32a2;border:0;font-weight:700;cursor:pointer}button:disabled{opacity:.55;cursor:wait}.row{display:flex;gap:10px;align-items:center}.row>*{flex:1}.ticket small{color:var(--muted)}.reply{padding:10px;margin:8px 0;border-left:3px solid var(--accent);background:#100b1c}.hidden{display:none!important}a{color:var(--accent)}@media(max-width:600px){.row{display:block}header{align-items:flex-start;flex-direction:column}}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+<header><strong>CLIPX AI STUDIO · SUPPORT ADMIN</strong><button id="logout" style="width:auto" hidden>Logout</button></header>
+<main>
+<section id="login" class="panel"><h1>Admin sign-in</h1><p>Only an account with the server-assigned <code>app_metadata.support_role = admin</code> claim can access support tickets.</p><input id="email" type="email" autocomplete="username" placeholder="Admin email"><input id="password" type="password" autocomplete="current-password" placeholder="Password"><button id="signIn">Login</button><p id="loginStatus" aria-live="polite"></p></section>
+<section id="dashboard" class="hidden"><h1>Support queue</h1><p id="identity" class="muted"></p><div class="row"><button id="refresh">Refresh tickets</button><span id="queueStatus" class="muted" aria-live="polite"></span></div><div id="tickets"></div></section>
+</main>
+<script>
+(() => {
+ const URL="https://qmoxfzgiwamblpouxitn.supabase.co";
+ const KEY="sb_publishable_dsVQ5-5VuIG5n_m0qqNjqw__i5sogpL";
+ const client=window.supabase?.createClient(URL,KEY);
+ const el=id=>document.getElementById(id);
+ if(!client){el("loginStatus").textContent="Supabase client could not load.";return;}
+ const esc=value=>String(value??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+ function showLogin(message=""){el("login").classList.remove("hidden");el("dashboard").classList.add("hidden");el("loginStatus").textContent=message;el("logout").hidden=true;}
+ function showDashboard(user){el("login").classList.add("hidden");el("dashboard").classList.remove("hidden");el("logout").hidden=false;el("identity").textContent="Signed in as "+(user.email||"support admin");}
+ async function checkSession(){
+  const {data,error}=await client.auth.getSession();if(error||!data.session){showLogin();return;}
+  const {data:result}=await client.auth.getUser();const user=result?.user;
+  if(user?.app_metadata?.support_role!=="admin"){await client.auth.signOut();showLogin("This account has no support-admin permission. Access denied.");return;}
+  showDashboard(user);await loadTickets();
+ }
+ async function loadTickets(){
+  el("queueStatus").textContent="Loading…";el("tickets").replaceChildren();
+  const {data,error}=await client.from("support_tickets").select("id,user_id,category,subject,message,contact_email,status,created_at").order("created_at",{ascending:false}).limit(100);
+  if(error){el("queueStatus").textContent="Could not load tickets: "+error.message;return;}
+  el("queueStatus").textContent=data.length+" ticket(s)";
+  for(const t of data){
+   const card=document.createElement("article");card.className="ticket";
+   card.innerHTML="<h2>"+esc(t.subject)+"</h2><small>"+esc(t.category)+" · "+esc(t.status)+" · "+esc(new Date(t.created_at).toLocaleString())+"</small><p>"+esc(t.message)+"</p><small>User: "+esc(t.user_id)+" · "+esc(t.contact_email||"No reply email supplied")+"</small><div class='row'><select aria-label='Ticket status'><option value='open'>Open</option><option value='in_progress'>In progress</option><option value='resolved'>Resolved</option><option value='closed'>Closed</option></select><button type='button'>Save status</button></div><div class='replies'></div><textarea rows='3' maxlength='5000' placeholder='Write a support reply'></textarea><button type='button' class='send'>Send reply</button><p class='muted result' aria-live='polite'></p>";
+   const status=card.querySelector("select");status.value=t.status;
+   const result=card.querySelector(".result");
+   const replies=card.querySelector(".replies");
+   const {data:replyRows,error:replyError}=await client.from("support_ticket_replies").select("id,admin_user_id,reply,created_at").eq("ticket_id",t.id).order("created_at",{ascending:true});
+   if(replyError){replies.textContent="Replies unavailable: "+replyError.message;}else if(!replyRows.length){replies.textContent="No replies yet.";}else{replies.innerHTML=replyRows.map(r=>"<div class='reply'>"+esc(r.reply)+"<br><small>"+esc(new Date(r.created_at).toLocaleString())+"</small></div>").join("");}
+   card.querySelector(".row button").addEventListener("click",async()=>{const {error}=await client.from("support_tickets").update({status:status.value}).eq("id",t.id);result.textContent=error?"Status update failed: "+error.message:"Status updated.";});
+   card.querySelector(".send").addEventListener("click",async()=>{const text=card.querySelector("textarea").value.trim();if(text.length<2){result.textContent="Reply must contain at least 2 characters.";return;}const {data:{user}}=await client.auth.getUser();const {error}=await client.from("support_ticket_replies").insert({ticket_id:t.id,admin_user_id:user.id,reply:text});if(error){result.textContent="Reply failed: "+error.message;return;}card.querySelector("textarea").value="";result.textContent="Reply sent.";const {data:rows}=await client.from("support_ticket_replies").select("id,reply,created_at").eq("ticket_id",t.id).order("created_at",{ascending:true});replies.innerHTML=(rows||[]).map(r=>"<div class='reply'>"+esc(r.reply)+"<br><small>"+esc(new Date(r.created_at).toLocaleString())+"</small></div>").join("");});
+   el("tickets").append(card);
+  }
+ }
+ el("signIn").addEventListener("click",async()=>{el("signIn").disabled=true;const {error}=await client.auth.signInWithPassword({email:el("email").value.trim(),password:el("password").value});el("signIn").disabled=false;if(error){showLogin(error.message);return;}await checkSession();});
+ el("refresh").addEventListener("click",loadTickets);
+ el("logout").addEventListener("click",async()=>{await client.auth.signOut();showLogin("Signed out.");});
+ client.auth.onAuthStateChange(()=>{void checkSession();});
+ void checkSession();
+})();
+</script>
+</body></html>
