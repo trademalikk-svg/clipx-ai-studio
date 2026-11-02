@@ -411,9 +411,20 @@ footer{color:#b39ac7}
   <input id="authEmail" type="email" autocomplete="email" placeholder="Email address">
   <label for="authPassword">Password</label>
   <input id="authPassword" type="password" autocomplete="current-password" placeholder="Password">
+  <label for="referralCodeInput" id="referralCodeLabel" hidden>Referral Code (optional)</label>
+  <input id="referralCodeInput" type="text" maxlength="20" autocomplete="off" placeholder="Enter referral code" hidden>
   <p id="authPasswordHint" class="muted" style="margin:4px 0 8px;font-size:12px" aria-live="polite">Login के लिए अपना password डालें।</p>
   <button class="primary" id="authButton" type="button" onclick="handleAuth()">Continue</button>
   <p id="authMessage" class="muted" aria-live="polite"></p>
+  <div id="referralDashboard" class="notice" hidden style="margin-top:14px">
+   <h3 style="margin:0 0 8px">Your ClipX Referral Rewards</h3>
+   <p>Referral Code: <strong id="myReferralCode">Loading…</strong></p>
+   <p>Total Points: <strong id="myReferralPoints">0</strong></p>
+   <p>Feature Credit: <strong id="myReferralCredit">₹0.00</strong></p>
+   <p class="muted">100 points = ₹70 Feature Credit. Points can only unlock eligible ClipX features; cash withdrawal is not available.</p>
+   <button class="secondary" type="button" onclick="copyClipXReferralLink()">Copy Referral Link</button>
+   <p id="referralDashboardMessage" aria-live="polite"></p>
+  </div>
   <button class="secondary" type="button" onclick="document.getElementById('authBox').hidden=true">Close</button>
  </section>
 
@@ -1324,8 +1335,15 @@ function showAuth(mode) {
  passwordInput.autocomplete = mode === "signup" ? "new-password" : "current-password";
  passwordInput.minLength = mode === "signup" ? 8 : 0;
  passwordInput.placeholder = mode === "signup" ? "Create a password (8+ characters)" : "Password";
+ const referralInput = document.getElementById("referralCodeInput");
+ const referralLabel = document.getElementById("referralCodeLabel");
+ referralInput.hidden = mode !== "signup";
+ referralLabel.hidden = mode !== "signup";
+ if (mode === "signup" && !referralInput.value) {
+  referralInput.value = new URLSearchParams(window.location.search).get("ref") || "";
+ }
  document.getElementById("authPasswordHint").textContent = mode === "signup"
-  ? "नया password कम-से-कम 8 characters का रखें।"
+  ? "नया password कम-से-कम 8 characters का रखें। Referral code optional है।"
   : "Login के लिए अपना password डालें।";
  document.getElementById("authMessage").textContent = "";
  box.scrollIntoView({behavior:"smooth", block:"center"});
@@ -1337,6 +1355,50 @@ try {
  }
 } catch (error) {
  console.error("Supabase initialization failed:", error);
+}
+
+async function loadClipXReferralDashboard(user) {
+ const codeEl = document.getElementById("myReferralCode");
+ const pointsEl = document.getElementById("myReferralPoints");
+ const creditEl = document.getElementById("myReferralCredit");
+ const messageEl = document.getElementById("referralDashboardMessage");
+ if (!user || !supabaseClient) return;
+ codeEl.textContent = "Loading…";
+ try {
+  const [{ data: profile, error: profileError }, { data: ledger, error: ledgerError }] = await Promise.all([
+   supabaseClient.from("profiles").select("referral_code").eq("id", user.id).maybeSingle(),
+   supabaseClient.from("referral_points_ledger").select("points").eq("beneficiary_user_id", user.id)
+  ]);
+  if (profileError) throw profileError;
+  if (ledgerError) throw ledgerError;
+  const points = (ledger || []).reduce((sum, row) => sum + Number(row.points || 0), 0);
+  codeEl.textContent = profile?.referral_code || "Not available yet";
+  pointsEl.textContent = String(points);
+  creditEl.textContent = "₹" + (Math.max(0, points) * 0.70).toFixed(2);
+  messageEl.textContent = "Signup referral rewards are recorded after a valid referred account is created. Purchase rewards will be enabled only after payment setup is separately approved.";
+ } catch (error) {
+  codeEl.textContent = "Unavailable";
+  messageEl.textContent = error.message || "Referral details could not be loaded.";
+ }
+}
+
+async function copyClipXReferralLink() {
+ const code = document.getElementById("myReferralCode").textContent.trim();
+ const message = document.getElementById("referralDashboardMessage");
+ if (!code || code === "Unavailable" || code === "Not available yet" || code === "Loading…") {
+  message.textContent = "Referral code अभी उपलब्ध नहीं है।";
+  return;
+ }
+ const url = new URL(window.location.href);
+ url.search = "";
+ url.hash = "";
+ url.searchParams.set("ref", code);
+ try {
+  await navigator.clipboard.writeText(url.toString());
+  message.textContent = "Referral link copied.";
+ } catch (error) {
+  message.textContent = "Copy नहीं हो सका। Referral code manually copy करें: " + code;
+ }
 }
 
 function updateAuthControls(user) {
@@ -1352,7 +1414,12 @@ function updateAuthControls(user) {
   document.getElementById("authButton").hidden = true;
   document.getElementById("authEmail").hidden = true;
   document.getElementById("authPassword").hidden = true;
+  document.getElementById("referralCodeInput").hidden = true;
+  document.getElementById("referralCodeLabel").hidden = true;
+  document.getElementById("referralDashboard").hidden = false;
+  void loadClipXReferralDashboard(user);
  } else {
+  document.getElementById("referralDashboard").hidden = true;
   document.getElementById("authButton").hidden = false;
   document.getElementById("authEmail").hidden = false;
   document.getElementById("authPassword").hidden = false;
@@ -1578,8 +1645,13 @@ async function handleAuth() {
  button.disabled = true;
  message.textContent = "Please wait...";
  try {
+  const referralCode = document.getElementById("referralCodeInput").value.trim().toUpperCase();
   const result = authMode === "signup"
-   ? await supabaseClient.auth.signUp({email, password})
+   ? await supabaseClient.auth.signUp({
+      email,
+      password,
+      options: { data: referralCode ? { referral_code: referralCode } : {} }
+     })
    : await supabaseClient.auth.signInWithPassword({email, password});
   if (result.error) throw result.error;
   if (authMode === "signup") {
