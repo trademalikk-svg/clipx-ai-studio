@@ -155,7 +155,7 @@ header{background:rgba(10,6,25,.92);border-bottom:1px solid #6d329b;box-shadow:0
 .sidebar a{transition:background .2s,color .2s,transform .2s}
 .sidebar a.active,.sidebar a:first-of-type{background:linear-gradient(100deg,#a52be8,#6324c9 55%,#3a1c91);box-shadow:0 5px 18px #9b35ed55;color:#fff}
 .sidebar a:hover{background:#3b2057;transform:translateX(2px)}
-.hero{border:1px solid #a64ee5;background:radial-gradient(circle at 82% 30%,#6d28a8 0,#35166e 30%,transparent 61%),linear-gradient(115deg,#200b39,#100a29 62%,#241052);box-shadow:0 18px 55px #8b24d933,inset 0 1px #ffffff22}
+.hero-art{position:relative;min-height:240px;display:flex;align-items:center;justify-content:center;isolation:isolate}.hero-robot{position:absolute;right:7%;top:50%;transform:translateY(-52%);font-size:clamp(112px,18vw,205px);line-height:1;filter:drop-shadow(0 0 18px #35caff) drop-shadow(0 0 34px #9b35ff);z-index:2;animation:clipxRobotFloat 4s ease-in-out infinite}.hero-robot-label{position:absolute;right:12%;bottom:7%;z-index:3;padding:5px 13px;border:1px solid #8c4bff;border-radius:18px;background:#17072ee8;color:#9eeaff;font-size:11px;font-weight:900;letter-spacing:2px;box-shadow:0 0 18px #8c4bff77}@keyframes clipxRobotFloat{0%,100%{translate:0 0}50%{translate:0 -9px}}.hero-art .hero-play,.hero-art .hero-clapper,.hero-art .hero-spark{z-index:1}@media(max-width:760px){.hero-art{min-height:150px;margin-top:8px}.hero-robot{font-size:132px;right:17%;top:48%}.hero-robot-label{right:20%;bottom:0}.hero-play{left:6%;top:20%}.hero-clapper{left:12%;bottom:8%}}.hero{border:1px solid #a64ee5;background:radial-gradient(circle at 82% 30%,#6d28a8 0,#35166e 30%,transparent 61%),linear-gradient(115deg,#200b39,#100a29 62%,#241052);box-shadow:0 18px 55px #8b24d933,inset 0 1px #ffffff22}
 .hero .vip{background:linear-gradient(90deg,#8c2bce,#4b2ba7);color:#fff;border:1px solid #bd7af0}
 .hero h1 span{background:linear-gradient(90deg,#ff63ef,#b47aff,#69ddff);-webkit-background-clip:text;color:transparent}
 .dashboard-shortcuts .shortcut{border:1px solid #ffffff35;box-shadow:0 12px 30px #0006;transition:transform .2s,filter .2s}
@@ -500,7 +500,7 @@ footer{color:#b39ac7}
    <a class="hero-cta" href="#promptStudio" data-toolview="prompts">🚀 Get Started Free <b>→</b></a>
    <div class="hero-trust"><span>✓ Easy to use</span><span>✓ Creator tools</span><span>✓ Hindi + English</span></div>
   </div>
-  <div class="hero-art" aria-hidden="true"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="hero-play">▶</div><div class="hero-clapper">🎬</div><div class="hero-spark">✦</div></div>
+  <div class="hero-art" aria-hidden="true"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="hero-play">▶</div><div class="hero-clapper">🎬</div><div class="hero-spark">✦</div><div class="hero-robot" role="img" aria-label="ClipX AI robot">🤖</div><div class="hero-robot-label">CLIPX AI</div></div>
  </section>
  <section class="dashboard-shortcuts" id="tools" aria-label="Video tools menu">
   <h2 class="menu-heading">Video Tools</h2><p class="muted">एक फीचर चुनें। हर टूल अलग स्क्रीन में खुलेगा।</p>
