@@ -511,9 +511,11 @@ footer{color:#b39ac7}
 
  <section class="card" id="backendConnection">
   <h2>Backend Connection Test</h2>
-  <p class="muted">Supabase Edge Function और saved secret की connection जाँचें। यह टेस्ट वीडियो नहीं बनाता और Runway credits खर्च नहीं करता।</p>
+  <p class="muted">पहला टेस्ट Supabase login और secret की मौजूदगी जाँचता है। दूसरा टेस्ट Runway API key को केवल read-only organization endpoint से verify करता है। कोई वीडियो generate नहीं होगा और credits खर्च नहीं होंगे।</p>
   <button class="primary" id="backendTestButton" type="button" onclick="testBackendConnection()">Test Backend Connection</button>
   <div id="backendTestResult" class="result" aria-live="polite">अभी connection test नहीं हुआ है।</div>
+  <button class="primary secondary" id="runwayKeyTestButton" type="button" onclick="testRunwayApiKey()">Verify Runway API Key (Read-only)</button>
+  <div id="runwayKeyTestResult" class="result" aria-live="polite">Runway API key की जाँच अभी नहीं हुई है।</div>
  </section>
 
  <section class="card" id="captionStudio">
@@ -1397,6 +1399,39 @@ async function testBackendConnection() {
  } catch (error) {
   resultBox.textContent = "TEST FAILED: " + (error.message || String(error));
   console.error("Backend connection test failed:", error);
+ } finally {
+  button.disabled = false;
+ }
+}
+
+async function testRunwayApiKey() {
+ const button = document.getElementById("runwayKeyTestButton");
+ const resultBox = document.getElementById("runwayKeyTestResult");
+ if (!button || !resultBox) return;
+ button.disabled = true;
+ resultBox.textContent = "Runway API key जाँची जा रही है... कृपया प्रतीक्षा करें।";
+ try {
+  if (!supabaseClient) throw new Error("Supabase client load नहीं हुआ। Page refresh करें।");
+  const { data: sessionData, error: sessionError } = await supabaseClient.auth.getSession();
+  if (sessionError) throw sessionError;
+  if (!sessionData.session) throw new Error("पहले Login करें, फिर Runway API key test दबाएँ।");
+  const { data, error } = await supabaseClient.functions.invoke("generate-video", {
+   body: { action: "runway-health" }
+  });
+  if (error) throw error;
+  if (data && data.status === "valid") {
+   const balance = Number.isFinite(Number(data.creditBalance)) ? Number(data.creditBalance).toLocaleString("en-IN") : "Unavailable";
+   resultBox.textContent = "SUCCESS: Runway API key valid है। API credit balance: " + balance + ". यह read-only जाँच थी; कोई वीडियो generate नहीं हुआ और credits खर्च नहीं हुए। Cloud generation अभी भी disabled है।";
+  } else if (data && data.status === "invalid_key") {
+   resultBox.textContent = "Runway API ने key को स्वीकार नहीं किया (401). Key disabled, गलत या गलत project से हो सकती है। Secret को chat में साझा न करें।";
+  } else if (data && data.status === "missing_secret") {
+   resultBox.textContent = "RUNWAY_API_KEY secret Supabase में नहीं मिला। Secret का नाम जाँचें; उसकी value यहाँ न भेजें।";
+  } else {
+   resultBox.textContent = "Runway जाँच पूरी नहीं हुई: " + (data && data.message ? data.message : "Provider response unavailable.") + " कोई generation request नहीं भेजी गई।";
+  }
+ } catch (error) {
+  resultBox.textContent = "KEY TEST FAILED: " + (error.message || String(error));
+  console.error("Runway key check failed:", error);
  } finally {
   button.disabled = false;
  }
