@@ -83,8 +83,13 @@ jobs:
               match = re.search(rf"async\s+function\s+{fn}\s*\([^)]*\)\s*\{{", home)
               if not match or guard not in home[match.end():match.end()+500]:
                   raise SystemExit(f"Free-mode guard missing in {fn}.")
+          if "selectedVideoFile.size > 3 * 1024 * 1024 * 1024" not in home:
+              raise SystemExit("Local browser upload safeguard (3 GB) is missing.")
+          if "file.size > 3 * 1024 * 1024 * 1024" not in home:
+              raise SystemExit("Cloud upload safeguard (3 GB) is missing.")
           if not re.search(r"file\.size\s*>\s*150\s*\*\s*1024\s*\*\s*1024", home):
-              raise SystemExit("Browser upload size safeguard (150 MB) is missing.")
+              raise SystemExit("Whisper auto-caption memory safeguard (150 MB) is missing.")
+          print(f"SEO/sitemap OK: {len(urls)} pages; Free Browser Mode guards, 3 GB video limit and 150 MB caption safeguard OK.")
           print(f"SEO/sitemap OK: {len(urls)} pages; Free Browser Mode guards and 150 MB upload safeguard OK.")
           PY
       - name: Check FFmpeg worker syntax
