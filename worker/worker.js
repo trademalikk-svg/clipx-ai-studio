@@ -16,11 +16,11 @@ const MAX_INPUT_BYTES = Math.min(2 * 1024 * 1024 * 1024, Math.max(1, Number(proc
 const MAX_CLIPS_PER_JOB = Math.min(10, Math.max(1, Number(process.env.MAX_CLIPS_PER_JOB || 10)));
 const MAX_JOBS_PER_USER_PER_DAY = Math.min(10, Math.max(1, Number(process.env.MAX_JOBS_PER_USER_PER_DAY || 2)));
 const MAX_JOBS_GLOBAL_PER_MONTH = Math.min(250, Math.max(1, Number(process.env.MAX_JOBS_GLOBAL_PER_MONTH || 25)));
-if (!URL || !KEY) throw new Error("SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are required.");
 if (!CLOUD_ENABLED) {
   console.log("ClipX cloud processing is disabled. Set CLIPX_CLOUD_PROCESSING_ENABLED=true only after approving host costs and quotas.");
   process.exit(0);
 }
+if (!URL || !KEY) throw new Error("SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are required.");
 const db = createClient(URL, KEY, { auth: { persistSession: false } });
 
 function run(command, args) {
