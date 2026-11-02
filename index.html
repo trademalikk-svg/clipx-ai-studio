@@ -550,6 +550,7 @@ footer{color:#b39ac7}
   <input id="referralCodeInput" type="text" maxlength="20" autocomplete="off" placeholder="Enter referral code" hidden>
   <p id="authPasswordHint" class="muted" style="margin:4px 0 8px;font-size:12px" aria-live="polite">Login के लिए अपना password डालें।</p>
   <button class="primary" id="authButton" type="button" onclick="handleAuth()">Continue</button>
+  <button class="secondary" id="forgotPasswordButton" type="button" onclick="handlePasswordReset()">Forgot Password?</button>
   <div class="google-auth-divider" aria-hidden="true"><span>या</span></div>
   <button class="google-auth-button" id="googleAuthButton" type="button" disabled aria-disabled="true" title="Google provider setup pending"><span class="google-g" aria-hidden="true">G</span> Google Login — Setup Pending</button>
   <p class="muted" style="font-size:12px;margin:8px 0">Google Login अभी उपलब्ध नहीं है। इसे Google Cloud OAuth और Supabase Provider setup पूरा होने के बाद चालू किया जाएगा। अभी Email + Password से Login / Sign Up करें।</p>
@@ -1661,6 +1662,8 @@ function updateAuthControls(user) {
  document.getElementById("logoutNavButton").hidden = !loggedIn;
  const googleButton = document.getElementById("googleAuthButton");
  if (googleButton) googleButton.hidden = loggedIn;
+ const forgotButton = document.getElementById("forgotPasswordButton");
+ if (forgotButton) forgotButton.hidden = loggedIn;
  const title = document.getElementById("authTitle");
  if (loggedIn) {
   title.textContent = "Account";
@@ -1684,12 +1687,21 @@ function updateAuthControls(user) {
 }
 
 if (supabaseClient) {
- supabaseClient.auth.getSession().then(({data}) => {
+ supabaseClient.auth.getSession().then(({data, error}) => {
+  if (error) throw error;
   updateAuthControls(data.session ? data.session.user : null);
+ }).catch(error => {
+  updateAuthControls(null);
+  document.getElementById("authMessage").textContent =
+   "Login status जाँचा नहीं जा सका: " + (error.message || String(error)) + "। Internet जाँचकर refresh करें।";
  });
  supabaseClient.auth.onAuthStateChange((_event, session) => {
   updateAuthControls(session ? session.user : null);
  });
+} else {
+ updateAuthControls(null);
+ document.getElementById("authMessage").textContent =
+  "Authentication service load नहीं हुई। Internet जाँचकर page refresh करें।";
 }
 
 async function testBackendConnection() {
@@ -1893,6 +1905,40 @@ async function handleGoogleAuth() {
   if (error) throw error;
  } catch (error) {
   message.textContent = error.message || "Google Login शुरू नहीं हो सका।";
+  button.disabled = false;
+ }
+}
+
+async function handlePasswordReset() {
+ const emailInput = document.getElementById("authEmail");
+ const message = document.getElementById("authMessage");
+ const button = document.getElementById("forgotPasswordButton");
+ const email = emailInput.value.trim();
+ if (!email) {
+  message.textContent = "Password reset link पाने के लिए पहले अपना Email लिखें।";
+  emailInput.focus();
+  return;
+ }
+ if (emailInput.validity.typeMismatch) {
+  message.textContent = "कृपया सही Email address लिखें।";
+  emailInput.focus();
+  return;
+ }
+ if (!supabaseClient) {
+  message.textContent = "Authentication service load नहीं हुई। Internet जाँचकर page refresh करें।";
+  return;
+ }
+ button.disabled = true;
+ message.textContent = "Password reset request भेजी जा रही है…";
+ try {
+  const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
+   redirectTo: "https://trademalikk-svg.github.io/clipx-ai-studio/"
+  });
+  if (error) throw error;
+  message.textContent = "यदि इस Email से account मौजूद है, तो password reset link भेज दी गई है। अपना inbox और spam folder जाँचें।";
+ } catch (error) {
+  message.textContent = error.message || "Password reset request पूरी नहीं हो सकी।";
+ } finally {
   button.disabled = false;
  }
 }
