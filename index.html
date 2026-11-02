@@ -604,6 +604,37 @@ button.secondary,.secondary{background:#38204f;border:1px solid #75439a}
  body.clipx-locked #authBox{width:100%;max-width:560px;margin:12px auto 28px!important}
 }
 
+
+/* Stretch the full Home/navigation menu vertically to use the entire left rail. */
+@media(min-width:901px){
+ .sidebar{
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:space-evenly!important;
+  align-items:stretch!important;
+  height:calc(100vh - 126px)!important;
+  min-height:calc(100vh - 126px)!important;
+  padding:18px 17px 22px!important;
+  overflow-y:auto!important;
+  gap:5px!important;
+ }
+ .sidebar .sidebar-title{
+  flex:0 0 auto!important;
+  margin:10px 8px 8px!important;
+  padding:7px 5px!important;
+ }
+ .sidebar a{
+  display:flex!important;
+  flex:1 0 36px!important;
+  align-items:center!important;
+  min-height:36px!important;
+  margin:0!important;
+  padding:10px 13px!important;
+  line-height:1.35!important;
+  border-radius:11px!important;
+ }
+}
+
 </style>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 </head>
