@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /admin.html
 
 Sitemap: https://trademalikk-svg.github.io/clipx-ai-studio/sitemap.xml
