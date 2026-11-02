@@ -1,6 +1,6 @@
 # ClipX FFmpeg worker MVP
 
-This worker is connected to the ClipX cloud upload queue in the browser app.
+This worker source is prepared for the ClipX `clip_jobs` queue, but it is **not currently deployed to a persistent processing host**. Until a host is configured and the process is running, uploaded jobs will remain queued/uploaded and no cloud clips will be rendered.
 
 ## Processing behavior
 - Polls `clip_jobs` for uploaded jobs and claims one job at a time.
