@@ -95,7 +95,59 @@ jobs:
           if not re.search(r"file\.size\s*>\s*150\s*\*\s*1024\s*\*\s*1024", home):
               raise SystemExit("Whisper auto-caption memory safeguard (150 MB) is missing.")
           print(f"SEO/sitemap OK: {len(urls)} pages; Free Browser Mode guards, local 3 GB / cloud 2 GB video limits and 150 MB caption safeguard OK.")
-          print(f"SEO/sitemap OK: {len(urls)} pages; Free Browser Mode guards and 150 MB upload safeguard OK.")
+          PY
+      - name: Check local page links and duplicate HTML IDs
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import pathlib
+          from html.parser import HTMLParser
+          from urllib.parse import urlsplit
+
+          class PageParser(HTMLParser):
+              def __init__(self):
+                  super().__init__()
+                  self.ids = set()
+                  self.links = []
+                  self.duplicates = set()
+              def handle_starttag(self, tag, attrs):
+                  attrs = dict(attrs)
+                  ident = attrs.get("id")
+                  if ident:
+                      if ident in self.ids:
+                          self.duplicates.add(ident)
+                      self.ids.add(ident)
+                  for attr in ("href", "src", "poster"):
+                      value = attrs.get(attr)
+                      if value:
+                          self.links.append((tag, attr, value))
+
+          pages = sorted(pathlib.Path(".").glob("*.html"))
+          parsed = {}
+          for page in pages:
+              parser = PageParser()
+              parser.feed(page.read_text(encoding="utf-8"))
+              if parser.duplicates:
+                  raise SystemExit(f"{page}: duplicate IDs: {', '.join(sorted(parser.duplicates))}")
+              parsed[page] = parser
+
+          errors = []
+          for page, parser in parsed.items():
+              for tag, attr, value in parser.links:
+                  value = value.strip()
+                  if not value or value.startswith(("#", "data:", "blob:", "javascript:", "mailto:", "tel:")):
+                      continue
+                  parts = urlsplit(value)
+                  if parts.scheme or parts.netloc or not parts.path:
+                      continue
+                  target = (page.parent / parts.path).resolve()
+                  if parts.path.endswith("/"):
+                      target = target / "index.html"
+                  if not target.is_file():
+                      errors.append(f"{page}: {tag}[{attr}] -> {value}")
+          if errors:
+              raise SystemExit("Broken local links/resources:\\n" + "\\n".join(errors))
+          print(f"Local links/resources OK across {len(pages)} HTML pages; duplicate IDs: none.")
           PY
       - name: Check FFmpeg worker syntax
         run: node --check worker/worker.js
