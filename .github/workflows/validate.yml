@@ -79,10 +79,15 @@ jobs:
           home = pathlib.Path("index.html").read_text(encoding="utf-8")
           if not re.search(r"const\s+CLIPX_FREE_MODE\s*=\s*true", home):
               raise SystemExit("Free Browser Mode is not explicitly enabled.")
-          for fn, guard in [("testBackendConnection", "Backend features are disabled in Free Browser Mode."), ("clipxStartCloudUpload", "Cloud rendering is disabled in Free Browser Mode."), ("clipxRunwayGenerate", "External AI video generation is disabled in Free Browser Mode.")]:
+          for fn, guard in [("clipxStartCloudUpload", "Cloud rendering is disabled in Free Browser Mode."), ("clipxRunwayGenerate", "External AI video generation is disabled in Free Browser Mode.")]:
               match = re.search(rf"async\s+function\s+{fn}\s*\([^)]*\)\s*\{{", home)
               if not match or guard not in home[match.end():match.end()+500]:
                   raise SystemExit(f"Free-mode guard missing in {fn}.")
+          health_test = re.search(r"async\s+function\s+testBackendConnection\s*\([^)]*\)\s*\{", home)
+          if not health_test or 'body: { action: "health" }' not in home[health_test.end():health_test.end()+1800]:
+              raise SystemExit("Safe health-only backend connection test is missing.")
+          if 'body: { action: "create"' in home[health_test.end():health_test.end()+1800]:
+              raise SystemExit("Backend health test must not request video generation.")
           if "selectedVideoFile.size > 3 * 1024 * 1024 * 1024" not in home:
               raise SystemExit("Local browser upload safeguard (3 GB) is missing.")
           if "file.size > 3 * 1024 * 1024 * 1024" not in home:
