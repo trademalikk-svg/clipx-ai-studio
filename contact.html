@@ -21,7 +21,7 @@
     input,select,textarea{width:100%;padding:12px;border-radius:10px;border:1px solid #554477;background:#0e0b19;color:#fff;font:inherit}
     textarea{min-height:145px;resize:vertical}.btn{display:inline-block;padding:12px 18px;background:#d8b45a;color:#171225;text-decoration:none;font-weight:bold;border:0;border-radius:10px;cursor:pointer;margin-top:14px}
     .secondary{background:#34274d;color:#fff}.muted,.note{font-size:13px;color:#aaa1bd}.status{padding:12px;border-radius:10px;background:#100d1c;margin-top:12px;white-space:pre-wrap;overflow-wrap:anywhere}
-    .ticket{padding:12px;border:1px solid #49336c;border-radius:10px;margin:10px 0}.ticket small{color:#aaa1bd}.ticket-actions{margin-top:10px}.ticket-actions button{margin:0 8px 0 0}
+    .ticket{padding:12px;border:1px solid #49336c;border-radius:10px;margin:10px 0}.ticket small{color:#aaa1bd}.ticket-actions{margin-top:10px}.ticket-actions button{margin:0 8px 0 0}.reply-item{padding:12px;border-left:3px solid #d8b45a;background:#100d1c;border-radius:8px;margin:10px 0}.admin-ticket textarea{min-height:90px}.admin-ticket select{margin-top:8px}
     footer{text-align:center;padding:25px;color:#aaa1bd}footer a{color:#e5c36d}
     [hidden]{display:none!important}
   </style>
@@ -59,12 +59,18 @@
     <button class="btn secondary" id="refreshTickets" type="button" hidden>Refresh Tickets</button>
     <div id="ticketDetails" class="ticket" hidden><h2>Ticket Details</h2><p><b>Ticket ID:</b> <span id="detailId"></span></p><p><b>Category:</b> <span id="detailCategory"></span></p><p><b>Subject:</b> <span id="detailSubject"></span></p><p><b>Status:</b> <span id="detailStatus"></span></p><p><b>Submitted:</b> <span id="detailDate"></span></p><h3>आपका पूरा संदेश</h3><div id="detailMessage" class="status"></div><h3>Support Reply</h3><div id="detailReply" class="status">अभी Support Reply उपलब्ध नहीं है।</div><button class="btn secondary" id="closeDetails" type="button">Close Details</button></div>
   </section>
+  <section class="panel" id="supportAdminPanel" hidden>
+    <h2>Support Admin Desk</h2>
+    <p class="note">यह panel केवल server-authorized support admins के लिए है।</p>
+    <div id="adminTicketList" class="status">Admin tickets लोड हो रहे हैं…</div>
+    <button class="btn secondary" id="refreshAdminTickets" type="button">Refresh Admin Tickets</button>
+  </section>
   <section class="panel">
     <h2>सुरक्षा और जवाब</h2>
     <ul>
       <li>Password, OTP, API key, card/UPI details या निजी वीडियो संदेश में न भेजें।</li>
-      <li>इस समय टिकट Supabase में सुरक्षित रूप से जमा होता है; ईमेल notification और live chat अभी उपलब्ध नहीं हैं।</li>
-      <li>Support reply अभी manually manage करना होगा; टिकट का status बाद में update किया जा सकता है।</li>
+      <li>टिकट और Support replies आपके खाते के अनुसार सुरक्षित रूप से दिखते हैं।</li>
+      <li>ईमेल notification और live chat अभी उपलब्ध नहीं हैं; Support Desk से जवाब यहाँ दिखाई देगा।</li>
     </ul>
     <p class="note">बिना Login किए टिकट जमा नहीं किया जा सकता।</p>
   </section>
@@ -88,8 +94,15 @@ function showSupportSession(user) {
   supportForm.hidden = !signedIn;
   loginPrompt.hidden = signedIn;
   refreshButton.hidden = !signedIn;
-  if (signedIn) loadMyTickets();
-  else ticketList.textContent = "Login करने के बाद आपके टिकट दिखाई देंगे।";
+  if (signedIn) {
+    loadMyTickets();
+    const isSupportAdmin = supportUser.app_metadata && supportUser.app_metadata.support_role === "admin";
+    document.getElementById("supportAdminPanel").hidden = !isSupportAdmin;
+    if (isSupportAdmin) loadSupportAdminTickets();
+  } else {
+    ticketList.textContent = "Login करने के बाद आपके टिकट दिखाई देंगे।";
+    document.getElementById("supportAdminPanel").hidden = true;
+  }
 }
 async function loadMyTickets() {
   if (!supportUser || !supportClient) return;
@@ -134,8 +147,63 @@ async function openTicketDetails(ticketId) {
   document.getElementById("detailStatus").textContent=d.status;
   document.getElementById("detailDate").textContent=new Date(d.created_at).toLocaleString();
   message.textContent=d.message;
+  const replyBox=document.getElementById("detailReply");
+  replyBox.textContent="Replies लोड हो रहे हैं…";
+  const replies=await supportClient.from("support_ticket_replies")
+    .select("reply,created_at").eq("ticket_id",ticketId).order("created_at",{ascending:true});
+  replyBox.replaceChildren();
+  if(replies.error){
+    replyBox.textContent="Replies लोड नहीं हुए: "+replies.error.message;
+  }else if(!replies.data || !replies.data.length){
+    replyBox.textContent="अभी Support Reply उपलब्ध नहीं है।";
+  }else{
+    for(const item of replies.data){
+      const entry=document.createElement("div"); entry.className="reply-item";
+      const body=document.createElement("div"); body.textContent=item.reply;
+      const stamp=document.createElement("small"); stamp.textContent="Support · "+new Date(item.created_at).toLocaleString();
+      entry.append(body,stamp); replyBox.append(entry);
+    }
+  }
   panel.scrollIntoView({behavior:"smooth",block:"start"});
 }
+
+async function loadSupportAdminTickets(){
+  const list=document.getElementById("adminTicketList");
+  if(!supportUser || supportUser.app_metadata?.support_role!=="admin") return;
+  list.textContent="सभी Support Tickets लोड हो रहे हैं…";
+  const {data,error}=await supportClient.from("support_tickets")
+    .select("id,user_id,category,subject,message,status,created_at,contact_email")
+    .order("created_at",{ascending:false}).limit(100);
+  if(error){list.textContent="Admin tickets लोड नहीं हुए: "+error.message;return;}
+  if(!data || !data.length){list.textContent="अभी कोई Support Ticket नहीं है।";return;}
+  list.replaceChildren();
+  for(const t of data){
+    const card=document.createElement("div");card.className="ticket admin-ticket";
+    const heading=document.createElement("strong");heading.textContent=t.subject+" · "+t.status;
+    const meta=document.createElement("small");meta.textContent="Ticket "+t.id.slice(0,8).toUpperCase()+" · "+t.category+" · "+(t.contact_email||t.user_id)+" · "+new Date(t.created_at).toLocaleString();
+    const msg=document.createElement("p");msg.textContent=t.message;
+    const reply=document.createElement("textarea");reply.maxLength=5000;reply.placeholder="यहाँ user को जवाब लिखें…";
+    const status=document.createElement("select");
+    for(const value of ["open","in_progress","resolved","closed"]){const option=document.createElement("option");option.value=value;option.textContent=value;option.selected=value===t.status;status.append(option);}
+    const send=document.createElement("button");send.type="button";send.className="btn";send.textContent="Send Reply";
+    send.addEventListener("click",async()=>{
+      const text=reply.value.trim();
+      if(text.length<2){alert("Reply कम-से-कम 2 अक्षरों का होना चाहिए।");return;}
+      send.disabled=true;
+      const inserted=await supportClient.from("support_ticket_replies").insert({ticket_id:t.id,admin_user_id:supportUser.id,reply:text});
+      if(inserted.error){alert("Reply भेजा नहीं गया: "+inserted.error.message);send.disabled=false;return;}
+      const updated=await supportClient.from("support_tickets").update({status:status.value}).eq("id",t.id);
+      if(updated.error){alert("Reply भेजा गया, लेकिन status update नहीं हुआ: "+updated.error.message);}
+      else alert("Support Reply user के ticket में भेज दिया गया।");
+      await loadSupportAdminTickets();
+      send.disabled=false;
+    });
+    card.append(heading,document.createElement("br"),meta,msg,status,reply,send);
+    list.append(card);
+  }
+}
+document.getElementById("refreshAdminTickets").addEventListener("click",loadSupportAdminTickets);
+
 document.getElementById("closeDetails").addEventListener("click",()=>{document.getElementById("ticketDetails").hidden=true;});
 supportForm.addEventListener("submit",async function(event){
   event.preventDefault();
