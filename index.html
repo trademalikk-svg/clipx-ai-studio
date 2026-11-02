@@ -1370,7 +1370,8 @@ async function testBackendConnection() {
  const button = document.getElementById("backendTestButton");
  const resultBox = document.getElementById("backendTestResult");
  if (!button || !resultBox) return;
- if (CLIPX_FREE_MODE) { resultBox.textContent = "Backend features are disabled in Free Browser Mode."; return; }
+ // Health-only diagnostics remain available in Free Browser Mode.
+ // This invokes action:"health" only; it never requests video generation.
  button.disabled = true;
  resultBox.textContent = "Testing connection... कृपया प्रतीक्षा करें।";
  try {
@@ -1387,9 +1388,9 @@ async function testBackendConnection() {
   });
   if (error) throw error;
   if (data && data.status === "connected") {
-   resultBox.textContent = "SUCCESS: Supabase Edge Function connected है और RUNWAY_API_KEY secret उपलब्ध है। AI generation endpoint ready है।";
+   resultBox.textContent = "SUCCESS: Supabase Edge Function reachable है, login valid है और RUNWAY_API_KEY secret configured है। यह केवल secret की मौजूदगी जाँचता है, key की वैधता नहीं। कोई वीडियो generate नहीं हुआ और Runway credits खर्च नहीं हुए।";
   } else if (data && data.status === "missing_secret") {
-   resultBox.textContent = "Secret नहीं मिला: Supabase Edge Function में RUNWAY_API_KEY secret जाँचें।";
+   resultBox.textContent = "Supabase Edge Function reachable है, लेकिन RUNWAY_API_KEY secret configured नहीं है। Supabase Dashboard → Edge Functions → Secrets में इसे सेट करें।";
   } else {
    resultBox.textContent = "Function से जवाब मिला, लेकिन status अपेक्षित नहीं है: " + JSON.stringify(data);
   }
