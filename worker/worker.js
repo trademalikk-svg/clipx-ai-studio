@@ -11,7 +11,16 @@ const KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const BUCKET = process.env.SUPABASE_BUCKET || "clipx-private";
 const POLL_MS = Number(process.env.POLL_MS || 8000);
 const DEFAULT_CLIP_SECONDS = Math.min(90, Math.max(10, Number(process.env.CLIP_SECONDS || 30)));
+const CLOUD_ENABLED = process.env.CLIPX_CLOUD_PROCESSING_ENABLED === "true";
+const MAX_INPUT_BYTES = Math.min(2 * 1024 * 1024 * 1024, Math.max(1, Number(process.env.MAX_INPUT_BYTES || 2 * 1024 * 1024 * 1024)));
+const MAX_CLIPS_PER_JOB = Math.min(10, Math.max(1, Number(process.env.MAX_CLIPS_PER_JOB || 10)));
+const MAX_JOBS_PER_USER_PER_DAY = Math.min(10, Math.max(1, Number(process.env.MAX_JOBS_PER_USER_PER_DAY || 2)));
+const MAX_JOBS_GLOBAL_PER_MONTH = Math.min(250, Math.max(1, Number(process.env.MAX_JOBS_GLOBAL_PER_MONTH || 25)));
 if (!URL || !KEY) throw new Error("SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are required.");
+if (!CLOUD_ENABLED) {
+  console.log("ClipX cloud processing is disabled. Set CLIPX_CLOUD_PROCESSING_ENABLED=true only after approving host costs and quotas.");
+  process.exit(0);
+}
 const db = createClient(URL, KEY, { auth: { persistSession: false } });
 
 function run(command, args) {
@@ -40,7 +49,7 @@ async function processJob(job) {
       new Transform({
         transform(chunk, encoding, callback) {
           downloadedBytes += chunk.length;
-          if (downloadedBytes > 2 * 1024 * 1024 * 1024) return callback(new Error("Source file exceeds the 2 GB processing limit."));
+          if (downloadedBytes > MAX_INPUT_BYTES) return callback(new Error("Source file exceeds the 2 GB processing limit."));
           callback(null, chunk);
         }
       }),
@@ -58,7 +67,7 @@ async function processJob(job) {
     const ratio = ["9:16", "16:9", "1:1"].includes(job.options?.aspectRatio) ? job.options.aspectRatio : "9:16";
     const dimensions = ratio === "16:9" ? [1920,1080] : ratio === "1:1" ? [1080,1080] : [1080,1920];
     const requestedCount = Number(job.options?.requestedCount || 20);
-    const safeCount = Math.min(20, Math.max(1, Number.isFinite(requestedCount) ? Math.floor(requestedCount) : 20));
+    const safeCount = Math.min(MAX_CLIPS_PER_JOB, Math.max(1, Number.isFinite(requestedCount) ? Math.floor(requestedCount) : MAX_CLIPS_PER_JOB));
     const total = Math.min(safeCount, Math.ceil(duration / clipSeconds));
     const results = [];
     for (let i = 0; i < total; i++) {
@@ -94,6 +103,23 @@ async function tick() {
   if (error) { console.error("Queue read failed:",error.message); return; }
   const job = jobs?.[0];
   if (!job) return;
+
+  // Quotas count the current queued job too, so they cap created jobs rather than only completed jobs.
+  const now = new Date();
+  const dayStart = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate())).toISOString();
+  const monthStart = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1)).toISOString();
+  const [{ count: userDaily }, { count: globalMonthly }] = await Promise.all([
+    db.from("clip_jobs").select("id", { count: "exact", head: true }).eq("user_id", job.user_id).gte("created_at", dayStart),
+    db.from("clip_jobs").select("id", { count: "exact", head: true }).gte("created_at", monthStart)
+  ]);
+  if ((userDaily || 0) > MAX_JOBS_PER_USER_PER_DAY) {
+    await db.from("clip_jobs").update({ status:"failed", error_message:"Daily cloud-processing quota reached." }).eq("id", job.id).eq("status","uploaded");
+    return;
+  }
+  if ((globalMonthly || 0) > MAX_JOBS_GLOBAL_PER_MONTH) {
+    await db.from("clip_jobs").update({ status:"failed", error_message:"Monthly cloud-processing quota reached." }).eq("id", job.id).eq("status","uploaded");
+    return;
+  }
   const { data: claimed, error: claimError } = await db.from("clip_jobs").update({status:"processing"}).eq("id",job.id).eq("status","uploaded").select("id").maybeSingle();
   if (claimError || !claimed) return;
   console.log("Processing job",job.id);
