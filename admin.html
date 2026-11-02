@@ -15,7 +15,15 @@
 <header><strong>CLIPX AI STUDIO · SUPPORT ADMIN</strong><button id="logout" style="width:auto" hidden>Logout</button></header>
 <main>
 <section id="login" class="panel"><h1>Admin sign-in</h1><p>Only an account with the server-assigned <code>app_metadata.support_role = admin</code> claim can access support tickets.</p><input id="email" type="email" autocomplete="username" placeholder="Admin email"><input id="password" type="password" autocomplete="current-password" placeholder="Password"><button id="signIn">Login</button><p id="loginStatus" aria-live="polite"></p></section>
-<section id="dashboard" class="hidden"><h1>Support queue</h1><p id="identity" class="muted"></p><div class="row"><button id="refresh">Refresh tickets</button><span id="queueStatus" class="muted" aria-live="polite"></span></div><div id="tickets"></div></section>
+<section id="dashboard" class="hidden">
+<section class="panel" aria-labelledby="budgetHeading">
+ <h2 id="budgetHeading">Monthly budget monitor</h2>
+ <p class="muted">Application ledger only — this is not a live provider invoice or guaranteed billing cap.</p>
+ <button id="budgetRefresh" type="button">Refresh budget</button>
+ <p id="budgetStatus" class="muted" aria-live="polite">Loading budget…</p>
+ <div id="budgetSummary"></div>
+</section>
+<h1>Support queue</h1><p id="identity" class="muted"></p><div class="row"><button id="refresh">Refresh tickets</button><span id="queueStatus" class="muted" aria-live="polite"></span></div><div id="tickets"></div></section>
 </main>
 <script>
 (() => {
@@ -31,7 +39,27 @@
   const {data,error}=await client.auth.getSession();if(error||!data.session){showLogin();return;}
   const {data:result}=await client.auth.getUser();const user=result?.user;
   if(user?.app_metadata?.support_role!=="admin"){await client.auth.signOut();showLogin("This account has no support-admin permission. Access denied.");return;}
-  showDashboard(user);await loadTickets();
+  showDashboard(user);await loadBudget();await loadTickets();
+ }
+ async function loadBudget(){
+  const status=el("budgetStatus"), summary=el("budgetSummary");
+  status.textContent="Loading current UTC month…";summary.replaceChildren();
+  const {data,error}=await client.functions.invoke("clipx-budget-status",{body:{}});
+  if(error||!data||data.error){status.textContent="Budget status unavailable: "+(error?.message||data?.error||"Unknown error");return;}
+  const money=paise=>"₹"+(Number(paise||0)/100).toFixed(2);
+  status.textContent="Month: "+data.monthStart+" · Total used/reserved: "+money(data.total?.usedPaise)+" / "+money(data.total?.capPaise);
+  const names={cloud_processing:"Cloud processing + hosting",ai_highlights:"AI Highlights",ai_video_generation:"AI Video Generation"};
+  for(const key of Object.keys(names)){
+   const item=data.categories?.[key]||{};
+   const row=document.createElement("div");row.className="ticket";
+   const title=document.createElement("strong");title.textContent=names[key];
+   const detail=document.createElement("p");
+   detail.textContent="Spent: "+money(item.spentPaise)+" · Reserved: "+money(item.reservedPaise)+" · Used: "+money(item.usedPaise)+" / "+money(item.capPaise);
+   const remaining=document.createElement("small");
+   remaining.textContent="Remaining app allocation: "+money(Math.max(0,Number(item.capPaise||0)-Number(item.usedPaise||0)));
+   row.append(title,detail,remaining);summary.append(row);
+  }
+  const note=document.createElement("p");note.className="muted";note.textContent=data.disclaimer||"Application ledger only.";summary.append(note);
  }
  async function loadTickets(){
   el("queueStatus").textContent="Loading…";el("tickets").replaceChildren();
@@ -53,6 +81,7 @@
  }
  el("signIn").addEventListener("click",async()=>{el("signIn").disabled=true;const {error}=await client.auth.signInWithPassword({email:el("email").value.trim(),password:el("password").value});el("signIn").disabled=false;if(error){showLogin(error.message);return;}await checkSession();});
  el("refresh").addEventListener("click",loadTickets);
+ el("budgetRefresh").addEventListener("click",loadBudget);
  el("logout").addEventListener("click",async()=>{await client.auth.signOut();showLogin("Signed out.");});
  client.auth.onAuthStateChange(()=>{void checkSession();});
  void checkSession();
