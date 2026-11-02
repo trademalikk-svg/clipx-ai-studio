@@ -238,11 +238,20 @@ refreshButton.addEventListener("click",loadMyTickets);
 if(!supportClient){
   authStatus.textContent="Supabase client लोड नहीं हुआ। Internet connection जाँचकर page refresh करें।";
 }else{
-  supportClient.auth.getSession().then(({data,error})=>{
-    if(error){authStatus.textContent="Session check failed: "+error.message;return;}
-    showSupportSession(data.session ? data.session.user : null);
+  // Refresh the stored JWT once on page load so newly granted app_metadata roles are picked up.
+  supportClient.auth.onAuthStateChange((_event,session)=>{
+    showSupportSession(session ? session.user : null);
   });
-  supportClient.auth.onAuthStateChange((_event,session)=>showSupportSession(session ? session.user : null));
+  (async()=>{
+    const {data,error}=await supportClient.auth.refreshSession();
+    if(error){
+      // A missing session is normal for signed-out visitors; show the login prompt.
+      const current=await supportClient.auth.getSession();
+      showSupportSession(current.data?.session ? current.data.session.user : null);
+      return;
+    }
+    showSupportSession(data.session ? data.session.user : null);
+  })();
 }
 </script>
 </body>
