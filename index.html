@@ -1662,6 +1662,8 @@ function updateAuthControls(user) {
  if (authBox) authBox.hidden = false;
  if (!loggedIn) {
   authMode = "login";
+  // Always return signed-out visitors to the dedicated Login view.
+  if (typeof showWorkspaceView === "function") showWorkspaceView("settings");
   document.getElementById("authTitle").textContent = "Login Required";
   document.getElementById("authButton").textContent = "Login";
   document.getElementById("authMessage").textContent = "ClipX के Video Tools और Creator Features इस्तेमाल करने के लिए पहले Login करें या नया Account बनाएँ।";
@@ -1838,8 +1840,12 @@ async function handleLogout() {
   return;
  }
  updateAuthControls(null);
+ if (typeof showWorkspaceView === "function") showWorkspaceView("settings");
+ const authBox = document.getElementById("authBox");
+ authBox.hidden = false;
+ authBox.classList.remove("view-hidden");
  message.textContent = "आप Logout हो गए हैं। अब काम करने के लिए फिर से Login करें।";
- document.getElementById("authBox").hidden = false;
+ authBox.scrollIntoView({behavior:"smooth", block:"center"});
 }
 
 async function clipxRunwayGenerate() {
