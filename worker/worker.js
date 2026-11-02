@@ -16,11 +16,15 @@ const MAX_INPUT_BYTES = Math.min(2 * 1024 * 1024 * 1024, Math.max(1, Number(proc
 const MAX_CLIPS_PER_JOB = Math.min(10, Math.max(1, Number(process.env.MAX_CLIPS_PER_JOB || 10)));
 const MAX_JOBS_PER_USER_PER_DAY = Math.min(10, Math.max(1, Number(process.env.MAX_JOBS_PER_USER_PER_DAY || 2)));
 const MAX_JOBS_GLOBAL_PER_MONTH = Math.min(250, Math.max(1, Number(process.env.MAX_JOBS_GLOBAL_PER_MONTH || 25)));
+const CLOUD_JOB_RESERVE_PAISE = Number(process.env.CLIPX_CLOUD_JOB_RESERVE_PAISE || 0);
 if (!CLOUD_ENABLED) {
   console.log("ClipX cloud processing is disabled. Set CLIPX_CLOUD_PROCESSING_ENABLED=true only after approving host costs and quotas.");
   process.exit(0);
 }
 if (!URL || !KEY) throw new Error("SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are required.");
+if (!Number.isSafeInteger(CLOUD_JOB_RESERVE_PAISE) || CLOUD_JOB_RESERVE_PAISE <= 0) {
+  throw new Error("CLIPX_CLOUD_JOB_RESERVE_PAISE must be a positive integer in paise; refusing to start without a budget reservation estimate.");
+}
 const db = createClient(URL, KEY, { auth: { persistSession: false } });
 
 function run(command, args) {
@@ -122,9 +126,38 @@ async function tick() {
   }
   const { data: claimed, error: claimError } = await db.from("clip_jobs").update({status:"processing"}).eq("id",job.id).eq("status","uploaded").select("id").maybeSingle();
   if (claimError || !claimed) return;
-  console.log("Processing job",job.id);
+
+  // Reserve the maximum configured per-job estimate before any FFmpeg work starts.
+  // The RPC is atomic and enforces both category and overall INR monthly ceilings.
+  const { data: budget, error: budgetError } = await db.rpc("clipx_reserve_budget", {
+    p_category: "cloud_processing",
+    p_estimated_paise: CLOUD_JOB_RESERVE_PAISE,
+    p_idempotency_key: "cloud-job-" + job.id
+  });
+  if (budgetError || !budget?.allowed || !budget?.reservation_id) {
+    const reason = budgetError?.message || budget?.reason || "budget_reservation_denied";
+    await db.from("clip_jobs").update({
+      status:"failed",
+      error_message:("Monthly budget guard stopped this job: " + reason).slice(0,1000)
+    }).eq("id",job.id).eq("status","processing");
+    console.warn("Budget guard denied job",job.id,reason);
+    return;
+  }
+
+  console.log("Processing job",job.id,"with reserved paise",CLOUD_JOB_RESERVE_PAISE);
   await processJob(job);
-  console.log("Finished job",job.id);
+  // Until the host provides per-job invoice metering, consume the full conservative
+  // reservation rather than under-reporting costs. If settlement fails, the reservation
+  // remains held, which fails closed and prevents further overspend.
+  const { data: settled, error: settleError } = await db.rpc("clipx_settle_budget", {
+    p_reservation_id: budget.reservation_id,
+    p_actual_paise: CLOUD_JOB_RESERVE_PAISE
+  });
+  if (settleError || !settled?.settled) {
+    console.error("Budget settlement failed; reservation remains held",job.id,settleError?.message || settled?.reason);
+    return;
+  }
+  console.log("Finished job",job.id,"budget reservation settled");
 }
 
 console.log("ClipX FFmpeg worker started; polling every",POLL_MS,"ms");
