@@ -12,7 +12,7 @@ The public site is configured to avoid unexpected paid-provider charges:
 
 ## Current browser tools
 
-- Select a local video and preview it in the browser.
+- Select a local video up to 3 GB and preview it in the browser. The 3 GB value is a file-selection ceiling, not a guarantee that every device can edit/export a file of that size.
 - Trim, split and export clips where browser codecs and MediaRecorder support the selected file.
 - Adjust rotation, crop/fit, speed, volume and mute.
 - Edit SRT subtitles and use supported browser-side speech tools.
@@ -25,7 +25,7 @@ The public site is configured to avoid unexpected paid-provider charges:
 - Automatic Shorts splits by chosen duration; it does not understand speech, story or semantic highlights.
 - Smart Highlights uses a visual frame-change heuristic and may select poor segments.
 - Template-generated scripts, titles and captions are not fact-checked.
-- Speech recognition may use browser/vendor speech services or download a model; it can be inaccurate or fail on low-memory phones.
+- Speech recognition may use browser/vendor speech services or download a model; it can be inaccurate or fail on low-memory phones. Whisper auto-captions retain a separate 150 MB source-file safeguard because decoding audio can consume substantial memory.
 - Face detection/face-follow is experimental.
 - Export format and quality depend on browser support; MP4 may not be available on every device.
 - YouTube URL preview does not download or process third-party videos.
