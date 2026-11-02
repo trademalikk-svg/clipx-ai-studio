@@ -580,6 +580,30 @@ button.secondary,.secondary{background:#38204f;border:1px solid #75439a}
  .dashboard-shortcuts .shortcut{min-height:92px}
 }
 
+
+
+/* Login screen uses the full desktop canvas: balanced two-panel layout, no dead side. */
+@media(min-width:901px){
+ body.clipx-locked{min-height:100vh;background:radial-gradient(ellipse at 18% 42%,#4b1678 0,transparent 38%),radial-gradient(ellipse at 88% 12%,#1a2d72 0,transparent 34%),linear-gradient(120deg,#09051b,#100725 52%,#080d25)}
+ body.clipx-locked header{position:fixed;left:0;top:0;width:100%;height:82px;padding:12px 34px;display:flex;flex-direction:row;align-items:center;justify-content:space-between;background:#090719ef;border:0;border-bottom:1px solid #63318c;box-shadow:0 8px 28px #0005}
+ body.clipx-locked header .logo{font-size:27px;align-items:center}
+ body.clipx-locked header .logo:before{width:46px;height:46px;font-size:23px}
+ body.clipx-locked header .header-edition{display:inline-flex}
+ body.clipx-locked header .auth-buttons{position:static;display:flex;margin-left:auto}
+ body.clipx-locked main{display:flex!important;justify-content:center;align-items:center;width:100%!important;max-width:none!important;min-height:100vh;margin:0!important;padding:112px 5vw 42px!important}
+ body.clipx-locked #authBox{display:grid!important;grid-template-columns:minmax(0,1.02fr) minmax(360px,.98fr);align-items:start;column-gap:38px;row-gap:8px;width:min(100%,1080px);max-width:1080px;min-height:590px;margin:0 auto!important;padding:42px;border:1px solid #a64ee5;border-radius:28px;background:linear-gradient(115deg,#211044 0%,#17102f 49%,#100b20 49%,#0d091b 100%);box-shadow:0 25px 90px #0009,0 0 55px #8b24d933}
+ body.clipx-locked #authBox:before{content:"✦  CLIPX CREATOR STUDIO\A\AYour video workspace starts here.\A\A✧  Browser-based creator tools\A✧  Hindi + English workflow\A✧  Video clips, captions & prompts\A\ACreate. Edit. Share.";grid-column:1;grid-row:1 / span 30;align-self:stretch;display:flex;align-items:center;justify-content:center;min-height:500px;padding:34px;border:1px solid #8e4fc2;border-radius:22px;white-space:pre-line;text-align:left;line-height:2.05;font-size:clamp(18px,2vw,25px);font-weight:800;color:#f4e5ff;background:radial-gradient(circle at 70% 30%,#6c2bad88,transparent 42%),linear-gradient(145deg,#32145a,#17103d 65%,#10183d);box-shadow:inset 0 1px #ffffff20,0 15px 35px #0005}
+ body.clipx-locked #authBox>*{grid-column:2;min-width:0}
+ body.clipx-locked #authBox h2{font-size:29px;margin:0 0 10px}
+ body.clipx-locked #authBox label{margin-top:13px}
+ body.clipx-locked #authBox .google-auth-divider{margin:10px 0}
+ body.clipx-locked #authBox .muted{line-height:1.5}
+}
+@media(max-width:900px){
+ body.clipx-locked main{width:100%!important;margin:0!important;padding:28px 14px 42px!important;min-height:calc(100vh - 90px)}
+ body.clipx-locked #authBox{width:100%;max-width:560px;margin:12px auto 28px!important}
+}
+
 </style>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 </head>
