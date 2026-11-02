@@ -899,6 +899,11 @@ function updateVideoLoadingProgress(player) {
 }
 
 videoInput.addEventListener("change", function () {
+ // Release the previous local preview before switching to another file.
+ if (videoURL) {
+  URL.revokeObjectURL(videoURL);
+  videoURL = null;
+ }
  selectedVideoFile = this.files && this.files[0] ? this.files[0] : null;
  uploadProgress.value = 0;
  preview.textContent = "Upload Video दबाएँ, फिर आपका preview यहाँ दिखाई देगा।";
@@ -908,11 +913,14 @@ videoInput.addEventListener("change", function () {
   uploadVideoButton.disabled = true;
   return;
  }
- if (!selectedVideoFile.type.startsWith("video/")) {
-  document.getElementById("fileInfo").textContent = "Please select a video file.";
-  uploadProgressText.textContent = "Please select a valid video file.";
+ // Some Android browsers report an empty or generic MIME type for valid videos.
+ const supportedExtension = /\.(mp4|m4v|mov|webm|mkv|ogv|3gp|3g2)$/i.test(selectedVideoFile.name);
+ if (!selectedVideoFile.type.startsWith("video/") && !supportedExtension) {
+  document.getElementById("fileInfo").textContent = "Please select a supported video file.";
+  uploadProgressText.textContent = "Supported formats: MP4, MOV, WebM, MKV, OGV and 3GP.";
   uploadVideoButton.disabled = true;
   selectedVideoFile = null;
+  this.value = "";
   return;
  }
  if (selectedVideoFile.size > 3 * 1024 * 1024 * 1024) {
