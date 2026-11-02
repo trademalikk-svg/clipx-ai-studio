@@ -30,7 +30,7 @@ The public site is configured to avoid unexpected paid-provider charges:
 - Export format and quality depend on browser support; MP4 may not be available on every device.
 - YouTube URL preview does not download or process third-party videos.
 - No independent security audit, formal load test or full cross-device QA has been completed. Do not use confidential or sensitive footage.
-- Supabase account and backend code remain in the repository for optional future development, but cloud processing and external AI generation are not active features of the public free mode.
+- Supabase account, private 2 GB storage bucket, and authenticated upload Edge Functions are configured. The public Free Browser Mode keeps cloud upload disabled. The separate FFmpeg worker has source code but is not deployed to a processing host, so cloud clip processing is not yet operational. External AI video generation is also disabled.
 
 ## Website and ownership
 
