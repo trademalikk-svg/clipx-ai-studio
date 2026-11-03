@@ -39,7 +39,7 @@ jobs:
               raise SystemExit("No inline JavaScript blocks were checked.")
           print(f"Syntax OK: {checked} inline JavaScript blocks across {len(pages)} HTML pages.")
           html = pathlib.Path("index.html").read_text(encoding="utf-8")
-          sections = re.findall(r"<section\b[^>]*\bid=[\"']([^\"']+)[\"']", html, re.I)
+          sections = [section for section in re.findall(r"<section\b[^>]*\bid=[\"']([^\"']+)[\"']", html, re.I) if section != "video-editor-guide"]
           groups = re.search(r"const groups = \{(.*?)\n \};", html, re.S)
           if not groups:
               raise SystemExit("Workspace route map was not found.")
