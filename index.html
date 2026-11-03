@@ -2364,11 +2364,11 @@ async function handleGoogleAuth() {
  button.disabled = true;
  message.textContent = "Google sign-in खोला जा रहा है…";
  try {
+  // Return users to the same live site they started Google sign-in from.
+  const redirectTo = window.location.origin + window.location.pathname;
   const { error } = await supabaseClient.auth.signInWithOAuth({
    provider: "google",
-   options: {
-    redirectTo: "https://trademalikk-svg.github.io/clipx-ai-studio/"
-   }
+   options: { redirectTo }
   });
   if (error) throw error;
  } catch (error) {
