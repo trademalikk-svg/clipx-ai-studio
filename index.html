@@ -691,6 +691,16 @@ body.clipx-locked main>section#video-editor-guide{width:100%!important}
  body.clipx-locked .creator-illustration{max-width:390px!important}
  body.clipx-locked main>#authBox{display:block!important;padding:18px!important}
 }
+/* Organic sharing panel */
+.clipx-share-panel{max-width:1200px;margin:0 auto 24px;padding:18px 22px;border:1px solid #dedfe5;border-radius:16px;background:#fff;color:#111;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.clipx-share-panel strong{font-size:18px;color:#111}.clipx-share-panel p{margin:4px 0 0;color:#555;font-size:14px}
+.clipx-share-actions{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.clipx-share-actions button,.clipx-share-actions a{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:10px 16px;border-radius:24px;font:700 14px Arial,sans-serif;text-decoration:none;cursor:pointer}
+.clipx-share-primary{background:#080808;color:#fff;border:1px solid #080808}
+.clipx-share-whatsapp{background:#e9f7ed;color:#125b2b;border:1px solid #b9dfc3}
+.clipx-share-copy{background:#fff;color:#111;border:1px solid #bbb}
+.clipx-share-panel .clipx-share-status{flex-basis:100%;margin:0;color:#555;font-size:12px;min-height:0}
+@media(max-width:700px){.clipx-share-panel{margin:0 12px 18px;padding:16px;display:block}.clipx-share-actions{margin-top:12px}.clipx-share-actions button,.clipx-share-actions a{flex:1 1 auto}}
 </style>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <style id="clipx-simple-light-theme">
@@ -833,6 +843,15 @@ footer a{color:#222!important}
     <g fill="#fff"><path d="m438 63 8 19 19 8-19 8-8 19-8-19-19-8 19-8z" opacity=".9"/><circle cx="62" cy="248" r="7" fill="#67dcff"/><circle cx="452" cy="168" r="5" fill="#d875ff"/></g>
    </svg>
   </div>
+ </section>
+ <section class="clipx-share-panel" aria-label="Share ClipX AI Studio">
+  <div><strong>ClipX पसंद आया?</strong><p>अपने creator दोस्तों के साथ शेयर करें — वे भी browser में Shorts और Reels तैयार कर सकते हैं।</p></div>
+  <div class="clipx-share-actions">
+   <button type="button" class="clipx-share-primary" onclick="clipxShareSite()">Share ClipX</button>
+   <a class="clipx-share-whatsapp" id="clipxWhatsAppShare" href="https://wa.me/?text=Try%20ClipX%20AI%20Studio%20-%20free%20browser-based%20tools%20for%20Shorts%2C%20Reels%2C%20Hindi%20subtitles%20and%20thumbnails%3A%20https%3A%2F%2Ftrademalikk-svg.github.io%2Fclipx-ai-studio%2F" target="_blank" rel="noopener noreferrer">Share on WhatsApp</a>
+   <button type="button" class="clipx-share-copy" onclick="clipxCopySiteLink()">Copy Link</button>
+  </div>
+  <p class="clipx-share-status" id="clipxShareStatus" role="status" aria-live="polite"></p>
  </section>
  <section class="dashboard-shortcuts" id="tools" aria-label="Video tools menu">
   <h2 class="menu-heading">Video Tools</h2><p class="muted">एक फीचर चुनें। हर टूल अलग स्क्रीन में खुलेगा।</p>
@@ -2591,5 +2610,31 @@ async function scanFacesOnDevice(){
 }
 </script>
 
+<script>
+function clipxShareUrl(){
+ const url=new URL("https://trademalikk-svg.github.io/clipx-ai-studio/");
+ url.searchParams.set("utm_source","clipx_share");
+ url.searchParams.set("utm_medium","social");
+ url.searchParams.set("utm_campaign","organic_referral");
+ return url.toString();
+}
+async function clipxCopySiteLink(){
+ const status=document.getElementById("clipxShareStatus");
+ const url=clipxShareUrl();
+ try{
+  if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(url);}
+  else{const field=document.createElement("textarea");field.value=url;field.style.position="fixed";field.style.opacity="0";document.body.appendChild(field);field.select();const ok=document.execCommand("copy");field.remove();if(!ok)throw new Error("Copy unavailable");}
+  status.textContent="Website link copied. अब इसे WhatsApp, Instagram या कहीं भी भेज सकते हैं।";
+ }catch(error){status.textContent="Link copy नहीं हुआ। Address bar से website link copy करें।";}
+}
+async function clipxShareSite(){
+ const status=document.getElementById("clipxShareStatus");
+ const data={title:"ClipX AI Studio",text:"Free browser-based creator tools for Shorts, Reels, Hindi subtitles and thumbnails. Try ClipX AI Studio:",url:clipxShareUrl()};
+ try{
+  if(navigator.share){await navigator.share(data);status.textContent="Share sheet खुल गया।";}
+  else{await clipxCopySiteLink();}
+ }catch(error){if(error&&error.name==="AbortError"){status.textContent="Sharing cancelled.";}else{await clipxCopySiteLink();}}
+}
+</script>
 </body>
 </html>
