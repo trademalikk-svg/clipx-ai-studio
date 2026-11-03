@@ -76,6 +76,18 @@ jobs:
           robots = pathlib.Path("robots.txt").read_text(encoding="utf-8")
           if "Sitemap: " + base + "sitemap.xml" not in robots:
               raise SystemExit("robots.txt does not point to the public sitemap.")
+          admin = pathlib.Path("admin.html").read_text(encoding="utf-8")
+          if not re.search(r"""<meta\b[^>]*name=["']robots["'][^>]*content=["'][^"']*noindex""", admin, re.I):
+              raise SystemExit("Support admin page must remain noindex.")
+          if base + "admin.html" in urls:
+              raise SystemExit("Private support admin page must not be listed in the public sitemap.")
+          gitignore = pathlib.Path(".gitignore").read_text(encoding="utf-8")
+          for pattern in [".env", ".env.*", "**/.env", "**/.env.*"]:
+              if pattern not in gitignore.splitlines():
+                  raise SystemExit(f".gitignore is missing secret-file rule: {pattern}")
+          env_files = [p for p in pathlib.Path(".").rglob(".env*") if ".git" not in p.parts and p.name != ".env.example"]
+          if env_files:
+              raise SystemExit("Potential environment secret file found in repository: " + ", ".join(map(str, env_files)))
           home = pathlib.Path("index.html").read_text(encoding="utf-8")
           if not re.search(r"const\s+CLIPX_FREE_MODE\s*=\s*true", home):
               raise SystemExit("Free Browser Mode is not explicitly enabled.")
