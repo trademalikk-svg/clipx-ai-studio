@@ -900,6 +900,13 @@ footer a{color:#222!important}
   <button class="primary" id="autoShortsButton" type="button" onclick="makeAutomaticShorts()">Create Shorts Automatically</button>
   <p id="autoShortsStatus" class="muted" aria-live="polite">तैयार होने वाली क्लिप्स यहाँ दिखाई देंगी।</p>
   <div id="autoShortsResults" class="result">No clips created yet.</div>
+  <div class="notice" style="margin-top:16px">
+   <strong>Experimental Activity Suggestions</strong><br>
+   यह AI viral-moment detector नहीं है। यह वीडियो के कुछ frames के बीच दृश्य बदलाव मापकर संभावित हिस्से सुझाता है। हर सुझाव preview करके ही चुनें।
+  </div>
+  <button class="primary secondary" type="button" id="highlightScanButton" onclick="findSmartHighlights()">Find Activity-Based Highlights</button>
+  <p id="highlightStatus" class="muted" aria-live="polite">पहले वीडियो load करें। यह परीक्षण अधिकतम लगभग 120 sample points जाँचेगा।</p>
+  <div id="highlightResults" class="result">अभी कोई activity suggestions नहीं हैं।</div>
 
  </section>
  <section class="card" id="faceTrackingLab">
@@ -1703,7 +1710,7 @@ async function findSmartHighlights(){
  const scores=[];
  try{
   let previous=null;
-  const step=Math.max(1,Math.floor(clipLen/5));
+  const step=Math.max(1,player.duration/120);
   for(let t=0;t<player.duration-1;t+=step){
    await new Promise((resolve,reject)=>{
     const done=()=>{clearTimeout(timer);resolve();};
