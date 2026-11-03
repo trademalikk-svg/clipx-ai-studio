@@ -59,7 +59,7 @@ jobs:
           urls = [node.text for node in sitemap.findall("sm:url/sm:loc", ns)]
           if not urls or len(urls) != len(set(urls)):
               raise SystemExit("Sitemap is empty or contains duplicate URLs.")
-          expected = {base, *(base + name for name in ["creator-tools.html", "about.html", "contact.html", "privacy.html", "terms.html"])}
+          expected = {base, *(base + name for name in ["creator-tools.html", "about.html", "contact.html", "privacy.html", "terms.html", "guides.html", "guide-youtube-shorts.html", "guide-hindi-subtitles.html", "guide-youtube-thumbnail.html"])}
           if set(urls) != expected:
               raise SystemExit("Sitemap URLs do not match the expected public pages.")
           for url in urls:
