@@ -752,6 +752,30 @@ footer a{color:#222!important}
 .hero-robot,.hero-robot-label{display:none!important}
 @media(max-width:760px){.hero-visual-art{flex:auto;width:100%;min-height:190px;height:210px;margin:0}.creator-illustration{max-width:340px;width:100%}}
 </style>
+
+<style id="clipx-desktop-horizontal-navigation">
+@media (min-width: 901px) {
+  body { padding-top: 0 !important; }
+  body > header { position: sticky !important; top: 0 !important; left: auto !important; width: 100% !important; height: auto !important; min-height: 82px; box-sizing: border-box; padding: 14px 3.2% !important; display: flex !important; flex-direction: row !important; align-items: center !important; justify-content: space-between !important; gap: 22px !important; border-right: 0 !important; border-bottom: 1px solid #dedede !important; background: #fff !important; }
+  body > header .logo { font-size: 25px !important; line-height: 1.1; white-space: nowrap; }
+  body > header .header-edition { display: inline-flex !important; margin: 0 auto 0 20px; white-space: nowrap; }
+  body > header .auth-buttons { position: static !important; left: auto !important; right: auto !important; top: auto !important; display: flex; flex-wrap: nowrap; justify-content: flex-end !important; gap: 10px; }
+  body > header .auth-buttons button { white-space: nowrap; }
+  main { display: block !important; width: min(1440px, 94%) !important; max-width: 1440px !important; margin: 0 auto !important; padding: 26px 0 42px !important; box-sizing: border-box; }
+  main > .sidebar { position: static !important; inset: auto !important; width: 100% !important; min-height: 0 !important; height: auto !important; overflow: visible !important; display: flex !important; flex-direction: row !important; align-items: center !important; flex-wrap: wrap !important; gap: 7px !important; padding: 12px 14px !important; margin: 0 0 22px !important; border: 1px solid #e2e2e2 !important; border-radius: 12px !important; background: #fff !important; box-sizing: border-box; }
+  main > .sidebar .sidebar-title { display: none !important; }
+  main > .sidebar a { display: inline-flex !important; align-items: center; justify-content: center; margin: 0 !important; padding: 10px 13px !important; min-height: 40px; border-radius: 8px !important; color: #222 !important; background: #f5f5f5 !important; box-shadow: none !important; font-size: 14px !important; line-height: 1.25; white-space: nowrap; }
+  main > .sidebar a.active, main > .sidebar a:hover, main > .sidebar a:focus { background: #171717 !important; color: #fff !important; }
+  main > .hero, main > section, main > .dashboard-shortcuts { width: 100%; box-sizing: border-box; }
+  .notice[role=note] { width: min(1440px, 94%) !important; max-width: 1440px !important; margin: 18px auto !important; position: static !important; top: auto !important; box-sizing: border-box; }
+  footer { margin-left: 0 !important; }
+  .mobile-bottom-nav { display: none !important; }
+}
+@media (min-width: 901px) and (max-width: 1100px) {
+  body > header { flex-wrap: wrap !important; }
+  main > .sidebar a { font-size: 13px !important; padding: 9px 10px !important; }
+}
+</style>
 </head>
 <body class="clipx-locked">
 <header>
@@ -908,8 +932,8 @@ footer a{color:#222!important}
    <p id="passwordRecoveryMessage" aria-live="polite"></p>
   </div>
   <div class="google-auth-divider" aria-hidden="true"><span>या</span></div>
-  <button class="google-auth-button" id="googleAuthButton" type="button" disabled aria-disabled="true" title="Google provider setup pending"><span class="google-g" aria-hidden="true">G</span> Google Login — Setup Pending</button>
-  <p class="muted" style="font-size:12px;margin:8px 0">Google Login अभी उपलब्ध नहीं है। इसे Google Cloud OAuth और Supabase Provider setup पूरा होने के बाद चालू किया जाएगा। अभी Email + Password से Login / Sign Up करें।</p>
+  <button class="google-auth-button" id="googleAuthButton" type="button" onclick="handleGoogleAuth()" title="Continue with Google"><span class="google-g" aria-hidden="true">G</span> Continue with Google</button>
+  <p class="muted" id="googleAuthSetupNote" style="font-size:12px;margin:8px 0">Google sign-in के लिए Supabase में Google Provider और Google Cloud OAuth Client ID/Secret configure होना जरूरी है।</p>
   <p id="authMessage" class="muted" aria-live="polite"></p>
   <div id="referralDashboard" class="notice" hidden style="margin-top:14px">
    <h3 style="margin:0 0 8px">Your ClipX Referral Rewards</h3>
