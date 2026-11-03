@@ -19,6 +19,7 @@ The public site is configured to avoid unexpected paid-provider charges:
 - Edit SRT subtitles and use supported browser-side speech tools.
 - Generate basic title, description, hashtag and prompt drafts.
 - Use the separate Creator Tools page for thumbnail layouts, script templates, subtitle formatting and text utilities.
+- Read the new Video Guides hub for practical walkthroughs on Shorts editing, Hindi subtitles/SRT and YouTube thumbnails.
 - Experimental face detection/face-follow tools may depend on model downloads and compatible devices.
 
 ## Important limitations
@@ -37,6 +38,7 @@ The public site is configured to avoid unexpected paid-provider charges:
 
 - Live website: https://trademalikk-svg.github.io/clipx-ai-studio/
 - Creator Tools: https://trademalikk-svg.github.io/clipx-ai-studio/creator-tools.html
+- Video Guides: https://trademalikk-svg.github.io/clipx-ai-studio/guides.html
 - The GitHub Pages site is public. The repository is public so the site can be hosted on the free GitHub Pages setup; public visibility does not give visitors permission to change the repository. Keep repository owner/admin access under your control and do not add collaborators unless you choose to.
 
 ## Deployment and checks
