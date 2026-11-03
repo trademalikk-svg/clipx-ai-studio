@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="google-site-verification" content="LQD6s4pAOjI6GeUjCGG-JzTTLx832DSu6K8M7vIcUcw" />
 <meta name="theme-color" content="#090611">
-<title>Free Online Video Editor for Shorts & Reels | ClipX AI Studio</title>
+<title>Free Online Video Editor for Shorts | ClipX AI Studio</title>
 <meta name="description" content="Use ClipX, a free online video editor for Shorts and Reels. Trim clips, split videos, create Hindi subtitles, SRT captions and thumbnails in your browser.">
 <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
 <link rel="canonical" href="https://trademalikk-svg.github.io/clipx-ai-studio/">
@@ -635,6 +635,24 @@ button.secondary,.secondary{background:#38204f;border:1px solid #75439a}
  }
 }
 
+
+/* Public landing content remains crawlable while editing tools stay behind login. */
+.public-intro{max-width:1160px;margin:10px auto 0;padding:0 18px;color:#d9c9ef;font-size:14px;line-height:1.55}
+body.clipx-locked main>section#home,
+body.clipx-locked main>section#video-editor-guide{display:block!important}
+@media(min-width:901px){
+ body.clipx-locked main{display:grid!important;grid-template-columns:minmax(0,1.1fr) minmax(360px,.9fr);align-items:center;gap:22px;width:calc(100% - 80px)!important;max-width:1200px!important;min-height:0;margin:0 auto!important;padding:28px 0 36px!important}
+ body.clipx-locked main>section#home{grid-column:1;grid-row:1;min-width:0}
+ body.clipx-locked main>#authBox{grid-column:2;grid-row:1;display:block!important;width:100%;max-width:none;min-height:0;margin:0!important;padding:26px;border-radius:22px}
+ body.clipx-locked main>section#video-editor-guide{grid-column:1/-1;grid-row:2}
+}
+@media(max-width:900px){
+ body.clipx-locked main{display:flex!important;flex-direction:column;align-items:stretch;gap:14px;width:100%!important;max-width:none!important;margin:0!important;padding:14px 12px 30px!important}
+ body.clipx-locked main>section#home{order:1;width:100%;min-height:0}
+ body.clipx-locked main>#authBox{order:2;width:100%;max-width:560px;margin:0 auto!important}
+ body.clipx-locked main>section#video-editor-guide{order:3;width:100%}
+ body.clipx-locked .public-intro{margin:8px 12px 0;padding:0;font-size:12px}
+}
 </style>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 </head>
@@ -649,6 +667,7 @@ button.secondary,.secondary{background:#38204f;border:1px solid #75439a}
  </div>
 </header>
 <div class="notice" role="note" style="max-width:1200px;margin:14px auto;padding:14px 18px;border:1px solid #4b3a70;border-radius:12px;background:#171225;color:#e8def8;line-height:1.6"><strong>FREE BROWSER MODE:</strong> Basic editing and creator tools are available without a subscription. Cloud rendering and paid third-party AI video generation are disabled to avoid unexpected provider charges. Speech tools or model downloads may use internet data and depend on your device/browser.</div>
+<p class="public-intro">Free online video editor for YouTube Shorts and Instagram Reels: trim clips, split videos by time, create Hindi subtitles and prepare thumbnails in your browser.</p>
 
 <main>
 
