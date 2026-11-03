@@ -1146,7 +1146,36 @@ function handleWorkspaceNavigation(event) {
  history.replaceState(null, "", link.getAttribute("href") || "#"+view);
 }
 document.getElementById("mobileBottomNav")?.addEventListener("click", handleWorkspaceNavigation);
-document.querySelector(".hero-cta[data-toolview]")?.addEventListener("click", handleWorkspaceNavigation);
+
+// Get Started Free must always check the live Supabase session before routing.
+document.querySelector(".hero-cta[data-toolview]")?.addEventListener("click", async function(event) {
+ event.preventDefault();
+ if (!supabaseClient) {
+  showAuth("login");
+  document.getElementById("authMessage").textContent =
+   "Login service अभी उपलब्ध नहीं है। Internet जाँचकर page refresh करें।";
+  return;
+ }
+ const button = this;
+ button.setAttribute("aria-busy", "true");
+ try {
+  const { data, error } = await supabaseClient.auth.getSession();
+  if (error) throw error;
+  if (data.session && data.session.user) {
+   updateAuthControls(data.session.user);
+   showWorkspaceView("prompts");
+  } else {
+   showAuth("login");
+  }
+ } catch (error) {
+  showAuth("login");
+  document.getElementById("authMessage").textContent =
+   "Login status जाँचा नहीं जा सका: " + (error.message || String(error)) +
+   "। Internet जाँचकर दोबारा कोशिश करें।";
+ } finally {
+  button.removeAttribute("aria-busy");
+ }
+});
 </script>
 <script>
 const editorSpeed = document.getElementById("editorSpeed");
