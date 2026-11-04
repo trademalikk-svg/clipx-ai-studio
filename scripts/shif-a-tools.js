@@ -17,6 +17,7 @@
   {id:"education-studio",name:"AI Education",category:"Education",description:"Learning and study tools are planned.",status:"coming-soon"},
   {id:"productivity-studio",name:"AI Productivity",category:"Productivity",description:"Personal productivity and task tools are planned.",status:"coming-soon"}
  ];
+ window.ShifATools=Object.freeze(tools.map(tool=>Object.freeze({...tool})));
  const grid=document.getElementById("toolGrid"),search=document.getElementById("toolSearch"),filter=document.getElementById("categoryFilter");
  [...new Set(tools.map(t=>t.category))].sort().forEach(category=>{const o=document.createElement("option");o.value=category;o.textContent=category;filter.appendChild(o);});
  function render(){
