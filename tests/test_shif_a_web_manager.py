@@ -24,6 +24,15 @@ class WebManagerTests(unittest.TestCase):
         self.assertIn('"/api/tags"', script)
         self.assertIn("Device बंद होने पर local AI भी बंद रहेगा", page)
 
+    def test_offline_shell_cache_excludes_authenticated_api_data(self):
+        worker = (ROOT / "shif-a-manager-sw.js").read_text(encoding="utf-8")
+        self.assertIn("shif-a-owner-manager-v1", worker)
+        self.assertIn('/functions/', worker)
+        self.assertIn('/rest/v1/', worker)
+        self.assertIn('request.method!=="GET"', worker)
+        page = (ROOT / "web-manager.html").read_text(encoding="utf-8")
+        self.assertIn('scripts/shif-a-tools.js', page)
+
     def test_production_actions_are_not_exposed(self):
         page = (ROOT / "web-manager.html").read_text(encoding="utf-8")
         self.assertIn("Owner approval required", page)
