@@ -30,5 +30,21 @@ class ShifATeamAccessTests(unittest.TestCase):
         workflow=(ROOT/".github"/"workflows"/"validate.yml").read_text(encoding="utf-8")
         self.assertIn("deno check supabase/functions/shif-a-team-access/index.ts",workflow)
 
+    def test_owner_can_change_member_role_and_bounded_limits_only(self):
+        source=(ROOT/"supabase"/"functions"/"shif-a-team-access"/"index.ts").read_text(encoding="utf-8")
+        self.assertIn('action === "update_member"',source)
+        self.assertIn('project.user_id !== user.id',source)
+        self.assertIn('"ai_messages_per_24h", 0, 1000',source)
+        self.assertIn('"storage_limit_bytes", 0, 10737418240',source)
+        self.assertIn('"max_file_size_bytes", 1, 20971520',source)
+        self.assertIn('"member_role_changed"',source)
+        self.assertIn('"member_limits_changed"',source)
+
+    def test_owner_can_revoke_pending_invitation(self):
+        source=(ROOT/"supabase"/"functions"/"shif-a-team-access"/"index.ts").read_text(encoding="utf-8")
+        self.assertIn('action === "revoke_invitation"',source)
+        self.assertIn('.eq("status", "pending")',source)
+        self.assertIn('"invitation_revoked"',source)
+
 if __name__ == "__main__":
     unittest.main()
