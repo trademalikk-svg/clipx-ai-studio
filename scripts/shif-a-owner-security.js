@@ -5,7 +5,6 @@ const KEY="sb_publishable_dsVQ5-5VuIG5n_m0qqNjqw__i5sogpL";
 const $=id=>document.getElementById(id);
 const status=$("securityStatus");
 const client=window.supabase.createClient(URL,KEY,{auth:{experimental:{passkey:true}}});
-window.shifAOwnerClient=client;
 function say(message,warning){status.textContent=message;status.className=warning?"status warning":"status";}
 function recoverySay(message,warning){const node=$("recoveryStatus");if(node){node.textContent=message;node.className=warning?"status warning":"status";}}
 async function owner(){
@@ -16,44 +15,75 @@ async function owner(){
  return {ok:p.role==="owner",session};
 }
 async function render(){
- try{const a=await owner();$("signedOut").classList.toggle("hidden",a.ok);$("ownerControls").classList.toggle("hidden",!a.ok);say(a.ok?"Verified Owner session active.":"Owner passkey sign-in के लिए तैयार।");}
+ try{const access=await owner();$("signedOut").classList.toggle("hidden",access.ok);$("ownerControls").classList.toggle("hidden",!access.ok);say(access.ok?"Verified Owner session active.":"Owner passkey sign-in के लिए तैयार।");}
  catch(e){$("signedOut").classList.remove("hidden");$("ownerControls").classList.add("hidden");say("Owner status verify नहीं हो सका: "+e.message,true);}
 }
 $("directLogin").addEventListener("click",async()=>{
- const b=$("directLogin");b.disabled=true;let signed=false;say("Device authenticator खुल रहा है…");
- try{const {data,error}=await client.auth.signInWithPasskey();if(error)throw error;if(!data.session)throw new Error("Supabase session नहीं मिली।");signed=true;const a=await owner();if(!a.ok)throw new Error("यह passkey Owner account से संबंधित नहीं है।");say("Owner Direct Passkey Login सफल।");await render();}
+ const button=$("directLogin");button.disabled=true;let signed=false;say("Device authenticator खुल रहा है…");
+ try{const {data,error}=await client.auth.signInWithPasskey();if(error)throw error;if(!data.session)throw new Error("Supabase session नहीं मिली।");signed=true;const access=await owner();if(!access.ok)throw new Error("यह passkey Owner account से संबंधित नहीं है।");say("Owner Direct Passkey Login सफल।");await render();}
  catch(e){if(signed){try{await client.auth.signOut();}catch(_){say("Owner verification विफल हुई। कृपया तुरंत Sign out करें।",true);return;}}say(e.message||"Passkey login असफल रहा।",true);await render();}
- finally{b.disabled=false;}
+ finally{button.disabled=false;}
 });
 $("registerPasskey").addEventListener("click",async()=>{
- const b=$("registerPasskey");b.disabled=true;
- try{const a=await owner();if(!a.ok)throw new Error("Owner verification required.");const {data,error}=await client.auth.registerPasskey();if(error)throw error;say("Passkey इस account में register हो गई।");await listPasskeys();}
- catch(e){say(e.message||"Passkey registration असफल रही।",true);}finally{b.disabled=false;}
+ const button=$("registerPasskey");button.disabled=true;
+ try{const access=await owner();if(!access.ok)throw new Error("Owner verification required.");const {error}=await client.auth.registerPasskey();if(error)throw error;say("Passkey इस account में register हो गई।");await listPasskeys();}
+ catch(e){say(e.message||"Passkey registration असफल रही।",true);}finally{button.disabled=false;}
 });
 async function listPasskeys(){
- const a=await owner();if(!a.ok)throw new Error("Owner verification required.");
+ const access=await owner();if(!access.ok)throw new Error("Owner verification required.");
  const {data,error}=await client.auth.passkey.list();if(error)throw error;
- const box=$("passkeyList");box.replaceChildren();if(!data||!data.length){box.textContent="अभी कोई passkey registered नहीं है।";return;}
- const ul=document.createElement("ul");data.forEach(x=>{const li=document.createElement("li");li.textContent=(x.friendly_name||"Passkey")+" · "+new Date(x.created_at).toLocaleString("hi-IN");ul.append(li);});box.append(ul);
- const select=$("revokePasskeyId");if(select){select.replaceChildren();data.forEach(x=>{const option=document.createElement("option");option.value=x.id;option.textContent=(x.friendly_name||"Passkey")+" · "+new Date(x.created_at).toLocaleDateString("hi-IN");select.append(option);});}
+ const box=$("passkeyList");box.replaceChildren();
+ const select=$("revokePasskeyId");if(select)select.replaceChildren();
+ if(!data||!data.length){box.textContent="अभी कोई passkey registered नहीं है।";if(select){const o=document.createElement("option");o.value="";o.textContent="कोई passkey उपलब्ध नहीं";select.append(o);}return;}
+ const ul=document.createElement("ul");
+ data.forEach(item=>{
+  const li=document.createElement("li");li.textContent=(item.friendly_name||"Passkey")+" · "+new Date(item.created_at).toLocaleString("hi-IN");ul.append(li);
+  if(select){const option=document.createElement("option");option.value=item.id;option.textContent=(item.friendly_name||"Passkey")+" · "+new Date(item.created_at).toLocaleDateString("hi-IN");select.append(option);}
+ });
+ box.append(ul);
 }
 $("listPasskeys").addEventListener("click",async()=>{try{await listPasskeys();say("Passkey list प्राप्त हुई।");}catch(e){say(e.message,true);}});
 $("signOut").addEventListener("click",async()=>{const {error}=await client.auth.signOut();if(error)say(error.message,true);else{say("Sign out हो गया।");await render();}});
 $("sendPasswordReset").addEventListener("click",async()=>{
- const b=$("sendPasswordReset"),email=$("recoveryEmail").value.trim().toLowerCase();
+ const button=$("sendPasswordReset"),email=$("recoveryEmail").value.trim().toLowerCase();
  if(!email||email.length>254||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){recoverySay("कृपया valid verified email दर्ज करें।",true);return;}
- b.disabled=true;
- try{const {error}=await client.auth.resetPasswordForEmail(email,{redirectTo:"https://trademalikk-svg.github.io/clipx-ai-studio/owner-security.html"});if(error)throw error;recoverySay("यदि इस email से account मौजूद है, तो reset instructions भेज दी गई हैं। Inbox और spam folder देखें।");}
- catch(_){recoverySay("अभी request पूरी नहीं हो सकी। कुछ देर बाद दोबारा कोशिश करें।",true);}finally{b.disabled=false;}
-});
-client.auth.onAuthStateChange(event=>{if(event==="PASSWORD_RECOVERY"){$("newPasswordPanel").classList.remove("hidden");recoverySay("Verified recovery link स्वीकार हुआ। नया password सेट करें।");}});
-$("saveNewOwnerPassword").addEventListener("click",async()=>{
- const a=$("newOwnerPassword").value,b=$("confirmOwnerPassword").value,button=$("saveNewOwnerPassword");
- if(a.length<10||a.length>128){recoverySay("Password कम से कम 10 characters का होना चाहिए।",true);return;}
- if(a!==b){recoverySay("दोनों password एक जैसे नहीं हैं।",true);return;}
  button.disabled=true;
- try{const {error}=await client.auth.updateUser({password:a});if(error)throw error;$("newOwnerPassword").value="";$("confirmOwnerPassword").value="";$("newPasswordPanel").classList.add("hidden");recoverySay("Password update हो गया। अब नए password से login करें।");}
+ try{const {error}=await client.auth.resetPasswordForEmail(email,{redirectTo:"https://trademalikk-svg.github.io/clipx-ai-studio/owner-security.html"});if(error)throw error;recoverySay("यदि इस email से account मौजूद है, तो reset instructions भेज दी गई हैं। Inbox और spam folder देखें।");}
+ catch(_){recoverySay("अभी request पूरी नहीं हो सकी। कुछ देर बाद दोबारा कोशिश करें।",true);}finally{button.disabled=false;}
+});
+client.auth.onAuthStateChange(event=>{if(event==="PASSWORD_RECOVERY"){$("newPasswordPanel").classList.remove("hidden");recoverySay("Verified recovery link स्वीकार हुआ। नया password सेट करें。");}});
+$("saveNewOwnerPassword").addEventListener("click",async()=>{
+ const first=$("newOwnerPassword").value,second=$("confirmOwnerPassword").value,button=$("saveNewOwnerPassword");
+ if(first.length<10||first.length>128){recoverySay("Password कम से कम 10 characters का होना चाहिए।",true);return;}
+ if(first!==second){recoverySay("दोनों password एक जैसे नहीं हैं।",true);return;}
+ button.disabled=true;
+ try{const {error}=await client.auth.updateUser({password:first});if(error)throw error;$("newOwnerPassword").value="";$("confirmOwnerPassword").value="";$("newPasswordPanel").classList.add("hidden");recoverySay("Password update हो गया। अब नए password से login करें।");}
  catch(_){recoverySay("Password update नहीं हो सका। Recovery link की validity जाँचें।",true);}finally{button.disabled=false;}
+});
+async function recoveryRequest(payload){
+ const {data:{session},error}=await client.auth.getSession();if(error)throw error;
+ if(!session)throw new Error("पहले Owner account में sign in करें।");
+ const access=await owner();if(!access.ok)throw new Error("Owner verification required.");
+ const response=await fetch(URL+"/functions/v1/shif-a-owner-recovery",{
+  method:"POST",headers:{apikey:KEY,Authorization:"Bearer "+session.access_token,"Content-Type":"application/json"},body:JSON.stringify(payload)
+ });
+ const result=await response.json().catch(()=>({}));if(!response.ok)throw new Error(result.error||"Recovery service request failed.");return result;
+}
+const generate=$("generateRecoveryCodes");
+generate.addEventListener("click",async()=>{
+ generate.disabled=true;$("recoveryCodesList").textContent="";$("recoveryCodesResult").classList.add("hidden");
+ try{const result=await recoveryRequest({action:"generate"});if(!Array.isArray(result.codes)||result.codes.length!==8)throw new Error("Server response अधूरा है।");$("recoveryCodesList").textContent=result.codes.join("\n");$("recoveryCodesResult").classList.remove("hidden");$("recoveryCodeStatus").textContent="8 नए codes बने। इन्हें सुरक्षित offline जगह पर लिखें।";}
+ catch(e){$("recoveryCodeStatus").textContent=e.message||"Codes generate नहीं हो सके।";}
+ finally{generate.disabled=false;}
+});
+$("hideRecoveryCodes").addEventListener("click",()=>{$("recoveryCodesList").textContent="";$("recoveryCodesResult").classList.add("hidden");$("recoveryCodeStatus").textContent="Codes इस screen से छिपा दिए गए। फिर देखने के लिए नया set generate करना होगा।";});
+$("consumeRecoveryCodeButton").addEventListener("click",async()=>{
+ const code=$("consumeRecoveryCode").value.trim(),passkeyId=$("revokePasskeyId").value;
+ if(!code||!passkeyId){$("recoveryCodeStatus").textContent="Recovery code और passkey दोनों चुनें।";return;}
+ const button=$("consumeRecoveryCodeButton");button.disabled=true;
+ try{const result=await recoveryRequest({action:"revoke_with_code",code,passkey_id:passkeyId});$("consumeRecoveryCode").value="";$("recoveryCodeStatus").textContent=result.audit_recorded===false?"Passkey revoke हुई, लेकिन audit confirmation नहीं मिली।":"Passkey revoke हो गई। Recovery code अब दोबारा इस्तेमाल नहीं होगा।";await listPasskeys();}
+ catch(e){$("recoveryCodeStatus").textContent=e.message||"Passkey revoke नहीं हो सकी।";}
+ finally{button.disabled=false;}
 });
 render();
 })();
