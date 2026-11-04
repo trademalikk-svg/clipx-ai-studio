@@ -870,6 +870,17 @@ footer{background:#041226!important;color:#9bb8d2!important;border-top:1px solid
 @media(max-width:760px){body>header{position:sticky!important;padding:10px 12px!important;gap:8px!important;min-height:60px!important;flex-wrap:wrap!important}.top-platform-nav{order:3;width:100%;overflow-x:auto;flex:0 0 100%;padding:3px 0}.top-platform-nav a{font-size:11px;padding:8px 9px}.body>header .logo{font-size:19px!important}body>header .auth-buttons button{font-size:11px!important;padding:8px 9px!important}main{display:flex!important;flex-direction:column!important;width:100%!important;padding:10px 10px 90px!important;gap:12px!important}main>.sidebar{position:static!important;order:0;width:100%!important;height:auto!important;min-height:0!important;display:flex!important;flex-direction:row!important;overflow-x:auto!important;white-space:nowrap;padding:8px!important}.sidebar-title{display:none!important}main>.sidebar a{flex:0 0 auto!important;padding:9px 11px!important;font-size:11px!important}.workspace-content{order:1;width:100%}.quick-rail{order:2;width:100%;display:grid;grid-template-columns:1fr}.hero{min-height:0!important;padding:18px!important;flex-direction:column!important}.hero-visual-art{min-height:150px!important;height:160px!important}.tool-category-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.tool-category{min-height:122px;padding:11px}.platform-tool-library{padding:13px!important}.platform-section-heading{align-items:flex-start}.platform-section-heading h2{font-size:19px}.catalog-link{font-size:10px}.mobile-bottom-nav{display:flex!important;position:fixed!important;bottom:0;left:0;right:0;z-index:9999;justify-content:space-around;gap:4px;padding:8px 5px calc(8px + env(safe-area-inset-bottom));background:#041226f5!important;border-top:1px solid #14588b!important;backdrop-filter:blur(14px)}.mobile-bottom-nav a{color:#c8def3!important;font-size:10px;text-decoration:none;display:flex;flex-direction:column;align-items:center;gap:3px}.mobile-bottom-nav a span{font-size:17px}.mobile-bottom-nav .bottom-create{background:#087ee8;border-radius:50%;padding:7px 12px;color:white!important}.quick-rail .rail-panel{padding:13px}.dashboard-support-grid{grid-template-columns:1fr!important}}
 @media(min-width:761px) and (max-width:1180px){.tool-category-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 </style>
+<style id="shif-a-layout-auth-and-navigation-fix">
+/* Keep the existing Supabase login gate working after the dashboard wrapper was added. */
+body.clipx-locked main{grid-template-columns:minmax(0,1fr)!important;display:block!important;width:min(1120px,96%)!important}
+body.clipx-locked main>.sidebar,body.clipx-locked main>.quick-rail,body.clipx-locked .mobile-bottom-nav{display:none!important}
+body.clipx-locked .workspace-content{display:grid!important;grid-template-columns:minmax(0,1.1fr) minmax(320px,.9fr);align-items:center;gap:18px}
+body.clipx-locked .workspace-content>section:not(#home):not(#authBox){display:none!important}
+body.clipx-locked .workspace-content>#home{grid-column:1;grid-row:1;display:flex!important}
+body.clipx-locked .workspace-content>#authBox{grid-column:2;grid-row:1;display:block!important;width:100%;max-width:none;margin:0!important}
+body.clipx-locked .workspace-content>#video-editor-guide{display:none!important}
+@media(max-width:760px){body.clipx-locked .workspace-content{display:flex!important;flex-direction:column!important;align-items:stretch!important}body.clipx-locked .workspace-content>#home,body.clipx-locked .workspace-content>#authBox{width:100%!important;max-width:none!important}}
+</style>
 </head>
 <body class="clipx-locked">
 <header>
@@ -1377,8 +1388,8 @@ function showWorkspaceView(view) {
   settings:["backendConnection","authBox","paymentSandbox"],
   billing:["paymentSandbox"]
  };
- const allowed = groups[view] || groups.home;
- document.querySelectorAll("main > section").forEach(section => {
+ const allowed = [...(groups[view] || groups.home), ...(view === "home" || view === "tools" ? ["platformTools"] : [])];
+ document.querySelectorAll(".workspace-content > section").forEach(section => {
   section.hidden = !allowed.includes(section.id);
   section.classList.toggle("view-hidden", !allowed.includes(section.id));
  });
