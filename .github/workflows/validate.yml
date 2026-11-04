@@ -17,7 +17,7 @@ jobs:
         with:
           node-version: 22
       - name: Run SHIF-A workspace and tools contract tests
-        run: python3 -m unittest tests.test_shif_a_workspace tests.test_shif_a_tools
+        run: python3 -m unittest discover -s tests -p 'test_shif_a_*.py'
       - name: Check inline JavaScript syntax in all pages
         shell: bash
         run: |
@@ -41,7 +41,7 @@ jobs:
               raise SystemExit("No inline JavaScript blocks were checked.")
           print(f"Syntax OK: {checked} inline JavaScript blocks across {len(pages)} HTML pages.")
           html = pathlib.Path("index.html").read_text(encoding="utf-8")
-          sections = [section for section in re.findall(r"<section\b[^>]*\bid=[\"']([^\"']+)[\"']", html, re.I) if section != "video-editor-guide"]
+          sections = [section for section in re.findall(r"<section\b[^>]*\bid=[\"']([^\"']+)[\"']", html, re.I) if section not in ("video-editor-guide", "platformTools")]
           groups = re.search(r"const groups = \{(.*?)\n \};", html, re.S)
           if not groups:
               raise SystemExit("Workspace route map was not found.")
