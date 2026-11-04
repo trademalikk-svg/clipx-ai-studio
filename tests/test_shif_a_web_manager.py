@@ -52,6 +52,16 @@ class WebManagerTests(unittest.TestCase):
         self.assertIn('const supported=new Set(', script)
         self.assertIn('stream:true', script)
 
+    def test_tool_studio_has_language_controls_and_examples(self):
+        page = (ROOT / "tool-studio.html").read_text(encoding="utf-8")
+        script = (ROOT / "scripts/shif-a-tool-studio.js").read_text(encoding="utf-8")
+        self.assertIn('id="responseLanguage"', page)
+        self.assertIn('id="outputLength"', page)
+        self.assertIn('id="promptTemplate"', page)
+        self.assertIn('"video-prompts":', script)
+        self.assertIn('Respond in Hindi.', script)
+        self.assertIn('Keep the answer concise.', script)
+
     def test_production_actions_are_not_exposed(self):
         page = (ROOT / "web-manager.html").read_text(encoding="utf-8")
         self.assertIn("Owner approval required", page)
