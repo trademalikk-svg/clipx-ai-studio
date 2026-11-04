@@ -34,7 +34,41 @@ $("directLogin").addEventListener("click",async()=>{
   const access=await getOwnerAccess();
   if(!access.owner)throw new Error("यह passkey किसी Owner account से संबंधित नहीं है।");
   say("Owner Direct Passkey Login सफल।");
-  await render();
+  await 
+const recoveryStatus=$("recoveryStatus");
+function recoverySay(message,warning){if(recoveryStatus){recoveryStatus.textContent=message;recoveryStatus.className=warning?"status warning":"status";}}
+$("sendPasswordReset").addEventListener("click",async()=>{
+ const button=$("sendPasswordReset");const email=$("recoveryEmail").value.trim().toLowerCase();
+ if(!email||email.length>254||!/^\S+@\S+\.\S+$/.test(email)){recoverySay("कृपया valid verified email दर्ज करें।",true);return;}
+ button.disabled=true;recoverySay("यदि इस email से account मौजूद है, तो password reset instructions भेज दी जाएँगी।");
+ try{
+  const {error}=await client.auth.resetPasswordForEmail(email,{redirectTo:"https://trademalikk-svg.github.io/clipx-ai-studio/owner-security.html"});
+  if(error)throw error;
+  recoverySay("यदि इस email से account मौजूद है, तो password reset instructions भेज दी गई हैं। अपना inbox और spam folder देखें।");
+  const {error:auditError}=await (async()=>{const {data:{session}}=await client.auth.getSession();if(!session)return {error:null};return await fetch(SUPABASE_URL+"/functions/v1/shif-a-security-audit",{method:"POST",headers:{apikey:SUPABASE_PUBLISHABLE_KEY,Authorization:"Bearer "+session.access_token,"Content-Type":"application/json"},body:JSON.stringify({event_type:"password_reset_requested",outcome:"allowed",metadata:{method:"email"}})}).then(async r=>({error:r.ok?null:new Error("Audit unavailable")}));})();
+  if(auditError)console.warn("Password reset audit was not recorded.");
+ }catch(error){recoverySay("अभी request पूरी नहीं हो सकी। कुछ देर बाद दोबारा कोशिश करें।",true);}
+ finally{button.disabled=false;}
+});
+client.auth.onAuthStateChange((event)=>{
+ if(event==="PASSWORD_RECOVERY"){$("newPasswordPanel").classList.remove("hidden");recoverySay("Verified recovery link स्वीकार हो गया। अब नया password सेट करें।");}
+});
+$("saveNewOwnerPassword").addEventListener("click",async()=>{
+ const first=$("newOwnerPassword").value,second=$("confirmOwnerPassword").value,button=$("saveNewOwnerPassword");
+ if(first.length<10||first.length>128){recoverySay("Password कम से कम 10 characters का होना चाहिए।",true);return;}
+ if(first!==second){recoverySay("दोनों password एक जैसे नहीं हैं।",true);return;}
+ button.disabled=true;
+ try{
+  const {error}=await client.auth.updateUser({password:first});
+  if(error)throw error;
+  $("newOwnerPassword").value="";$("confirmOwnerPassword").value="";
+  $("newPasswordPanel").classList.add("hidden");
+  recoverySay("Password सफलतापूर्वक update हो गया। अब नए password से login करें।");
+ }catch(error){recoverySay("Password update नहीं हो सका। Recovery link की validity जाँचें या नया link मँगाएँ।",true);}
+ finally{button.disabled=false;}
+});
+
+render();
  }catch(error){
   if(authenticated){try{await client.auth.signOut();}catch(signOutError){say("Owner verification विफल हुई और automatic sign out की पुष्टि नहीं हो सकी। कृपया तुरंत Sign out करें।",true);button.disabled=false;return;}}
   say(error.message||"Passkey login असफल रहा।",true);
