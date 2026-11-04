@@ -77,5 +77,21 @@ class ShifAProjectsContractTests(unittest.TestCase):
         self.assertIn("(select auth.uid()) = user_id",sql)
         self.assertIn("references auth.users(id) on delete cascade",sql)
 
+    def test_team_access_foundation_is_server_managed_and_owner_cannot_be_invited(self):
+        sql=(ROOT/"supabase"/"migrations"/"20261105120000_shif_a_team_access_foundation.sql").read_text(encoding="utf-8")
+        self.assertIn("role in ('admin','editor','ai_user','viewer')",sql)
+        self.assertIn("role <> 'owner'",sql)
+        self.assertIn("revoke all on public.shif_a_project_invitations from anon, public, authenticated",sql.lower())
+        self.assertIn("revoke insert, update, delete on public.shif_a_access_audit",sql.lower())
+        self.assertIn("enable row level security",sql.lower())
+        self.assertIn("token_hash text not null unique",sql.lower())
+
+    def test_owner_team_access_design_documents_cost_and_rollout_limits(self):
+        doc=(ROOT/"docs"/"SHIF-A-OWNER-TEAM-ACCESS.md").read_text(encoding="utf-8")
+        self.assertIn("no SHIF-A subscription charge",doc)
+        self.assertIn("third-party compute",doc)
+        self.assertIn("trusted server-side function",doc)
+        self.assertIn("explicit approval",doc)
+
 if __name__=="__main__":
     unittest.main()
