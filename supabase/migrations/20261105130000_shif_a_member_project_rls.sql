@@ -177,16 +177,12 @@ create policy "Editors upload SHIF-A project objects"
   );
 
 drop policy if exists "Users delete own SHIF-A project objects" on storage.objects;
-create policy "Editors remove own SHIF-A upload objects"
+create policy "Owners and admins remove SHIF-A upload objects"
   on storage.objects for delete to authenticated
   using (
     bucket_id = 'shif-a-project-files'
     and (
-      (
-        (storage.foldername(name))[1] = (select auth.uid())::text
-        and public.shif_a_can_edit_project(((storage.foldername(name))[2])::uuid)
-      )
-      or public.shif_a_project_role(((storage.foldername(name))[2])::uuid) in ('owner','admin')
+      public.shif_a_project_role(((storage.foldername(name))[2])::uuid) in ('owner','admin')
     )
   );
 
