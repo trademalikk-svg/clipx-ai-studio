@@ -16,6 +16,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
+      - name: Run SHIF-A workspace and tools contract tests
+        run: python3 -m unittest tests.test_shif_a_workspace tests.test_shif_a_tools
       - name: Check inline JavaScript syntax in all pages
         shell: bash
         run: |
@@ -59,7 +61,7 @@ jobs:
           urls = [node.text for node in sitemap.findall("sm:url/sm:loc", ns)]
           if not urls or len(urls) != len(set(urls)):
               raise SystemExit("Sitemap is empty or contains duplicate URLs.")
-          expected = {base, *(base + name for name in ["creator-tools.html", "about.html", "contact.html", "privacy.html", "terms.html", "guides.html", "guide-youtube-shorts.html", "guide-hindi-subtitles.html", "guide-youtube-thumbnail.html", "guide-hindi-shorts.html", "split-video-into-multiple-clips.html"])}
+          expected = {base, base + "ai-tools.html", *(base + name for name in ["creator-tools.html", "about.html", "contact.html", "privacy.html", "terms.html", "guides.html", "guide-youtube-shorts.html", "guide-hindi-subtitles.html", "guide-youtube-thumbnail.html", "guide-hindi-shorts.html", "split-video-into-multiple-clips.html"])}
           if set(urls) != expected:
               raise SystemExit("Sitemap URLs do not match the expected public pages.")
           for url in urls:
