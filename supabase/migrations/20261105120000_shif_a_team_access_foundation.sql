@@ -147,3 +147,14 @@ $$;
 
 revoke all on function public.shif_a_accept_project_invitation(uuid,text,text) from public,anon,authenticated;
 grant execute on function public.shif_a_accept_project_invitation(uuid,text,text) to service_role;
+
+
+-- Include explicit revocation in the immutable access audit vocabulary.
+alter table public.shif_a_access_audit
+  drop constraint if exists shif_a_access_audit_action_check;
+alter table public.shif_a_access_audit
+  add constraint shif_a_access_audit_action_check check (action in (
+    'invitation_created','invitation_accepted','invitation_revoked',
+    'member_role_changed','member_limits_changed','member_suspended',
+    'member_reactivated','member_revoked'
+  ));
