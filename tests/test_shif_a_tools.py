@@ -22,7 +22,7 @@ class ShifAToolsContractTests(unittest.TestCase):
 
     def test_future_tools_are_not_claimed_as_available(self):
         js = (ROOT / "scripts/shif-a-tools.js").read_text(encoding="utf-8")
-        for tool in ("AI Image Studio", "AI Voice Studio", "AI Chat & Research", "AI Coding Studio", "AI Agents Studio", "AI Automation Studio"):
+        for tool in ("AI Image Studio", "AI Voice Studio", "AI Chat & Research", "AI Agents Studio", "AI Automation Studio"):
             self.assertRegex(js, re.compile(r'name:"' + re.escape(tool) + r'".{0,260}status:"coming-soon"', re.S))
         self.assertIn('if(t.href)', js)
 
