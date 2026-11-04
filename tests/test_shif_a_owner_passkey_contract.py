@@ -14,14 +14,15 @@ class OwnerPasskeyContractTests(unittest.TestCase):
         script = (ROOT / "scripts/shif-a-owner-security.js").read_text(encoding="utf-8")
         self.assertIn("signInWithPasskey", script)
         self.assertIn("shif-a-access", script)
-        self.assertIn("if(!access.owner)", script)
+        self.assertIn('return {ok:p.role==="owner",session}', script)
+        self.assertIn('if(!access.ok)', script)
         self.assertIn("signOut", script)
 
     def test_passkey_enrollment_requires_server_confirmed_owner(self):
         script = (ROOT / "scripts/shif-a-owner-security.js").read_text(encoding="utf-8")
         self.assertIn("registerPasskey", script)
-        self.assertIn("getOwnerAccess", script)
-        self.assertIn("Passkey registration is restricted to the Owner account", script)
+        self.assertIn("async function owner()", script)
+        self.assertIn("Owner verification required.", script)
 
     def test_no_biometric_data_or_client_side_owner_flag(self):
         script = (ROOT / "scripts/shif-a-owner-security.js").read_text(encoding="utf-8")
