@@ -14,8 +14,8 @@ class ShifAGuideContractTests(unittest.TestCase):
 
     def test_guide_is_truthful_about_unavailable_features(self):
         html=(ROOT/"user-guide.html").read_text(encoding="utf-8")
-        self.assertIn("Project saving अभी connect नहीं है",html)
-        self.assertIn("AI task अभी execute नहीं",html)
+        self.assertIn("Project backend जुड़ने के बाद सक्रिय होगी",html)
+        self.assertIn("task complete होने का दावा नहीं करता",html)
         self.assertIn("Coming Soon",html)
 
     def test_guide_search_uses_text_content(self):
