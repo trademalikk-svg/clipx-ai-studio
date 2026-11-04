@@ -117,19 +117,15 @@ Deno.serve(async (req: Request) => {
     return respond({ revoked: false, error: "Recovery code अमान्य है या पहले इस्तेमाल हो चुका है।" }, 400);
   }
 
+  const { data: credentials, error: credentialError } = await admin.auth.admin.passkey.listPasskeys({ userId: user.id });
+  if (credentialError || !Array.isArray(credentials) || !credentials.some((item: { id?: string }) => item.id === body.passkey_id)) {
+    return respond({ revoked: false, error: "Selected passkey नहीं मिली। Passkey list refresh करें।" }, 404);
+  }
+
   const { data: consumed, error: consumeError } = await admin.rpc("shif_a_consume_recovery_code", {
     p_user_id: user.id, p_code_id: matchedId,
   });
   if (consumeError || consumed !== true) return respond({ revoked: false, error: "Recovery code अमान्य है या पहले इस्तेमाल हो चुका है।" }, 409);
-
-  const { data: credentials, error: credentialError } = await admin.auth.admin.passkey.listPasskeys({ userId: user.id });
-  if (credentialError || !Array.isArray(credentials) || !credentials.some((item: { id?: string }) => item.id === body.passkey_id)) {
-    await admin.rpc("shif_a_write_security_event", {
-      p_actor_user_id: user.id, p_event_type: "recovery_code_consumed",
-      p_outcome: "error", p_metadata: { method: "passkey_revocation" },
-    });
-    return respond({ revoked: false, code_consumed: true, error: "Selected passkey नहीं मिली। नया recovery code आवश्यक होगा।" }, 404);
-  }
   const { error: deleteError } = await admin.auth.admin.passkey.deletePasskey({
     userId: user.id, passkeyId: body.passkey_id,
   });
