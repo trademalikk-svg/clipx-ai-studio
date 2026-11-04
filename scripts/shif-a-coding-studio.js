@@ -222,6 +222,56 @@ class MainActivity : Activity() {
     return new Blob([...localParts, ...centralParts, end], { type: "application/zip" });
   }
 
+  const STORAGE_KEY = "shifA.codingStudio.project.v1";
+
+  function saveProject() {
+    if (!fileNames().length) {
+      setStatus("पहले starter project बनाएँ।");
+      return;
+    }
+    try {
+      const saved = { version: 1, mode: state.mode, files: state.files, activeFile: state.activeFile, savedAt: new Date().toISOString() };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(saved));
+      setStatus("Project इसी device के browser में save हो गया। Browser data clear करने पर यह मिट सकता है।");
+    } catch (error) {
+      setStatus("इस device पर save नहीं हो पाया। Storage full या browser storage disabled हो सकता है। ZIP export इस्तेमाल करें।");
+    }
+  }
+
+  function restoreProject() {
+    let saved;
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) {
+        setStatus("इस browser में कोई saved project नहीं मिला।");
+        return;
+      }
+      saved = JSON.parse(raw);
+    } catch (error) {
+      setStatus("Saved project पढ़ा नहीं जा सका। ZIP export backup इस्तेमाल करें।");
+      return;
+    }
+    if (!saved || saved.version !== 1 || !["website", "android"].includes(saved.mode) ||
+        !saved.files || typeof saved.files !== "object" || Array.isArray(saved.files) ||
+        !Object.values(saved.files).every((value) => typeof value === "string")) {
+      setStatus("Saved project format मान्य नहीं है।");
+      return;
+    }
+    state.mode = saved.mode;
+    state.files = saved.files;
+    state.activeFile = Object.prototype.hasOwnProperty.call(state.files, saved.activeFile)
+      ? saved.activeFile : (fileNames()[0] || "");
+    byId("projectMode").value = state.mode;
+    if (state.activeFile) selectFile(state.activeFile);
+    else {
+      byId("codeEditor").value = "";
+      byId("activeFile").textContent = "No file";
+      renderFileList();
+    }
+    renderPreview();
+    setStatus("इस device पर save किया गया project restore हो गया।");
+  }
+
   function exportProject() {
     if (!fileNames().length) {
       setStatus("पहले starter project बनाएँ।");
@@ -247,6 +297,8 @@ class MainActivity : Activity() {
     }
     byId("buildButton").addEventListener("click", () => createProject(byId("projectMode").value));
     byId("resetButton").addEventListener("click", () => createProject(state.mode));
+    byId("saveButton").addEventListener("click", saveProject);
+    byId("restoreButton").addEventListener("click", restoreProject);
     byId("exportButton").addEventListener("click", exportProject);
     byId("codeEditor").addEventListener("input", () => {
       if (!state.activeFile) return;
