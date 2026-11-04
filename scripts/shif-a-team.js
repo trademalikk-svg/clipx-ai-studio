@@ -37,23 +37,37 @@
   list.replaceChildren();
   if(!project){list.className="empty";list.textContent="पहले project चुनें।";return;}
   const owner=project.user_id===session.user.id;
-  const {data,error}=await client.from("shif_a_project_members").select("user_id,role,status,created_at").eq("project_id",project.id).order("created_at",{ascending:true});
+  const {data,error}=await client.from("shif_a_project_members").select("user_id,role,status,created_at,ai_messages_per_24h,storage_limit_bytes,max_file_size_bytes").eq("project_id",project.id).order("created_at",{ascending:true});
   if(error)throw error;
   if(!data?.length){list.className="empty";list.textContent="अभी कोई accepted team member नहीं है।";return;}
   list.className="";
   data.forEach(member=>{
    const row=text("div","");row.className="saved-project";
    const title=text("strong",member.role.toUpperCase()+" · "+member.status);row.append(title);
-   row.append(text("p","User ID: "+member.user_id));
+   row.append(text("p","Member ID: "+member.user_id));
    if(owner&&member.status==="active"){
-    const button=text("button","Revoke Access");button.type="button";button.style.marginTop="8px";
-    button.addEventListener("click",async()=>{
-     if(!window.confirm("इस member का project access revoke करें?"))return;
-     button.disabled=true;
-     try{await callEdge({action:"revoke_member",project_id:project.id,member_user_id:member.user_id});status("Member access revoke हो गया।");await loadMembers();}
-     catch(e){button.disabled=false;status("Revoke नहीं हुआ: "+e.message,true);}
+    const role=document.createElement("select");
+    ["admin","editor","ai_user","viewer"].forEach(v=>role.add(new Option(v,v)));
+    role.value=member.role;role.style.margin="6px";role.setAttribute("aria-label","Member role");
+    const ai=document.createElement("input");ai.type="number";ai.min="0";ai.max="1000";ai.value=String(member.ai_messages_per_24h);ai.placeholder="AI messages / 24h";ai.style.width="130px";ai.style.margin="6px";
+    const storage=document.createElement("input");storage.type="number";storage.min="0";storage.max="10240";storage.value=String(Math.floor(member.storage_limit_bytes/1048576));storage.placeholder="Storage MB";storage.style.width="105px";storage.style.margin="6px";
+    const maxFile=document.createElement("input");maxFile.type="number";maxFile.min="1";maxFile.max="20";maxFile.value=String(Math.max(1,Math.floor(member.max_file_size_bytes/1048576)));maxFile.placeholder="Max file MB";maxFile.style.width="105px";maxFile.style.margin="6px";
+    const save=text("button","Save Role & Limits");save.type="button";save.style.margin="6px";
+    save.addEventListener("click",async()=>{
+     const aiN=Number(ai.value),storageN=Number(storage.value),fileN=Number(maxFile.value);
+     if(!Number.isInteger(aiN)||aiN<0||aiN>1000||!Number.isInteger(storageN)||storageN<0||storageN>10240||!Number.isInteger(fileN)||fileN<1||fileN>20){status("Limits: AI 0–1000, storage 0–10240 MB, file 1–20 MB.",true);return;}
+     save.disabled=true;
+     try{await callEdge({action:"update_member",project_id:project.id,member_user_id:member.user_id,role:role.value,ai_messages_per_24h:aiN,storage_limit_bytes:storageN*1048576,max_file_size_bytes:fileN*1048576});status("Member role और limits update हो गईं।");await loadMembers();}
+     catch(e){save.disabled=false;status("Update नहीं हुआ: "+e.message,true);}
     });
-    row.append(button);
+    const revoke=text("button","Revoke Access");revoke.type="button";revoke.style.margin="6px";
+    revoke.addEventListener("click",async()=>{
+     if(!window.confirm("इस member का project access revoke करें?"))return;
+     revoke.disabled=true;
+     try{await callEdge({action:"revoke_member",project_id:project.id,member_user_id:member.user_id});status("Member access revoke हो गया।");await loadMembers();}
+     catch(e){revoke.disabled=false;status("Revoke नहीं हुआ: "+e.message,true);}
+    });
+    row.append(text("p","Role and limits · Storage values MB में"),role,ai,storage,maxFile,save,revoke);
    }
    list.append(row);
   });
