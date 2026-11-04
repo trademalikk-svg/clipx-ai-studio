@@ -15,7 +15,7 @@ input{width:100%;max-width:440px;padding:12px;border:1px solid #315d83;border-ra
 .status{min-height:26px;color:#8de7c6;line-height:1.5}.warning{color:#ffd48b}.hidden{display:none!important}
 li{margin:8px 0;line-height:1.5}.tag{display:inline-block;border:1px solid #286b9e;border-radius:99px;padding:5px 10px;color:#aeeaff;font-size:12px}
 @media(max-width:600px){main{width:calc(100% - 20px);margin:14px auto}.panel{padding:16px}}
-</style>
+pre{white-space:pre-wrap;word-break:break-word;background:#04101f;border:1px solid #28547a;border-radius:10px;padding:12px;color:#b9f4ff;font-size:14px;line-height:1.8}</style>
 </head>
 <body>
 <header><a href="dashboard.html">✦ SHIF-A AI · Owner Security</a></header>
@@ -63,6 +63,24 @@ li{margin:8px 0;line-height:1.5}.tag{display:inline-block;border:1px solid #286b
 <input id="confirmOwnerPassword" type="password" autocomplete="new-password" minlength="10" maxlength="128">
 <button id="saveNewOwnerPassword" type="button">Password Update करें</button>
 </div>
+</section>
+
+<section class="panel">
+<h2>One-time Recovery Codes</h2>
+<p class="muted">8 backup codes बनेंगे। इन्हें केवल एक बार दिखाया जाएगा। हर code एक बार ही इस्तेमाल हो सकता है और 365 दिनों में expire होगा। Generate करने के लिए verified Owner session और Supabase TOTP MFA का AAL2 जरूरी है।</p>
+<button id="generateRecoveryCodes" type="button">8 Recovery Codes बनाएं</button>
+<div id="recoveryCodesResult" class="hidden">
+<p class="status warning">इन codes को अभी सुरक्षित offline जगह पर लिखें। इस पेज को बंद करने के बाद दोबारा नहीं दिखाया जाएगा।</p>
+<pre id="recoveryCodesList"></pre>
+<button id="hideRecoveryCodes" class="secondary" type="button">Codes छिपाएँ</button>
+</div>
+<hr style="border:0;border-top:1px solid #245071;margin:18px 0">
+<h2>एक Recovery Code इस्तेमाल करें</h2>
+<p class="muted">यह विकल्प केवल पहले से signed-in और server-verified Owner session में अतिरिक्त one-time verification के लिए है। यह अकेले login या MFA bypass नहीं करता।</p>
+<label for="consumeRecoveryCode">Recovery Code</label>
+<input id="consumeRecoveryCode" type="text" autocomplete="off" maxlength="40" placeholder="XXXX-XXXX-XXXX-XXXX-XXXX-XXXX-XXXX-XXXX">
+<button id="consumeRecoveryCodeButton" type="button">Code Verify और Consume करें</button>
+<p id="recoveryCodeStatus" class="status" role="status" aria-live="polite"></p>
 </section>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.105.0"></script>
