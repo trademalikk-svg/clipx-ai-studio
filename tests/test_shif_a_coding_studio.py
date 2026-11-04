@@ -20,7 +20,7 @@ class ShifACodingStudioTests(unittest.TestCase):
 
     def test_website_and_android_templates_are_exportable(self):
         js = (ROOT / "scripts" / "shif-a-coding-studio.js").read_text(encoding="utf-8")
-        for token in ('website', 'android', 'MainActivity.kt', 'AndroidManifest.xml', 'exportProject', 'zipProject', 'application/zip', 'shif-a-android-project.zip'):
+        for token in ('website', 'android', 'MainActivity.kt', 'AndroidManifest.xml', 'exportProject', 'zipProject', 'application/zip', 'shif-a-android-project.zip', 'localStorage.setItem', 'localStorage.getItem', 'restoreProject', 'saveProject'):
             self.assertIn(token, js)
 
     def test_catalog_marks_studio_limited_until_ai_engine_exists(self):
