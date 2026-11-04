@@ -3,6 +3,11 @@
 const $=id=>document.getElementById(id);
 let authorized=false,logLines=[];
 function log(message){const line=new Date().toLocaleTimeString()+"  "+message;logLines.unshift(line);logLines=logLines.slice(0,80);$("activityLog").textContent=logLines.join("\n");}
+async function registerOfflineShell(){
+ if(!("serviceWorker" in navigator)){log("Offline shell caching is not supported by this browser.");return;}
+ try{const reg=await navigator.serviceWorker.register("./shif-a-manager-sw.js");await navigator.serviceWorker.ready;log("Offline shell cache ready. Reloading offline still requires a fresh online Owner verification.");}
+ catch(e){log("Offline shell registration failed: "+e.message);}
+}
 function network(){const online=navigator.onLine;$("networkState").textContent=online?"Network: Online":"Network: Offline";$("networkState").className="status "+(online?"good":"warn");$("modeMetric").textContent=online?"Hybrid":"Offline";}
 function setStatus(id,msg,kind){const e=$(id);e.textContent=msg;e.className="status "+(kind||"");}
 async function verifyOwner(){
@@ -36,7 +41,7 @@ async function scanWorkspace(){
 }
 window.addEventListener("online",network);window.addEventListener("offline",network);
 document.addEventListener("DOMContentLoaded",async()=>{
- network();$("checkLocal").addEventListener("click",()=>checkLocal().catch(e=>setStatus("localResult",e.message,"bad")));
+ network();registerOfflineShell();$("checkLocal").addEventListener("click",()=>checkLocal().catch(e=>setStatus("localResult",e.message,"bad")));
  $("scanTools").addEventListener("click",()=>{try{scanRegistry();}catch(e){setStatus("scanResult",e.message,"bad");}});
  $("refreshScan").addEventListener("click",()=>scanWorkspace().catch(e=>setStatus("scanResult",e.message,"bad")));
  $("clearLog").addEventListener("click",()=>{logLines=[];$("activityLog").textContent="Local activity cleared.";});
