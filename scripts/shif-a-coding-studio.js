@@ -130,7 +130,7 @@ class MainActivity : Activity() {
       .replace(/<link[^>]+href=["']style\.css["'][^>]*>/i, "")
       .replace(/<script[^>]+src=["']app\.js["'][^>]*><\/script>/i, "")
       .replace(/<\/head>/i, "<style>" + css + "</style></head>")
-      .replace(/<\/body>/i, "<script>" + script + "<\\/script></body>");
+      .replace(/<\/body>/i, "<script>" + script + "</script></body>");
     byId("previewFrame").srcdoc = documentHtml;
   }
 
