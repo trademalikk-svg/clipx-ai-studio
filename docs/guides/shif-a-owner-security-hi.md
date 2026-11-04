@@ -33,3 +33,21 @@ RP ID बदलने से पहले सावधानी रखें: �
 - सामान्य camera से retina/iris scan का दावा नहीं किया जाता।
 - Recovery codes, Owner ID/password recovery और optional supplementary recovery phrase अगले implementation चरण हैं।
 - इस code change से live project में passkeys enable नहीं होतीं।
+
+
+## Owner ID और Password Recovery
+
+1. इस project में Owner ID अलग username नहीं है; यह वही verified email है जो Supabase account में इस्तेमाल होता है।
+2. Owner Security page पर **Owner ID / Password Recovery** section खोलें।
+3. अपना verified email लिखकर **Password Reset Link भेजें** दबाएँ।
+4. अगर उस email से account मौजूद है, तो Supabase की ओर से reset instructions आएँगी। Inbox और Spam folder देखें।
+5. Email में मिले link को उसी browser में खोलें। Owner Security page पर नया password और confirmation भरें।
+6. Password update होने के बाद नए password से sign in करें। Password reset अपने-आप किसी account को Owner role नहीं देता।
+
+सुरक्षा के लिए पेज यह नहीं बताता कि email से account मौजूद है या नहीं। Owner ID भूल गए हों तो अपने account का verified email पहचानना जरूरी है; email-only प्रक्रिया किसी दूसरे account की ID उजागर नहीं करती।
+
+## अभी बाकी
+
+- Recovery codes का secure one-time issue/consume और lost-device recovery flow अभी implement नहीं हुआ है।
+- Optional Lover Name अभी enable नहीं है। इसे कभी भी अकेले login या MFA bypass के रूप में इस्तेमाल नहीं किया जाएगा।
+- सभी devices से session revocation और passkey revocation का पूरा recovery flow अगला चरण है।
