@@ -48,13 +48,15 @@ Deno.serve(async (req: Request) => {
   } catch { return respond({ error: "Invalid request." }, 400); }
 
   const action = body.action;
-  if (action !== "generate" && action !== "consume") return respond({ error: "Unsupported action." }, 400);
+  if (action !== "generate" && action !== "revoke_with_code") return respond({ error: "Unsupported action." }, 400);
   const auth = createClient(url, anonKey, { auth: { persistSession: false, autoRefreshToken: false } });
   const { data: authData, error: authError } = await auth.auth.getUser(jwt);
   const user = authData?.user;
   if (authError || !user || !user.email_confirmed_at) return respond({ error: "Verified sign-in required." }, 401);
 
-  const admin = createClient(url, serviceKey, { auth: { persistSession: false, autoRefreshToken: false } });
+  const admin = createClient(url, serviceKey, {
+    auth: { persistSession: false, autoRefreshToken: false, experimental: { passkey: true } },
+  });
   const { data: membershipData, error: membershipError } = await admin.rpc("shif_a_get_membership", { p_user_id: user.id });
   const membership = Array.isArray(membershipData) ? membershipData[0] : null;
   if (membershipError || membership?.role !== "owner") return respond({ error: "Owner access required." }, 403);
@@ -62,8 +64,9 @@ Deno.serve(async (req: Request) => {
   if (action === "generate" && readAal(jwt) !== "aal2") {
     return respond({ error: "Recovery codes बनाने से पहले authenticator MFA (AAL2) verify करें." }, 403);
   }
+  const rateAction = action === "generate" ? "generate" : "consume";
   const { data: allowed, error: rateError } = await admin.rpc("shif_a_check_recovery_rate", {
-    p_user_id: user.id, p_action: action,
+    p_user_id: user.id, p_action: rateAction,
   });
   if (rateError || allowed !== true) return respond({ error: "बहुत अधिक प्रयास हुए हैं। 15 मिनट बाद दोबारा कोशिश करें." }, 429);
 
@@ -91,11 +94,13 @@ Deno.serve(async (req: Request) => {
     return respond({ codes: rawCodes, count: rawCodes.length, expires_in_days: 365, shown_once: true });
   }
 
-  if (typeof body.code !== "string" || body.code.length < 16 || body.code.length > 64) {
-    return respond({ valid: false, error: "Recovery code अमान्य है या पहले इस्तेमाल हो चुका है।" }, 400);
+  if (typeof body.code !== "string" || body.code.length < 16 || body.code.length > 64
+      || typeof body.passkey_id !== "string"
+      || !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(body.passkey_id)) {
+    return respond({ revoked: false, error: "Recovery code या passkey चयन अमान्य है।" }, 400);
   }
   const normalized = normalizeCode(body.code);
-  if (!/^[a-f0-9]{32}$/.test(normalized)) return respond({ valid: false, error: "Recovery code अमान्य है या पहले इस्तेमाल हो चुका है।" }, 400);
+  if (!/^[a-f0-9]{32}$/.test(normalized)) return respond({ revoked: false, error: "Recovery code अमान्य है या पहले इस्तेमाल हो चुका है।" }, 400);
 
   const { data: verifiers, error: listError } = await admin.rpc("shif_a_list_recovery_verifiers", { p_user_id: user.id });
   if (listError || !Array.isArray(verifiers)) return respond({ error: "Recovery verification unavailable." }, 503);
@@ -107,18 +112,39 @@ Deno.serve(async (req: Request) => {
   if (!matchedId) {
     await admin.rpc("shif_a_write_security_event", {
       p_actor_user_id: user.id, p_event_type: "recovery_code_consumed",
-      p_outcome: "denied", p_metadata: { method: "recovery_code" },
+      p_outcome: "denied", p_metadata: { method: "passkey_revocation" },
     });
-    return respond({ valid: false, error: "Recovery code अमान्य है या पहले इस्तेमाल हो चुका है।" }, 400);
+    return respond({ revoked: false, error: "Recovery code अमान्य है या पहले इस्तेमाल हो चुका है।" }, 400);
   }
+
   const { data: consumed, error: consumeError } = await admin.rpc("shif_a_consume_recovery_code", {
     p_user_id: user.id, p_code_id: matchedId,
   });
-  if (consumeError || consumed !== true) return respond({ valid: false, error: "Recovery code अमान्य है या पहले इस्तेमाल हो चुका है।" }, 409);
+  if (consumeError || consumed !== true) return respond({ revoked: false, error: "Recovery code अमान्य है या पहले इस्तेमाल हो चुका है।" }, 409);
+
+  const { data: credentials, error: credentialError } = await admin.auth.admin.passkey.listPasskeys({ userId: user.id });
+  if (credentialError || !Array.isArray(credentials) || !credentials.some((item: { id?: string }) => item.id === body.passkey_id)) {
+    await admin.rpc("shif_a_write_security_event", {
+      p_actor_user_id: user.id, p_event_type: "recovery_code_consumed",
+      p_outcome: "error", p_metadata: { method: "passkey_revocation" },
+    });
+    return respond({ revoked: false, code_consumed: true, error: "Selected passkey नहीं मिली। नया recovery code आवश्यक होगा।" }, 404);
+  }
+  const { error: deleteError } = await admin.auth.admin.passkey.deletePasskey({
+    userId: user.id, passkeyId: body.passkey_id,
+  });
+  if (deleteError) {
+    console.error("SHIF-A passkey revocation failed:", deleteError.message);
+    await admin.rpc("shif_a_write_security_event", {
+      p_actor_user_id: user.id, p_event_type: "recovery_code_consumed",
+      p_outcome: "error", p_metadata: { method: "passkey_revocation" },
+    });
+    return respond({ revoked: false, code_consumed: true, error: "Code consume हुआ, लेकिन passkey revoke नहीं हो सकी। नया code generate करें और फिर प्रयास करें।" }, 503);
+  }
   const { error: auditError } = await admin.rpc("shif_a_write_security_event", {
-    p_actor_user_id: user.id, p_event_type: "recovery_code_consumed",
+    p_actor_user_id: user.id, p_event_type: "passkey_revoked",
     p_outcome: "allowed", p_metadata: { method: "recovery_code" },
   });
-  if (auditError) return respond({ error: "Code consume हुआ, लेकिन audit confirmation विफल रही। Security support से संपर्क करें।" }, 503);
-  return respond({ valid: true, one_time: true });
+  if (auditError) return respond({ revoked: true, audit_recorded: false, warning: "Passkey revoke हुई; audit confirmation विफल रही।" }, 200);
+  return respond({ revoked: true, audit_recorded: true });
 });
