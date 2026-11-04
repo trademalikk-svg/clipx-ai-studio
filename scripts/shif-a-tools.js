@@ -7,7 +7,7 @@
   {id:"thumbnail-tools",name:"Thumbnail Creator",category:"Design",description:"Browser-based thumbnail and creator design utilities.",status:"limited",href:"creator-tools.html"},
   {id:"image-studio",name:"AI Image Studio",category:"Image",description:"Image generation and editing engines are not connected yet.",status:"coming-soon"},
   {id:"voice-studio",name:"AI Voice Studio",category:"Voice",description:"Text-to-speech and audio generation engines are not connected yet.",status:"coming-soon"},
-  {id:"ai-chat",name:"AI Chat & Research",category:"Chat & Research",description:"Model-backed assistant and research tools are planned.",status:"coming-soon"},
+  {id:"ai-chat",name:"AI Chat & Research",category:"Chat & Research",description:"Connect a free local Ollama model or another OpenAI-compatible endpoint. Provider usage and device limits apply.",status:"limited",href:"chat.html"},
   {id:"writing-studio",name:"AI Writing Studio",category:"Writing",description:"Model-backed writing and document workflows are planned.",status:"coming-soon"},
   {id:"coding-studio",name:"AI Coding Studio",category:"Coding",description:"Free local website and Android starter templates, code editor, website preview and source bundle export. AI generation and APK compilation are not connected.",status:"limited",href:"coding-studio.html"},
   {id:"agents-studio",name:"AI Agents Studio",category:"Agents",description:"Custom task agents and tool permissions are planned.",status:"coming-soon"},
