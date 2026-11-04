@@ -35,6 +35,7 @@ async function listPasskeys(){
  const {data,error}=await client.auth.passkey.list();if(error)throw error;
  const box=$("passkeyList");box.replaceChildren();if(!data||!data.length){box.textContent="अभी कोई passkey registered नहीं है।";return;}
  const ul=document.createElement("ul");data.forEach(x=>{const li=document.createElement("li");li.textContent=(x.friendly_name||"Passkey")+" · "+new Date(x.created_at).toLocaleString("hi-IN");ul.append(li);});box.append(ul);
+ const select=$("revokePasskeyId");if(select){select.replaceChildren();data.forEach(x=>{const option=document.createElement("option");option.value=x.id;option.textContent=(x.friendly_name||"Passkey")+" · "+new Date(x.created_at).toLocaleDateString("hi-IN");select.append(option);});}
 }
 $("listPasskeys").addEventListener("click",async()=>{try{await listPasskeys();say("Passkey list प्राप्त हुई।");}catch(e){say(e.message,true);}});
 $("signOut").addEventListener("click",async()=>{const {error}=await client.auth.signOut();if(error)say(error.message,true);else{say("Sign out हो गया।");await render();}});
