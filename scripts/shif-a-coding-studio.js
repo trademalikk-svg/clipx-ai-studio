@@ -146,31 +146,97 @@ class MainActivity : Activity() {
       : "Website starter created locally. Edit the files and preview your changes.");
   }
 
+  function crc32(bytes) {
+    let crc = 0xffffffff;
+    for (const byte of bytes) {
+      crc ^= byte;
+      for (let bit = 0; bit < 8; bit++) crc = (crc >>> 1) ^ (0xedb88320 & -(crc & 1));
+    }
+    return (crc ^ 0xffffffff) >>> 0;
+  }
+
+  function zipProject(files) {
+    const encoder = new TextEncoder();
+    const localParts = [];
+    const centralParts = [];
+    let localOffset = 0;
+    const now = new Date();
+    const dosTime = (now.getHours() << 11) | (now.getMinutes() << 5) | Math.floor(now.getSeconds() / 2);
+    const dosDate = ((Math.max(1980, now.getFullYear()) - 1980) << 9) | ((now.getMonth() + 1) << 5) | now.getDate();
+
+    for (const [name, content] of Object.entries(files)) {
+      const nameBytes = encoder.encode(name);
+      const data = encoder.encode(content);
+      const checksum = crc32(data);
+      const local = new Uint8Array(30 + nameBytes.length);
+      const lv = new DataView(local.buffer);
+      lv.setUint32(0, 0x04034b50, true);
+      lv.setUint16(4, 20, true);
+      lv.setUint16(6, 0x0800, true);
+      lv.setUint16(8, 0, true);
+      lv.setUint16(10, dosTime, true);
+      lv.setUint16(12, dosDate, true);
+      lv.setUint32(14, checksum, true);
+      lv.setUint32(18, data.length, true);
+      lv.setUint32(22, data.length, true);
+      lv.setUint16(26, nameBytes.length, true);
+      lv.setUint16(28, 0, true);
+      local.set(nameBytes, 30);
+      localParts.push(local, data);
+
+      const central = new Uint8Array(46 + nameBytes.length);
+      const cv = new DataView(central.buffer);
+      cv.setUint32(0, 0x02014b50, true);
+      cv.setUint16(4, 20, true);
+      cv.setUint16(6, 20, true);
+      cv.setUint16(8, 0x0800, true);
+      cv.setUint16(10, 0, true);
+      cv.setUint16(12, dosTime, true);
+      cv.setUint16(14, dosDate, true);
+      cv.setUint32(16, checksum, true);
+      cv.setUint32(20, data.length, true);
+      cv.setUint32(24, data.length, true);
+      cv.setUint16(28, nameBytes.length, true);
+      cv.setUint16(30, 0, true);
+      cv.setUint16(32, 0, true);
+      cv.setUint16(34, 0, true);
+      cv.setUint16(36, 0, true);
+      cv.setUint32(38, 0, true);
+      cv.setUint32(42, localOffset, true);
+      central.set(nameBytes, 46);
+      centralParts.push(central);
+      localOffset += local.length + data.length;
+    }
+
+    const centralSize = centralParts.reduce((sum, part) => sum + part.length, 0);
+    const end = new Uint8Array(22);
+    const ev = new DataView(end.buffer);
+    ev.setUint32(0, 0x06054b50, true);
+    ev.setUint16(4, 0, true);
+    ev.setUint16(6, 0, true);
+    ev.setUint16(8, centralParts.length, true);
+    ev.setUint16(10, centralParts.length, true);
+    ev.setUint32(12, centralSize, true);
+    ev.setUint32(16, localOffset, true);
+    ev.setUint16(20, 0, true);
+    return new Blob([...localParts, ...centralParts, end], { type: "application/zip" });
+  }
+
   function exportProject() {
     if (!fileNames().length) {
       setStatus("पहले starter project बनाएँ।");
       return;
     }
-    const bundle = {
-      format: "shif-a-project-bundle",
-      version: 1,
-      projectType: state.mode,
-      exportedAt: new Date().toISOString(),
-      files: state.files,
-      notes: state.mode === "android"
-        ? ["Source files only.", "Open in Android Studio with compatible Android SDK and Gradle.", "APK compilation and signing are not performed here."]
-        : ["Static website source bundle.", "Open index.html in a browser.", "No hosting service is activated by this export."]
-    };
-    const blob = new Blob([JSON.stringify(bundle, null, 2)], { type: "application/json" });
+    const blob = zipProject(state.files);
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = state.mode === "android" ? "shif-a-android-project.json" : "shif-a-website-project.json";
+    link.download = state.mode === "android" ? "shif-a-android-project.zip" : "shif-a-website-project.zip";
     document.body.appendChild(link);
     link.click();
     link.remove();
     URL.revokeObjectURL(url);
-    setStatus("Project source bundle export शुरू किया गया।");
+    setStatus("ZIP source project export शुरू किया गया।");
   }
 
   function boot() {
