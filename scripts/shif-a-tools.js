@@ -16,6 +16,32 @@
   {id:"business-studio",name:"AI Business Tools",category:"Business",description:"Business and marketing assistants are planned.",status:"coming-soon"},
   {id:"education-studio",name:"AI Education",category:"Education",description:"Learning and study tools are planned.",status:"coming-soon"},
   {id:"productivity-studio",name:"AI Productivity",category:"Productivity",description:"Personal productivity and task tools are planned.",status:"coming-soon"}
+,
+  {id:"translation-studio",name:"AI Translator",category:"Language",description:"Context-aware translation workflows.",status:"coming-soon"},
+  {id:"transcription-studio",name:"Audio Transcription",category:"Voice",description:"Convert audio into editable text.",status:"coming-soon"},
+  {id:"meeting-notes",name:"Meeting Notes Assistant",category:"Productivity",description:"Summarize meetings and extract action items.",status:"coming-soon"},
+  {id:"presentation-studio",name:"Presentation Builder",category:"Documents",description:"Create structured slide outlines and content.",status:"coming-soon"},
+  {id:"spreadsheet-assistant",name:"Spreadsheet Assistant",category:"Business",description:"Clean and analyse spreadsheet data.",status:"coming-soon"},
+  {id:"data-analyst",name:"AI Data Analyst",category:"Business",description:"Explore datasets and explain trends.",status:"coming-soon"},
+  {id:"seo-studio",name:"SEO Assistant",category:"Marketing",description:"Plan keywords and on-page SEO improvements.",status:"coming-soon"},
+  {id:"social-media-studio",name:"Social Media Planner",category:"Marketing",description:"Build content calendars and post drafts.",status:"coming-soon"},
+  {id:"ad-copy-studio",name:"Ad Copy Generator",category:"Marketing",description:"Draft campaign copy for review.",status:"coming-soon"},
+  {id:"brand-kit",name:"Brand Identity Assistant",category:"Design",description:"Develop brand positioning and visual direction.",status:"coming-soon"},
+  {id:"logo-concepts",name:"Logo Concept Studio",category:"Design",description:"Prepare logo concepts and generation briefs.",status:"coming-soon"},
+  {id:"image-upscale",name:"Image Enhancement",category:"Image",description:"Image cleanup and resizing workflows.",status:"coming-soon"},
+  {id:"background-removal",name:"Background Remover",category:"Image",description:"Remove or replace image backgrounds.",status:"coming-soon"},
+  {id:"voice-cleanup",name:"Audio Cleanup",category:"Voice",description:"Prepare cleaner voice recordings.",status:"coming-soon"},
+  {id:"music-assistant",name:"Music & Sound Planner",category:"Voice",description:"Create sound design briefs and music plans.",status:"coming-soon"},
+  {id:"subtitle-studio",name:"Subtitle & Caption Studio",category:"Video",description:"Generate and format video subtitles.",status:"coming-soon"},
+  {id:"video-script",name:"Video Script Writer",category:"Video",description:"Write scene-by-scene video scripts.",status:"coming-soon"},
+  {id:"video-summary",name:"Video Summarizer",category:"Video",description:"Summarize videos and extract key moments.",status:"coming-soon"},
+  {id:"video-dubbing",name:"Video Dubbing",category:"Video",description:"Plan translated voice tracks and dubbing.",status:"coming-soon"},
+  {id:"web-research",name:"Web Research Assistant",category:"Chat & Research",description:"Organize sourced research from approved sources.",status:"coming-soon"},
+  {id:"fact-checker",name:"Fact Check Assistant",category:"Chat & Research",description:"Review claims against cited sources.",status:"coming-soon"},
+  {id:"code-reviewer",name:"Code Review Assistant",category:"Coding",description:"Inspect code for correctness and maintainability.",status:"coming-soon"},
+  {id:"api-builder",name:"API & Integration Builder",category:"Coding",description:"Design API contracts and integration scaffolds.",status:"coming-soon"},
+  {id:"workflow-builder",name:"Workflow Designer",category:"Automation",description:"Design workflows with approval gates.",status:"coming-soon"},
+  {id:"email-assistant",name:"Email & Reply Assistant",category:"Writing",description:"Draft structured email replies and follow-ups.",status:"coming-soon"}
  ];
  window.ShifATools=Object.freeze(tools.map(tool=>Object.freeze({...tool})));
  const grid=document.getElementById("toolGrid"),search=document.getElementById("toolSearch"),filter=document.getElementById("categoryFilter");
