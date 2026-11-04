@@ -19,6 +19,7 @@
 - Do not apply SQL migrations or deploy Edge Functions to production as part of branch implementation. Production rollout requires a separate explicit approval.
 - Preserve existing ClipX authentication, free-mode safeguards, dashboard, tools catalog, and Coding Studio.
 - Provide a Hindi, mobile-first usage guide explaining setup, login, recovery, and device revocation.
+- Put an optional Owner-entered **Lover Name** check at the very end of recovery options. The Owner supplies the value during trusted setup; never prefill or invent it. It is a weak supplementary check only, never standalone authentication or an MFA/verified-channel bypass. Store only a salted verifier, do not reveal the saved value, rate-limit attempts, audit attempts, and notify the verified channel. If unset, normal recovery remains available.
 - Never claim 100% unhackable security.
 
 ---
@@ -128,12 +129,12 @@ git commit -m "feat: add owner passkey authentication"
 - Test: `tests/test_shif_a_owner_recovery_contract.py` (proposed)
 
 **Interfaces:**
-- Recovery endpoints: `POST /functions/v1/shif-a-owner-recovery` with actions `request-id-recovery`, `request-password-reset`, `consume-recovery-code`, and `revoke-lost-authenticator`.
+- Recovery endpoints: `POST /functions/v1/shif-a-owner-recovery` with actions `request-id-recovery`, `request-password-reset`, `consume-recovery-code`, `verify-final-fallback`, and `revoke-lost-authenticator`.
 - Browser module exposes `requestOwnerIdRecovery()`, `requestPasswordReset()`, `consumeRecoveryCode(code)`, and `revokeLostAuthenticator(credentialId)`.
 
 - [ ] **Step 1: Add failing contract tests**
 
-Assert recovery responses do not reveal whether an account exists; codes are high-entropy, stored only as salted/hashed verifiers, expire, and can be consumed once; invalid/replayed/expired codes fail; recovery requires the registered verified channel and additional verification; successful recovery revokes selected lost passkeys and active sessions/refresh tokens where supported; every attempt creates a minimal audit event.
+Assert recovery responses do not reveal whether an account exists; codes are high-entropy, stored only as salted/hashed verifiers, expire, and can be consumed once; invalid/replayed/expired codes fail; recovery requires the registered verified channel and additional verification; the optional final Lover Name value is entered by the Owner, stored only as a salted verifier, never returned to the browser, rate-limited, audited, and cannot authorize recovery by itself; successful recovery revokes selected lost passkeys and active sessions/refresh tokens where supported; every attempt creates a minimal audit event.
 
 - [ ] **Step 2: Verify the relevant failure**
 
@@ -143,7 +144,7 @@ Expected: tests fail because recovery endpoint and recovery-code schema do not e
 
 - [ ] **Step 3: Implement the minimum behavior**
 
-Add one-time recovery codes generated only after authenticated Owner enrollment; display them once with Hindi instructions to store offline. Persist only salted/hashed verifiers. Use Supabase's supported verified email password-reset flow for password resets and generic responses to prevent account enumeration. Owner ID recovery returns or delivers the ID only through the previously verified recovery channel after successful verification. Require recent MFA or an unused recovery code to revoke a lost passkey. Revoke sessions using supported Supabase Auth administrative capabilities from the server, then require fresh authentication. For loss of all authenticators and codes, provide a documented manual verification process; do not add an email-only MFA bypass. Camera-based retina/iris scanning is explicitly not implemented.
+Add one-time recovery codes generated only after authenticated Owner enrollment; display them once with Hindi instructions to store offline. Persist only salted/hashed verifiers. Use Supabase's supported verified email password-reset flow for password resets and generic responses to prevent account enumeration. Owner ID recovery returns or delivers the ID only through the previously verified recovery channel after successful verification. Require recent MFA or an unused recovery code to revoke a lost passkey. Implement the optional Lover Name as the final supplementary check only; the Owner supplies it during trusted setup, it is never prefilled or displayed later, only a salted verifier is stored, and it must never replace verified-channel/MFA/recovery-code proof. Revoke sessions using supported Supabase Auth administrative capabilities from the server, then require fresh authentication. For loss of all authenticators and codes, provide a documented manual verification process; do not add an email-only MFA bypass. Camera-based retina/iris scanning is explicitly not implemented.
 
 - [ ] **Step 4: Verify the focused pass**
 
@@ -217,7 +218,7 @@ git commit -m "feat: add owner security center and Hindi guide"
 
 1. **Owner ID format and delivery:** The current project uses Supabase email/password identity. Decide whether Owner ID is a separate public username mapped to the verified Supabase user, or whether the verified email remains the login identifier and Owner ID is a recovery/display alias. Recommendation: keep Supabase email as the authentication identifier initially; add a separate non-secret Owner ID alias only if product UX requires it.
 2. **Passkey account discovery:** Decide whether to support discoverable passkey sign-in from the Owner login screen before an email is entered, or require Owner ID/email first and then offer the passkey. Recommendation: require Owner ID/email first for the initial release; it simplifies account selection and avoids exposing account enumeration.
-3. **Recovery channel:** Confirm which verified recovery channel(s) the Owner can access and whether a separate recovery email should be enrolled. No address is assumed in this plan.
+3. **Recovery channel:** Confirm which verified recovery channel(s) the Owner can access and whether a separate recovery email should be enrolled. No address is assumed in this plan. The optional Lover Name fallback is user-entered during trusted setup and remains supplementary only.
 4. **Eye/iris:** No dedicated eye scanner will be built for ordinary phones. Support is limited to whatever modality the device OS performs behind WebAuthn user verification.
 5. **Session revocation semantics:** Confirm whether recovery should revoke all sessions on every device or allow the Owner to preserve the current trusted session. Recommendation: revoke all sessions after password/account recovery; allow selective session revocation for a lost device when the platform supports it.
 6. **Deployment approval:** SQL migration, Edge Function deployment, and Owner bootstrap are separate production actions and require explicit approval after branch tests and security review.
