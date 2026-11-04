@@ -8,6 +8,8 @@
 <div class="layout"><aside class="panel settings"><h2 style="margin:0;font-size:16px">Connection Settings</h2>
 <label>Project Context<select id="projectSelect" disabled><option value="">Loading private projects…</option></select></label>
 <label>Saved Conversations<select id="threadSelect" disabled><option value="">Loading saved chats…</option></select></label>
+<label>Project Files<select id="projectFiles" multiple size="5" disabled aria-describedby="fileContextHelp"><option value="">Select a project first</option></select></label>
+<button id="loadFileContext" class="secondary" type="button">Attach Selected Text Files</button>p class="small" id="fileContextHelp">Only TXT, MD, CSV and JSON are read. Max 64 KB per file / 128 KB total. Selected text is sent to your chosen AI provider when you send a prompt.</p>
 <div class="row"><button id="saveChat" type="button">Save Chat</button><button id="loadChat" class="secondary" type="button">Load Selected</button></div>
 <label>API Base URL<input id="baseUrl" type="url" value="http://localhost:11434/v1" autocomplete="url"></label>
 <label>Model Name<input id="modelName" value="qwen2.5:3b" maxlength="120" placeholder="e.g. qwen2.5:3b"></label>
