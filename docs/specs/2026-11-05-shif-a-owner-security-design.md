@@ -15,11 +15,13 @@
 ## Owner sign-in
 
 1. First-time enrollment requires a trusted, manually authorized Owner bootstrap. An email address alone must never grant Owner privileges.
-2. The Owner signs in using the existing verified account credentials and completes a second factor (MFA).
-3. The Owner registers a WebAuthn passkey on the device. The browser/operating system may offer fingerprint, face recognition, or device PIN/pattern/password according to device capability.
-4. On later visits, the Owner may select the registered passkey. If the device supports biometric verification, the operating system can prompt for it and return a cryptographic assertion to the website. On success, the server validates the assertion and creates the authenticated session.
-5. If biometric verification is unavailable, the user may use the device's supported screen-lock method or the account's approved fallback authentication.
-6. New devices require full account authentication and MFA before a new passkey can be enrolled.
+2. Initial passkey enrollment happens only after the Owner signs in using the existing verified account credentials and completes MFA.
+3. The Owner registers a discoverable WebAuthn passkey (resident credential) on the device, with user verification required.
+4. **Direct passkey sign-in (selected):** On later visits, the Owner can choose “Owner Passkey Login” without entering an email or password. The server issues a discoverable-credential challenge; the browser invokes WebAuthn with no account identifier; the verified credential ID and user handle map to the pre-enrolled Owner account. The server checks the private Owner membership record and only then creates a short-lived Supabase magic-link token using the server-side Admin API. The browser exchanges that one-time token hash with Supabase Auth to establish the normal Supabase session. The token hash is never returned before successful passkey verification, is single-use, and is not logged.
+5. The Supabase session is therefore still issued by Supabase Auth; SHIF-A never fabricates JWTs or stores user passwords.
+6. The Owner registers a WebAuthn passkey on the device. The browser/operating system may offer fingerprint, face recognition, or device PIN/pattern/password according to device capability.
+7. On success, the server validates the assertion, checks the Owner membership and returns the one-time Supabase handoff token described above.
+8. If biometric verification is unavailable, the OS may use its supported screen-lock method. New devices require full account authentication and MFA before a new passkey can be enrolled.
 
 **Important capability boundary:** A website cannot demand fingerprint specifically on every device. WebAuthn authenticates possession of a registered authenticator and user verification; the operating system decides whether that verification uses fingerprint, face, PIN, or another supported method. A website does not receive the biometric itself.
 
