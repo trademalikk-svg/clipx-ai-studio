@@ -168,6 +168,7 @@ jobs:
         run: |
           node --check scripts/shif-a-coding-studio.js
           node --check scripts/shif-a-tools.js
+          node --check scripts/shif-a-chat.js
           node --check scripts/shif-a-owner-security.js
       - name: Check FFmpeg worker syntax
         run: node --check worker/worker.js
