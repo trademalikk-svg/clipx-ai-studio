@@ -8,7 +8,7 @@ class OwnerRecoveryContractTests(unittest.TestCase):
         js = (ROOT / "scripts" / "shif-a-owner-security.js").read_text(encoding="utf-8")
         self.assertIn("resetPasswordForEmail(", js)
         self.assertIn("PASSWORD_RECOVERY", js)
-        self.assertIn("updateUser({password:a})", js)
+        self.assertIn("updateUser({password:first})", js)
         self.assertIn("owner-security.html", js)
 
     def test_recovery_responses_do_not_enumerate_accounts(self):
