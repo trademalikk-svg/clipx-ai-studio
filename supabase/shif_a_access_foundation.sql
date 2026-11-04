@@ -319,3 +319,42 @@ revoke all on function public.shif_a_consume_recovery_code(uuid,uuid) from publi
 grant execute on function public.shif_a_replace_recovery_codes(uuid,jsonb) to service_role;
 grant execute on function public.shif_a_list_recovery_verifiers(uuid) to service_role;
 grant execute on function public.shif_a_consume_recovery_code(uuid,uuid) to service_role;
+
+
+create table if not exists private.shif_a_recovery_rate_limits (
+ user_id uuid not null references auth.users(id) on delete cascade,
+ action text not null check (action in ('generate','consume')),
+ window_started_at timestamptz not null default now(),
+ attempt_count integer not null default 0 check (attempt_count >= 0),
+ primary key(user_id,action)
+);
+alter table private.shif_a_recovery_rate_limits ENABLE ROW LEVEL SECURITY;
+REVOKE ALL ON private.shif_a_recovery_rate_limits FROM PUBLIC,anon,authenticated;
+GRANT SELECT,INSERT,UPDATE,DELETE ON private.shif_a_recovery_rate_limits TO service_role;
+
+create or replace function public.shif_a_check_recovery_rate(p_user_id uuid,p_action text)
+returns boolean language plpgsql security definer
+set search_path = pg_catalog, private
+as $$
+declare v_row private.shif_a_recovery_rate_limits%rowtype;
+begin
+ if p_action not in ('generate','consume') then return false; end if;
+ insert into private.shif_a_recovery_rate_limits(user_id,action)
+ values(p_user_id,p_action) on conflict(user_id,action) do nothing;
+ select * into v_row from private.shif_a_recovery_rate_limits
+ where user_id=p_user_id and action=p_action for update;
+ if v_row.window_started_at < now()-interval '15 minutes' then
+  update private.shif_a_recovery_rate_limits set window_started_at=now(),attempt_count=1
+  where user_id=p_user_id and action=p_action;
+  return true;
+ end if;
+ if v_row.attempt_count >= case when p_action='generate' then 2 else 5 end then
+  return false;
+ end if;
+ update private.shif_a_recovery_rate_limits set attempt_count=attempt_count+1
+ where user_id=p_user_id and action=p_action;
+ return true;
+end;
+$$;
+revoke all on function public.shif_a_check_recovery_rate(uuid,text) from public,anon,authenticated;
+grant execute on function public.shif_a_check_recovery_rate(uuid,text) to service_role;
