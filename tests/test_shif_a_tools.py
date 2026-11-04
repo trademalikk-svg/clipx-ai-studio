@@ -20,9 +20,14 @@ class ShifAToolsContractTests(unittest.TestCase):
         for status in ("available", "limited", "coming-soon"):
             self.assertIn('status:"' + status + '"', js)
 
+    def test_ai_chat_is_limited_and_opens_chat_page(self):
+        js = (ROOT / "scripts" / "shif-a-tools.js").read_text(encoding="utf-8")
+        self.assertIn('name:"AI Chat & Research"', js)
+        self.assertIn('status:"limited",href:"chat.html"', js)
+
     def test_future_tools_are_not_claimed_as_available(self):
         js = (ROOT / "scripts/shif-a-tools.js").read_text(encoding="utf-8")
-        for tool in ("AI Image Studio", "AI Voice Studio", "AI Chat & Research", "AI Agents Studio", "AI Automation Studio"):
+        for tool in ("AI Image Studio", "AI Voice Studio", "AI Agents Studio", "AI Automation Studio"):
             self.assertRegex(js, re.compile(r'name:"' + re.escape(tool) + r'".{0,260}status:"coming-soon"', re.S))
         self.assertIn('if(t.href)', js)
 
