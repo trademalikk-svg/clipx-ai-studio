@@ -163,6 +163,10 @@ jobs:
               raise SystemExit("Broken local links/resources:\\n" + "\\n".join(errors))
           print(f"Local links/resources OK across {len(pages)} HTML pages; duplicate IDs: none.")
           PY
+      - name: Check SHIF-A browser script syntax
+        run: |
+          node --check scripts/shif-a-coding-studio.js
+          node --check scripts/shif-a-tools.js
       - name: Check FFmpeg worker syntax
         run: node --check worker/worker.js
       - name: Set up Deno
