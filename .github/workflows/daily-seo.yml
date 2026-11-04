@@ -1,0 +1,48 @@
+name: ClipX Daily SEO
+
+on:
+  schedule:
+    # 06:00 India Standard Time (UTC+05:30)
+    - cron: '30 0 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: clipx-daily-seo
+  cancel-in-progress: false
+
+jobs:
+  daily-seo:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out site
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Run SEO automation tests
+        run: python -m unittest discover -s tests -v
+
+      - name: Research trends and update safe homepage metadata
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_SEO_MODEL: ${{ vars.OPENAI_SEO_MODEL }}
+        run: python scripts/daily_seo.py
+
+      - name: Commit SEO metadata and daily report
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html seo-reports/
+          if git diff --cached --quiet; then
+            echo "No SEO changes to commit."
+          else
+            git commit -m "chore(seo): daily trend-informed metadata update"
+            git push
+          fi
