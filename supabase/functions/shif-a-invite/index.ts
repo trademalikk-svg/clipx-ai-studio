@@ -69,14 +69,14 @@ Deno.serve(async (req: Request) => {
 
     const invitationToken = makeToken();
     const tokenHash = await sha256(invitationToken);
-    const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
-    const { data: invitationId, error } = await admin.rpc("shif_a_create_invitation", {
+    const expires_at = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
+    // The database validates expires_at and enforces accepted_at IS NULL for one-time use.\n    const { data: invitationId, error } = await admin.rpc("shif_a_create_invitation", {
       p_email: email,
       p_role: role,
       p_token_hash: tokenHash,
       p_invited_by: user.id,
       p_enabled_tools: tools,
-      p_expires_at: expiresAt,
+      p_expires_at: expires_at,
     });
     if (error || !invitationId) {
       console.error("SHIF-A invitation creation failed:", error?.message || "No invitation ID returned.");
@@ -86,7 +86,7 @@ Deno.serve(async (req: Request) => {
       invitationId,
       email,
       role,
-      expiresAt,
+      expiresAt: expires_at,
       invitationToken,
       note: "Token is shown once. Share it only with the intended recipient. Email delivery is not configured yet.",
     }, 201);
