@@ -182,3 +182,76 @@ revoke all on function public.shif_a_accept_invitation(uuid, text, text) from pu
 grant execute on function public.shif_a_get_membership(uuid) to service_role;
 grant execute on function public.shif_a_create_invitation(text, text, text, uuid, text[], timestamptz) to service_role;
 grant execute on function public.shif_a_accept_invitation(uuid, text, text) to service_role;
+
+-- Owner security records. These remain inaccessible to browser roles.
+create table if not exists private.shif_a_owner_recovery_codes (
+ id uuid primary key default gen_random_uuid(),
+ user_id uuid not null references auth.users(id) on delete cascade,
+ code_hash text not null check (code_hash ~ '^[a-f0-9]{64}$'),
+ salt text not null check (salt ~ '^[a-f0-9]{32,64}$'),
+ created_at timestamptz not null default now(),
+ expires_at timestamptz not null,
+ consumed_at timestamptz,
+ constraint shif_a_recovery_expiry check (expires_at > created_at)
+);
+create unique index if not exists shif_a_recovery_code_hash_unique on private.shif_a_owner_recovery_codes(code_hash);
+create index if not exists shif_a_recovery_user_active on private.shif_a_owner_recovery_codes(user_id, expires_at) where consumed_at is null;
+
+create table if not exists private.shif_a_owner_security_settings (
+ user_id uuid primary key references auth.users(id) on delete cascade,
+ lover_name_salt text check (lover_name_salt is null or lover_name_salt ~ '^[a-f0-9]{32,64}$'),
+ lover_name_hash text check (lover_name_hash is null or lover_name_hash ~ '^[a-f0-9]{64}$'),
+ lover_name_configured_at timestamptz,
+ updated_at timestamptz not null default now(),
+ constraint shif_a_lover_name_pair check (
+  (lover_name_salt is null and lover_name_hash is null and lover_name_configured_at is null)
+  or (lover_name_salt is not null and lover_name_hash is not null and lover_name_configured_at is not null)
+ )
+);
+
+create table if not exists private.shif_a_security_events (
+ id bigint generated always as identity primary key,
+ actor_user_id uuid references auth.users(id) on delete set null,
+ event_type text not null check (event_type in (
+  'passkey_login_succeeded','passkey_login_denied','passkey_registered','passkey_revoked',
+  'recovery_code_generated','recovery_code_consumed','password_reset_requested',
+  'owner_id_recovery_requested','lover_name_check_succeeded','lover_name_check_denied','session_revoked'
+ )),
+ outcome text not null check (outcome in ('allowed','denied','error')),
+ metadata jsonb not null default '{}'::jsonb check (jsonb_typeof(metadata) = 'object'),
+ created_at timestamptz not null default now()
+);
+create index if not exists shif_a_security_events_actor_created on private.shif_a_security_events(actor_user_id, created_at desc);
+
+alter table private.shif_a_owner_recovery_codes ENABLE ROW LEVEL SECURITY;
+alter table private.shif_a_owner_security_settings ENABLE ROW LEVEL SECURITY;
+alter table private.shif_a_security_events ENABLE ROW LEVEL SECURITY;
+REVOKE ALL ON ALL TABLES IN SCHEMA private FROM PUBLIC, anon, authenticated;
+GRANT SELECT, INSERT, UPDATE, DELETE ON private.shif_a_owner_recovery_codes TO service_role;
+GRANT SELECT, INSERT, UPDATE, DELETE ON private.shif_a_owner_security_settings TO service_role;
+GRANT SELECT, INSERT ON private.shif_a_security_events TO service_role;
+GRANT USAGE, SELECT ON SEQUENCE private.shif_a_security_events_id_seq TO service_role;
+
+-- Narrow audit writer. It runs as the caller (service_role), not SECURITY DEFINER.
+create or replace function public.shif_a_write_security_event(p_actor_user_id uuid,p_event_type text,p_outcome text,p_metadata jsonb default '{}'::jsonb)
+returns void language plpgsql security invoker set search_path = pg_catalog, private
+as $$
+begin
+ if p_event_type not in (
+  'passkey_login_succeeded','passkey_login_denied','passkey_registered','passkey_revoked',
+  'recovery_code_generated','recovery_code_consumed','password_reset_requested',
+  'owner_id_recovery_requested','lover_name_check_succeeded','lover_name_check_denied','session_revoked'
+ ) then raise exception 'Unsupported security event' using errcode = '22023'; end if;
+ if p_outcome not in ('allowed','denied','error') then raise exception 'Unsupported event outcome' using errcode = '22023'; end if;
+ if p_metadata is null or jsonb_typeof(p_metadata) <> 'object' or octet_length(p_metadata::text) > 512 then
+  raise exception 'Invalid event metadata' using errcode = '22023';
+ end if;
+ if p_metadata ?| array['token','password','secret','credential','biometric','code','lover_name'] then
+  raise exception 'Sensitive metadata is not permitted' using errcode = '22023';
+ end if;
+ insert into private.shif_a_security_events(actor_user_id,event_type,outcome,metadata)
+ values (p_actor_user_id,p_event_type,p_outcome,p_metadata);
+end;
+$$;
+revoke all on function public.shif_a_write_security_event(uuid,text,text,jsonb) from public, anon, authenticated;
+grant execute on function public.shif_a_write_security_event(uuid,text,text,jsonb) to service_role;
