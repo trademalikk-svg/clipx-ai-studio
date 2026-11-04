@@ -24,6 +24,23 @@ class ShifAProjectsContractTests(unittest.TestCase):
         self.assertNotIn("sessionStorage",js)
         self.assertNotIn("innerHTML =",js)
 
+    def test_project_file_version_migration_is_private_and_limited(self):
+        sql=(ROOT/"supabase"/"migrations"/"20261105110000_shif_a_project_file_versions.sql").read_text(encoding="utf-8")
+        self.assertIn("enable row level security",sql.lower())
+        self.assertIn("storage.objects",sql.lower())
+        self.assertIn("public=false",sql.lower())
+        self.assertIn("20971520",sql)
+        self.assertIn("unique(project_id,file_name,version)",sql.replace(" ","").lower())
+
+    def test_project_file_ui_has_upload_and_download_flow(self):
+        html=(ROOT/"projects.html").read_text(encoding="utf-8")
+        js=(ROOT/"scripts"/"shif-a-projects.js").read_text(encoding="utf-8")
+        for ident in ['id="fileProject"','id="projectFile"','id="uploadProjectFile"','id="fileList"']:
+            self.assertIn(ident,html)
+        self.assertIn('createSignedUrl',js)
+        self.assertIn('storage.from("shif-a-project-files").upload',js)
+        self.assertIn("20*1024*1024",js)
+
     def test_private_chat_migration_enforces_user_scoped_rls(self):
         sql=(ROOT/"supabase"/"migrations"/"20261105100000_shif_a_private_chat_history.sql").read_text(encoding="utf-8")
         self.assertIn("enable row level security",sql.lower())
