@@ -51,6 +51,11 @@ class MainWorkspaceContractTests(unittest.TestCase):
         for token in ['Available', 'Limited', 'Coming Soon']:
             self.assertIn(token, self.js)
 
+    def test_ai_chat_tool_routes_to_real_chat_page(self):
+        tools = (ROOT / "scripts" / "shif-a-tools.js").read_text(encoding="utf-8")
+        self.assertIn('id:"ai-chat"', tools)
+        self.assertIn('status:"limited",href:"chat.html"', tools)
+
     def test_command_router_only_recommends_and_does_not_execute(self):
         self.assertIn('classifyIntent', self.js)
         self.assertIn('getToolById', self.js)
