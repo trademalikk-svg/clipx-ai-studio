@@ -178,3 +178,5 @@ jobs:
           deno check supabase/functions/create-clip-job/index.ts
           deno check supabase/functions/complete-clip-upload/index.ts
           deno check supabase/functions/generate-video/index.ts
+          deno check supabase/functions/shif-a-access/index.ts
+          deno check supabase/functions/shif-a-security-audit/index.ts
