@@ -14,7 +14,7 @@
 <p class="small">Free local setup: Ollama + a downloaded model. Model download needs internet once; running it uses your device/PC resources. Browser access may need CORS configuration.</p>
 <div class="notice">Privacy: API key and chat are memory-only. Refreshing or closing this page clears them. No SHIF-A chat history is saved yet.</div>
 </aside>
-<section class="panel chat" aria-label="AI conversation"><div class="row" style="justify-content:space-between;align-items:center"><strong>Conversation</strong><button id="clearChat" class="secondary" type="button">Clear Chat</button></div>
+<section class="panel chat" aria-label="AI conversation"><div class="row" style="justify-content:space-between;align-items:center"><strong>Conversation</strong><div class="row"><button id="exportChat" class="secondary" type="button">Export .md</button><button id="clearChat" class="secondary" type="button">Clear Chat</button></div></div>
 <div class="messages" id="messages" aria-live="polite"><div class="msg system">Connection test करें, फिर अपना सवाल भेजें।</div></div>
-<form class="composer" id="chatForm"><textarea id="prompt" maxlength="12000" placeholder="अपना सवाल लिखें… (Hindi / English)" required></textarea><button id="sendBtn" type="submit">Send</button></form><p class="small">12,000 characters max per prompt · Responses depend on the connected model and its limits.</p></section></div></main>
+<form class="composer" id="chatForm"><textarea id="prompt" maxlength="12000" placeholder="अपना सवाल लिखें… (Hindi / English)" required></textarea><div class="row" style="align-items:stretch"><button id="sendBtn" type="submit">Send</button><button id="stopBtn" class="secondary" type="button" hidden>Stop</button></div></form><p class="small">Live streaming · Stop generation anytime · Export conversation as Markdown · 12,000 characters max per prompt.</p></section></div></main>
 <script src="scripts/shif-a-chat.js"></script></body></html>
