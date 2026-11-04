@@ -14,7 +14,7 @@
   text("accountEmail",user.email||"Signed-in account");
   text("accountRole",access.role==="unassigned"?"Access role अभी configure नहीं है":access.role.toUpperCase());
   text("accessSummary",access.unlimitedPlatformCredits?"Platform credit deductions लागू नहीं होंगे। Provider quotas और device limits फिर भी लागू रहेंगे।":"Customer access policy server पर configure होने के बाद यहाँ दिखाई जाएगी।");
-  text("toolAccess",access.access.length?access.access.join(", "):access.role==="owner"?"All enabled tools":access.role==="invited"?"Invited tool access not yet assigned":"Tool access details not connected yet");
+  text("toolAccess",access.access.length?access.access.join(", "):(access.role==="owner"||access.role==="invited")?"All enabled platform tools":"Tool access details not connected yet");
   $("dashboardContent").hidden=false;
   $("loginPrompt").hidden=true;
   const ownerPanel=$("ownerPanel");
