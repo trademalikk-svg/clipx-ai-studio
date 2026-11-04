@@ -39,6 +39,14 @@
 - If the Owner loses all authenticators and recovery codes, use a separately documented manual identity verification and administrator-controlled recovery procedure. Never bypass MFA merely because someone knows the Owner ID or email address.
 - After recovery, revoke lost passkeys, active sessions, and refresh tokens; notify the verified account channel; record the event in the audit log.
 
+### Final fallback: Owner-entered “Lover Name”
+
+- Place an optional **Lover Name** field at the very end of the recovery options, after the normal account, passkey, recovery-code, and verified-channel methods have failed or are unavailable.
+- The Owner enters the value personally during a trusted, authenticated setup. SHIF-A must not prefill, guess, suggest, or invent the name.
+- Treat it only as a supplementary recovery check, never as a password, standalone proof of identity, or a way to bypass verified-channel/MFA requirements. A name can be guessed or discovered.
+- Do not display the saved answer again. Store only a salted, purpose-specific verifier; apply strict rate limits, generic failure messages, audit logging, and recovery notifications.
+- The field is optional. The Owner may leave it unset; the standard recovery routes must continue to work.
+
 ## Server-side authorization
 
 - The server obtains the authenticated user identity from Supabase Auth and checks a private, server-controlled Owner membership record.
