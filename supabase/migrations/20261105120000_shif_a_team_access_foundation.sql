@@ -87,3 +87,63 @@ create policy "SHIF-A owners read access audit"
 revoke all on public.shif_a_access_audit from anon, public;
 grant select on public.shif_a_access_audit to authenticated;
 revoke insert, update, delete on public.shif_a_access_audit from anon, public, authenticated;
+
+-- Atomic invitation acceptance helper. Called only by the authenticated Edge Function
+-- using service_role after it verifies the caller's JWT and confirmed email.
+create or replace function public.shif_a_accept_project_invitation(
+  p_user_id uuid,
+  p_verified_email text,
+  p_token_hash text
+)
+returns table(project_id uuid, role text)
+language plpgsql
+security definer
+set search_path = pg_catalog, public
+as $$
+declare
+  v_invite public.shif_a_project_invitations%rowtype;
+begin
+  if p_user_id is null or p_verified_email is null
+     or p_token_hash !~ '^[a-f0-9]{64}$' then
+    raise exception 'Invalid invitation acceptance' using errcode = '22023';
+  end if;
+
+  select i.* into v_invite
+  from public.shif_a_project_invitations i
+  where i.token_hash = p_token_hash
+    and i.invited_email = lower(btrim(p_verified_email))
+    and i.status = 'pending'
+    and i.expires_at > now()
+  for update;
+
+  if not found then
+    return;
+  end if;
+
+  update public.shif_a_project_invitations
+    set status = 'accepted', accepted_by = p_user_id, accepted_at = now()
+    where id = v_invite.id and status = 'pending';
+  if not found then
+    return;
+  end if;
+
+  insert into public.shif_a_project_members
+    (project_id,user_id,role,status,invited_by)
+  values
+    (v_invite.project_id,p_user_id,v_invite.role,'active',v_invite.invited_by)
+  on conflict (project_id,user_id) do update
+    set role = excluded.role, status = 'active', invited_by = excluded.invited_by,
+        updated_at = now();
+
+  insert into public.shif_a_access_audit
+    (project_id,actor_user_id,target_user_id,action,details)
+  values
+    (v_invite.project_id,p_user_id,p_user_id,'invitation_accepted',
+     jsonb_build_object('role',v_invite.role));
+
+  return query select v_invite.project_id,v_invite.role;
+end;
+$$;
+
+revoke all on function public.shif_a_accept_project_invitation(uuid,text,text) from public,anon,authenticated;
+grant execute on function public.shif_a_accept_project_invitation(uuid,text,text) to service_role;
