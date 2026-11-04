@@ -41,6 +41,17 @@ class WebManagerTests(unittest.TestCase):
         self.assertEqual(len(set(ids)), 40)
         self.assertIn('status:"coming-soon"', registry)
 
+    def test_local_ai_tool_studio_supports_text_tool_execution(self):
+        page = (ROOT / "tool-studio.html").read_text(encoding="utf-8")
+        script = (ROOT / "scripts/shif-a-tool-studio.js").read_text(encoding="utf-8")
+        registry = (ROOT / "scripts/shif-a-tools.js").read_text(encoding="utf-8")
+        self.assertIn('id="runTool"', page)
+        self.assertIn('/chat/completions', script)
+        self.assertIn('AbortController', script)
+        self.assertIn('tool-studio.html?tool=', registry)
+        self.assertIn('const supported=new Set(', script)
+        self.assertIn('stream:true', script)
+
     def test_production_actions_are_not_exposed(self):
         page = (ROOT / "web-manager.html").read_text(encoding="utf-8")
         self.assertIn("Owner approval required", page)
