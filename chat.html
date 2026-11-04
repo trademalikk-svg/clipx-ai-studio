@@ -7,13 +7,15 @@
 <main class="wrap"><section class="hero"><h1>AI Chat & Research</h1><p class="muted">अपने free local AI server या किसी OpenAI-compatible endpoint से जुड़ें। SHIF-A आपके prompts किसी third-party server पर तभी भेजेगा जब आप Send दबाएँगे।</p></section>
 <div class="layout"><aside class="panel settings"><h2 style="margin:0;font-size:16px">Connection Settings</h2>
 <label>Project Context<select id="projectSelect" disabled><option value="">Loading private projects…</option></select></label>
+<label>Saved Conversations<select id="threadSelect" disabled><option value="">Loading saved chats…</option></select></label>
+<div class="row"><button id="saveChat" type="button">Save Chat</button><button id="loadChat" class="secondary" type="button">Load Selected</button></div>
 <label>API Base URL<input id="baseUrl" type="url" value="http://localhost:11434/v1" autocomplete="url"></label>
 <label>Model Name<input id="modelName" value="qwen2.5:3b" maxlength="120" placeholder="e.g. qwen2.5:3b"></label>
 <label>API Key (optional)<input id="apiKey" type="password" maxlength="500" autocomplete="off" placeholder="Only if your provider requires it"></label>
 <div class="row"><button id="connectBtn" type="button">Test Connection</button><button id="clearKeyBtn" class="secondary" type="button">Clear Key</button></div>
 <p class="notice" id="connectionStatus" role="status" aria-live="polite">Not connected. Local Ollama server example: http://localhost:11434/v1</p>
 <p class="small">Free local setup: Ollama + a downloaded model. Model download needs internet once; running it uses your device/PC resources. Browser access may need CORS configuration.</p>
-<div class="notice">Privacy: API key and chat are memory-only. Refreshing or closing this page clears them. No SHIF-A chat history is saved yet.</div>
+<div class="notice">Privacy: Chat केवल Save Chat दबाने पर आपके private account में save होगी। API key page memory में रहती है।</div>
 </aside>
 <section class="panel chat" aria-label="AI conversation"><div class="row" style="justify-content:space-between;align-items:center"><strong>Conversation</strong><div class="row"><button id="exportChat" class="secondary" type="button">Export .md</button><button id="clearChat" class="secondary" type="button">Clear Chat</button></div></div>
 <div class="messages" id="messages" aria-live="polite"><div class="msg system">Connection test करें, फिर अपना सवाल भेजें।</div></div>
