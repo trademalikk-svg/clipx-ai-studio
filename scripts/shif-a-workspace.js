@@ -12,7 +12,7 @@
   {id:"voice-studio",words:["voice","audio","speech","आवाज","वॉइस","ऑडियो"]},
   {id:"ai-chat",words:["research","search","explain","question","chat","रिसर्च","खोज","समझाओ","सवाल"]},
   {id:"writing-studio",words:["write","article","blog","letter","लिखो","लेख","पत्र"]},
-  {id:"coding-studio",words:["code","coding","debug","program","कोड","प्रोग्राम"]},
+  {id:"coding-studio",words:["code","coding","debug","program","website","web app","android app","app builder","वेबसाइट","ऐप","कोड","प्रोग्राम"]},
   {id:"document-studio",words:["pdf","document","report","दस्तावेज","पीडीएफ","रिपोर्ट"]},
   {id:"business-studio",words:["business","marketing","seo","व्यापार","मार्केटिंग"]},
   {id:"education-studio",words:["study","learn","homework","पढ़ाई","सीखना"]},
