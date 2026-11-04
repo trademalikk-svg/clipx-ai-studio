@@ -255,3 +255,67 @@ end;
 $$;
 revoke all on function public.shif_a_write_security_event(uuid,text,text,jsonb) from public, anon, authenticated;
 grant execute on function public.shif_a_write_security_event(uuid,text,text,jsonb) to service_role;
+
+
+-- Recovery-code RPCs: callers must already be verified Owner sessions.
+-- Verifiers are generated and hashed inside the trusted Edge Function; raw codes
+-- are returned once and are never persisted.
+create or replace function public.shif_a_replace_recovery_codes(p_user_id uuid, p_codes jsonb)
+returns integer
+language plpgsql security definer
+set search_path = pg_catalog, private
+as $$
+declare
+ v_count integer;
+begin
+ if p_user_id is null or jsonb_typeof(p_codes) <> 'array'
+    or jsonb_array_length(p_codes) <> 8 then
+   raise exception 'Exactly eight recovery verifiers are required' using errcode = '22023';
+ end if;
+ if exists (
+   select 1 from jsonb_array_elements(p_codes) e
+   where coalesce(e->>'code_hash','') !~ '^[a-f0-9]{64}$'
+      or coalesce(e->>'salt','') !~ '^[a-f0-9]{32,64}$'
+ ) then
+   raise exception 'Invalid recovery verifier' using errcode = '22023';
+ end if;
+ delete from private.shif_a_owner_recovery_codes
+ where user_id = p_user_id and consumed_at is null;
+ insert into private.shif_a_owner_recovery_codes(user_id,code_hash,salt,expires_at)
+ select p_user_id,e->>'code_hash',e->>'salt',now()+interval '365 days'
+ from jsonb_array_elements(p_codes) e;
+ get diagnostics v_count = row_count;
+ return v_count;
+end;
+$$;
+
+create or replace function public.shif_a_list_recovery_verifiers(p_user_id uuid)
+returns table(id uuid,code_hash text,salt text)
+language sql security definer
+set search_path = pg_catalog, private
+as $$
+ select c.id,c.code_hash,c.salt
+ from private.shif_a_owner_recovery_codes c
+ where c.user_id=p_user_id and c.consumed_at is null and c.expires_at>now()
+$$;
+
+create or replace function public.shif_a_consume_recovery_code(p_user_id uuid,p_code_id uuid)
+returns boolean
+language plpgsql security definer
+set search_path = pg_catalog, private
+as $$
+begin
+ update private.shif_a_owner_recovery_codes
+ set consumed_at=now()
+ where id=p_code_id and user_id=p_user_id
+   and consumed_at is null and expires_at>now();
+ return found;
+end;
+$$;
+
+revoke all on function public.shif_a_replace_recovery_codes(uuid,jsonb) from public,anon,authenticated;
+revoke all on function public.shif_a_list_recovery_verifiers(uuid) from public,anon,authenticated;
+revoke all on function public.shif_a_consume_recovery_code(uuid,uuid) from public,anon,authenticated;
+grant execute on function public.shif_a_replace_recovery_codes(uuid,jsonb) to service_role;
+grant execute on function public.shif_a_list_recovery_verifiers(uuid) to service_role;
+grant execute on function public.shif_a_consume_recovery_code(uuid,uuid) to service_role;
