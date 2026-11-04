@@ -75,8 +75,10 @@ pre{white-space:pre-wrap;word-break:break-word;background:#04101f;border:1px sol
 <button id="hideRecoveryCodes" class="secondary" type="button">Codes छिपाएँ</button>
 </div>
 <hr style="border:0;border-top:1px solid #245071;margin:18px 0">
-<h2>एक Recovery Code इस्तेमाल करें</h2>
-<p class="muted">यह विकल्प केवल पहले से signed-in और server-verified Owner session में अतिरिक्त one-time verification के लिए है। यह अकेले login या MFA bypass नहीं करता।</p>
+<h2>Lost Device Passkey Revoke</h2>
+<p class="muted">यह विकल्प पहले से signed-in Owner session में एक recovery code verify करके चुनी हुई passkey को server-side revoke करता है। Code अकेले login या MFA bypass नहीं करता। Code consume होने के बाद दोबारा इस्तेमाल नहीं होगा। पहले “मेरी Passkeys देखें” दबाकर सही device चुनें।</p>
+<label for="revokePasskeyId">जिस passkey को हटाना है</label>
+<select id="revokePasskeyId" style="display:block;width:100%;max-width:440px;padding:12px;border:1px solid #315d83;border-radius:10px;background:#061326;color:#fff;margin:6px 0 12px"><option value="">पहले “मेरी Passkeys देखें” दबाएँ</option></select>
 <label for="consumeRecoveryCode">Recovery Code</label>
 <input id="consumeRecoveryCode" type="text" autocomplete="off" maxlength="40" placeholder="XXXX-XXXX-XXXX-XXXX-XXXX-XXXX-XXXX-XXXX">
 <button id="consumeRecoveryCodeButton" type="button">Code Verify और Consume करें</button>
