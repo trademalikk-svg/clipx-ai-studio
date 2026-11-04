@@ -36,7 +36,7 @@ class WebManagerTests(unittest.TestCase):
     def test_tool_registry_has_40_unique_entries(self):
         import re
         registry = (ROOT / "scripts/shif-a-tools.js").read_text(encoding="utf-8")
-        ids = re.findall(r'\\{id:"([^"]+)"', registry)
+        ids = re.findall(r'id:"([^"]+)",name:', registry)
         self.assertEqual(len(ids), 40)
         self.assertEqual(len(set(ids)), 40)
         self.assertIn('status:"coming-soon"', registry)
