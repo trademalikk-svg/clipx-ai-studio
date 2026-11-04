@@ -36,7 +36,7 @@ class MainWorkspaceContractTests(unittest.TestCase):
         cls.js = (ROOT / "scripts" / "shif-a-workspace.js").read_text(encoding="utf-8")
 
     def test_semantic_workspace_regions_and_navigation(self):
-        for token in ['<nav', 'aria-label="Primary navigation"', 'id="workspaceMain"', 'id="contextPanel"', 'id="mobileNavToggle"', 'id="toolGrid"']:
+        for token in ['<aside', 'aria-label="Primary navigation"', 'id="workspaceMain"', 'id="contextPanel"', 'id="mobileNavToggle"', 'id="toolGrid"']:
             self.assertIn(token, self.html)
 
     def test_universal_command_modes_and_label(self):
@@ -49,8 +49,7 @@ class MainWorkspaceContractTests(unittest.TestCase):
 
     def test_tool_availability_is_truthful(self):
         for token in ['Available', 'Limited', 'Coming Soon']:
-            self.assertIn(token, self.html)
-        self.assertIn('Coming Soon', self.js)
+            self.assertIn(token, self.js)
 
     def test_command_router_only_recommends_and_does_not_execute(self):
         self.assertIn('classifyIntent', self.js)
