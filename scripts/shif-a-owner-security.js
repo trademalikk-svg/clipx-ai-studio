@@ -21,23 +21,25 @@ async function render(){
   $("signedOut").classList.toggle("hidden",access.owner);
   $("ownerControls").classList.toggle("hidden",!access.owner);
   say(access.owner?"Verified Owner session active.":"Owner passkey sign-in के लिए तैयार।");
- }catch(error){say("Owner status verify नहीं हो सका: "+error.message,true);}
+ }catch(error){$("signedOut").classList.remove("hidden");$("ownerControls").classList.add("hidden");say("Owner status verify नहीं हो सका: "+error.message,true);}
 }
 $("directLogin").addEventListener("click",async()=>{
  const button=$("directLogin");button.disabled=true;say("Device authenticator खुल रहा है…");
+ let authenticated=false;
  try{
   const {data,error}=await client.auth.signInWithPasskey();
   if(error)throw error;
   if(!data.session)throw new Error("Supabase session नहीं मिली।");
+  authenticated=true;
   const access=await getOwnerAccess();
-  if(!access.owner){
-   await client.auth.signOut();
-   throw new Error("यह passkey किसी Owner account से संबंधित नहीं है। Session बंद कर दी गई।");
-  }
+  if(!access.owner)throw new Error("यह passkey किसी Owner account से संबंधित नहीं है।");
   say("Owner Direct Passkey Login सफल।");
   await render();
- }catch(error){say(error.message||"Passkey login असफल रहा।",true);}
- finally{button.disabled=false;}
+ }catch(error){
+  if(authenticated){try{await client.auth.signOut();}catch(signOutError){say("Owner verification विफल हुई और automatic sign out की पुष्टि नहीं हो सकी। कृपया तुरंत Sign out करें।",true);button.disabled=false;return;}}
+  say(error.message||"Passkey login असफल रहा।",true);
+  await render();
+ }finally{button.disabled=false;}
 });
 $("registerPasskey").addEventListener("click",async()=>{
  const button=$("registerPasskey");button.disabled=true;
