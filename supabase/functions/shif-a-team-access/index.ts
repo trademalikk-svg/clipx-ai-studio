@@ -99,6 +99,79 @@ Deno.serve(async (req: Request) => {
     return reply({ accepted: true, project_id: accepted.project_id, role: accepted.role });
   }
 
+  if (action === "update_member") {
+    const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+    if (typeof body.project_id !== "string" || !uuid.test(body.project_id) ||
+        typeof body.member_user_id !== "string" || !uuid.test(body.member_user_id)) {
+      return reply({ error: "Project या member identifier अमान्य है।" }, 400);
+    }
+    const allowed = ["admin","editor","ai_user","viewer"];
+    const patch: Record<string, unknown> = { updated_at: new Date().toISOString() };
+    const audit: Array<{action:string;details:Record<string,unknown>}> = [];
+    if (body.role !== undefined) {
+      if (typeof body.role !== "string" || !allowed.includes(body.role)) return reply({ error: "Role अमान्य है।" }, 400);
+      patch.role = body.role;
+      audit.push({ action: "member_role_changed", details: { role: body.role } });
+    }
+    const limits: Array<[string, number, number]> = [
+      ["ai_messages_per_24h", 0, 1000],
+      ["storage_limit_bytes", 0, 10737418240],
+      ["max_file_size_bytes", 1, 20971520]
+    ];
+    for (const [field, min, max] of limits) {
+      if (body[field] !== undefined) {
+        const value = body[field];
+        if (typeof value !== "number" || !Number.isSafeInteger(value) || value < min || value > max) {
+          return reply({ error: "Member limit अमान्य है: " + field }, 400);
+        }
+        patch[field] = value;
+        audit.push({ action: "member_limits_changed", details: { [field]: value } });
+      }
+    }
+    if (Object.keys(patch).length === 1) return reply({ error: "बदलने के लिए role या limit दें।" }, 400);
+    const { data: project, error: projectError } = await admin.from("shif_a_projects")
+      .select("id,user_id").eq("id", body.project_id).maybeSingle();
+    if (projectError) return reply({ error: "Project access check failed." }, 503);
+    if (!project || project.user_id !== user.id) return reply({ error: "Only the project owner can change member permissions." }, 403);
+    const { data: member, error: memberError } = await admin.from("shif_a_project_members")
+      .update(patch).eq("project_id", project.id).eq("user_id", body.member_user_id)
+      .select("user_id,role,ai_messages_per_24h,storage_limit_bytes,max_file_size_bytes").maybeSingle();
+    if (memberError) return reply({ error: "Member update failed." }, 503);
+    if (!member) return reply({ error: "Member not found." }, 404);
+    for (const entry of audit) {
+      const { error } = await admin.from("shif_a_access_audit").insert({
+        project_id: project.id, actor_user_id: user.id, target_user_id: member.user_id,
+        action: entry.action, details: entry.details
+      });
+      if (error) return reply({ updated: true, audit_recorded: false, member,
+        warning: "Member update saved, but audit confirmation failed." }, 200);
+    }
+    return reply({ updated: true, audit_recorded: true, member });
+  }
+
+  if (action === "revoke_invitation") {
+    const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+    if (typeof body.project_id !== "string" || !uuid.test(body.project_id) ||
+        typeof body.invitation_id !== "string" || !uuid.test(body.invitation_id)) {
+      return reply({ error: "Project या invitation identifier अमान्य है।" }, 400);
+    }
+    const { data: project, error: projectError } = await admin.from("shif_a_projects")
+      .select("id,user_id").eq("id", body.project_id).maybeSingle();
+    if (projectError) return reply({ error: "Project access check failed." }, 503);
+    if (!project || project.user_id !== user.id) return reply({ error: "Only the project owner can revoke invitations." }, 403);
+    const { data: invite, error: inviteError } = await admin.from("shif_a_project_invitations")
+      .update({ status: "revoked" }).eq("id", body.invitation_id)
+      .eq("project_id", project.id).eq("status", "pending")
+      .select("id,role").maybeSingle();
+    if (inviteError) return reply({ error: "Invitation revoke failed." }, 503);
+    if (!invite) return reply({ error: "Pending invitation not found." }, 404);
+    const { error: auditError } = await admin.from("shif_a_access_audit").insert({
+      project_id: project.id, actor_user_id: user.id, action: "invitation_revoked",
+      details: { invitation_id: invite.id, role: invite.role }
+    });
+    return reply({ revoked: true, audit_recorded: !auditError });
+  }
+
   if (action === "revoke_member") {
     if (typeof body.project_id !== "string" || typeof body.member_user_id !== "string") {
       return reply({ error: "Project or member identifier missing." }, 400);
