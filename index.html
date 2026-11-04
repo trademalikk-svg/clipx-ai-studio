@@ -804,11 +804,84 @@ footer a{color:#222!important}
   main > .sidebar a { font-size: 13px !important; padding: 9px 10px !important; }
 }
 </style>
+<style id="shif-a-super-platform-layout">
+:root{color-scheme:dark;--sa-bg:#030b19;--sa-panel:#07172b;--sa-panel2:#0a203a;--sa-line:#15528a;--sa-blue:#168cff;--sa-cyan:#20d9f5;--sa-text:#f4f9ff;--sa-muted:#9bb6d2}
+html,body{background:#030b19!important;color:var(--sa-text)!important}
+body{background-image:radial-gradient(ellipse at 55% -20%,#0b3260 0,transparent 50%)!important}
+body>header{position:sticky!important;top:0!important;z-index:1000;min-height:72px!important;padding:10px 22px!important;display:flex!important;gap:18px!important;align-items:center!important;background:#041226f2!important;border-bottom:1px solid #1262a0!important;box-shadow:0 8px 28px #0008!important;backdrop-filter:blur(16px)!important}
+body>header .logo{color:#f6fbff!important;font-size:23px!important;letter-spacing:.5px}
+body>header .logo span{color:#26d9f4!important;-webkit-text-fill-color:#26d9f4!important}
+body>header .logo:before{content:"✦";display:inline-grid;place-items:center;width:36px;height:36px;margin-right:9px;border-radius:12px;background:linear-gradient(145deg,#168cff,#13d9ef);color:white!important;box-shadow:0 0 22px #168cff88}
+.header-edition{display:none!important}
+.top-platform-nav{display:flex;align-items:center;gap:5px;flex:1;min-width:0}
+.top-platform-nav a{color:#c8def3!important;text-decoration:none!important;padding:10px 12px;border-radius:10px;font-size:13px;white-space:nowrap}
+.top-platform-nav a:hover,.top-platform-nav a.top-nav-active{background:linear-gradient(110deg,#0879db,#0751a5)!important;color:#fff!important;box-shadow:0 5px 20px #0879db55}
+body>header .auth-buttons{display:flex!important;gap:8px!important;position:static!important}
+body>header .auth-buttons button{padding:9px 13px!important;white-space:nowrap;background:linear-gradient(110deg,#087ce5,#0a4c9b)!important;border:1px solid #249be8!important;border-radius:10px!important;color:#fff!important}
+.notice[role=note],.public-intro{display:none!important}
+main{display:grid!important;grid-template-columns:218px minmax(0,1fr) 238px!important;gap:16px!important;width:min(1600px,98%)!important;max-width:1600px!important;margin:0 auto!important;padding:16px 0 42px!important;align-items:start}
+main>.sidebar{grid-column:1;grid-row:1;position:sticky!important;top:88px!important;display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:5px!important;width:auto!important;height:calc(100vh - 110px)!important;min-height:520px!important;overflow:auto!important;padding:14px 10px!important;margin:0!important;border:1px solid #124a7c!important;border-radius:16px!important;background:linear-gradient(180deg,#061a31,#041124)!important;box-shadow:0 12px 35px #0005!important}
+.sidebar-title{display:block!important;color:#63c9f5!important;font-size:10px!important;letter-spacing:1.5px!important;padding:10px 9px!important}
+main>.sidebar a{display:flex!important;align-items:center!important;justify-content:flex-start!important;padding:11px 12px!important;margin:0!important;border-radius:10px!important;color:#c6d9ee!important;background:transparent!important;font-size:13px!important;text-decoration:none!important;white-space:normal!important}
+main>.sidebar a.active,main>.sidebar a:hover,main>.sidebar a:focus{background:linear-gradient(100deg,#087ce5,#073e83)!important;color:#fff!important;box-shadow:0 5px 18px #087ce544!important}
+.workspace-content{grid-column:2;grid-row:1;min-width:0}
+.quick-rail{grid-column:3;grid-row:1;position:sticky;top:88px;display:flex;flex-direction:column;gap:13px}
+.rail-panel{padding:15px;border:1px solid #15538b;border-radius:15px;background:linear-gradient(145deg,#0a2442,#06162b);box-shadow:0 10px 30px #0004}
+.rail-panel h2{font-size:16px;color:#eaf7ff!important;margin:0 0 12px}
+.rail-panel>a{display:flex;justify-content:space-between;gap:8px;padding:11px 10px;margin:7px 0;border:1px solid #18568d;border-radius:10px;background:#0b2b4e;color:#e7f5ff!important;text-decoration:none!important;font-size:12px}
+.rail-panel>a:hover{background:#0b60a8}
+.rail-panel p,.rail-coming,.rail-status{color:#9bb8d2!important;font-size:11px;line-height:1.55}
+.rail-coming,.rail-status{margin-top:10px;padding:9px;border-radius:9px;background:#06152a;border:1px solid #123c63}
+.owner-panel{border-color:#6452c9;background:linear-gradient(145deg,#171d49,#091a34)}
+.hero{display:flex!important;align-items:center!important;text-align:left!important;min-height:245px!important;padding:26px!important;border:1px solid #137ac4!important;border-radius:18px!important;background:radial-gradient(circle at 82% 30%,#07549b 0,transparent 42%),linear-gradient(115deg,#06172d,#071b35 65%,#102c58)!important;box-shadow:0 18px 50px #001b3d88!important}
+.hero h1{font-size:clamp(29px,3vw,43px)!important;color:#fff!important}
+.hero h1 span{background:linear-gradient(90deg,#fff,#28d9f4,#63aaff)!important;-webkit-background-clip:text!important;color:transparent!important}
+.hero p,.hero .hero-trust{color:#b7d0e8!important}
+.hero .vip{background:#0a2a4a!important;color:#9eeaff!important;border-color:#197bc0!important}
+.hero-cta{background:linear-gradient(100deg,#087ee8,#06a9d6)!important;border-radius:10px!important}
+.platform-tool-library,.dashboard-shortcuts,.dashboard-support-grid,.card{border:1px solid #154b7a!important;border-radius:16px!important;background:linear-gradient(145deg,#081d36,#061327)!important;color:#eef7ff!important;box-shadow:0 10px 30px #0003!important}
+.platform-tool-library{padding:18px!important;margin:16px 0!important}
+.platform-section-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:15px}
+.platform-eyebrow{font-size:10px;letter-spacing:1.6px;color:#31c8f1}
+.platform-section-heading h2{font-size:22px;color:#f2f9ff!important;margin:5px 0}
+.platform-section-heading h2 small{font-size:12px;color:#91b4d2;font-weight:400}
+.platform-section-heading p{font-size:12px;color:#9db9d5!important;margin:0}
+.catalog-link{font-size:12px;color:#69d8fa!important;text-decoration:none;white-space:nowrap}
+.tool-category-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.tool-category{min-height:126px;display:flex;flex-direction:column;align-items:flex-start;gap:7px;padding:13px;border:1px solid #1763a0;border-radius:13px;background:linear-gradient(145deg,#0b3157,#071a31);text-decoration:none!important;color:#f2f9ff!important;transition:transform .18s,border-color .18s}
+.tool-category:hover{transform:translateY(-2px);border-color:#26c9f2}
+.tool-icon{display:grid;place-items:center;width:34px;height:34px;border-radius:10px;background:linear-gradient(145deg,#087fe8,#04b7d5);color:#fff;font-size:20px;box-shadow:0 0 16px #087fe855}
+.tool-category strong{font-size:13px}
+.tool-category small{font-size:10px;line-height:1.45;color:#a9c4df!important}
+.tool-category em{font-size:9px;font-style:normal;color:#54d8a6;margin-top:auto}
+.tool-planned{border-color:#334c6a;background:linear-gradient(145deg,#10243c,#09172a)}
+.tool-planned .tool-icon{background:linear-gradient(145deg,#3c5c88,#29416c);box-shadow:none}
+.tool-planned em{color:#a9bad0}
+.dashboard-shortcuts{padding:17px!important}
+.dashboard-shortcuts .shortcut{background:#0a3158!important;border:1px solid #1763a0!important;color:#eef8ff!important}
+.dashboard-shortcuts .shortcut small{color:#a9c4df!important}
+.card h2,h1,h2,h3,.card h3{color:#eaf7ff!important}
+p,li,.muted{color:#adc5dc}
+input,select,textarea{background:#06182d!important;color:#f5faff!important;border-color:#245b89!important}
+button,.primary{background:linear-gradient(100deg,#087ee8,#0750a5)!important;color:white!important;border:1px solid #218ed4!important}
+.mobile-bottom-nav{display:none!important}
+footer{background:#041226!important;color:#9bb8d2!important;border-top:1px solid #124a7c!important}
+@media(max-width:1180px){main{grid-template-columns:190px minmax(0,1fr)!important;width:96%!important}.quick-rail{grid-column:2;grid-row:2;position:static;display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.workspace-content{grid-column:2;grid-row:1}}
+@media(max-width:760px){body>header{position:sticky!important;padding:10px 12px!important;gap:8px!important;min-height:60px!important;flex-wrap:wrap!important}.top-platform-nav{order:3;width:100%;overflow-x:auto;flex:0 0 100%;padding:3px 0}.top-platform-nav a{font-size:11px;padding:8px 9px}.body>header .logo{font-size:19px!important}body>header .auth-buttons button{font-size:11px!important;padding:8px 9px!important}main{display:flex!important;flex-direction:column!important;width:100%!important;padding:10px 10px 90px!important;gap:12px!important}main>.sidebar{position:static!important;order:0;width:100%!important;height:auto!important;min-height:0!important;display:flex!important;flex-direction:row!important;overflow-x:auto!important;white-space:nowrap;padding:8px!important}.sidebar-title{display:none!important}main>.sidebar a{flex:0 0 auto!important;padding:9px 11px!important;font-size:11px!important}.workspace-content{order:1;width:100%}.quick-rail{order:2;width:100%;display:grid;grid-template-columns:1fr}.hero{min-height:0!important;padding:18px!important;flex-direction:column!important}.hero-visual-art{min-height:150px!important;height:160px!important}.tool-category-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.tool-category{min-height:122px;padding:11px}.platform-tool-library{padding:13px!important}.platform-section-heading{align-items:flex-start}.platform-section-heading h2{font-size:19px}.catalog-link{font-size:10px}.mobile-bottom-nav{display:flex!important;position:fixed!important;bottom:0;left:0;right:0;z-index:9999;justify-content:space-around;gap:4px;padding:8px 5px calc(8px + env(safe-area-inset-bottom));background:#041226f5!important;border-top:1px solid #14588b!important;backdrop-filter:blur(14px)}.mobile-bottom-nav a{color:#c8def3!important;font-size:10px;text-decoration:none;display:flex;flex-direction:column;align-items:center;gap:3px}.mobile-bottom-nav a span{font-size:17px}.mobile-bottom-nav .bottom-create{background:#087ee8;border-radius:50%;padding:7px 12px;color:white!important}.quick-rail .rail-panel{padding:13px}.dashboard-support-grid{grid-template-columns:1fr!important}}
+@media(min-width:761px) and (max-width:1180px){.tool-category-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+</style>
 </head>
 <body class="clipx-locked">
 <header>
  <div class="logo">SHIF-A <span>AI</span></div>
  <div class="header-edition">✦ AI WORKSPACE</div>
+ <nav class="top-platform-nav" aria-label="Main platform navigation">
+  <a class="top-nav-active" href="#home">⌂ Home</a>
+  <a href="#platformTools">✣ AI Tools</a>
+  <a href="#marketplacePanel">▣ Marketplace</a>
+  <a href="#agentPanel">♧ Agents</a>
+  <a href="#automationPanel">⌘ Automation</a>
+ </nav>
  <div class="auth-buttons" id="authControls">
   <button type="button" id="loginNavButton" onclick="showAuth('login')">Login</button>
   <button type="button" class="secondary" id="signupNavButton" onclick="showAuth('signup')">Sign Up</button>
@@ -846,6 +919,7 @@ footer a{color:#222!important}
   <a href="#backendConnection" data-view="settings"><span>♙</span>Profile</a>
   <a href="#paymentSandbox" data-view="billing"><span>₹</span>Payments</a>
  </nav>
+ <div class="workspace-content">
  <section class="hero" id="home">
   <div class="hero-copy">
    <p class="hero-kicker">ONE ACCOUNT · ONE CREATIVE WORKSPACE</p>
@@ -904,6 +978,26 @@ footer a{color:#222!important}
    <button type="button" class="clipx-share-copy" onclick="clipxCopySiteLink()">Copy Link</button>
   </div>
   <p class="clipx-share-status" id="clipxShareStatus" role="status" aria-live="polite"></p>
+ </section>
+ <section class="platform-tool-library" id="platformTools" aria-label="SHIF-A AI tool library">
+  <div class="platform-section-heading">
+   <div><span class="platform-eyebrow">THE AI TOOL UNIVERSE</span><h2>All AI Tools <small>One workspace</small></h2><p>एक ही जगह पर AI के अलग-अलग कामों के लिए tool categories.</p></div>
+   <a href="#tools" class="catalog-link">Explore current tools →</a>
+  </div>
+  <div class="tool-category-grid">
+   <a class="tool-category tool-ready" href="#upload" data-view="studio"><span class="tool-icon">▣</span><strong>AI Video Studio</strong><small>ClipX editor, Shorts tools, captions and prompts</small><em>Available tools</em></a>
+   <a class="tool-category" href="#promptStudio" data-toolview="prompts"><span class="tool-icon">✧</span><strong>AI Content Studio</strong><small>Titles, descriptions, hashtags and prompts</small><em>Available tools</em></a>
+   <a class="tool-category tool-planned" href="#imageStudio"><span class="tool-icon">▧</span><strong>AI Image Studio</strong><small>Generate, edit, enhance and transform images</small><em>Planned module</em></a>
+   <a class="tool-category tool-planned" href="#voiceStudio"><span class="tool-icon">♫</span><strong>AI Voice Studio</strong><small>Text-to-speech, transcription and voice tools</small><em>Planned module</em></a>
+   <a class="tool-category tool-planned" href="#chatStudio"><span class="tool-icon">◉</span><strong>AI Chat & Research</strong><small>Assistants, research and question answering</small><em>Planned module</em></a>
+   <a class="tool-category tool-planned" href="#writingStudio"><span class="tool-icon">✎</span><strong>AI Writing</strong><small>Articles, scripts, documents and summaries</small><em>Planned module</em></a>
+   <a class="tool-category tool-planned" href="#codingStudio"><span class="tool-icon">⌘</span><strong>AI Coding</strong><small>Code help, debugging and app development</small><em>Planned module</em></a>
+   <a class="tool-category tool-planned" id="agentPanel" href="#agentPanel"><span class="tool-icon">♧</span><strong>AI Agents</strong><small>Custom assistants for focused tasks</small><em>Planned module</em></a>
+   <a class="tool-category tool-planned" id="automationPanel" href="#automationPanel"><span class="tool-icon">⌁</span><strong>AI Automation</strong><small>Connect tools into repeatable workflows</small><em>Planned module</em></a>
+   <a class="tool-category tool-planned" href="#documentStudio"><span class="tool-icon">▤</span><strong>Documents & PDF</strong><small>Read, summarize and organize documents</small><em>Planned module</em></a>
+   <a class="tool-category tool-planned" href="#designStudio"><span class="tool-icon">◈</span><strong>AI Design</strong><small>Branding, graphics and design assistance</small><em>Planned module</em></a>
+   <a class="tool-category tool-planned" id="marketplacePanel" href="#marketplacePanel"><span class="tool-icon">▣</span><strong>AI Marketplace</strong><small>Discover and sell tools, agents and workflows</small><em>Planned module</em></a>
+  </div>
  </section>
  <section class="dashboard-shortcuts" id="tools" aria-label="Video tools menu">
   <h2 class="menu-heading">Video Tools</h2><p class="muted">एक फीचर चुनें। हर टूल अलग स्क्रीन में खुलेगा।</p>
@@ -1219,6 +1313,28 @@ footer a{color:#222!important}
   <div id="clipxTestOrderHistory" class="muted" aria-live="polite">Login के बाद test orders यहाँ दिखेंगे।</div>
   <p class="muted">ये demo prices अंतिम कीमतें नहीं हैं। Live gateway, real purchases, commission payout और premium feature unlocking अभी बंद हैं।</p>
  </section>
+</div>
+ <aside class="quick-rail" aria-label="Quick actions and account access">
+  <section class="rail-panel">
+   <h2>⚡ Quick Create</h2>
+   <a href="#upload" data-view="studio">▣ Generate / Edit Video <span>→</span></a>
+   <a href="#promptStudio" data-toolview="prompts">✧ Create Video Prompt <span>→</span></a>
+   <a href="#freeCreatorKit" data-view="creatorKit">✍ Create Content <span>→</span></a>
+   <a href="#captionStudio" data-toolview="captions">CC Create Captions <span>→</span></a>
+   <div class="rail-coming">Image, Voice and AI Chat engines: planned modules</div>
+  </section>
+  <section class="rail-panel owner-panel">
+   <h2>♛ Owner Control</h2>
+   <p>Owner and invited-user access will be managed here after role permissions are connected.</p>
+   <a href="#backendConnection" data-view="settings">Open Workspace Settings <span>→</span></a>
+   <div class="rail-status">Platform layout preview · access rules not activated yet</div>
+  </section>
+  <section class="rail-panel">
+   <h2>✦ Your Workspace</h2>
+   <p>ClipX Video Studio is included in SHIF-A AI.</p>
+   <a href="#upload" data-view="studio">Open ClipX Studio <span>→</span></a>
+  </section>
+ </aside>
 </main>
 
 <footer>© 2026 SHIF-A AI · ClipX Video Studio & Creator Workspace<br><a href="creator-tools.html">Creator Tools</a> · <a href="about.html">About</a> · <a href="contact.html">Support</a> · <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a></footer>
