@@ -4,7 +4,7 @@
 
 **Goal:** Add Owner-only passkey-based sign-in, MFA-aware account recovery, server-authoritative Owner authorization, and auditable security controls without collecting biometric data.
 
-**Architecture:** Keep Supabase Auth as the identity/session authority and private membership records as the Owner-role authority. Add WebAuthn passkey registration and assertion verification through trusted server endpoints with short-lived, single-use challenges; the device/OS performs fingerprint, face, iris, or screen-lock verification and SHIF-A receives only cryptographic WebAuthn results. Recovery uses verified account channels and one-time hashed recovery codes, with session/credential revocation and audit events.
+**Architecture:** Keep Supabase Auth as the identity/session authority and private membership records as the Owner-role authority. Owner chooses direct, account-identifier-free passkey sign-in using a discoverable WebAuthn credential. The server verifies the assertion, resolves credential ID/user handle to the enrolled Owner, checks private Owner membership, then uses Supabase Admin `generateLink({type: "magiclink"})` to mint a one-time handoff token hash; the browser exchanges it with `auth.verifyOtp({token_hash, type: "email"})` to establish the genuine Supabase session. Never fabricate JWTs or expose a handoff token before assertion verification. The device/OS performs fingerprint, face, iris, or screen-lock verification and SHIF-A receives only cryptographic WebAuthn results. Recovery uses verified account channels and one-time hashed recovery codes, with session/credential revocation and audit events.
 
 **Tech Stack:** Existing static HTML/CSS/JavaScript frontend, Supabase Auth, Supabase Edge Functions (Deno/TypeScript), PostgreSQL private schema/RPC, Python unittest contract tests, Node syntax checks, Deno type checks, GitHub Actions.
 
@@ -12,6 +12,8 @@
 
 - Owner privileges are read from a private server-controlled membership record; never infer Owner from email address, client state, URL parameters, local storage, or editable user metadata.
 - Biometric templates, fingerprint images, face images, iris images, and retina images must never be collected or stored by SHIF-A.
+- Direct Owner passkey login must not require Owner ID/email first; use discoverable credentials and server-side credential-to-Owner mapping.
+- Supabase Auth remains the only issuer of application sessions; after a valid discoverable passkey assertion and Owner membership check, mint a single-use Supabase magic-link token hash server-side and exchange it client-side with `verifyOtp`. Never mint JWTs directly.
 - A browser cannot force fingerprint specifically. WebAuthn user verification may be performed by the OS using fingerprint, face, PIN, pattern, or device password according to device capability.
 - Ordinary phone cameras must not be represented as retina scanners. Iris/eye verification is available only if the platform authenticator exposes it; SHIF-A cannot reliably identify which modality the OS used.
 - First-time Owner bootstrap remains a separately trusted administrative operation; no account is promoted based only on an email string.
@@ -217,7 +219,7 @@ git commit -m "feat: add owner security center and Hindi guide"
 ## Unresolved implementation decisions
 
 1. **Owner ID format and delivery:** The current project uses Supabase email/password identity. Decide whether Owner ID is a separate public username mapped to the verified Supabase user, or whether the verified email remains the login identifier and Owner ID is a recovery/display alias. Recommendation: keep Supabase email as the authentication identifier initially; add a separate non-secret Owner ID alias only if product UX requires it.
-2. **Passkey account discovery:** Decide whether to support discoverable passkey sign-in from the Owner login screen before an email is entered, or require Owner ID/email first and then offer the passkey. Recommendation: require Owner ID/email first for the initial release; it simplifies account selection and avoids exposing account enumeration.
+2. **Passkey account discovery:** Decide whether to support discoverable passkey sign-in from the Owner login screen before an email is entered, or require Owner ID/email first and then offer the passkey. Decision: direct discoverable passkey sign-in with no email/Owner ID prompt. The credential ID and user handle are resolved server-side; generic responses and rate limits prevent account enumeration.
 3. **Recovery channel:** Confirm which verified recovery channel(s) the Owner can access and whether a separate recovery email should be enrolled. No address is assumed in this plan. The optional Lover Name fallback is user-entered during trusted setup and remains supplementary only.
 4. **Eye/iris:** No dedicated eye scanner will be built for ordinary phones. Support is limited to whatever modality the device OS performs behind WebAuthn user verification.
 5. **Session revocation semantics:** Confirm whether recovery should revoke all sessions on every device or allow the Owner to preserve the current trusted session. Recommendation: revoke all sessions after password/account recovery; allow selective session revocation for a lost device when the platform supports it.
