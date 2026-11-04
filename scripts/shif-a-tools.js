@@ -9,7 +9,7 @@
   {id:"voice-studio",name:"AI Voice Studio",category:"Voice",description:"Text-to-speech and audio generation engines are not connected yet.",status:"coming-soon"},
   {id:"ai-chat",name:"AI Chat & Research",category:"Chat & Research",description:"Model-backed assistant and research tools are planned.",status:"coming-soon"},
   {id:"writing-studio",name:"AI Writing Studio",category:"Writing",description:"Model-backed writing and document workflows are planned.",status:"coming-soon"},
-  {id:"coding-studio",name:"AI Coding Studio",category:"Coding",description:"Code generation and debugging engines are not connected yet.",status:"coming-soon"},
+  {id:"coding-studio",name:"AI Coding Studio",category:"Coding",description:"Free local website and Android starter templates, code editor, website preview and source bundle export. AI generation and APK compilation are not connected.",status:"limited",href:"coding-studio.html"},
   {id:"agents-studio",name:"AI Agents Studio",category:"Agents",description:"Custom task agents and tool permissions are planned.",status:"coming-soon"},
   {id:"automation-studio",name:"AI Automation Studio",category:"Automation",description:"Multi-step workflows and scheduled automation are planned.",status:"coming-soon"},
   {id:"document-studio",name:"Documents & PDF",category:"Documents",description:"Document understanding and PDF workflows are planned.",status:"coming-soon"},
