@@ -11,7 +11,7 @@ header{padding:16px 5%;border-bottom:1px solid #164d7c;background:#041327ed}head
 main{width:min(780px,94%);margin:28px auto}.panel{padding:22px;border:1px solid #16558b;border-radius:18px;background:linear-gradient(145deg,#0a2442,#06162b);box-shadow:0 12px 35px #0005;margin:16px 0}
 h1{font-size:clamp(26px,5vw,40px);margin:8px 0}h2{font-size:18px}.muted{color:#a8c1d9;line-height:1.65}
 button{border:1px solid #228bd4;border-radius:10px;padding:12px 16px;background:linear-gradient(100deg,#087fe8,#0753a7);color:white;font-weight:700;cursor:pointer;margin:5px 5px 5px 0}
-button:disabled{opacity:.55;cursor:not-allowed}.secondary{background:#142b48;border-color:#315d83}
+input{width:100%;max-width:440px;padding:12px;border:1px solid #315d83;border-radius:10px;background:#061326;color:#fff;margin:6px 0 12px}button:disabled{opacity:.55;cursor:not-allowed}.secondary{background:#142b48;border-color:#315d83}
 .status{min-height:26px;color:#8de7c6;line-height:1.5}.warning{color:#ffd48b}.hidden{display:none!important}
 li{margin:8px 0;line-height:1.5}.tag{display:inline-block;border:1px solid #286b9e;border-radius:99px;padding:5px 10px;color:#aeeaff;font-size:12px}
 @media(max-width:600px){main{width:calc(100% - 20px);margin:14px auto}.panel{padding:16px}}
@@ -46,6 +46,23 @@ li{margin:8px 0;line-height:1.5}.tag{display:inline-block;border:1px solid #286b
 <li>Eye/iris तभी उपलब्ध होगा जब device authenticator और OS उसे WebAuthn के जरिए support करें। सामान्य camera से retina scan नहीं किया जाएगा।</li>
 <li>यह passkey feature Supabase Auth का experimental feature है। Production activation से पहले project configuration और origin verify करना जरूरी है।</li>
 </ul>
+</section>
+
+<section class="panel">
+<h2>Owner ID / Password Recovery</h2>
+<p class="muted">इस project में Owner ID आपका verified login email है। अगर ID याद नहीं है, तो वही email इस्तेमाल करें जिससे SHIF-A account verify किया गया था। सुरक्षा के लिए यह पेज account मौजूद होने या न होने की जानकारी नहीं देगा।</p>
+<label for="recoveryEmail">Owner ID (verified email)</label>
+<input id="recoveryEmail" type="email" autocomplete="username" maxlength="254" placeholder="अपना verified email लिखें">
+<button id="sendPasswordReset" type="button">Password Reset Link भेजें</button>
+<p id="recoveryStatus" class="status" role="status" aria-live="polite"></p>
+<div id="newPasswordPanel" class="hidden">
+<h2>नया Password सेट करें</h2>
+<label for="newOwnerPassword">नया Password</label>
+<input id="newOwnerPassword" type="password" autocomplete="new-password" minlength="10" maxlength="128">
+<label for="confirmOwnerPassword">Password दोबारा लिखें</label>
+<input id="confirmOwnerPassword" type="password" autocomplete="new-password" minlength="10" maxlength="128">
+<button id="saveNewOwnerPassword" type="button">Password Update करें</button>
+</div>
 </section>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.105.0"></script>
