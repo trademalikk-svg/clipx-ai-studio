@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="hi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#06162c">
+<title>Research Workspace | SHIF-A AI</title><meta name="description" content="Organize research questions, source links, evidence notes and findings in a free browser workspace.">
+<link rel="canonical" href="https://trademalikk-svg.github.io/clipx-ai-studio/research-studio.html">
+<style>
+:root{color-scheme:dark;font-family:Arial,sans-serif;background:#030b19;color:#f4f9ff}*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 70% -15%,#104276 0,transparent 44%),#030b19}a{color:#8edcff;text-decoration:none}.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px clamp(14px,4vw,48px);border-bottom:1px solid #164d7c;background:#041327ed;position:sticky;top:0;z-index:5}.brand{font-size:22px;font-weight:900;color:#fff}.brand span{color:#28d8f3}.top nav{display:flex;gap:15px;flex-wrap:wrap;font-size:13px}
+main{width:min(1120px,94%);margin:24px auto 60px}.hero,.panel{border:1px solid #16558b;border-radius:17px;background:linear-gradient(145deg,#0a2442,#06162b);padding:20px;margin-bottom:15px}h1{font-size:clamp(28px,5vw,42px);margin:0 0 8px}.muted{color:#9db8d3;line-height:1.6}.notice{padding:11px 13px;border:1px solid #8a6729;background:#30230b;color:#ffe4a6;border-radius:10px;font-size:13px;line-height:1.55;margin-top:12px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.wide{grid-column:1/-1}label{display:block;font-size:13px;color:#c7ddf2;margin:8px 0 5px}input,select,textarea{width:100%;padding:12px;border:1px solid #28649a;border-radius:9px;background:#071a31;color:#fff;font:inherit}textarea{min-height:100px;resize:vertical}.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}button{padding:11px 15px;border:1px solid #2386c8;border-radius:9px;background:linear-gradient(100deg,#087fe8,#0753a7);color:#fff;font-weight:700;cursor:pointer}button.secondary{background:#102a47;border-color:#315b80}.source{padding:13px;border:1px solid #28547a;border-radius:11px;background:#071a31;margin-top:10px;overflow-wrap:anywhere}.source a{word-break:break-all}.source-head{display:flex;justify-content:space-between;gap:10px;align-items:center}.remove{background:#3a1d2b;border-color:#87415c;padding:7px 10px}.checks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.check{display:flex;gap:8px;align-items:flex-start;padding:9px;border:1px solid #28547a;border-radius:9px;background:#071a31;font-size:13px}.check input{width:auto;margin-top:2px}.output{white-space:pre-wrap;overflow-wrap:anywhere;background:#04101f;border:1px solid #315a7d;border-radius:11px;padding:14px;min-height:150px;color:#d9efff;font:13px/1.6 ui-monospace,monospace}.status{font-size:12px;color:#82e0bd;min-height:18px;margin-top:9px}
+@media(max-width:700px){.top{align-items:flex-start;flex-direction:column}main{width:calc(100% - 22px);margin:14px auto 40px}.grid,.checks{grid-template-columns:1fr}.wide{grid-column:auto}.hero,.panel{padding:16px}}
+</style></head><body>
+<header class="top"><a class="brand" href="index.html">✦ SHIF-A <span>AI</span></a><nav><a href="index.html">Home</a><a href="ai-tools.html">AI Tools</a><a href="dashboard.html">My Workspace</a><a href="agents-studio.html">Agent Designer</a></nav></header>
+<main>
+<section class="hero"><h1>Research Workspace</h1><p class="muted">Research question तय करें, भरोसेमंद sources के links जोड़ें, evidence notes रखें और अपने निष्कर्ष व्यवस्थित करें।</p>
+<div class="notice"><strong>ईमानदार स्थिति:</strong> यह research organizer है, live AI chat या automatic web-search engine नहीं। यह खुद facts verify या sources fetch नहीं करता। Links खोलकर जानकारी स्वयं जाँचें और notes दर्ज करें। कोई paid API नहीं; data इसी browser में रहता है, जब तक आप export न करें।</div></section>
+<section class="panel"><h2>1. Research brief</h2><div class="grid">
+<div><label for="topic">Research topic</label><input id="topic" maxlength="180" placeholder="जैसे: UP में छोटे व्यवसायों के लिए digital marketing"></div>
+<div><label for="language">Preferred language</label><select id="language"><option>Hindi</option><option>English</option><option>Hindi + English</option></select></div>
+<div class="wide"><label for="question">Main research question</label><textarea id="question" maxlength="1500" placeholder="आपको किस सवाल का जवाब ढूँढना है?"></textarea></div>
+<div><label for="scope">Scope / time period</label><input id="scope" maxlength="300" placeholder="जैसे: India, 2024–2026"></div>
+<div><label for="audience">Intended audience</label><input id="audience" maxlength="180" placeholder="जैसे: Beginners, business owners"></div>
+</div></section>
+<section class="panel"><h2>2. Source library</h2><p class="muted">किसी official page, report, article या document का URL और उसका title दर्ज करें।</p><div class="grid">
+<div class="wide"><label for="sourceUrl">Source URL (https://)</label><input id="sourceUrl" type="url" maxlength="1000" placeholder="https://example.com/report"></div>
+<div><label for="sourceTitle">Source title</label><input id="sourceTitle" maxlength="180" placeholder="Report / article title"></div>
+<div><label for="sourceType">Source type</label><select id="sourceType"><option>Official / Government</option><option>Academic / Research</option><option>Primary data</option><option>News / Journalism</option><option>Industry report</option><option>Other</option></select></div>
+<div class="wide"><label for="sourceNote">Key evidence / notes</label><textarea id="sourceNote" maxlength="1200" placeholder="इस source से कौन-सी relevant बात मिली? अपने शब्दों में लिखें।"></textarea></div>
+</div><div class="actions"><button id="addSource">Add source</button></div><div id="sourceList"><p class="muted">अभी कोई source नहीं जोड़ा गया।</p></div><p id="sourceStatus" class="status" role="status"></p></section>
+<section class="panel"><h2>3. Evidence quality checklist</h2><p class="muted">किसी निष्कर्ष पर भरोसा करने से पहले इन बातों को जाँचें।</p><div class="checks">
+<label class="check"><input type="checkbox" class="quality" value="Source author/publisher identified">Author / publisher पहचाना गया</label>
+<label class="check"><input type="checkbox" class="quality" value="Publication date checked">Publication date जाँची</label>
+<label class="check"><input type="checkbox" class="quality" value="Primary or official source preferred">Primary / official source को प्राथमिकता</label>
+<label class="check"><input type="checkbox" class="quality" value="Claims cross-checked">महत्वपूर्ण claims cross-check किए</label>
+<label class="check"><input type="checkbox" class="quality" value="Limitations and uncertainty noted">Limitations और uncertainty लिखी</label>
+<label class="check"><input type="checkbox" class="quality" value="Facts separated from opinions">Facts और opinions अलग रखे</label>
+</div></section>
+<section class="panel"><h2>4. Findings and conclusion</h2><div class="grid">
+<div class="wide"><label for="findings">Key findings</label><textarea id="findings" maxlength="4000" placeholder="Sources से मिली मुख्य बातें लिखें। जहाँ संभव हो source number का उल्लेख करें।"></textarea></div>
+<div class="wide"><label for="gaps">Gaps / unanswered questions</label><textarea id="gaps" maxlength="2000" placeholder="कौन-सी जानकारी अभी नहीं मिली या verify नहीं हुई?"></textarea></div>
+<div class="wide"><label for="conclusion">Working conclusion</label><textarea id="conclusion" maxlength="2500" placeholder="Evidence के आधार पर अपना provisional conclusion लिखें।"></textarea></div>
+</div><div class="actions"><button id="buildReport">Build research report</button><button class="secondary" id="resetAll">Reset workspace</button></div><p id="reportStatus" class="status" role="status"></p></section>
+<section class="panel"><h2>5. Export research notes</h2><div id="reportOutput" class="output">आपकी research report यहाँ दिखाई देगी।</div><div class="actions"><button id="copyReport">Copy report</button><button class="secondary" id="downloadReport">Download TXT</button><button class="secondary" id="downloadData">Download JSON</button></div><p id="exportStatus" class="status" role="status"></p></section>
+</main><script src="scripts/shif-a-research-studio.js"></script></body></html>
