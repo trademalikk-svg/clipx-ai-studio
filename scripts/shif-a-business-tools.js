@@ -1,14 +1,16 @@
 (function(){
 "use strict";
 const $=id=>document.getElementById(id);
-let currentTool="profile",latest="";\nconst WORKSPACE_KEY="shifA.businessTools.workspace.v1";\nconst LIBRARY_KEY="shifA.businessTools.library.v1";\nconst MAX_LIBRARY_ITEMS=30;\nlet restoring=false;
+let currentTool="profile",latest="";
+const WORKSPACE_KEY="shifA.businessTools.workspace.v1";\nconst LIBRARY_KEY="shifA.businessTools.library.v1";\nconst MAX_LIBRARY_ITEMS=30;\nlet restoring=false;
 const fields={profile:["detailWrap"],listing:["detailWrap","itemWrap","priceWrap"],reply:["customerWrap"],plan:["goalWrap","budgetWrap"],quote:["itemWrap","priceWrap","qtyWrap","taxWrap"]};
 function selectTool(tool){
  currentTool=tool;
  document.querySelectorAll("[data-tool]").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.tool===tool)));
  ["detailWrap","customerWrap","goalWrap","budgetWrap","itemWrap","priceWrap","qtyWrap","taxWrap"].forEach(id=>$(id).classList.toggle("hidden",!fields[tool].includes(id)));
  const names={profile:"Business Profile",listing:"Product Listing",reply:"Customer Reply",plan:"Marketing Plan",quote:"Quotation Estimate"};
- $("formStatus").textContent=names[tool]+" selected.";\n saveWorkspace();
+ $("formStatus").textContent=names[tool]+" selected.";
+ saveWorkspace();
 }
 document.querySelectorAll("[data-tool]").forEach(b=>b.addEventListener("click",()=>selectTool(b.dataset.tool)));
 const FIELD_IDS=["businessName","businessType","city","language","details","customerMessage","goal","budget","itemName","itemPrice","itemQty","taxRate"];
@@ -90,7 +92,9 @@ $("generateBtn").addEventListener("click",()=>{
  try{latest=build();$("result").textContent=latest;saveWorkspace();$("formStatus").textContent="Draft ready. Please verify details before using."; $("resultStatus").textContent="";}
  catch(e){$("formStatus").textContent=e.message;}
 });
-$("saveToLibraryBtn").addEventListener("click",saveToLibrary);\n$("savedBusinessDocs").addEventListener("click",event=>{const open=event.target.closest("[data-open-doc]"),del=event.target.closest("[data-delete-doc]");if(open)openLibraryItem(open.dataset.openDoc);if(del)deleteLibraryItem(del.dataset.deleteDoc);});\n$("copyBtn").addEventListener("click",async()=>{
+$("saveToLibraryBtn").addEventListener("click",saveToLibrary);
+$("savedBusinessDocs").addEventListener("click",event=>{const open=event.target.closest("[data-open-doc]"),del=event.target.closest("[data-delete-doc]");if(open)openLibraryItem(open.dataset.openDoc);if(del)deleteLibraryItem(del.dataset.deleteDoc);});
+$("copyBtn").addEventListener("click",async()=>{
  if(!latest){$("resultStatus").textContent="पहले draft तैयार करें।";return;}
  try{await navigator.clipboard.writeText(latest);$("resultStatus").textContent="Draft copied.";}
  catch{$("resultStatus").textContent="Clipboard permission नहीं मिली। Text select करके copy करें।";}
@@ -103,7 +107,8 @@ $("downloadBtn").addEventListener("click",()=>{
 $("clearBtn").addEventListener("click",()=>{
  ["businessName","businessType","city","details","customerMessage","goal","budget","itemName","itemPrice","taxRate"].forEach(id=>$(id).value="");
  $("itemQty").value="1";latest="";$("result").textContent="Choose a tool, enter details and tap Create Draft.";
- $("formStatus").textContent="Fields cleared."; $("resultStatus").textContent="";\n try{localStorage.removeItem(WORKSPACE_KEY);}catch(error){}
+ $("formStatus").textContent="Fields cleared."; $("resultStatus").textContent="";
+ try{localStorage.removeItem(WORKSPACE_KEY);}catch(error){}
 });
-selectTool("profile");
+FIELD_IDS.forEach(id=>$(id).addEventListener("input",saveWorkspace));\nrestoring=true;\nselectTool("profile");\nrestoring=false;\nrestoreWorkspace();\nrenderLibrary();
 })();
