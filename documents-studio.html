@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="hi">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#06162c">
+<title>Documents & PDF Studio | SHIF-A AI</title>
+<meta name="description" content="Create and format documents in your browser, download TXT files and print or save documents as PDF.">
+<link rel="canonical" href="https://trademalikk-svg.github.io/clipx-ai-studio/documents-studio.html">
+<style>
+:root{color-scheme:dark;font-family:Arial,sans-serif;background:#030b19;color:#f4f9ff}*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 70% -15%,#104276 0,transparent 44%),#030b19}
+a{color:#8edcff;text-decoration:none}.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px clamp(14px,4vw,48px);border-bottom:1px solid #164d7c;background:#041327ed;position:sticky;top:0;z-index:5}
+.brand{font-size:22px;font-weight:900;color:#fff}.brand span{color:#28d8f3}.top nav{display:flex;gap:15px;flex-wrap:wrap;font-size:13px}
+main{width:min(1120px,94%);margin:24px auto 60px}.hero,.panel{border:1px solid #16558b;border-radius:17px;background:linear-gradient(145deg,#0a2442,#06162b);padding:20px;margin-bottom:15px}
+h1{font-size:clamp(28px,5vw,42px);margin:0 0 8px}.muted{color:#9db8d3;line-height:1.6}
+.notice{padding:11px 13px;border:1px solid #267b69;background:#092b2a;color:#b8f5dc;border-radius:10px;font-size:13px;line-height:1.5;margin-top:12px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.wide{grid-column:1/-1}
+label{display:block;font-size:13px;color:#c7ddf2;margin:8px 0 5px}
+input,select,textarea{width:100%;padding:12px;border:1px solid #28649a;border-radius:9px;background:#071a31;color:#fff;font:inherit}
+textarea{min-height:250px;resize:vertical;line-height:1.55}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}
+button{padding:11px 15px;border:1px solid #2386c8;border-radius:9px;background:linear-gradient(100deg,#087fe8,#0753a7);color:#fff;font-weight:700;cursor:pointer}
+button.secondary{background:#102a47;border-color:#315b80}
+.stats,.status{font-size:12px;color:#9db8d3;margin-top:9px;min-height:18px}
+.preview-wrap{background:#dce7f2;padding:16px;border-radius:12px;overflow:auto}
+#paperPreview{background:#fff;color:#172033;width:100%;max-width:760px;min-height:500px;margin:0 auto;padding:48px 54px;box-shadow:0 6px 24px #0004;white-space:pre-wrap;overflow-wrap:anywhere;font:16px/1.65 Arial,sans-serif}
+#previewTitle{font-size:25px;font-weight:700;margin:0 0 24px;white-space:pre-wrap}
+#previewMeta{font-size:12px;color:#64748b;margin-bottom:22px}
+@media(max-width:700px){.top{align-items:flex-start;flex-direction:column}main{width:calc(100% - 22px);margin:14px auto 40px}.grid{grid-template-columns:1fr}.wide{grid-column:auto}.hero,.panel{padding:16px}#paperPreview{padding:28px 22px;min-height:420px}}
+@media print{
+ @page{size:A4;margin:20mm}
+ html,body{background:#fff!important;color:#172033!important}
+ body *{visibility:hidden!important}
+ #paperPreview,#paperPreview *{visibility:visible!important}
+ #paperPreview{position:absolute;left:0;top:0;width:100%;max-width:none;min-height:0;margin:0;padding:0;box-shadow:none;background:#fff;color:#172033;overflow:visible}
+ #previewTitle{color:#172033}
+ #previewMeta{color:#64748b}
+}
+</style>
+</head>
+<body>
+<header class="top"><a class="brand" href="index.html">✦ SHIF-A <span>AI</span></a><nav><a href="index.html">Home</a><a href="ai-tools.html">AI Tools</a><a href="dashboard.html">My Workspace</a><a href="writing-studio.html">Writing Studio</a></nav></header>
+<main>
+<section class="hero"><h1>Documents & PDF Studio</h1><p class="muted">Browser में document तैयार करें, format करें, TXT डाउनलोड करें या Print के जरिए PDF में save करें।</p><div class="notice">Free local tool · आपका document किसी server पर upload नहीं होता। PDF export के लिए Print dialog में “Save as PDF” चुनें। इस version में PDF merge, split और OCR उपलब्ध नहीं हैं।</div></section>
+<section class="panel">
+<h2>Document Editor</h2>
+<div class="grid">
+<div><label for="docTitle">Document title</label><input id="docTitle" maxlength="120" placeholder="उदाहरण: Project Report"></div>
+<div><label for="docAuthor">Author / Prepared by (optional)</label><input id="docAuthor" maxlength="100" placeholder="नाम या संस्था"></div>
+<div><label for="docSize">Preview font size</label><select id="docSize"><option value="14">Small · 14 px</option><option value="16" selected>Normal · 16 px</option><option value="18">Large · 18 px</option><option value="20">Extra large · 20 px</option></select></div>
+<div><label for="docLine">Line spacing</label><select id="docLine"><option value="1.4">Compact</option><option value="1.65" selected>Normal</option><option value="1.9">Relaxed</option></select></div>
+<div class="wide"><label for="docBody">Document content</label><textarea id="docBody" maxlength="30000" placeholder="अपना document यहाँ लिखें या paste करें…"></textarea></div>
+</div>
+<div class="stats" id="docStats" aria-live="polite">0 words · 0 characters</div>
+<div class="actions"><button id="updatePreviewBtn">Update Preview</button><button id="printPdfBtn">Print / Save as PDF</button><button class="secondary" id="downloadTxtBtn">Download TXT</button><button class="secondary" id="clearDocBtn">Clear</button></div>
+<p class="status" id="docStatus" role="status"></p>
+</section>
+<section class="panel"><h2>Document Preview</h2><div class="preview-wrap"><article id="paperPreview"><h1 id="previewTitle">Untitled Document</h1><div id="previewMeta"></div><div id="previewBody">आपका document preview यहाँ दिखाई देगा।</div></article></div></section>
+</main>
+<script src="scripts/shif-a-documents-studio.js"></script>
+</body></html>
