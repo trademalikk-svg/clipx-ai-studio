@@ -15,7 +15,7 @@
   {id:"automation-studio",name:"AI Automation Studio",category:"Automation",description:"Multi-step workflows and scheduled automation are planned.",status:"coming-soon"},
   {id:"document-studio",name:"Documents & PDF Studio",category:"Documents",description:"Create and format documents in your browser, download TXT files and print/save documents as PDF. No upload or AI API required.",status:"available",href:"documents-studio.html"},
   {id:"business-studio",name:"Business Toolkit",category:"Business",description:"Free local templates for business profiles, product listings, customer replies, marketing plans and quotation estimates. No AI API or data upload.",status:"available",href:"business-tools.html"},
-  {id:"education-studio",name:"AI Education",category:"Education",description:"Learning and study tools are planned.",status:"coming-soon"},
+  {id:"education-studio",name:"Study Studio",category:"Education",description:"Free browser-based study planner, user-made flashcards, practice quiz from your own notes and progress checklist. No AI API or data upload.",status:"available",href:"education-studio.html"},
   {id:"productivity-studio",name:"AI Productivity",category:"Productivity",description:"Personal productivity and task tools are planned.",status:"coming-soon"}
  ];
  const grid=document.getElementById("toolGrid"),search=document.getElementById("toolSearch"),filter=document.getElementById("categoryFilter");
