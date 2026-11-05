@@ -4,6 +4,11 @@ import unittest
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 
 class ShifAAIProviderContractTests(unittest.TestCase):
+    def test_tool_directory_has_no_duplicate_array_separator(self):
+        import re
+        source = (ROOT / "scripts" / "shif-a-tools.js").read_text(encoding="utf-8")
+        self.assertNotRegex(source, r",\s*,\s*\{")
+
     def test_cloudflare_is_default_and_gemini_remains_switchable(self):
         source = (ROOT / "supabase" / "functions" / "shif-a-model-gateway" / "index.ts").read_text(encoding="utf-8")
         self.assertIn('Deno.env.get("AI_PROVIDER") || "cloudflare"', source)
