@@ -1,16 +1,59 @@
 (function(){
 "use strict";
 const $=id=>document.getElementById(id);
-let currentTool="profile",latest="";
+let currentTool="profile",latest="";\nconst WORKSPACE_KEY="shifA.businessTools.workspace.v1";\nconst LIBRARY_KEY="shifA.businessTools.library.v1";\nconst MAX_LIBRARY_ITEMS=30;\nlet restoring=false;
 const fields={profile:["detailWrap"],listing:["detailWrap","itemWrap","priceWrap"],reply:["customerWrap"],plan:["goalWrap","budgetWrap"],quote:["itemWrap","priceWrap","qtyWrap","taxWrap"]};
 function selectTool(tool){
  currentTool=tool;
  document.querySelectorAll("[data-tool]").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.tool===tool)));
  ["detailWrap","customerWrap","goalWrap","budgetWrap","itemWrap","priceWrap","qtyWrap","taxWrap"].forEach(id=>$(id).classList.toggle("hidden",!fields[tool].includes(id)));
  const names={profile:"Business Profile",listing:"Product Listing",reply:"Customer Reply",plan:"Marketing Plan",quote:"Quotation Estimate"};
- $("formStatus").textContent=names[tool]+" selected.";
+ $("formStatus").textContent=names[tool]+" selected.";\n saveWorkspace();
 }
 document.querySelectorAll("[data-tool]").forEach(b=>b.addEventListener("click",()=>selectTool(b.dataset.tool)));
+const FIELD_IDS=["businessName","businessType","city","language","details","customerMessage","goal","budget","itemName","itemPrice","itemQty","taxRate"];
+function collectFields(){const out={};FIELD_IDS.forEach(id=>out[id]=$(id).value);return out;}
+function saveWorkspace(){
+ if(restoring)return;
+ try{localStorage.setItem(WORKSPACE_KEY,JSON.stringify({version:1,tool:currentTool,fields:collectFields(),draft:latest}));}
+ catch(error){$("formStatus").textContent="Local save उपलब्ध नहीं है। Draft को Download TXT से सुरक्षित रखें।";}
+}
+function restoreWorkspace(){
+ try{
+  const raw=localStorage.getItem(WORKSPACE_KEY);if(!raw)return;
+  const saved=JSON.parse(raw),f=saved&&saved.fields;
+  if(!saved||saved.version!==1||!f||typeof f!=="object"||Array.isArray(f)||!Object.prototype.hasOwnProperty.call(fields,saved.tool))return;
+  const limits={businessName:120,businessType:100,city:100,details:1000,customerMessage:1000,goal:180,budget:40,itemName:120};
+  for(const [id,max] of Object.entries(limits)){if(typeof f[id]!=="string"||f[id].length>max)return;}
+  if(!["hi","en","both"].includes(f.language))return;
+  for(const id of ["itemPrice","itemQty","taxRate"]){if(typeof f[id]!=="string"||f[id].length>32)return;}
+  restoring=true;FIELD_IDS.forEach(id=>{if(typeof f[id]==="string")$(id).value=f[id];});selectTool(saved.tool);
+  if(typeof saved.draft==="string"&&saved.draft.length<=30000){latest=saved.draft;if(latest)$("result").textContent=latest;}
+  restoring=false;
+  if(latest)$("formStatus").textContent="पिछला Business Toolkit draft restore हो गया।";
+ }catch(error){restoring=false;$("formStatus").textContent="Saved business workspace पढ़ा नहीं जा सका।";}
+}
+function readLibrary(){
+ try{const raw=localStorage.getItem(LIBRARY_KEY);if(!raw)return [];const items=JSON.parse(raw);if(!Array.isArray(items))return [];return items.filter(x=>x&&typeof x.id==="string"&&typeof x.title==="string"&&typeof x.tool==="string"&&Object.prototype.hasOwnProperty.call(fields,x.tool)&&typeof x.draft==="string"&&x.draft.length<=30000&&x.fields&&typeof x.fields==="object"&&!Array.isArray(x.fields)).slice(0,MAX_LIBRARY_ITEMS);}
+ catch(error){return [];}
+}
+function renderLibrary(){
+ const root=$("savedBusinessDocs");if(!root)return;const items=readLibrary();root.replaceChildren();
+ if(!items.length){const p=document.createElement("p");p.className="muted";p.textContent="अभी कोई saved document नहीं है।";root.appendChild(p);return;}
+ items.forEach(item=>{const row=document.createElement("div");row.className="saved-item";const info=document.createElement("div"),title=document.createElement("strong"),meta=document.createElement("small");title.textContent=item.title;meta.textContent=item.toolLabel+" · "+new Date(item.savedAt||0).toLocaleString();info.append(title,meta);const actions=document.createElement("div");actions.className="actions";const open=document.createElement("button");open.type="button";open.className="secondary";open.textContent="Open";open.dataset.openDoc=item.id;const del=document.createElement("button");del.type="button";del.className="secondary";del.textContent="Delete";del.dataset.deleteDoc=item.id;actions.append(open,del);row.append(info,actions);root.appendChild(row);});
+}
+function saveToLibrary(){
+ if(!latest){$("libraryStatus").textContent="पहले draft तैयार करें।";return;}
+ const labels={profile:"Business Profile",listing:"Product Listing",reply:"Customer Reply",plan:"Marketing Plan",quote:"Quotation Estimate"};const items=readLibrary();
+ items.unshift({id:Date.now()+"-"+Math.random().toString(36).slice(2,8),title:($("businessName").value.trim()||"Business")+" — "+labels[currentTool],tool:currentTool,toolLabel:labels[currentTool],fields:collectFields(),draft:latest,savedAt:Date.now()});
+ try{localStorage.setItem(LIBRARY_KEY,JSON.stringify(items.slice(0,MAX_LIBRARY_ITEMS)));renderLibrary();$("libraryStatus").textContent="Document Library में सेव हो गया।";}
+ catch(error){$("libraryStatus").textContent="Library में जगह उपलब्ध नहीं है। पुराने drafts हटाएँ या TXT डाउनलोड करें।";}
+}
+function openLibraryItem(id){
+ const item=readLibrary().find(x=>x.id===id);if(!item)return;restoring=true;
+ FIELD_IDS.forEach(key=>{if(typeof item.fields[key]==="string")$(key).value=item.fields[key];});selectTool(item.tool);latest=item.draft;$("result").textContent=latest;restoring=false;saveWorkspace();$("formStatus").textContent="Saved document खुल गया।";$("libraryStatus").textContent="Document editor में restore हो गया।";
+}
+function deleteLibraryItem(id){const items=readLibrary().filter(x=>x.id!==id);try{localStorage.setItem(LIBRARY_KEY,JSON.stringify(items));renderLibrary();$("libraryStatus").textContent="Saved document हटाया गया।";}catch(error){$("libraryStatus").textContent="Document हटाया नहीं जा सका।";}}
 function build(){
  const name=$("businessName").value.trim(),type=$("businessType").value.trim(),city=$("city").value.trim(),lang=$("language").value,details=$("details").value.trim();
  const hi=lang==="hi",both=lang==="both",heading=(h,e)=>hi?h:both?h+" / "+e:e;
@@ -44,10 +87,10 @@ function build(){
  }
 }
 $("generateBtn").addEventListener("click",()=>{
- try{latest=build();$("result").textContent=latest;$("formStatus").textContent="Draft ready. Please verify details before using."; $("resultStatus").textContent="";}
+ try{latest=build();$("result").textContent=latest;saveWorkspace();$("formStatus").textContent="Draft ready. Please verify details before using."; $("resultStatus").textContent="";}
  catch(e){$("formStatus").textContent=e.message;}
 });
-$("copyBtn").addEventListener("click",async()=>{
+$("saveToLibraryBtn").addEventListener("click",saveToLibrary);\n$("savedBusinessDocs").addEventListener("click",event=>{const open=event.target.closest("[data-open-doc]"),del=event.target.closest("[data-delete-doc]");if(open)openLibraryItem(open.dataset.openDoc);if(del)deleteLibraryItem(del.dataset.deleteDoc);});\n$("copyBtn").addEventListener("click",async()=>{
  if(!latest){$("resultStatus").textContent="पहले draft तैयार करें।";return;}
  try{await navigator.clipboard.writeText(latest);$("resultStatus").textContent="Draft copied.";}
  catch{$("resultStatus").textContent="Clipboard permission नहीं मिली। Text select करके copy करें।";}
@@ -60,7 +103,7 @@ $("downloadBtn").addEventListener("click",()=>{
 $("clearBtn").addEventListener("click",()=>{
  ["businessName","businessType","city","details","customerMessage","goal","budget","itemName","itemPrice","taxRate"].forEach(id=>$(id).value="");
  $("itemQty").value="1";latest="";$("result").textContent="Choose a tool, enter details and tap Create Draft.";
- $("formStatus").textContent="Fields cleared."; $("resultStatus").textContent="";
+ $("formStatus").textContent="Fields cleared."; $("resultStatus").textContent="";\n try{localStorage.removeItem(WORKSPACE_KEY);}catch(error){}
 });
 selectTool("profile");
 })();
