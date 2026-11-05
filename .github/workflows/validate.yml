@@ -170,6 +170,7 @@ jobs:
           node --check scripts/shif-a-tools.js
           node --check scripts/shif-a-chat.js
           node --check scripts/shif-a-owner-security.js
+          node --check scripts/shif-a-cloud-media.js
       - name: Check FFmpeg worker syntax
         run: node --check worker/worker.js
       - name: Set up Deno
@@ -185,3 +186,4 @@ jobs:
           deno check supabase/functions/shif-a-security-audit/index.ts
           deno check supabase/functions/shif-a-owner-recovery/index.ts
           deno check supabase/functions/shif-a-team-access/index.ts
+          deno check supabase/functions/shif-a-media-gateway/index.ts
