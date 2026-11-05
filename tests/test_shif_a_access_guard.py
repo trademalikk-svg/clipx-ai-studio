@@ -14,6 +14,8 @@ class AccessGuardTests(unittest.TestCase):
             "index.html": "clipx-video",
             "workspace.html": "workspace",
             "tool-studio.html": "dynamic-tool",
+            "chat.html": "ai-chat",
+            "creator-tools.html": "thumbnail-tools",
             "coding-studio.html": "coding-studio",
             "media-studio.html": "media-studio",
             "video-studio.html": "video-studio",
