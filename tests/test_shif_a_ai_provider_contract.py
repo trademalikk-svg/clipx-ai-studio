@@ -66,6 +66,11 @@ class ShifAAIProviderContractTests(unittest.TestCase):
         self.assertNotIn("GEMINI_API_KEY", source)
         self.assertIn('@cf/qwen/qwen3-30b-a3b-fp8', source)
 
+    def test_gateway_enforces_verified_email_server_side(self):
+        source = (ROOT / "supabase" / "functions" / "shif-a-model-gateway" / "index.ts").read_text(encoding="utf-8")
+        self.assertIn("!authData.user.email_confirmed_at", source)
+        self.assertIn("Email verification is required.", source)
+
     def test_usage_guard_runs_before_provider_request_and_free_limit_has_no_fallback(self):
         source = (ROOT / "supabase" / "functions" / "shif-a-model-gateway" / "index.ts").read_text(encoding="utf-8")
         self.assertLess(source.index('adminClient.rpc('), source.index('https://api.cloudflare.com/client/v4/accounts/'))
