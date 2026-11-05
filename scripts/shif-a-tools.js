@@ -41,7 +41,8 @@
   {id:"code-reviewer",name:"Code Review Assistant",category:"Coding",description:"Inspect code for correctness and maintainability.",status:"limited",href:"tool-studio.html?tool=code-reviewer"},
   {id:"api-builder",name:"API & Integration Builder",category:"Coding",description:"Design API contracts and integration scaffolds.",status:"limited",href:"tool-studio.html?tool=api-builder"},
   {id:"workflow-builder",name:"Workflow Designer",category:"Automation",description:"Design workflows with approval gates.",status:"limited",href:"tool-studio.html?tool=workflow-builder"},
-  {id:"email-assistant",name:"Email & Reply Assistant",category:"Writing",description:"Draft structured email replies and follow-ups.",status:"limited",href:"tool-studio.html?tool=email-assistant"}
+  {id:"email-assistant",name:"Email & Reply Assistant",category:"Writing",description:"Draft structured email replies and follow-ups.",status:"limited",href:"tool-studio.html?tool=email-assistant"},
+  {id:"growth-manager",name:"Growth & Keyword Manager",category:"Marketing",description:"Owner-only organic growth dashboard with daily content targets and a source-verified keyword map.",status:"limited",href:"growth-manager.html"}
  ];
  window.ShifATools=Object.freeze(tools.map(tool=>Object.freeze({...tool})));
  const grid=document.getElementById("toolGrid"),search=document.getElementById("toolSearch"),filter=document.getElementById("categoryFilter");
