@@ -22,7 +22,7 @@ textarea{min-height:105px;resize:vertical}.wide{grid-column:1/-1}
 button{padding:11px 15px;border:1px solid #2386c8;border-radius:9px;background:linear-gradient(100deg,#087fe8,#0753a7);color:#fff;font-weight:700;cursor:pointer}
 button.secondary{background:#102a47;border-color:#315b80}
 .output{min-height:240px;white-space:pre-wrap;overflow-wrap:anywhere;padding:15px;border:1px solid #315a7d;border-radius:11px;background:#041226;color:#e2f2ff;line-height:1.65}
-.status{font-size:12px;color:#82e0bd;margin-top:9px;min-height:18px}
+.status{font-size:12px;color:#82e0bd;margin-top:9px;min-height:18px}\n.saved-list{display:grid;gap:9px}.saved-item{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px;border:1px solid #28547a;border-radius:10px;background:#071a31}.saved-item strong{display:block;overflow-wrap:anywhere}.saved-item small{color:#9db8d3}.saved-item .actions{margin:0}.saved-item button{padding:8px 10px;font-size:12px}
 @media(max-width:700px){.top{align-items:flex-start;flex-direction:column}main{width:calc(100% - 22px);margin:14px auto 40px}.form-grid{grid-template-columns:1fr}.wide{grid-column:auto}.hero,.panel{padding:16px}}
 </style>
 </head>
@@ -45,6 +45,6 @@ button.secondary{background:#102a47;border-color:#315b80}
 <div class="actions"><button id="generateBtn">Generate local template</button><button id="generateAiBtn">Generate with Gemini AI</button><button class="secondary" id="clearBtn">Clear</button></div>
 <p class="status" id="formStatus" role="status"></p>
 </section>
-<section class="panel"><h2>Your draft</h2><div id="draftOutput" class="output" aria-live="polite">आपका draft यहाँ दिखाई देगा। Generate draft दबाएँ।</div><div class="actions"><button id="copyBtn">Copy draft</button><button class="secondary" id="downloadBtn">Download .txt</button></div><p class="status" id="outputStatus" role="status"></p></section>
+<section class="panel"><h2>Your draft</h2><div id="draftOutput" class="output" aria-live="polite">आपका draft यहाँ दिखाई देगा। Generate draft दबाएँ।</div><div class="actions"><button id="copyBtn">Copy draft</button><button class="secondary" id="downloadBtn">Download .txt</button><button class="secondary" id="saveDraftBtn">Save to Draft Library</button></div><p class="status" id="outputStatus" role="status"></p></section>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.89.0"></script><script src="scripts/shif-a-auth.js"></script><script src="scripts/shif-a-ai-client.js"></script><script src="scripts/shif-a-writing-studio.js"></script><script src="scripts/shif-a-ai-tools.js"></script></body></html>
