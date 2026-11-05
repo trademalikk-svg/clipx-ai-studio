@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="hi"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#06162c">
+<title>Business Toolkit | SHIF-A AI</title><meta name="description" content="Free browser-based business profile, product listing, customer reply, marketing plan and quotation templates.">
+<link rel="canonical" href="https://trademalikk-svg.github.io/clipx-ai-studio/business-tools.html">
+<style>
+:root{color-scheme:dark;font-family:Arial,sans-serif;background:#030b19;color:#f4f9ff}*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 70% -15%,#104276 0,transparent 44%),#030b19}
+a{color:#8edcff;text-decoration:none}.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px clamp(14px,4vw,48px);border-bottom:1px solid #164d7c;background:#041327ed;position:sticky;top:0;z-index:5}.brand{font-size:22px;font-weight:900;color:#fff}.brand span{color:#28d8f3}.top nav{display:flex;gap:15px;flex-wrap:wrap;font-size:13px}
+main{width:min(1120px,94%);margin:24px auto 60px}.hero,.panel{border:1px solid #16558b;border-radius:17px;background:linear-gradient(145deg,#0a2442,#06162b);padding:20px;margin-bottom:15px}h1{font-size:clamp(28px,5vw,42px);margin:0 0 8px}.muted{color:#9db8d3;line-height:1.6}.notice{padding:11px 13px;border:1px solid #267b69;background:#092b2a;color:#b8f5dc;border-radius:10px;font-size:13px;line-height:1.5;margin-top:12px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0}.tabs button{background:#102a47;border-color:#315b80}.tabs button[aria-pressed=true]{background:linear-gradient(100deg,#087fe8,#0753a7);border-color:#2386c8}
+.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.wide{grid-column:1/-1}label{display:block;font-size:13px;color:#c7ddf2;margin:8px 0 5px}input,select,textarea{width:100%;padding:12px;border:1px solid #28649a;border-radius:9px;background:#071a31;color:#fff;font:inherit}textarea{min-height:100px;resize:vertical;line-height:1.5}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}button{padding:11px 15px;border:1px solid #2386c8;border-radius:9px;background:linear-gradient(100deg,#087fe8,#0753a7);color:#fff;font-weight:700;cursor:pointer}button.secondary{background:#102a47;border-color:#315b80}
+.output{min-height:240px;white-space:pre-wrap;overflow-wrap:anywhere;padding:15px;border:1px solid #315a7d;border-radius:11px;background:#041226;color:#e2f2ff;line-height:1.65}.status{font-size:12px;color:#82e0bd;margin-top:9px;min-height:18px}.hidden{display:none!important}
+@media(max-width:700px){.top{align-items:flex-start;flex-direction:column}main{width:calc(100% - 22px);margin:14px auto 40px}.form-grid{grid-template-columns:1fr}.wide{grid-column:auto}.hero,.panel{padding:16px}}
+</style></head><body>
+<header class="top"><a class="brand" href="index.html">✦ SHIF-A <span>AI</span></a><nav><a href="index.html">Home</a><a href="ai-tools.html">AI Tools</a><a href="dashboard.html">My Workspace</a><a href="writing-studio.html">Writing Studio</a></nav></header>
+<main>
+<section class="hero"><h1>Business Toolkit</h1><p class="muted">छोटे व्यवसायों, दुकानदारों और creators के लिए काम के templates एक जगह।</p><div class="notice">Free browser-based toolkit · कोई AI API नहीं और कोई data upload नहीं। Drafts templates से बनते हैं—भेजने या इस्तेमाल करने से पहले जानकारी जाँच लें। Quotation केवल estimate है, GST tax invoice नहीं।</div></section>
+<section class="panel"><h2>Choose a business tool</h2><div class="tabs" role="group" aria-label="Business tools">
+<button type="button" data-tool="profile" aria-pressed="true">Business Profile</button><button type="button" data-tool="listing" aria-pressed="false">Product Listing</button><button type="button" data-tool="reply" aria-pressed="false">Customer Reply</button><button type="button" data-tool="plan" aria-pressed="false">Marketing Plan</button><button type="button" data-tool="quote" aria-pressed="false">Quotation Estimate</button></div>
+<div class="form-grid">
+<div><label for="businessName">Business / Shop name</label><input id="businessName" maxlength="120" placeholder="आपके व्यवसाय का नाम"></div>
+<div><label for="businessType">Business type</label><input id="businessType" maxlength="100" placeholder="उदाहरण: किराना दुकान, tailoring"></div>
+<div><label for="city">City / Service area</label><input id="city" maxlength="100" placeholder="शहर या सेवा क्षेत्र"></div>
+<div><label for="language">Language</label><select id="language"><option value="hi">Hindi</option><option value="en">English</option><option value="both">Hindi + English</option></select></div>
+<div class="wide" id="detailWrap"><label for="details">Products, services or key details</label><textarea id="details" maxlength="1000" placeholder="आप क्या बेचते हैं या कौन-सी सेवा देते हैं?"></textarea></div>
+<div class="wide hidden" id="customerWrap"><label for="customerMessage">Customer message / situation</label><textarea id="customerMessage" maxlength="1000" placeholder="ग्राहक का सवाल या स्थिति लिखें…"></textarea></div>
+<div class="wide hidden" id="goalWrap"><label for="goal">Marketing goal</label><input id="goal" maxlength="180" placeholder="उदाहरण: नए customers तक पहुँचना"></div>
+<div class="wide hidden" id="budgetWrap"><label for="budget">Approximate marketing budget (optional)</label><input id="budget" maxlength="40" placeholder="उदाहरण: ₹1000 / month"></div>
+<div class="hidden" id="itemWrap"><label for="itemName">Item / Service name</label><input id="itemName" maxlength="120" placeholder="Item name"></div>
+<div class="hidden" id="priceWrap"><label for="itemPrice">Unit price (₹)</label><input id="itemPrice" type="number" min="0" max="10000000" step="0.01" placeholder="0.00"></div>
+<div class="hidden" id="qtyWrap"><label for="itemQty">Quantity</label><input id="itemQty" type="number" min="1" max="100000" step="1" value="1"></div>
+<div class="hidden" id="taxWrap"><label for="taxRate">Optional tax rate (%)</label><input id="taxRate" type="number" min="0" max="100" step="0.01" value="0"></div>
+</div>
+<div class="actions"><button type="button" id="generateBtn">Create Draft</button><button type="button" class="secondary" id="clearBtn">Clear</button></div><p class="status" id="formStatus" role="status"></p></section>
+<section class="panel"><h2>Generated Draft</h2><div class="output" id="result" aria-live="polite">Choose a tool, enter details and tap Create Draft.</div><div class="actions"><button type="button" id="copyBtn">Copy Draft</button><button type="button" class="secondary" id="downloadBtn">Download TXT</button></div><p class="status" id="resultStatus" role="status"></p></section>
+</main><script src="scripts/shif-a-business-tools.js"></script></body></html>
