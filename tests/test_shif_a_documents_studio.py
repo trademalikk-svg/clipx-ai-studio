@@ -72,7 +72,7 @@ class ShifADocumentsStudioTests(unittest.TestCase):
         self.assertIn('id="ocrPageCount"', html)
         self.assertIn('id="runPdfOcrBtn"', html)
         self.assertIn("tesseract.js", html.lower())
-        self.assertIn("OCR runs locally", html)
+        self.assertIn("OCR आपके browser में चलता है", html)
 
 
 if __name__ == "__main__":
