@@ -5,6 +5,7 @@
   {id:"video-prompts",name:"Video Prompt Builder",category:"Video",description:"Create structured Hindi and English prompts for video tools.",status:"available",href:"index.html#promptStudio"},
   {id:"creator-kit",name:"Titles & Hashtags",category:"Writing",description:"Draft creator titles, descriptions and hashtags.",status:"available",href:"index.html#freeCreatorKit"},
   {id:"thumbnail-tools",name:"Thumbnail Creator",category:"Design",description:"Browser-based thumbnail and creator design utilities.",status:"limited",href:"creator-tools.html"},
+  {id:"browser-utilities",name:"Free Browser Utilities",category:"Productivity",description:"Local text analyzer, case converter, Shorts caption formatter, JSON validator and image resizer. Runs on your device without an AI API.",status:"available",href:"browser-tools.html"},
   {id:"image-studio",name:"AI Image Studio",category:"Image",description:"Image generation and editing engines are not connected yet.",status:"coming-soon"},
   {id:"voice-studio",name:"AI Voice Studio",category:"Voice",description:"Text-to-speech and audio generation engines are not connected yet.",status:"coming-soon"},
   {id:"ai-chat",name:"AI Chat & Research",category:"Chat & Research",description:"Model-backed assistant and research tools are planned.",status:"coming-soon"},
