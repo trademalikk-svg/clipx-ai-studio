@@ -33,12 +33,10 @@ async function listPasskeys(){
  const access=await owner();if(!access.ok)throw new Error("Owner verification required.");
  const {data,error}=await client.auth.passkey.list();if(error)throw error;
  const box=$("passkeyList");box.replaceChildren();
- const select=$("revokePasskeyId");if(select)select.replaceChildren();
- if(!data||!data.length){box.textContent="अभी कोई passkey registered नहीं है।";if(select){const o=document.createElement("option");o.value="";o.textContent="कोई passkey उपलब्ध नहीं";select.append(o);}return;}
+ if(!data||!data.length){box.textContent="अभी कोई passkey registered नहीं है।";return;}
  const ul=document.createElement("ul");
  data.forEach(item=>{
   const li=document.createElement("li");li.textContent=(item.friendly_name||"Passkey")+" · "+new Date(item.created_at).toLocaleString("hi-IN");ul.append(li);
-  if(select){const option=document.createElement("option");option.value=item.id;option.textContent=(item.friendly_name||"Passkey")+" · "+new Date(item.created_at).toLocaleDateString("hi-IN");select.append(option);}
  });
  box.append(ul);
 }
