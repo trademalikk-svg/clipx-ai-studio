@@ -17,7 +17,7 @@ class BrowserToolsContractTests(unittest.TestCase):
             "imageWidth", "imageHeight", "keepRatio", "resizeImageBtn", "imageStatus",
         ]:
             self.assertIn(f'id="{ident}"', HTML, f"Missing HTML control: {ident}")
-            self.assertIn(f'$("#{ident}")', SCRIPT, f"Missing script reference: {ident}")
+            self.assertIn(f'$("{ident}")', SCRIPT, f"Missing script reference: {ident}")
 
     def test_caption_copy_does_not_mutate_the_generated_caption(self):
         self.assertIn('await navigator.clipboard.writeText(value)', SCRIPT)
