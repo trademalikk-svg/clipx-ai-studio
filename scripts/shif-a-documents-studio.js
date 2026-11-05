@@ -2,7 +2,7 @@
 "use strict";
 const $=id=>document.getElementById(id);
 const STORAGE_KEY="shifA.documentsStudio.draft.v1";
-function updateStats(){const value=$("docBody").value,words=value.trim()?value.trim().split(/\\s+/u).length:0;$("docStats").textContent=words+" words · "+value.length+" characters";}
+function updateStats(){const value=$("docBody").value,words=value.trim()?value.trim().split(/\s+/u).length:0;$("docStats").textContent=words+" words · "+value.length+" characters";}
 function updatePreview(){
  const title=$("docTitle").value.trim()||"Untitled Document";
  const author=$("docAuthor").value.trim();
@@ -40,9 +40,9 @@ $("printPdfBtn").addEventListener("click",()=>{updatePreview();window.print();$(
 $("downloadTxtBtn").addEventListener("click",()=>{
  const title=$("docTitle").value.trim()||"shif-a-document";
  const author=$("docAuthor").value.trim();
- const content=(title+"\\n"+(author?"Prepared by: "+author+"\\n":"")+"\\n"+$("docBody").value).trim()+"\\n";
+ const content=(title+"\n"+(author?"Prepared by: "+author+"\n":"")+"\n"+$("docBody").value).trim()+"\n";
  const blob=new Blob([content],{type:"text/plain;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");
- a.href=url;a.download=title.replace(/[^\\p{L}\\p{N}-]+/gu,"-").replace(/^-|-$/g,"").slice(0,60)||"shif-a-document";
+ a.href=url;a.download=title.replace(/[^\p{L}\p{N}-]+/gu,"-").replace(/^-|-$/g,"").slice(0,60)||"shif-a-document";
  a.download+=".txt";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);
  $("docStatus").textContent="TXT download started.";
 });
