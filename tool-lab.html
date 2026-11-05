@@ -16,7 +16,9 @@
 (()=>{"use strict";
 const ids=["word-count","case-converter","remove-duplicates","sort-lines","clean-whitespace","slug-maker","hashtag-format","caption-breaker","bio-limit","title-case","keyword-groups","csv-json","json-format","url-inspector","base64","html-escape","regex-check","reading-time","text-diff","number-lines","filename-clean","image-info"];
 const names=["Word Counter","Case Converter","Duplicate Remover","Line Sorter","Whitespace Cleaner","Slug Maker","Hashtag Formatter","Caption Breaker","Bio Length Checker","Title Case","Keyword Grouper","CSV to JSON","JSON Formatter","URL Inspector","Base64 Tool","HTML Escaper","Regex Tester","Reading Time","Text Diff","Line Numbering","Filename Cleaner","Image Info"];
-const $=id=>document.getElementById(id);\nconst MAX_IMAGE_BYTES=15*1024*1024;\nlet imageRequestId=0;
+const $=id=>document.getElementById(id);
+const MAX_IMAGE_BYTES=15*1024*1024;
+let imageRequestId=0;
 const tool=$("tool"), input=$("input"), out=$("out"), status=$("status");
 ids.forEach((id,i)=>{const option=document.createElement("option");option.value=id;option.textContent=names[i];tool.append(option)});
 const requested=new URLSearchParams(location.search).get("tool");
