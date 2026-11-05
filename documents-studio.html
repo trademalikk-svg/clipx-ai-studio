@@ -21,7 +21,7 @@ textarea{min-height:250px;resize:vertical;line-height:1.55}
 .actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}
 button{padding:11px 15px;border:1px solid #2386c8;border-radius:9px;background:linear-gradient(100deg,#087fe8,#0753a7);color:#fff;font-weight:700;cursor:pointer}
 button.secondary{background:#102a47;border-color:#315b80}
-.stats,.status{font-size:12px;color:#9db8d3;margin-top:9px;min-height:18px}
+.stats,.status{font-size:12px;color:#9db8d3;margin-top:9px;min-height:18px}.library-list{display:grid;gap:10px}.library-item{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px;border:1px solid #24577f;border-radius:10px;background:#071a31}.library-item .actions{margin:0}.library-item p{margin:5px 0 0}
 .preview-wrap{background:#dce7f2;padding:16px;border-radius:12px;overflow:auto}
 #paperPreview{background:#fff;color:#172033;width:100%;max-width:760px;min-height:500px;margin:0 auto;padding:48px 54px;box-shadow:0 6px 24px #0004;white-space:pre-wrap;overflow-wrap:anywhere;font:16px/1.65 Arial,sans-serif}
 #previewTitle{font-size:25px;font-weight:700;margin:0 0 24px;white-space:pre-wrap}
@@ -52,9 +52,10 @@ button.secondary{background:#102a47;border-color:#315b80}
 <div class="wide"><label for="docBody">Document content</label><textarea id="docBody" maxlength="30000" placeholder="अपना document यहाँ लिखें या paste करें…"></textarea></div>
 </div>
 <div class="stats" id="docStats" aria-live="polite">0 words · 0 characters</div>
-<div class="actions"><button id="updatePreviewBtn">Update Preview</button><button id="printPdfBtn">Print / Save as PDF</button><button class="secondary" id="downloadTxtBtn">Download TXT</button><button class="secondary" id="clearDocBtn">Clear</button></div>
+<div class="actions"><button id="updatePreviewBtn">Update Preview</button><button id="saveLibraryBtn" class="secondary">Save to Library</button><button id="printPdfBtn">Print / Save as PDF</button><button class="secondary" id="downloadTxtBtn">Download TXT</button><button class="secondary" id="clearDocBtn">Clear</button></div>
 <p class="status" id="docStatus" role="status"></p>
 </section>
+<section class="panel"><h2>Saved Documents</h2><p class="muted">इस browser में अधिकतम 30 documents save कर सकते हैं। Open करके edit करें या Delete करें।</p><div id="documentLibrary" class="library-list" aria-live="polite"></div></section>
 <section class="panel"><h2>Document Preview</h2><div class="preview-wrap"><article id="paperPreview"><h1 id="previewTitle">Untitled Document</h1><div id="previewMeta"></div><div id="previewBody">आपका document preview यहाँ दिखाई देगा।</div></article></div></section>
 </main>
 <script src="scripts/shif-a-documents-studio.js"></script>
