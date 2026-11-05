@@ -17,8 +17,6 @@ class AgentAndAutomationPersistenceTests(unittest.TestCase):
         self.assertIn("input[name='perm']", script)
         self.assertIn("Reset करने पर saved draft मिट जाएगा", page)
         self.assertIn("setTimeout(()=>URL.revokeObjectURL(url),1500)", script)
-        self.assertIn('$("copyFlow").addEventListener("click",async()=>{renderOutput();', script)
-        self.assertIn('$("jsonFlow").addEventListener("click",()=>{renderOutput();', script)
         self.assertIn('$("copyBlueprint").addEventListener("click",async()=>{render();', script)
         self.assertIn('$("downloadJson").addEventListener("click",()=>{render();', script)
 
@@ -34,6 +32,8 @@ class AgentAndAutomationPersistenceTests(unittest.TestCase):
         self.assertIn("saveWorkspace();", script)
         self.assertIn("Reset all करने पर saved draft मिट जाएगा", page)
         self.assertIn("setTimeout(()=>URL.revokeObjectURL(url),1500)", script)
+        self.assertIn('$("copyFlow").addEventListener("click",async()=>{renderOutput();', script)
+        self.assertIn('$("jsonFlow").addEventListener("click",()=>{renderOutput();', script)
 
 
 if __name__ == "__main__":
