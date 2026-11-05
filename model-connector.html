@@ -20,7 +20,7 @@ footer{padding:20px;text-align:center;color:#8792b8;font-size:12px}
 <body>
 <header><div class="logo">SHIF-A <span>AI</span> · MODEL CONNECTOR</div><nav><a href="dashboard.html">Dashboard</a> &nbsp;·&nbsp; <a href="ai-tools.html">All tools</a></nav></header>
 <main>
-<section class="hero"><div class="kicker">MODEL CATALOG · PHASE 1</div><h1>AI Model Connector</h1><p>Browse model options for SHIF-A AI. The models below are listed for a possible free-tier integration; they are not connected to this website yet. No model API calls are made from this page.</p><span class="status">NOT CONNECTED · CATALOG ONLY</span><div class="actions"><a class="btn" href="chat-studio.html">Open AI Chat Studio</a><a class="btn alt" href="ai-tools.html">Browse tools</a></div></section>
+<section class="hero"><div class="kicker">MODEL CATALOG · PHASE 1 · SECURE GATEWAY</div><h1>AI Model Connector</h1><p>Browse model options for SHIF-A AI. The models below are listed for a possible free-tier integration; they are not connected to this website yet. No model API calls are made from this page.</p><span class="status">GATEWAY ACTIVE · PROVIDER NOT CONFIGURED</span><div class="actions"><a class="btn" href="chat-studio.html">Open AI Chat Studio</a><a class="btn alt" href="ai-tools.html">Browse tools</a></div></section>
 <h2 style="margin:28px 0 8px">Google Gemini · Phase 1 candidates</h2>
 <p class="muted">Official Gemini API pricing currently lists a free tier for these model families. Availability, request limits and model access can vary by account and may change.</p>
 <div class="grid">
@@ -29,7 +29,7 @@ footer{padding:20px;text-align:center;color:#8792b8;font-size:12px}
 </div>
 <div class="notice"><b>Privacy note:</b> Do not send passwords, private documents, personal records or other sensitive information to a free-tier model. The provider's free-tier data terms may allow submitted content to be used to improve its products. Review the provider's current terms before any real use.</div>
 <div class="grid">
-<section class="card"><h2>Connection status</h2><ul class="list"><li>Provider selected for integration: Not yet</li><li>Server-side model gateway: Not deployed</li><li>API credential: Not configured</li><li>Usage and rate-limit guard: Not active</li><li>Live model responses: Not available yet</li></ul></section>
+<section class="card"><h2>Connection status</h2><ul class="list"><li>Provider candidate: Gemini Flash / Flash-Lite</li><li>Server-side model gateway: Deployed · JWT required</li><li>API credential: Not configured · no model calls</li><li>Usage and rate-limit guard: Not active</li><li>Live model responses: Disabled until adult-supervised provider setup</li></ul></section>
 <section class="card"><h2>Safe implementation sequence</h2><ol class="steps"><li>Confirm a provider account and its current free-tier terms with adult supervision.</li><li>Keep any provider credential out of browser code, public GitHub files and chat.</li><li>Configure a server-side gateway with authentication, input limits and a strict no-paid-usage guard.</li><li>Connect AI Chat Studio only after the gateway is tested.</li><li>Show clear errors and stop requests when free limits are reached.</li></ol></section>
 </div>
 <div class="actions"><a class="btn alt" href="https://ai.google.dev/gemini-api/docs/pricing" target="_blank" rel="noopener">Official model pricing & limits</a><a class="btn alt" href="https://ai.google.dev/" target="_blank" rel="noopener">Google AI for Developers</a></div>
