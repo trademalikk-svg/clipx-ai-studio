@@ -35,6 +35,12 @@ class BrowserToolsContractTests(unittest.TestCase):
         self.assertIn('type === "image/webp" ? "webp"', SCRIPT)
         self.assertIn("width > 6000 || height > 6000", SCRIPT)
 
+    def test_image_loader_rejects_oversized_dimensions_and_stale_loads(self):
+        self.assertIn("imageRequestId", SCRIPT)
+        self.assertIn("requestId !== imageRequestId", SCRIPT)
+        self.assertIn("naturalWidth > 6000 || img.naturalHeight > 6000", SCRIPT)
+        self.assertIn("naturalWidth * img.naturalHeight > 16000000", SCRIPT)
+
     def test_page_loads_the_external_tool_script(self):
         self.assertIn('<script src="scripts/shif-a-browser-tools.js"></script>', HTML)
         self.assertIn('aria-live="polite"', HTML)
