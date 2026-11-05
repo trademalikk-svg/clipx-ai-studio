@@ -45,11 +45,11 @@ async function sendMessage(){
   addMessage("user",content,$("modelSelect").value);
   $("messageInput").value="";$("charCount").textContent="0 / 4000";
   setStatus("SHIF-A Gateway से सुरक्षित अनुरोध भेज रहे हैं…");
-  const response=await fetch(GATEWAY,{method:"POST",headers:{"Content-Type":"application/json","apikey":SUPABASE_KEY,"Authorization":"Bearer "+auth.session.access_token},body:JSON.stringify({message:content,model:$("modelSelect").value,mode:$("modeSelect").value})});
+  const response=await fetch(GATEWAY,{method:"POST",headers:{"Content-Type":"application/json","apikey":SUPABASE_KEY,"Authorization":"Bearer "+auth.session.access_token},body:JSON.stringify({message:content,model:$("modelSelect").value,mode:$("modeSelect").value}),signal:AbortSignal.timeout(35000)});
   const data=await response.json().catch(()=>({}));
   if(!response.ok){
    const msg=data.message||(
-    response.status===503?"Model provider अभी configured नहीं है। कोई AI जवाब generate नहीं हुआ।":
+    response.status===503?"Gemini सेवा अभी अस्थायी रूप से उपलब्ध नहीं है (503)। आपका prompt सुरक्षित है; कृपया थोड़ी देर बाद फिर Send करें।":
     response.status===429?"इस account की hourly request limit पूरी हो गई है। बाद में कोशिश करें.":
     response.status===401?"Login session expire हो गया है। दोबारा login करें.":"Gateway request पूरी नहीं हुई।"
    );
@@ -57,7 +57,7 @@ async function sendMessage(){
   }
   if(typeof data.answer!=="string"||!data.answer.trim()){setStatus("Model ने कोई text reply नहीं दिया।");return;}
   addMessage("assistant",data.answer,data.model);setStatus("SHIF-A AI ने जवाब दिया · "+data.model);
- }catch(e){setStatus("Network या gateway connection उपलब्ध नहीं है। थोड़ी देर बाद कोशिश करें.");}
+ }catch(e){setStatus(e&&e.name==="TimeoutError"?"अनुरोध में 35 सेकंड से अधिक समय लगा। Gemini या नेटवर्क अभी जवाब नहीं दे रहा; थोड़ी देर बाद फिर कोशिश करें।":"Network या gateway connection उपलब्ध नहीं है। आपका prompt conversation में सुरक्षित है; थोड़ी देर बाद फिर कोशिश करें.");}
  finally{sending=false;$("sendMessageBtn").disabled=false;}
 }
 $("newChatBtn").addEventListener("click",newChat);
