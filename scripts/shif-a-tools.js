@@ -14,7 +14,7 @@
   {id:"agents-studio",name:"AI Agents Studio",category:"Agents",description:"Custom task agents and tool permissions are planned.",status:"coming-soon"},
   {id:"automation-studio",name:"AI Automation Studio",category:"Automation",description:"Multi-step workflows and scheduled automation are planned.",status:"coming-soon"},
   {id:"document-studio",name:"Documents & PDF Studio",category:"Documents",description:"Create and format documents in your browser, download TXT files and print/save documents as PDF. No upload or AI API required.",status:"available",href:"documents-studio.html"},
-  {id:"business-studio",name:"AI Business Tools",category:"Business",description:"Business and marketing assistants are planned.",status:"coming-soon"},
+  {id:"business-studio",name:"Business Toolkit",category:"Business",description:"Free local templates for business profiles, product listings, customer replies, marketing plans and quotation estimates. No AI API or data upload.",status:"available",href:"business-tools.html"},
   {id:"education-studio",name:"AI Education",category:"Education",description:"Learning and study tools are planned.",status:"coming-soon"},
   {id:"productivity-studio",name:"AI Productivity",category:"Productivity",description:"Personal productivity and task tools are planned.",status:"coming-soon"}
  ];
