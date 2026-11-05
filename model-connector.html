@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#080b22"><title>AI Model Connector | SHIF-A AI</title>
+<meta name="description" content="SHIF-A AI model provider readiness and secure integration workspace.">
+<style>
+:root{color-scheme:dark;--bg:#07091b;--panel:#111735;--line:#343d78;--blue:#28bfff;--violet:#9b65ff;--muted:#aab3d3}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 80% 0,#25145a 0,transparent 38%),var(--bg);color:#f5f7ff;font:15px Arial,sans-serif}
+header{padding:16px clamp(16px,5vw,54px);display:flex;justify-content:space-between;align-items:center;gap:12px;border-bottom:1px solid var(--line);background:#080b22eF;position:sticky;top:0}
+.logo{font-weight:900;letter-spacing:1px}.logo span{color:var(--blue)}a{color:#8bdcff;text-decoration:none}a:hover{text-decoration:underline}
+main{max-width:1100px;margin:auto;padding:28px 16px 60px}.hero{padding:28px;border:1px solid #6550bd;border-radius:20px;background:linear-gradient(120deg,#17133c,#10254b);box-shadow:0 15px 40px #0006}
+.kicker{color:#86dcff;font-size:12px;letter-spacing:2px;font-weight:bold}.hero h1{font-size:clamp(30px,5vw,48px);margin:12px 0}.hero p,.muted{color:var(--muted);line-height:1.65;max-width:760px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:18px}.card{background:linear-gradient(145deg,#151b3c,#0e132c);border:1px solid var(--line);border-radius:16px;padding:20px;min-width:0}.card h2{margin:0 0 10px;font-size:18px}.status{display:inline-block;border:1px solid #a67b39;color:#ffd58a;background:#342814;padding:6px 10px;border-radius:30px;font-size:12px;font-weight:bold}.status.ready{border-color:#287b9a;color:#8ee6ff;background:#0c2b42}.list{padding-left:20px;color:#d5dcf5;line-height:1.8}.steps{counter-reset:step;list-style:none;padding:0}.steps li{counter-increment:step;margin:12px 0;padding:12px 12px 12px 44px;background:#0b1028;border:1px solid #2b3567;border-radius:11px;position:relative;color:#dce4ff;line-height:1.55}.steps li:before{content:counter(step);position:absolute;left:12px;top:12px;background:#40328d;border-radius:50%;width:22px;height:22px;text-align:center;line-height:22px;font-weight:bold}
+.notice{margin-top:16px;padding:14px;border-radius:12px;border:1px solid #85652d;background:#2a2116;color:#ffe0a1;line-height:1.6}.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}.btn{display:inline-block;padding:11px 15px;border-radius:10px;background:linear-gradient(100deg,#6534ce,#1768bb);color:white;font-weight:bold}.btn.alt{background:#222c55;border:1px solid #46538e}
+footer{padding:20px;text-align:center;color:#8792b8;font-size:12px}
+@media(max-width:700px){.grid{grid-template-columns:1fr}.hero{padding:21px}.card{padding:17px}header{align-items:flex-start;flex-direction:column}}
+</style></head>
+<body>
+<header><div class="logo">SHIF-A <span>AI</span> · MODEL CONNECTOR</div><nav><a href="dashboard.html">Dashboard</a> &nbsp;·&nbsp; <a href="ai-tools.html">All tools</a></nav></header>
+<main>
+<section class="hero"><div class="kicker">INTEGRATION WORKSPACE · PHASE 1</div><h1>AI Model Connector</h1><p>Prepare SHIF-A AI to connect real language models through a protected server-side gateway. This page is a readiness workspace—not a live AI connection. Existing local tools continue to work without an AI provider.</p><span class="status">NOT CONNECTED · NO API CALLS</span><div class="actions"><a class="btn" href="chat-studio.html">Open AI Chat Studio</a><a class="btn alt" href="ai-tools.html">Browse tools</a></div></section>
+<div class="grid">
+<section class="card"><h2>Provider readiness</h2><p class="muted">Provider credentials have not been configured. No provider is selected or contacted.</p><ul class="list"><li><b>OpenAI-compatible API:</b> Not configured</li><li><b>Alternative model endpoint:</b> Not configured</li><li><b>SHIF-A secure gateway:</b> Design pending</li><li><b>Usage / cost guard:</b> Not active</li></ul></section>
+<section class="card"><h2>Secure connection design</h2><ul class="list"><li>Browser sends only the signed-in user's request to the Edge Function.</li><li>Provider secret stays in server-side function secrets—not HTML, JavaScript, GitHub, or localStorage.</li><li>Server validates the user session and limits request size.</li><li>Set usage caps and clear error handling before enabling a provider.</li></ul></section>
+<section class="card"><h2>Implementation sequence</h2><ol class="steps"><li>Choose a provider only after checking its current free-tier limits and data terms.</li><li>Store any provider credential in Supabase Edge Function Secrets.</li><li>Build an authenticated model-proxy Edge Function with input limits.</li><li>Connect AI Chat Studio to that function and show honest usage/error states.</li><li>Test with a small, non-sensitive prompt before wider rollout.</li></ol></section>
+<section class="card"><h2>Current SHIF-A status</h2><ul class="list"><li>AI Chat Studio: local workspace only; model replies are not connected.</li><li>Writing, study, business and other browser tools remain usable locally.</li><li>No paid plan, provider, API key or usage credits have been activated by this module.</li></ul></section>
+</div>
+<div class="notice"><b>Important:</b> Do not paste API keys into this page, a public GitHub file, or chat. A free provider tier is not guaranteed to remain free and may have usage limits. We will not enable any paid provider or spend credits without your clear approval.</div>
+</main><footer>SHIF-A AI · Secure integration readiness · Version 1</footer>
+</body></html>
