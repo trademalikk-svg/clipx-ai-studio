@@ -25,6 +25,25 @@ class ShifAAIProviderContractTests(unittest.TestCase):
         self.assertNotIn("gemini-3.8-flash", page)
         self.assertNotIn("gemini-3.1-flash-lite", page)
 
+    def test_core_ai_tool_field_and_output_ids_exist_in_their_pages(self):
+        import re
+        helper = (ROOT / "scripts" / "shif-a-ai-tools.js").read_text(encoding="utf-8")
+        configs = {
+            "writing-studio.html": ("draftOutput", ["topic", "language", "format", "platform", "tone", "audience", "keywords", "details"]),
+            "business-tools.html": ("result", ["businessName", "businessType", "city", "language", "details", "customerMessage", "goal", "budget", "itemName", "itemPrice", "itemQty", "taxRate"]),
+            "coding-studio.html": ("codeEditor", ["projectMode", "activeFile", "codeEditor"]),
+            "research-studio.html": ("reportOutput", ["topic", "language", "question", "scope", "audience", "findings", "gaps", "conclusion"]),
+            "education-studio.html": ("quizArea", ["subject", "quizNotes", "flashQuestion", "flashAnswer"]),
+        }
+        for page_name, (target, fields) in configs.items():
+            with self.subTest(page=page_name):
+                page = (ROOT / page_name).read_text(encoding="utf-8")
+                ids = set(re.findall(r'id=["\\']([^"\\']+)["\\']', page))
+                self.assertIn(target, ids)
+                for field in fields:
+                    self.assertIn(field, ids, f"{field} missing from {page_name}")
+                self.assertIn('"' + page_name + '"', helper)
+
     def test_cloudflare_is_default_and_gemini_remains_switchable(self):
         source = (ROOT / "supabase" / "functions" / "shif-a-model-gateway" / "index.ts").read_text(encoding="utf-8")
         self.assertIn('Deno.env.get("AI_PROVIDER") || "cloudflare"', source)
