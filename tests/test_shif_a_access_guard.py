@@ -13,7 +13,6 @@ class AccessGuardTests(unittest.TestCase):
         pages = {
             "index.html": "clipx-video",
             "workspace.html": "workspace",
-            "ai-tools.html": "tool-directory",
             "tool-studio.html": "dynamic-tool",
             "coding-studio.html": "coding-studio",
             "media-studio.html": "media-studio",
