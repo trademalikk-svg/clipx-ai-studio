@@ -2,6 +2,8 @@
 "use strict";
 const $=id=>document.getElementById(id);
 const STORAGE_KEY="shifA.documentsStudio.draft.v1";
+const LIBRARY_KEY="shifA.documentsStudio.library.v1";
+const MAX_LIBRARY_ITEMS=30;
 function updateStats(){const value=$("docBody").value,words=value.trim()?value.trim().split(/\s+/u).length:0;$("docStats").textContent=words+" words · "+value.length+" characters";}
 function updatePreview(){
  const title=$("docTitle").value.trim()||"Untitled Document";
@@ -20,6 +22,50 @@ function saveDraft(){
   $("docStatus").textContent="Draft इस browser में अपने-आप save हो गया।";
  }catch(error){$("docStatus").textContent="Local save उपलब्ध नहीं है। TXT download से backup रखें।";}
 }
+function readLibrary(){
+ try{
+  const raw=localStorage.getItem(LIBRARY_KEY);
+  if(!raw)return [];
+  const items=JSON.parse(raw);
+  if(!Array.isArray(items))return [];
+  return items.filter(item=>item&&typeof item.id==="string"&&typeof item.title==="string"&&typeof item.author==="string"&&typeof item.body==="string"&&item.title.length<=120&&item.author.length<=100&&item.body.length<=30000&&["14","16","18","20"].includes(item.fontSize)&&["1.4","1.65","1.9"].includes(item.lineSpacing)).slice(0,MAX_LIBRARY_ITEMS);
+ }catch(error){return [];}
+}
+function renderLibrary(){
+ const root=$("documentLibrary");
+ root.replaceChildren();
+ const items=readLibrary();
+ if(!items.length){const empty=document.createElement("p");empty.className="muted";empty.textContent="अभी कोई saved document नहीं है।";root.appendChild(empty);return;}
+ items.forEach(item=>{
+  const card=document.createElement("div");card.className="library-item";
+  const info=document.createElement("div");
+  const heading=document.createElement("strong");heading.textContent=item.title||"Untitled Document";
+  const meta=document.createElement("p");meta.className="muted";meta.textContent=(item.author?"Prepared by: "+item.author+" · ":"")+new Date(item.updatedAt||item.createdAt||Date.now()).toLocaleString();
+  info.append(heading,meta);
+  const actions=document.createElement("div");actions.className="actions";
+  [["open","Open"],["delete","Delete"]].forEach(([action,label])=>{const button=document.createElement("button");button.type="button";button.className=action==="delete"?"secondary":"";
+   button.dataset.action=action;button.dataset.id=item.id;button.textContent=label;actions.appendChild(button);});
+  card.append(info,actions);root.appendChild(card);
+ });
+}
+function saveToLibrary(){
+ const title=$("docTitle").value.trim()||"Untitled Document";
+ const items=readLibrary();
+ const item={id:Date.now().toString(36)+"-"+Math.random().toString(36).slice(2,8),title,author:$("docAuthor").value,body:$("docBody").value,fontSize:$("docSize").value,lineSpacing:$("docLine").value,createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()};
+ try{localStorage.setItem(LIBRARY_KEY,JSON.stringify([item,...items].slice(0,MAX_LIBRARY_ITEMS)));renderLibrary();$("docStatus").textContent="Document Saved Library में save हो गया।";}
+ catch(error){$("docStatus").textContent="Library में save नहीं हो सका। Browser storage की जगह कम हो सकती है।";}
+}
+function openLibraryDocument(id){
+ const item=readLibrary().find(entry=>entry.id===id);if(!item)return;
+ $("docTitle").value=item.title;$("docAuthor").value=item.author;$("docBody").value=item.body;
+ $("docSize").value=item.fontSize;$("docLine").value=item.lineSpacing;
+ updateStats();updatePreview();saveDraft();$("docStatus").textContent="Saved document editor में खुल गया।";
+}
+function deleteLibraryDocument(id){
+ const items=readLibrary();const next=items.filter(item=>item.id!==id);
+ try{localStorage.setItem(LIBRARY_KEY,JSON.stringify(next));renderLibrary();$("docStatus").textContent="Saved document library से delete हो गया.";}
+ catch(error){$("docStatus").textContent="Saved document delete नहीं हो सका।";}
+}
 function restoreDraft(){
  try{
   const raw=localStorage.getItem(STORAGE_KEY);
@@ -36,6 +82,8 @@ function restoreDraft(){
 ["docBody","docTitle","docAuthor"].forEach(id=>$(id).addEventListener("input",()=>{updateStats();updatePreview();saveDraft();}));
 ["docSize","docLine"].forEach(id=>$(id).addEventListener("change",()=>{updatePreview();saveDraft();}));
 $("updatePreviewBtn").addEventListener("click",updatePreview);
+$("saveLibraryBtn").addEventListener("click",saveToLibrary);
+$("documentLibrary").addEventListener("click",event=>{const button=event.target.closest("button[data-action][data-id]");if(!button)return;if(button.dataset.action==="open")openLibraryDocument(button.dataset.id);if(button.dataset.action==="delete")deleteLibraryDocument(button.dataset.id);});
 $("printPdfBtn").addEventListener("click",()=>{updatePreview();window.print();$("docStatus").textContent="Print dialog opened. Destination में Save as PDF चुनें।";});
 $("downloadTxtBtn").addEventListener("click",()=>{
  const title=$("docTitle").value.trim()||"shif-a-document";
@@ -52,5 +100,6 @@ $("clearDocBtn").addEventListener("click",()=>{
  try{localStorage.removeItem(STORAGE_KEY);}catch(error){}
  updateStats();updatePreview();$("docStatus").textContent="Document और browser में save draft दोनों clear कर दिए गए।";
 });
+renderLibrary();
 if(!restoreDraft()){updateStats();updatePreview();}
 })();
