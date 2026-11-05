@@ -43,7 +43,7 @@ The cloud gateway is an integration scaffold, not an active generation service. 
 
 Image/video model input schemas differ. The selected models must accept the gateway's documented prompt, aspect-ratio and duration inputs; test them in a non-production environment first. Provider pricing, free credits, model availability, output retention and licensing must be checked before configuration. No provider token, model, paid service, Supabase deployment or production setting has been activated by this code change. Do not put provider tokens in browser JavaScript or Git.
 
-The browser UI requires a verified SHIF-A account and internet access. Phone and computer use the same cloud endpoint; actual inference runs on the provider's servers. Stopping browser status polling does not cancel a provider prediction. Cloud task output links are provider-hosted URLs and may expire under provider policy.
+The browser UI requires a verified SHIF-A Owner account and internet access. Cloud generation is Owner-only during the private pilot; invited-member quotas and billing controls must be enforced before wider access. Phone and computer use the same cloud endpoint; actual inference runs on the provider's servers. Stopping browser status polling does not cancel a provider prediction. Cloud task output links are provider-hosted URLs and may expire under provider policy.
 
 ## Important limitations
 
