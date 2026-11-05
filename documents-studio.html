@@ -43,6 +43,8 @@ button.secondary{background:#102a47;border-color:#315b80}
 <main>
 <section class="hero"><h1>Documents & PDF Studio</h1><p class="muted">Browser में document तैयार करें, format करें, TXT डाउनलोड करें या Print के जरिए PDF में save करें।</p><div class="notice">Free local tool · आपका document किसी server पर upload नहीं होता। Draft इसी device के local browser में अपने-आप save होता है; Clear दबाने पर saved draft भी हट जाता है। PDF export के लिए Print dialog में “Save as PDF” चुनें। PDF text extraction इसी browser में होता है; file server पर upload नहीं होती। Scanned PDF के लिए OCR, PDF merge और split अभी उपलब्ध नहीं हैं। Optional SHIF-A AI document assistance के लिए verified login और Gemini API server-side credentials जरूरी हैं।</div></section>
 <section class="panel">
+<h2>Import PDF Text</h2><p class="muted">20 MB तक और अधिकतम 100 pages वाली PDF से selectable text निकालकर editor में लाएँ। Scanned image PDF का OCR अभी नहीं है।</p><label for="pdfImportInput">Choose PDF file</label><input id="pdfImportInput" type="file" accept="application/pdf,.pdf"><p class="muted">PDF text extraction happens locally in your browser. PDF.js library load करने के लिए internet connection चाहिए।</p></section>
+<section class="panel">
 <h2>Document Editor</h2>
 <div class="grid">
 <div><label for="docTitle">Document title</label><input id="docTitle" maxlength="120" placeholder="उदाहरण: Project Report"></div>
@@ -58,5 +60,5 @@ button.secondary{background:#102a47;border-color:#315b80}
 <section class="panel"><h2>Saved Documents</h2><p class="muted">इस browser में अधिकतम 30 documents save कर सकते हैं। Open करके edit करें या Delete करें।</p><div id="documentLibrary" class="library-list" aria-live="polite"></div></section>
 <section class="panel"><h2>Document Preview</h2><div class="preview-wrap"><article id="paperPreview"><h1 id="previewTitle">Untitled Document</h1><div id="previewMeta"></div><div id="previewBody">आपका document preview यहाँ दिखाई देगा।</div></article></div></section>
 </main>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script><script>if(window.pdfjsLib){pdfjsLib.GlobalWorkerOptions.workerSrc="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";}</script><script src="scripts/shif-a-documents-studio.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script><script>if(window.pdfjsLib){pdfjsLib.GlobalWorkerOptions.workerSrc="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";}</script><script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script><script>if(window.pdfjsLib){pdfjsLib.GlobalWorkerOptions.workerSrc="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";}</script><script src="scripts/shif-a-documents-studio.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.89.0"></script><script src="scripts/shif-a-auth.js"></script><script src="scripts/shif-a-ai-client.js"></script><script src="scripts/shif-a-ai-tools.js"></script></body></html>
