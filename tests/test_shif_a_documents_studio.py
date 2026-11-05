@@ -41,6 +41,20 @@ class ShifADocumentsStudioTests(unittest.TestCase):
         self.assertIn("pdf.min.js", html)
         self.assertIn("PDF text extraction happens locally", html)
 
+    def test_pdf_merge_and_page_range_split_are_available_locally(self):
+        js = (ROOT / "scripts/shif-a-documents-studio.js").read_text(encoding="utf-8")
+        html = (ROOT / "documents-studio.html").read_text(encoding="utf-8")
+        self.assertIn("async function mergePdfFiles(", js)
+        self.assertIn("async function splitPdfFile(", js)
+        self.assertIn("MAX_PDF_INPUT_FILES=10", js)
+        self.assertIn("parsePageRanges(", js)
+        self.assertIn('id="pdfMergeInput"', html)
+        self.assertIn('id="mergePdfBtn"', html)
+        self.assertIn('id="pdfSplitInput"', html)
+        self.assertIn('id="splitPdfBtn"', html)
+        self.assertIn("pdf-lib", html)
+        self.assertEqual(html.count("pdf.min.js"), 1)
+
     def test_document_studio_explains_local_draft_persistence(self):
         html = (ROOT / "documents-studio.html").read_text(encoding="utf-8")
         self.assertIn("local browser", html.lower())
