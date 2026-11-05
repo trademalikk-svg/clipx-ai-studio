@@ -11,6 +11,8 @@ DOWNLOAD_SCRIPTS = (
     "scripts/shif-a-education-studio.js",
     "scripts/shif-a-productivity-studio.js",
     "scripts/shif-a-coding-studio.js",
+    "scripts/shif-a-writing-studio.js",
+    "scripts/shif-a-business-tools.js",
 )
 
 
