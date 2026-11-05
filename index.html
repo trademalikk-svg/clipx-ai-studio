@@ -882,7 +882,7 @@ body.clipx-locked .workspace-content>#video-editor-guide{display:none!important}
 @media(max-width:760px){body.clipx-locked .workspace-content{display:flex!important;flex-direction:column!important;align-items:stretch!important}body.clipx-locked .workspace-content>#home,body.clipx-locked .workspace-content>#authBox{width:100%!important;max-width:none!important}}
 </style>
 </head>
-<body class="clipx-locked">
+<body class="clipx-locked" data-shifa-tool="clipx-video">
 <header>
  <div class="logo">SHIF-A <span>AI</span></div>
  <div class="header-edition">✦ AI WORKSPACE</div>
@@ -2823,5 +2823,7 @@ async function clipxShareSite(){
 <!-- Cloudflare Web Analytics -->
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"d7dcd6b703194983afebf2c828ec3e67"}'></script>
 <!-- End Cloudflare Web Analytics -->
+<script src="scripts/shif-a-auth.js"></script>
+<script src="scripts/shif-a-access-guard.js"></script>
 </body>
 </html>
