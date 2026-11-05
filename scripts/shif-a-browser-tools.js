@@ -6,7 +6,7 @@
 
   function updateStats() {
     const value = text();
-    const words = value.trim() ? value.trim().split(/\\s+/u).length : 0;
+    const words = value.trim() ? value.trim().split(/\s+/u).length : 0;
     const sentences = value.trim() ? (value.match(/[.!?।]+/g) || []).length : 0;
     $("textStats").textContent = words + " words · " + value.length + " characters · " + sentences + " sentences";
   }
@@ -14,7 +14,7 @@
   $("upperBtn").addEventListener("click", () => { $("textInput").value = text().toLocaleUpperCase(); updateStats(); });
   $("lowerBtn").addEventListener("click", () => { $("textInput").value = text().toLocaleLowerCase(); updateStats(); });
   $("titleBtn").addEventListener("click", () => {
-    $("textInput").value = text().toLocaleLowerCase().replace(/(^|\\s|[-'])\\p{L}/gu, m => m.toLocaleUpperCase());
+    $("textInput").value = text().toLocaleLowerCase().replace(/(^|\s|[-'])\p{L}/gu, m => m.toLocaleUpperCase());
     updateStats();
   });
   $("copyTextBtn").addEventListener("click", async () => {
@@ -23,7 +23,7 @@
   });
 
   function makeCaptions(value, max) {
-    const words = value.trim().split(/\\s+/u).filter(Boolean), lines = [];
+    const words = value.trim().split(/\s+/u).filter(Boolean), lines = [];
     let line = "";
     for (const word of words) {
       if (word.length > max) {
@@ -35,7 +35,7 @@
       if (next.length > max) { lines.push(line); line = word; } else line = next;
     }
     if (line) lines.push(line);
-    return lines.join("\\n");
+    return lines.join("\n");
   }
   $("formatCaptionBtn").addEventListener("click", () => {
     const max = Math.max(12, Math.min(48, Number($("lineLength").value) || 32));
