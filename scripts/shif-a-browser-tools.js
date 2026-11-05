@@ -2,7 +2,7 @@
   "use strict";
   const $ = id => document.getElementById(id);
   const text = () => $("textInput").value;
-  let selectedImage = null;
+  let selectedImage = null;\n  let imageRequestId = 0;
 
   function updateStats() {
     const value = text();
@@ -100,12 +100,23 @@
     }
     const url = URL.createObjectURL(file), img = new Image();
     img.onload = () => {
+      if (requestId !== imageRequestId) { URL.revokeObjectURL(url); return; }
+      if (img.naturalWidth > 6000 || img.naturalHeight > 6000 || img.naturalWidth * img.naturalHeight > 16000000) {
+        URL.revokeObjectURL(url);
+        $("imageInfo").textContent = "Maximum supported size is 6000 × 6000 px and 16 megapixels.";
+        $("imageStatus").textContent = "Please choose a smaller image.";
+        return;
+      }
       selectedImage = { file, img, url };
       $("imageWidth").value = img.naturalWidth;
       $("imageHeight").value = img.naturalHeight;
       $("imageInfo").textContent = img.naturalWidth + " × " + img.naturalHeight + " px · " + (file.size / 1024).toFixed(1) + " KB";
     };
-    img.onerror = () => { URL.revokeObjectURL(url); $("imageInfo").textContent = "Image could not be opened."; };
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      if (requestId !== imageRequestId) return;
+      $("imageInfo").textContent = "Image could not be opened.";
+    };
     img.src = url;
   });
   $("imageWidth").addEventListener("input", () => {
@@ -121,7 +132,7 @@
   $("resizeImageBtn").addEventListener("click", () => {
     if (!selectedImage) { $("imageStatus").textContent = "पहले valid image चुनें।"; return; }
     const width = Number($("imageWidth").value), height = Number($("imageHeight").value);
-    if (!Number.isInteger(width) || !Number.isInteger(height) || width < 1 || height < 1 || width > 6000 || height > 6000) {
+    if (!Number.isInteger(width) || !Number.isInteger(height) || width < 1 || height < 1 || width > 6000 || height > 6000 || width * height > 16000000) {
       $("imageStatus").textContent = "Width और height 1 से 6000 px के बीच दें।"; return;
     }
     const canvas = document.createElement("canvas");
