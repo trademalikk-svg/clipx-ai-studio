@@ -285,7 +285,7 @@ class MainActivity : Activity() {
     document.body.appendChild(link);
     link.click();
     link.remove();
-    URL.revokeObjectURL(url);
+    setTimeout(()=>URL.revokeObjectURL(url),1500);
     setStatus("ZIP source project export शुरू किया गया।");
   }
 
