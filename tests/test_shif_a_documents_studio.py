@@ -89,5 +89,22 @@ class ShifADocumentsStudioTests(unittest.TestCase):
         self.assertIn("Image to PDF", html)
 
 
+    def test_pdf_compression_is_local_bounded_and_discloses_flattening(self):
+        js = (ROOT / "scripts/shif-a-documents-studio.js").read_text(encoding="utf-8")
+        html = (ROOT / "documents-studio.html").read_text(encoding="utf-8")
+        self.assertIn("async function compressPdfFile(", js)
+        self.assertIn("MAX_COMPRESS_PDF_BYTES=20971520", js)
+        self.assertIn("MAX_COMPRESS_PDF_PAGES=20", js)
+        self.assertIn("MAX_COMPRESS_TOTAL_PIXELS=40000000", js)
+        self.assertIn("pdfjsLib.getDocument", js)
+        self.assertIn("PDFLib.PDFDocument.create()", js)
+        self.assertIn("canvas.toBlob", js)
+        self.assertIn('id="compressPdfInput"', html)
+        self.assertIn('id="compressPdfQuality"', html)
+        self.assertIn('id="compressPdfBtn"', html)
+        self.assertIn("compressPdfStatus", html)
+        self.assertIn("text selectable", html.lower())
+        self.assertIn("locally in your browser", html.lower())
+
 if __name__ == "__main__":
     unittest.main()
