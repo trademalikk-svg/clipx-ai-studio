@@ -102,6 +102,36 @@ async function importPdfFile(file){
 const MAX_OCR_PDF_BYTES=10485760;
 const MAX_OCR_PAGES=5;
 const MAX_OCR_CHARS=15000;
+
+const MAX_IMAGE_PDF_FILES=15;
+const MAX_IMAGE_PDF_FILE_BYTES=8388608;
+const MAX_IMAGE_PDF_TOTAL_BYTES=31457280;
+async function convertImagesToPdf(){
+ const files=Array.from($("imagePdfInput").files||[]);
+ if(!files.length){$("imagePdfStatus").textContent="PDF बनाने के लिए JPG या PNG images चुनें।";return;}
+ if(files.length>MAX_IMAGE_PDF_FILES){$("imagePdfStatus").textContent="एक बार में अधिकतम 15 images चुनें।";return;}
+ if(files.some(file=>file.size>MAX_IMAGE_PDF_FILE_BYTES)||files.reduce((sum,file)=>sum+file.size,0)>MAX_IMAGE_PDF_TOTAL_BYTES){$("imagePdfStatus").textContent="हर image 8 MB तक और कुल images 30 MB तक होनी चाहिए।";return;}
+ if(!window.PDFLib){$("imagePdfStatus").textContent="PDF library load नहीं हुई। Internet connection जाँचें।";return;}
+ $("imagesToPdfBtn").disabled=true;$("imagePdfStatus").textContent="Images से PDF बनाई जा रही है…";
+ try{
+  const output=await PDFLib.PDFDocument.create();
+  const pageWidth=595.28,pageHeight=841.89,margin=36;
+  for(let index=0;index<files.length;index++){
+   const file=files[index],type=file.type.toLowerCase();
+   if(type!=="image/jpeg"&&type!=="image/png")throw new Error("केवल JPG और PNG images समर्थित हैं: "+file.name);
+   const bytes=await file.arrayBuffer();
+   const image=type==="image/jpeg"?await output.embedJpg(bytes):await output.embedPng(bytes);
+   const page=output.addPage([pageWidth,pageHeight]);
+   const scale=Math.min((pageWidth-margin*2)/image.width,(pageHeight-margin*2)/image.height);
+   const width=image.width*scale,height=image.height*scale;
+   page.drawImage(image,{x:(pageWidth-width)/2,y:(pageHeight-height)/2,width,height});
+   $("imagePdfStatus").textContent="Image "+(index+1)+" / "+files.length+" जोड़ी जा रही है…";
+  }
+  downloadPdfBytes(await output.save(),"shif-a-images.pdf");
+  $("imagePdfStatus").textContent=files.length+" images से PDF बन गई। Download शुरू हुआ।";
+ }catch(error){$("imagePdfStatus").textContent=error&&error.message?error.message:"Images से PDF नहीं बन सकी। File format जाँचें।";}
+ finally{$("imagesToPdfBtn").disabled=false;}
+}
 async function runPdfOcr(){
  const file=$("ocrPdfInput").files&&$("ocrPdfInput").files[0];
  if(!file){$("ocrStatus").textContent="OCR के लिए scanned PDF चुनें।";return;}
@@ -240,6 +270,7 @@ $("updatePreviewBtn").addEventListener("click",updatePreview);
 $("saveLibraryBtn").addEventListener("click",saveToLibrary);
 $("pdfImportInput").addEventListener("change",event=>importPdfFile(event.target.files&&event.target.files[0]));
 $("runPdfOcrBtn").addEventListener("click",runPdfOcr);
+$("imagesToPdfBtn").addEventListener("click",convertImagesToPdf);
 $("mergePdfBtn").addEventListener("click",mergePdfFiles);
 $("splitPdfBtn").addEventListener("click",splitPdfFile);
 $("documentLibrary").addEventListener("click",event=>{const button=event.target.closest("button[data-action][data-id]");if(!button)return;if(button.dataset.action==="open")openLibraryDocument(button.dataset.id);if(button.dataset.action==="delete")deleteLibraryDocument(button.dataset.id);});
