@@ -4,14 +4,14 @@ const SUPABASE_URL="https://qmoxfzgiwamblpouxitn.supabase.co";
 const SUPABASE_KEY="sb_publishable_dsVQ5-5VuIG5n_m0qqNjqw__i5sogpL";
 const GATEWAY=SUPABASE_URL+"/functions/v1/shif-a-model-gateway";
 const configs={
-"writing-studio.html":{title:"Generate with Gemini",mode:"writing",target:"draftOutput",fields:["topic","language","format","platform","tone","audience","keywords","details"],label:"Writing Studio"},
-"business-tools.html":{title:"Improve with Gemini",mode:"writing",target:"result",fields:["businessName","businessType","city","language","details","customerMessage","goal","budget","itemName","itemPrice","itemQty","taxRate"],label:"Business Toolkit"},
-"coding-studio.html":{title:"Ask Gemini to review this code",mode:"coding",target:"codeEditor",fields:["projectMode","activeFile","codeEditor"],label:"Coding Studio"},
-"research-studio.html":{title:"Analyze with Gemini",mode:"research",target:"reportOutput",fields:["topic","language","question","scope","audience","findings","gaps","conclusion"],label:"Research Workspace"},
-"agents-studio.html":{title:"Refine blueprint with Gemini",mode:"writing",target:"blueprint",fields:["agentName","agentRole","agentGoal","agentInstructions","agentSteps","agentLimits"],label:"Agent Designer"},
-"automation-studio.html":{title:"Review workflow with Gemini",mode:"writing",target:"flowOutput",fields:["flowName","flowTrigger","flowPurpose","flowFrequency","flowOwner","stepList","approvalMode","failureMode","dataRules"],label:"Automation Designer"},
-"documents-studio.html":{title:"Improve document with Gemini",mode:"writing",target:"docBody",fields:["docTitle","docAuthor","docBody"],label:"Documents Studio"},
-"education-studio.html":{title:"Explain / create practice questions with Gemini",mode:"chat",target:"quizArea",fields:["subject","quizNotes","flashQuestion","flashAnswer"],label:"Study Studio"}
+"writing-studio.html":{title:"Generate with SHIF-A AI",mode:"writing",target:"draftOutput",fields:["topic","language","format","platform","tone","audience","keywords","details"],label:"Writing Studio"},
+"business-tools.html":{title:"Improve with SHIF-A AI",mode:"writing",target:"result",fields:["businessName","businessType","city","language","details","customerMessage","goal","budget","itemName","itemPrice","itemQty","taxRate"],label:"Business Toolkit"},
+"coding-studio.html":{title:"Review this code with SHIF-A AI",mode:"coding",target:"codeEditor",fields:["projectMode","activeFile","codeEditor"],label:"Coding Studio"},
+"research-studio.html":{title:"Analyze with SHIF-A AI",mode:"research",target:"reportOutput",fields:["topic","language","question","scope","audience","findings","gaps","conclusion"],label:"Research Workspace"},
+"agents-studio.html":{title:"Refine blueprint with SHIF-A AI",mode:"writing",target:"blueprint",fields:["agentName","agentRole","agentGoal","agentInstructions","agentSteps","agentLimits"],label:"Agent Designer"},
+"automation-studio.html":{title:"Review workflow with SHIF-A AI",mode:"writing",target:"flowOutput",fields:["flowName","flowTrigger","flowPurpose","flowFrequency","flowOwner","stepList","approvalMode","failureMode","dataRules"],label:"Automation Designer"},
+"documents-studio.html":{title:"Improve document with SHIF-A AI",mode:"writing",target:"docBody",fields:["docTitle","docAuthor","docBody"],label:"Documents Studio"},
+"education-studio.html":{title:"Explain / create practice questions with SHIF-A AI",mode:"chat",target:"quizArea",fields:["subject","quizNotes","flashQuestion","flashAnswer"],label:"Study Studio"}
 };
 function value(id){const el=document.getElementById(id);if(!el)return"";return ("value"in el?el.value:el.innerText||el.textContent||"").trim();}
 function init(){
@@ -37,12 +37,12 @@ function init(){
    const auth=await window.ShifAAuth.getSession();
    if(auth.error||!auth.session){status.textContent="पहले SHIF-A account में login करें।";return;}
    if(!auth.user||!auth.user.email_confirmed_at){status.textContent="पहले account का email verify करें।";return;}
-   status.textContent="Secure Gemini Gateway से अनुरोध भेजा जा रहा है…";
-   const response=await fetch(GATEWAY,{method:"POST",headers:{"Content-Type":"application/json","apikey":SUPABASE_KEY,"Authorization":"Bearer "+auth.session.access_token},body:JSON.stringify({message:prompt,model:"gemini-3.8-flash",mode:cfg.mode})});
+   status.textContent="Secure SHIF-A AI Gateway से अनुरोध भेजा जा रहा है…";
+   const response=await fetch(GATEWAY,{method:"POST",headers:{"Content-Type":"application/json","apikey":SUPABASE_KEY,"Authorization":"Bearer "+auth.session.access_token},body:JSON.stringify({message:prompt,model:"@cf/qwen/qwen3-30b-a3b-fp8",mode:cfg.mode})});
    const data=await response.json().catch(()=>({}));
    if(!response.ok){status.textContent=data.message||(response.status===429?"इस account की hourly limit पूरी हो गई है।":"AI service अभी जवाब नहीं दे सकी।");return;}
    if(typeof data.answer!=="string"||!data.answer.trim()){status.textContent="Model ने कोई text response नहीं दिया।";return;}
-   answer.textContent=data.answer;answer.hidden=false;status.textContent="Gemini response तैयार है। इसे review करके ही अपने draft में लागू करें।";
+   answer.textContent=data.answer;answer.hidden=false;status.textContent="Cloudflare AI response तैयार है। इसे review करके ही अपने draft में लागू करें।";
   }catch(e){status.textContent="Network या Gateway उपलब्ध नहीं है। बाद में कोशिश करें।";}
   finally{button.disabled=false;}
  });
