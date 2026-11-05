@@ -19,7 +19,7 @@
   }
   async function create(options) {
     if (!options || !["image", "video"].includes(options.kind)) throw new Error("Choose image or video generation.");
-    return call({ action: "create", ...options });
+    return call({ ...options, action: "create" });
   }
   async function status(taskToken) {
     return call({ action: "status", task_token: taskToken });
@@ -30,9 +30,13 @@
       const result = await status(taskToken);
       if (typeof onUpdate === "function") onUpdate(result);
       if (["succeeded", "failed", "canceled"].includes(result.status)) return result;
+      if (signal?.aborted) throw new DOMException("Cancelled", "AbortError");
       await new Promise((resolve, reject) => {
-        const timer = setTimeout(resolve, delay);
-        if (signal) signal.addEventListener("abort", () => { clearTimeout(timer); reject(new DOMException("Cancelled", "AbortError")); }, { once: true });
+        const finish = () => { signal?.removeEventListener("abort", cancel); resolve(); };
+        const timer = setTimeout(finish, delay);
+        const cancel = () => { clearTimeout(timer); signal?.removeEventListener("abort", cancel); reject(new DOMException("Cancelled", "AbortError")); };
+        signal?.addEventListener("abort", cancel, { once: true });
+        if (signal?.aborted) cancel();
       });
       delay = Math.min(8000, Math.round(delay * 1.35));
     }
@@ -44,8 +48,9 @@
     if (output && typeof output === "object") {
       for (const value of Object.values(output)) {
         if (typeof value === "string" && /^https:\/\//i.test(value)) return value;
+        if (value && typeof value === "object" && typeof value.url === "string" && /^https:\/\//i.test(value.url)) return value.url;
         if (Array.isArray(value)) {
-          const found = value.find(item => typeof item === "string" && /^https:\/\//i.test(item));
+          const found = value.map(item => typeof item === "string" ? item : item?.url).find(item => typeof item === "string" && /^https:\/\//i.test(item));
           if (found) return found;
         }
       }
