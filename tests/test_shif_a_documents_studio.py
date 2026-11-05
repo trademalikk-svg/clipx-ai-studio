@@ -17,6 +17,19 @@ class ShifADocumentsStudioTests(unittest.TestCase):
         self.assertIn(r'title+"\n"', js)
         self.assertIn(r"[^\p{L}\p{N}-]+", js)
 
+    def test_document_studio_has_saved_document_library(self):
+        js = (ROOT / "scripts/shif-a-documents-studio.js").read_text(encoding="utf-8")
+        html = (ROOT / "documents-studio.html").read_text(encoding="utf-8")
+        self.assertIn('const LIBRARY_KEY="shifA.documentsStudio.library.v1"', js)
+        self.assertIn("function saveToLibrary()", js)
+        self.assertIn("function renderLibrary()", js)
+        self.assertIn("function openLibraryDocument(", js)
+        self.assertIn("function deleteLibraryDocument(", js)
+        self.assertIn("MAX_LIBRARY_ITEMS=30", js)
+        self.assertIn('id="saveLibraryBtn"', html)
+        self.assertIn('id="documentLibrary"', html)
+        self.assertIn("local browser", html.lower())
+
     def test_document_studio_explains_local_draft_persistence(self):
         html = (ROOT / "documents-studio.html").read_text(encoding="utf-8")
         self.assertIn("local browser", html.lower())
