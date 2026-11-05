@@ -23,7 +23,7 @@ $("downloadTxtBtn").addEventListener("click",()=>{
  const content=(title+"\n"+(author?"Prepared by: "+author+"\n":"")+"\n"+$("docBody").value).trim()+"\n";
  const blob=new Blob([content],{type:"text/plain;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");
  a.href=url;a.download=title.replace(/[^\p{L}\p{N}-]+/gu,"-").replace(/^-|-$/g,"").slice(0,60)||"shif-a-document";
- a.download+=".txt";document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
+ a.download+=".txt";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);
  $("docStatus").textContent="TXT download started.";
 });
 $("clearDocBtn").addEventListener("click",()=>{
