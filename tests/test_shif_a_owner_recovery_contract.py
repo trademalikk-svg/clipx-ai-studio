@@ -29,14 +29,15 @@ class OwnerRecoveryContractTests(unittest.TestCase):
         self.assertNotIn("shif_a_memberships", js)
         self.assertNotIn("app_metadata", js)
 
-    def test_recovery_code_ui_is_bound_to_passkey_revocation(self):
+    def test_recovery_code_ui_remains_disabled_until_backend_is_activated(self):
         html = (ROOT / "owner-security.html").read_text(encoding="utf-8")
         js = (ROOT / "scripts" / "shif-a-owner-security.js").read_text(encoding="utf-8")
-        self.assertIn('id="revokePasskeyId"', html)
-        self.assertIn('id="consumeRecoveryCode"', html)
-        self.assertIn('action:"revoke_with_code"', js)
-        self.assertIn('passkey_id:', js)
-        self.assertIn('shif-a-owner-recovery', js)
+        self.assertIn("Recovery Codes & Lost Device Revocation", html)
+        self.assertIn("NOT ENABLED — BACKEND PENDING", html)
+        self.assertIn("यह सुविधा अभी उपलब्ध नहीं है", html)
+        self.assertNotIn('id="revokePasskeyId"', html)
+        self.assertNotIn('id="consumeRecoveryCode"', html)
+        self.assertNotIn('action:"revoke_with_code"', js)
 
     def test_recovery_codes_require_aal2_and_never_create_sessions(self):
         fn = (ROOT / "supabase" / "functions" / "shif-a-owner-recovery" / "index.ts").read_text(encoding="utf-8")
