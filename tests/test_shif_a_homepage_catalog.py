@@ -35,7 +35,7 @@ class HomepageCatalogTests(unittest.TestCase):
         self.assertIn("#0b1f3a", theme)
         self.assertIn("#1769ff", theme)
         self.assertIn("#ffffff", theme)
-        self.assertNotRegex(theme.lower(), r"purple|violet|#(?:[0-9a-f]{3}){1,2}[^;]*")
+        self.assertNotRegex(theme.lower(), r"purple|violet|#6842c2|#4e2b9e|#b45cff|#ed48ff|#a85ee1|#843bc5")
 
 if __name__ == "__main__":
     unittest.main()
