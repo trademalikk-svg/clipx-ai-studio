@@ -21,13 +21,13 @@ class BrowserToolsContractTests(unittest.TestCase):
 
     def test_caption_copy_does_not_mutate_the_generated_caption(self):
         self.assertIn('await navigator.clipboard.writeText(value)', SCRIPT)
-        self.assertIn('$("#captionStatus").textContent = "Captions copied."', SCRIPT)
-        self.assertNotIn('$("#captionOutput").textContent +=', SCRIPT)
+        self.assertIn('$("captionStatus").textContent = "Captions copied."', SCRIPT)
+        self.assertNotIn('$("captionOutput").textContent +=', SCRIPT)
 
     def test_json_copy_requires_a_valid_formatted_result(self):
         self.assertIn('if (!jsonResult)', SCRIPT)
         self.assertIn('jsonResult = ""', SCRIPT)
-        self.assertIn('JSON.parse($("#jsonInput").value)', SCRIPT)
+        self.assertIn('JSON.parse($("jsonInput").value)', SCRIPT)
 
     def test_image_resizer_releases_old_preview_and_preserves_supported_format(self):
         self.assertIn("URL.revokeObjectURL(selectedImage.url)", SCRIPT)
