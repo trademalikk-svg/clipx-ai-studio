@@ -12,7 +12,7 @@ class ShifAAIProviderContractTests(unittest.TestCase):
 
     def test_core_tools_describe_cloudflare_as_the_active_provider(self):
         root = ROOT
-        for name in ("writing-studio.html", "coding-studio.html", "research-studio.html", "business-tools.html", "chat-studio.html", "education-studio.html"):
+        for name in ("writing-studio.html", "coding-studio.html", "research-studio.html", "business-tools.html", "chat-studio.html", "education-studio.html", "documents-studio.html", "agents-studio.html", "automation-studio.html"):
             page = (root / name).read_text(encoding="utf-8")
             self.assertNotIn("Gemini", page, f"stale provider label in {name}")
         helper = (root / "scripts" / "shif-a-ai-tools.js").read_text(encoding="utf-8")
