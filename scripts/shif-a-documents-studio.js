@@ -103,6 +103,51 @@ const MAX_OCR_PDF_BYTES=10485760;
 const MAX_OCR_PAGES=5;
 const MAX_OCR_CHARS=15000;
 
+
+const MAX_COMPRESS_PDF_BYTES=20971520;
+const MAX_COMPRESS_PDF_PAGES=20;
+const MAX_COMPRESS_TOTAL_PIXELS=40000000;
+async function compressPdfFile(){
+ const file=$("compressPdfInput").files&&$("compressPdfInput").files[0];
+ if(!file){$("compressPdfStatus").textContent="Compress करने के लिए PDF चुनें।";return;}
+ if(file.type!=="application/pdf"&&!file.name.toLowerCase().endsWith(".pdf")){$("compressPdfStatus").textContent="कृपया PDF file चुनें।";return;}
+ if(file.size>MAX_COMPRESS_PDF_BYTES){$("compressPdfStatus").textContent="PDF अधिकतम 20 MB तक हो सकती है।";return;}
+ if(!window.pdfjsLib||!window.PDFLib){$("compressPdfStatus").textContent="PDF libraries load नहीं हुईं। Internet connection जाँचें और page reload करें।";return;}
+ const quality=$("compressPdfQuality").value;
+ const presets={balanced:{scale:1.15,jpeg:0.72},smaller:{scale:0.9,jpeg:0.55},clearer:{scale:1.4,jpeg:0.84}};
+ if(!Object.prototype.hasOwnProperty.call(presets,quality)){$("compressPdfStatus").textContent="Compression quality चुनें।";return;}
+ $("compressPdfBtn").disabled=true;
+ let pdf=null;
+ try{
+  $("compressPdfStatus").textContent="PDF pages पढ़े जा रहे हैं…";
+  pdf=await window.pdfjsLib.getDocument({data:await file.arrayBuffer()}).promise;
+  if(pdf.numPages>MAX_COMPRESS_PDF_PAGES)throw new Error("इस tool में अधिकतम 20 pages वाली PDF compress कर सकते हैं।");
+  const output=await PDFLib.PDFDocument.create();let totalPixels=0;
+  const preset=presets[quality];
+  for(let pageNumber=1;pageNumber<=pdf.numPages;pageNumber++){
+   $("compressPdfStatus").textContent="Page "+pageNumber+" / "+pdf.numPages+" optimize हो रहा है…";
+   const sourcePage=await pdf.getPage(pageNumber),base=sourcePage.getViewport({scale:1});
+   const scale=Math.min(preset.scale,Math.sqrt(8000000/(base.width*base.height)));
+   const viewport=sourcePage.getViewport({scale}),width=Math.ceil(viewport.width),height=Math.ceil(viewport.height),pixels=width*height;
+   if(!Number.isFinite(pixels)||pixels<1||pixels>8000000||totalPixels+pixels>MAX_COMPRESS_TOTAL_PIXELS)throw new Error("PDF का कुल rendered size 40 megapixels से अधिक है। छोटी या कम pages वाली PDF चुनें।");
+   totalPixels+=pixels;
+   const canvas=document.createElement("canvas");canvas.width=width;canvas.height=height;
+   const context=canvas.getContext("2d");
+   if(!context)throw new Error("इस browser में canvas उपलब्ध नहीं है।");
+   await sourcePage.render({canvasContext:context,viewport}).promise;
+   const jpeg=await new Promise(resolve=>canvas.toBlob(resolve,"image/jpeg",preset.jpeg));
+   canvas.width=0;canvas.height=0;
+   if(!jpeg)throw new Error("Page image तैयार नहीं हो सकी।");
+   const image=await output.embedJpg(await jpeg.arrayBuffer()),page=output.addPage([base.width,base.height]);
+   page.drawImage(image,{x:0,y:0,width:base.width,height:base.height});
+  }
+  const bytes=await output.save();downloadPdfBytes(bytes,safePdfName(file.name)+"-compressed.pdf");
+  const saved=file.size-bytes.length,detail=saved>0?("लगभग "+Math.round(saved/file.size*100)+"% छोटा"):"इस PDF का output original से छोटा नहीं हुआ";
+  $("compressPdfStatus").textContent=pdf.numPages+" pages process हुए। "+detail+" · Original "+(file.size/1048576).toFixed(2)+" MB, output "+(bytes.length/1048576).toFixed(2)+" MB. Download शुरू हुआ।";
+ }catch(error){$("compressPdfStatus").textContent=error&&error.message?error.message:"PDF compress नहीं हो सकी। Password-protected या damaged file हो सकती है।";}
+ finally{$("compressPdfBtn").disabled=false;}
+}
+
 const MAX_IMAGE_PDF_FILES=15;
 const MAX_IMAGE_PDF_FILE_BYTES=8388608;
 const MAX_IMAGE_PDF_TOTAL_BYTES=31457280;
