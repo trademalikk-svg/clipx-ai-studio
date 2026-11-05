@@ -9,7 +9,7 @@ class GrowthManagerTests(unittest.TestCase):
         script = (ROOT / "scripts/shif-a-growth-manager.js").read_text(encoding="utf-8")
         for marker in ('name="robots" content="noindex,nofollow"', 'id="growthStatus"', 'id="keywordTable"', 'id="dailyTargets"', 'scripts/shif-a-growth-manager.js'):
             self.assertIn(marker, page)
-        for marker in ("requireSession()", "getAccessProfile(", 'role !== "owner"', "keyword-map.json", "lastUpdated", "search intent", "trend direction"):
+        for marker in ("requireSession()", "getAccessProfile(", 'role !== "owner"', "data/shif-a-keywords.json", "lastUpdated", "item.intent", "item.trend"):
             self.assertIn(marker, script)
 
     def test_keyword_map_has_grounded_initial_terms_and_source_fields(self):
