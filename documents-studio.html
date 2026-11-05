@@ -4,7 +4,7 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#06162c">
 <title>Documents & PDF Studio | SHIF-A AI</title>
-<meta name="description" content="Create and format documents, extract PDF text with OCR, merge PDF files and split selected page ranges locally in your browser.">
+<meta name="description" content="Create and format documents, extract PDF text with OCR, merge, split, compress PDFs and convert images locally in your browser.">
 <link rel="canonical" href="https://trademalikk-svg.github.io/clipx-ai-studio/documents-studio.html">
 <style>
 :root{color-scheme:dark;font-family:Arial,sans-serif;background:#030b19;color:#f4f9ff}*{box-sizing:border-box}
@@ -57,6 +57,15 @@ button.secondary{background:#102a47;border-color:#315b80}
 </section>
 <section class="panel">
 <h2>Import PDF Text</h2><p class="muted">20 MB तक और अधिकतम 100 pages वाली PDF से selectable text निकालकर editor में लाएँ। Scanned PDF के लिए नीचे दिया गया OCR section इस्तेमाल करें (अधिकतम 5 pages)।</p><label for="pdfImportInput">Choose PDF file</label><input id="pdfImportInput" type="file" accept="application/pdf,.pdf"><p class="muted">PDF text extraction happens locally in your browser. PDF.js library load करने के लिए internet connection चाहिए।</p></section>
+<section class="panel">
+<h2>PDF Compress</h2>
+<p class="muted">PDF का size घटाने के लिए pages को JPEG images में बदलकर नई PDF बनती है। एक PDF 20 MB और अधिकतम 20 pages; total rendering 40 megapixels तक सीमित है।</p>
+<div class="notice">महत्वपूर्ण: यह image-based compression है। Output में text selectable/searchable नहीं रहेगा; forms, links, annotations, bookmarks और accessibility structure सुरक्षित नहीं रहते। Original PDF की copy अपने पास रखें। कुछ PDFs में output size कम न भी हो। यह प्रक्रिया locally in your browser चलती है; PDF server पर upload नहीं होती।</div>
+<label for="compressPdfInput">Choose PDF file</label><input id="compressPdfInput" type="file" accept="application/pdf,.pdf">
+<label for="compressPdfQuality">Compression quality</label><select id="compressPdfQuality"><option value="smaller">Smaller file · lower image quality</option><option value="balanced" selected>Balanced · recommended</option><option value="clearer">Clearer text · larger file</option></select>
+<div class="actions"><button id="compressPdfBtn">Compress PDF</button></div>
+<p id="compressPdfStatus" class="status" role="status" aria-live="polite"></p>
+</section>
 <section class="panel">
 <h2>Image to PDF</h2>
 <p class="muted">एक या अधिक JPG/PNG images को एक PDF में बदलें। हर image 8 MB तक, कुल 30 MB और अधिकतम 15 images। हर image PDF के अलग A4 page पर fit होगी।</p>
