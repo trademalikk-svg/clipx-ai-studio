@@ -42,7 +42,7 @@ button.secondary{background:#102a47;border-color:#315b80}
 <div><label for="keywords">Keywords (optional)</label><input id="keywords" maxlength="180" placeholder="comma separated keywords"></div>
 <div class="wide"><label for="details">Important points (optional)</label><textarea id="details" maxlength="700" placeholder="वे बातें लिखें जिन्हें draft में शामिल करना है…"></textarea></div>
 </div>
-<div class="actions"><button id="generateBtn">Generate draft</button><button class="secondary" id="clearBtn">Clear</button></div>
+<div class="actions"><button id="generateBtn">Generate local template</button><button id="generateAiBtn">Generate with Gemini AI</button><button class="secondary" id="clearBtn">Clear</button></div>
 <p class="status" id="formStatus" role="status"></p>
 </section>
 <section class="panel"><h2>Your draft</h2><div id="draftOutput" class="output" aria-live="polite">आपका draft यहाँ दिखाई देगा। Generate draft दबाएँ।</div><div class="actions"><button id="copyBtn">Copy draft</button><button class="secondary" id="downloadBtn">Download .txt</button></div><p class="status" id="outputStatus" role="status"></p></section>
