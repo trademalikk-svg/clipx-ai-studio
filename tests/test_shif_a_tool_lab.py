@@ -26,6 +26,16 @@ class ShifAToolLabContractTests(unittest.TestCase):
         self.assertIn('else if(c==="\\n")', self.lab)
         self.assertIn('if(quoted)throw Error("CSV में closing quote नहीं मिला")', self.lab)
 
+    def test_csv_parser_rejects_misplaced_quotes_and_trailing_characters(self):
+        self.assertIn("afterQuote", self.lab)
+        self.assertIn("CSV में quote केवल field की शुरुआत में हो सकता है", self.lab)
+        self.assertIn("Closing quote के बाद केवल comma या नई line मान्य है", self.lab)
+
+    def test_image_info_limits_file_size_and_ignores_stale_loads(self):
+        self.assertIn("MAX_IMAGE_BYTES", self.lab)
+        self.assertIn("imageRequestId", self.lab)
+        self.assertIn("requestId!==imageRequestId", self.lab)
+
     def test_copy_and_download_report_success_or_failure(self):
         self.assertIn("async function copyOutput()", self.lab)
         self.assertIn("Clipboard permission नहीं मिली", self.lab)
