@@ -33,12 +33,10 @@ async function listPasskeys(){
  const access=await owner();if(!access.ok)throw new Error("Owner verification required.");
  const {data,error}=await client.auth.passkey.list();if(error)throw error;
  const box=$("passkeyList");box.replaceChildren();
- const select=$("revokePasskeyId");if(select)select.replaceChildren();
- if(!data||!data.length){box.textContent="अभी कोई passkey registered नहीं है।";if(select){const o=document.createElement("option");o.value="";o.textContent="कोई passkey उपलब्ध नहीं";select.append(o);}return;}
+ if(!data||!data.length){box.textContent="अभी कोई passkey registered नहीं है।";return;}
  const ul=document.createElement("ul");
  data.forEach(item=>{
   const li=document.createElement("li");li.textContent=(item.friendly_name||"Passkey")+" · "+new Date(item.created_at).toLocaleString("hi-IN");ul.append(li);
-  if(select){const option=document.createElement("option");option.value=item.id;option.textContent=(item.friendly_name||"Passkey")+" · "+new Date(item.created_at).toLocaleDateString("hi-IN");select.append(option);}
  });
  box.append(ul);
 }
@@ -59,31 +57,6 @@ $("saveNewOwnerPassword").addEventListener("click",async()=>{
  button.disabled=true;
  try{const {error}=await client.auth.updateUser({password:first});if(error)throw error;$("newOwnerPassword").value="";$("confirmOwnerPassword").value="";$("newPasswordPanel").classList.add("hidden");recoverySay("Password update हो गया। अब नए password से login करें।");}
  catch(_){recoverySay("Password update नहीं हो सका। Recovery link की validity जाँचें।",true);}finally{button.disabled=false;}
-});
-async function recoveryRequest(payload){
- const {data:{session},error}=await client.auth.getSession();if(error)throw error;
- if(!session)throw new Error("पहले Owner account में sign in करें।");
- const access=await owner();if(!access.ok)throw new Error("Owner verification required.");
- const response=await fetch(URL+"/functions/v1/shif-a-owner-recovery",{
-  method:"POST",headers:{apikey:KEY,Authorization:"Bearer "+session.access_token,"Content-Type":"application/json"},body:JSON.stringify(payload)
- });
- const result=await response.json().catch(()=>({}));if(!response.ok)throw new Error(result.error||"Recovery service request failed.");return result;
-}
-const generate=$("generateRecoveryCodes");
-generate.addEventListener("click",async()=>{
- generate.disabled=true;$("recoveryCodesList").textContent="";$("recoveryCodesResult").classList.add("hidden");
- try{const result=await recoveryRequest({action:"generate"});if(!Array.isArray(result.codes)||result.codes.length!==8)throw new Error("Server response अधूरा है।");$("recoveryCodesList").textContent=result.codes.join("\n");$("recoveryCodesResult").classList.remove("hidden");$("recoveryCodeStatus").textContent="8 नए codes बने। इन्हें सुरक्षित offline जगह पर लिखें।";}
- catch(e){$("recoveryCodeStatus").textContent=e.message||"Codes generate नहीं हो सके।";}
- finally{generate.disabled=false;}
-});
-$("hideRecoveryCodes").addEventListener("click",()=>{$("recoveryCodesList").textContent="";$("recoveryCodesResult").classList.add("hidden");$("recoveryCodeStatus").textContent="Codes इस screen से छिपा दिए गए। फिर देखने के लिए नया set generate करना होगा।";});
-$("consumeRecoveryCodeButton").addEventListener("click",async()=>{
- const code=$("consumeRecoveryCode").value.trim(),passkeyId=$("revokePasskeyId").value;
- if(!code||!passkeyId){$("recoveryCodeStatus").textContent="Recovery code और passkey दोनों चुनें।";return;}
- const button=$("consumeRecoveryCodeButton");button.disabled=true;
- try{const result=await recoveryRequest({action:"revoke_with_code",code,passkey_id:passkeyId});$("consumeRecoveryCode").value="";$("recoveryCodeStatus").textContent=result.audit_recorded===false?"Passkey revoke हुई, लेकिन audit confirmation नहीं मिली।":"Passkey revoke हो गई। Recovery code अब दोबारा इस्तेमाल नहीं होगा।";await listPasskeys();}
- catch(e){$("recoveryCodeStatus").textContent=e.message||"Passkey revoke नहीं हो सकी।";}
- finally{button.disabled=false;}
 });
 render();
 })();
