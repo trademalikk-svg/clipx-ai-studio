@@ -36,6 +36,20 @@ class ShifAToolLabContractTests(unittest.TestCase):
         self.assertIn("imageRequestId", self.lab)
         self.assertIn("requestId!==imageRequestId", self.lab)
 
+    def test_base64_tool_has_explicit_encode_and_decode_modes(self):
+        self.assertIn('id="base64Mode"', self.lab)
+        self.assertIn('case"base64":{const mode=$("base64Mode").value', self.lab)
+        self.assertIn("TextEncoder", self.lab)
+        self.assertIn("TextDecoder", self.lab)
+        self.assertIn("Invalid Base64 input", self.lab)
+
+    def test_regex_runs_in_a_terminable_worker_with_input_limits(self):
+        self.assertIn("new Worker(workerUrl)", self.lab)
+        self.assertIn("setTimeout(()=>", self.lab)
+        self.assertIn("worker.terminate()", self.lab)
+        self.assertIn("REGEX_MAX_INPUT", self.lab)
+        self.assertIn("REGEX_MAX_PATTERN", self.lab)
+
     def test_copy_and_download_report_success_or_failure(self):
         self.assertIn("async function copyOutput()", self.lab)
         self.assertIn("Clipboard permission नहीं मिली", self.lab)
