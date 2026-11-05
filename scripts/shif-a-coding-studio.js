@@ -99,6 +99,7 @@ class MainActivity : Activity() {
     byId("activeFile").textContent = name;
     byId("codeEditor").value = state.files[name];
     renderFileList();
+    scheduleAutoSave();
   }
 
   function safeInline(value, closingTag) {
@@ -141,6 +142,7 @@ class MainActivity : Activity() {
     byId("codeEditor").disabled = false;
     selectFile(state.activeFile);
     renderPreview();
+    saveProject({ quiet: true });
     setStatus(mode === "android"
       ? "Android starter source project created locally. No APK has been compiled."
       : "Website starter created locally. Edit the files and preview your changes.");
@@ -223,39 +225,63 @@ class MainActivity : Activity() {
   }
 
   const STORAGE_KEY = "shifA.codingStudio.project.v1";
+  let autoSaveTimer = null;
+  const MAX_PROJECT_BYTES = 1500000;
 
-  function saveProject() {
+  function scheduleAutoSave() {
+    if (autoSaveTimer) clearTimeout(autoSaveTimer);
+    autoSaveTimer = setTimeout(() => {
+      autoSaveTimer = null;
+      saveProject({ quiet: true });
+    }, 350);
+  }
+
+  function saveProject(options = {}) {
+    const quiet = options.quiet === true;
     if (!fileNames().length) {
       setStatus("पहले starter project बनाएँ।");
       return;
     }
     try {
       const saved = { version: 1, mode: state.mode, files: state.files, activeFile: state.activeFile, savedAt: new Date().toISOString() };
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(saved));
-      setStatus("Project इसी device के browser में save हो गया। Browser data clear करने पर यह मिट सकता है।");
+      const serialized = JSON.stringify(saved);
+      if (serialized.length > MAX_PROJECT_BYTES) {
+        if (!quiet) setStatus("Project browser की local storage सीमा से बड़ा है। ZIP export इस्तेमाल करें।");
+        return false;
+      }
+      localStorage.setItem(STORAGE_KEY, serialized);
+      if (!quiet) setStatus("Project इसी device के browser में save हो गया। Browser data clear करने पर यह मिट सकता है।");
+      return true;
     } catch (error) {
-      setStatus("इस device पर save नहीं हो पाया। Storage full या browser storage disabled हो सकता है। ZIP export इस्तेमाल करें।");
+      if (!quiet) setStatus("इस device पर save नहीं हो पाया। Storage full या browser storage disabled हो सकता है। ZIP export इस्तेमाल करें।");
+      return false;
     }
   }
 
-  function restoreProject() {
+  function restoreProject(options = {}) {
+    const quiet = options.quiet === true;
     let saved;
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (!raw) {
-        setStatus("इस browser में कोई saved project नहीं मिला।");
-        return;
+        if (!quiet) setStatus("इस browser में कोई saved project नहीं मिला।");
+        return false;
       }
       saved = JSON.parse(raw);
     } catch (error) {
-      setStatus("Saved project पढ़ा नहीं जा सका। ZIP export backup इस्तेमाल करें।");
-      return;
+      if (!quiet) setStatus("Saved project पढ़ा नहीं जा सका। ZIP export backup इस्तेमाल करें।");
+      return false;
     }
     if (!saved || saved.version !== 1 || !["website", "android"].includes(saved.mode) ||
         !saved.files || typeof saved.files !== "object" || Array.isArray(saved.files) ||
-        !Object.values(saved.files).every((value) => typeof value === "string")) {
-      setStatus("Saved project format मान्य नहीं है।");
-      return;
+        Object.keys(saved.files).length > 100 ||
+        !Object.entries(saved.files).every(([name, value]) =>
+          typeof name === "string" && name.length > 0 && name.length <= 180 &&
+          !name.startsWith("/") && !name.split("/").includes("..") &&
+          typeof value === "string" && value.length <= MAX_PROJECT_BYTES) ||
+        JSON.stringify(saved).length > MAX_PROJECT_BYTES) {
+      if (!quiet) setStatus("Saved project format मान्य नहीं है।");
+      return false;
     }
     state.mode = saved.mode;
     state.files = saved.files;
@@ -269,7 +295,8 @@ class MainActivity : Activity() {
       renderFileList();
     }
     renderPreview();
-    setStatus("इस device पर save किया गया project restore हो गया।");
+    if (!quiet) setStatus("इस device पर save किया गया project restore हो गया।");
+    return true;
   }
 
   function exportProject() {
@@ -297,16 +324,17 @@ class MainActivity : Activity() {
     }
     byId("buildButton").addEventListener("click", () => createProject(byId("projectMode").value));
     byId("resetButton").addEventListener("click", () => createProject(state.mode));
-    byId("saveButton").addEventListener("click", saveProject);
-    byId("restoreButton").addEventListener("click", restoreProject);
+    byId("saveButton").addEventListener("click", () => saveProject());
+    byId("restoreButton").addEventListener("click", () => restoreProject());
     byId("exportButton").addEventListener("click", exportProject);
     byId("codeEditor").addEventListener("input", () => {
       if (!state.activeFile) return;
       state.files[state.activeFile] = byId("codeEditor").value;
       if (state.mode === "website" && ["index.html", "style.css", "app.js"].includes(state.activeFile)) renderPreview();
-      setStatus("Unsaved local edit: " + state.activeFile);
+      setStatus("Autosaving locally: " + state.activeFile);
+      scheduleAutoSave();
     });
-    createProject("website");
+    if (!restoreProject({ quiet: true })) createProject("website");
   }
 
   document.addEventListener("DOMContentLoaded", boot);
