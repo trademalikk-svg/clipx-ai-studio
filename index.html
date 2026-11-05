@@ -1337,11 +1337,11 @@ body.clipx-locked .workspace-content>#video-editor-guide{display:none!important}
    <a href="#captionStudio" data-toolview="captions">CC Create Captions <span>→</span></a>
    <div class="rail-coming">Image, Voice and AI Chat engines: planned modules</div>
   </section>
-  <section class="rail-panel owner-panel">
-   <h2>♛ Owner Control</h2>
-   <p>Owner and invited-user access will be managed here after role permissions are connected.</p>
-   <a href="#backendConnection" data-view="settings">Open Workspace Settings <span>→</span></a>
-   <div class="rail-status">Platform layout preview · access rules not activated yet</div>
+  <section class="rail-panel owner-panel" id="homeOwnerPanel">
+   <h2>♛ Owner Control <span id="homeOwnerBadge" hidden>· OWNER</span></h2>
+   <p id="homeOwnerMessage">Account access profile जाँचा जा रहा है…</p>
+   <a id="homeOwnerAction" href="dashboard.html">Open My Workspace <span>→</span></a>
+   <div class="rail-status" id="homeOwnerStatus" aria-live="polite">Server-verified access status loading…</div>
   </section>
   <section class="rail-panel">
    <h2>✦ Your Workspace</h2>
@@ -2265,6 +2265,46 @@ async function copyClipXReferralLink() {
  }
 }
 
+async function loadHomeOwnerAccess(user) {
+ const panel = document.getElementById("homeOwnerPanel");
+ const badge = document.getElementById("homeOwnerBadge");
+ const message = document.getElementById("homeOwnerMessage");
+ const status = document.getElementById("homeOwnerStatus");
+ const action = document.getElementById("homeOwnerAction");
+ if (!panel || !user) return;
+ try {
+  const { data, error } = await supabaseClient.auth.getSession();
+  if (error) throw error;
+  if (!data.session || !data.session.access_token) throw new Error("Active session unavailable.");
+  const response = await fetch(SUPABASE_URL + "/functions/v1/shif-a-access", {
+   method: "GET",
+   headers: { apikey: SUPABASE_ANON_KEY, Authorization: "Bearer " + data.session.access_token }
+  });
+  const profile = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(profile.error || "Access profile could not be loaded.");
+  const role = ["owner", "invited", "customer"].includes(profile.role) ? profile.role : "unassigned";
+  if (role === "owner") {
+   badge.hidden = false;
+   message.textContent = "Server-verified Owner account: " + (user.email || "signed-in account");
+   action.href = "owner-security.html";
+   action.innerHTML = "Open Owner Security Center <span>→</span>";
+   status.textContent = "OWNER access active · " + (Array.isArray(profile.enabledTools) ? profile.enabledTools.length : 0) + " platform tool permissions";
+  } else {
+   badge.hidden = true;
+   message.textContent = role === "invited" ? "Invited workspace account." : "Signed-in workspace account.";
+   action.href = "dashboard.html";
+   action.textContent = "Open My Workspace →";
+   status.textContent = "Access role: " + role.toUpperCase();
+  }
+ } catch (error) {
+  badge.hidden = true;
+  message.textContent = "Owner access status could not be verified.";
+  status.textContent = error.message || "Server access profile unavailable.";
+  action.href = "dashboard.html";
+  action.textContent = "Open My Workspace →";
+ }
+}
+
 function updateAuthControls(user) {
  const loggedIn = Boolean(user);
  document.body.classList.toggle("clipx-locked", !loggedIn);
@@ -2297,6 +2337,7 @@ function updateAuthControls(user) {
   document.getElementById("referralCodeLabel").hidden = true;
   document.getElementById("referralDashboard").hidden = false;
   void loadClipXReferralDashboard(user);
+  void loadHomeOwnerAccess(user);
   void clipxLoadTestOrderHistory();
   if (typeof showWorkspaceView === "function") showWorkspaceView("home");
  } else {
