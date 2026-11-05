@@ -28,6 +28,11 @@ class HomepageCatalogTests(unittest.TestCase):
         self.assertGreaterEqual(len(tool_ids), 40)
         self.assertEqual(len(tool_ids), len(set(tool_ids)), "tool IDs must be unique")
 
+    def test_directory_remains_visible_to_signed_out_visitors_and_has_home_route(self):
+        self.assertIn('body.clipx-locked .workspace-content>#allToolsDirectory{display:block!important', HOME)
+        self.assertIn('home:["home","tools","features","homeOwnerPanel","allToolsDirectory"]', HOME)
+        self.assertIn('tools:["tools","allToolsDirectory"]', HOME)
+
     def test_homepage_final_theme_uses_navy_electric_blue_and_white_not_purple(self):
         marker = '<style id="shifa-navy-electric-blue-theme">'
         self.assertIn(marker, HOME)
