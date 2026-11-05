@@ -74,6 +74,20 @@ class ShifADocumentsStudioTests(unittest.TestCase):
         self.assertIn("tesseract.js", html.lower())
         self.assertIn("OCR आपके browser में चलता है", html)
 
+    def test_images_can_be_converted_to_pdf_locally_with_limits(self):
+        js = (ROOT / "scripts/shif-a-documents-studio.js").read_text(encoding="utf-8")
+        html = (ROOT / "documents-studio.html").read_text(encoding="utf-8")
+        self.assertIn("async function convertImagesToPdf(", js)
+        self.assertIn("MAX_IMAGE_PDF_FILES=15", js)
+        self.assertIn("MAX_IMAGE_PDF_FILE_BYTES=8388608", js)
+        self.assertIn("MAX_IMAGE_PDF_TOTAL_BYTES=31457280", js)
+        self.assertIn("PDFLib.PDFDocument.create()", js)
+        self.assertIn("embedJpg", js)
+        self.assertIn("embedPng", js)
+        self.assertIn('id="imagePdfInput"', html)
+        self.assertIn('id="imagesToPdfBtn"', html)
+        self.assertIn("Image to PDF", html)
+
 
 if __name__ == "__main__":
     unittest.main()
