@@ -16,7 +16,7 @@
   {id:"document-studio",name:"Documents & PDF Studio",category:"Documents",description:"Create and format documents in your browser, download TXT files and print/save documents as PDF. No upload or AI API required.",status:"available",href:"documents-studio.html"},
   {id:"business-studio",name:"Business Toolkit",category:"Business",description:"Free local templates for business profiles, product listings, customer replies, marketing plans and quotation estimates. No AI API or data upload.",status:"available",href:"business-tools.html"},
   {id:"education-studio",name:"Study Studio",category:"Education",description:"Free browser-based study planner, user-made flashcards, practice quiz from your own notes and progress checklist. No AI API or data upload.",status:"available",href:"education-studio.html"},
-  {id:"productivity-studio",name:"AI Productivity",category:"Productivity",description:"Personal productivity and task tools are planned.",status:"coming-soon"}
+  {id:"productivity-studio",name:"Productivity Studio",category:"Productivity",description:"Free local task manager, daily planner, quick notes and focus timer. Data stays in this browser unless cleared.",status:"available",href:"productivity-studio.html"}
  ];
  const grid=document.getElementById("toolGrid"),search=document.getElementById("toolSearch"),filter=document.getElementById("categoryFilter");
  [...new Set(tools.map(t=>t.category))].sort().forEach(category=>{const o=document.createElement("option");o.value=category;o.textContent=category;filter.appendChild(o);});
