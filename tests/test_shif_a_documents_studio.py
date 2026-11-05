@@ -13,6 +13,9 @@ class ShifADocumentsStudioTests(unittest.TestCase):
         self.assertIn('localStorage.setItem(STORAGE_KEY', js)
         self.assertIn('localStorage.getItem(STORAGE_KEY)', js)
         self.assertIn('localStorage.removeItem(STORAGE_KEY)', js)
+        self.assertIn(r"split(/\s+/u)", js)
+        self.assertIn(r'title+"\n"', js)
+        self.assertIn(r"[^\p{L}\p{N}-]+", js)
 
     def test_document_studio_explains_local_draft_persistence(self):
         html = (ROOT / "documents-studio.html").read_text(encoding="utf-8")
