@@ -2,7 +2,7 @@
 "use strict";
 const $=id=>document.getElementById(id);
 let latestDraft="";
-const STORAGE_KEY="shifA.writingStudio.draft.v1";
+const STORAGE_KEY="shifA.writingStudio.draft.v1";\nconst LIBRARY_KEY="shifA.writingStudio.library.v1";\nconst MAX_LIBRARY_DRAFTS=30;
 const clean=s=>String(s||"").trim();
 function listPoints(value){return clean(value).split(/[\n,;]+/).map(x=>x.trim()).filter(Boolean);}
 function saveWorkspace(){
@@ -23,6 +23,47 @@ function restoreWorkspace(){
   if(typeof saved.draft==="string"&&saved.draft.length<=30000){latestDraft=saved.draft;if(latestDraft)$("draftOutput").textContent=latestDraft;}
   if(latestDraft)$("formStatus").textContent="पिछला Writing Studio draft इसी browser से restore हो गया।";
  }catch(error){$("formStatus").textContent="Saved writing draft पढ़ा नहीं जा सका।";}
+}
+function readDraftLibrary(){
+ try{
+  const raw=localStorage.getItem(LIBRARY_KEY);if(!raw)return [];
+  const items=JSON.parse(raw);if(!Array.isArray(items))return [];
+  return items.filter(item=>item&&typeof item.id==="string"&&typeof item.title==="string"&&typeof item.draft==="string"&&item.draft.length<=30000&&item.fields&&typeof item.fields==="object"&&!Array.isArray(item.fields)).slice(0,MAX_LIBRARY_DRAFTS);
+ }catch(error){return [];}
+}
+function renderDraftLibrary(){
+ const container=$("savedDrafts");if(!container)return;
+ const items=readDraftLibrary();container.replaceChildren();
+ if(!items.length){const empty=document.createElement("p");empty.className="muted";empty.textContent="अभी कोई saved draft नहीं है।";container.appendChild(empty);return;}
+ items.forEach(item=>{
+  const row=document.createElement("div");row.className="saved-item";
+  const info=document.createElement("div"),title=document.createElement("strong"),meta=document.createElement("small");
+  title.textContent=item.title;meta.textContent=new Date(item.savedAt||0).toLocaleString();info.append(title,meta);
+  const actions=document.createElement("div");actions.className="actions";
+  const load=document.createElement("button");load.type="button";load.className="secondary";load.textContent="Open";load.dataset.loadDraft=item.id;
+  const remove=document.createElement("button");remove.type="button";remove.className="secondary";remove.textContent="Delete";remove.dataset.deleteDraft=item.id;
+  actions.append(load,remove);row.append(info,actions);container.appendChild(row);
+ });
+}
+function saveDraftToLibrary(){
+ if(!latestDraft){$("libraryStatus").textContent="पहले draft तैयार करें।";return;}
+ const fields={topic:$("topic").value,language:$("language").value,format:$("format").value,platform:$("platform").value,tone:$("tone").value,audience:$("audience").value,keywords:$("keywords").value,details:$("details").value};
+ const items=readDraftLibrary();
+ items.unshift({id:Date.now()+"-"+Math.random().toString(36).slice(2,8),title:clean(fields.topic)||"Untitled draft",draft:latestDraft,fields,savedAt:Date.now()});
+ try{localStorage.setItem(LIBRARY_KEY,JSON.stringify(items.slice(0,MAX_LIBRARY_DRAFTS)));renderDraftLibrary();$("libraryStatus").textContent="Draft Library में सेव हो गया।";}
+ catch(error){$("libraryStatus").textContent="Draft Library में जगह उपलब्ध नहीं है। पुराने drafts हटाएँ या .txt डाउनलोड करें।";}
+}
+function loadSavedDraft(id){
+ const item=readDraftLibrary().find(entry=>entry.id===id);if(!item)return;
+ const fields=item.fields,ids=["topic","language","format","platform","tone","audience","keywords","details"];
+ ids.forEach(key=>{if(typeof fields[key]==="string"&&$(key))$(key).value=fields[key];});
+ latestDraft=item.draft;$("draftOutput").textContent=latestDraft;saveWorkspace();
+ $("formStatus").textContent="Saved draft खुल गया।";$("libraryStatus").textContent="Draft editor में restore हो गया।";
+}
+function deleteSavedDraft(id){
+ const remaining=readDraftLibrary().filter(item=>item.id!==id);
+ try{localStorage.setItem(LIBRARY_KEY,JSON.stringify(remaining));renderDraftLibrary();$("libraryStatus").textContent="Saved draft हटाया गया।";}
+ catch(error){$("libraryStatus").textContent="Draft हटाया नहीं जा सका।";}
 }
 function buildDraft(data){
  const topic=data.topic, audience=data.audience||"दर्शकों", platform=data.platform, points=listPoints(data.details), keywords=listPoints(data.keywords);
@@ -60,7 +101,7 @@ $("generateBtn").addEventListener("click",()=>{
  $("formStatus").textContent="Draft तैयार है। Publish करने से पहले facts और wording जाँच लें।";
  $("outputStatus").textContent="";
 });
-$("clearBtn").addEventListener("click",()=>{["topic","audience","keywords","details"].forEach(id=>$(id).value="");latestDraft="";try{localStorage.removeItem(STORAGE_KEY);}catch(error){}$("draftOutput").textContent="आपका draft यहाँ दिखाई देगा।";$("formStatus").textContent="Fields clear कर दिए गए।";$("outputStatus").textContent="";});
+$("saveDraftBtn").addEventListener("click",saveDraftToLibrary);\n$("savedDrafts").addEventListener("click",event=>{const load=event.target.closest("[data-load-draft]"),remove=event.target.closest("[data-delete-draft]");if(load)loadSavedDraft(load.dataset.loadDraft);if(remove)deleteSavedDraft(remove.dataset.deleteDraft);});\n$("clearBtn").addEventListener("click",()=>{["topic","audience","keywords","details"].forEach(id=>$(id).value="");latestDraft="";try{localStorage.removeItem(STORAGE_KEY);}catch(error){}$("draftOutput").textContent="आपका draft यहाँ दिखाई देगा।";$("formStatus").textContent="Fields clear कर दिए गए।";$("outputStatus").textContent="";});
 $("copyBtn").addEventListener("click",async()=>{if(!latestDraft){$("outputStatus").textContent="पहले draft तैयार करें।";return;}try{await navigator.clipboard.writeText(latestDraft);$("outputStatus").textContent="Draft copied."; }catch{$("outputStatus").textContent="Clipboard permission नहीं मिली। Text select करके copy करें।";}});
 $("downloadBtn").addEventListener("click",()=>{if(!latestDraft){$("outputStatus").textContent="पहले draft तैयार करें।";return;}const blob=new Blob([latestDraft],{type:"text/plain;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="shif-a-writing-draft.txt";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);$("outputStatus").textContent="Text file download शुरू हुआ।";});
 
