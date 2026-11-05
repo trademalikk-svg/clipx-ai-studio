@@ -57,6 +57,13 @@ button.secondary{background:#102a47;border-color:#315b80}
 </section>
 <section> class="panel">\n<h2>Import PDF Text</h2><p class="muted">20 MB तक और अधिकतम 100 pages वाली PDF से selectable text निकालकर editor में लाएँ। Scanned PDF के लिए नीचे दिया गया OCR section इस्तेमाल करें (अधिकतम 5 pages)।</p><label for="pdfImportInput">Choose PDF file</label><input id="pdfImportInput" type="file" accept="application/pdf,.pdf"><p class="muted">PDF text extraction happens locally in your browser. PDF.js library load करने के लिए internet connection चाहिए।</p></section>
 <section class="panel">
+<h2>Image to PDF</h2>
+<p class="muted">एक या अधिक JPG/PNG images को एक PDF में बदलें। हर image 8 MB तक, कुल 30 MB और अधिकतम 15 images। हर image PDF के अलग A4 page पर fit होगी।</p>
+<label for="imagePdfInput">Choose JPG / PNG images</label><input id="imagePdfInput" type="file" accept="image/jpeg,image/png,.jpg,.jpeg,.png" multiple>
+<div class="actions"><button id="imagesToPdfBtn">Convert Images to PDF</button></div>
+<p id="imagePdfStatus" class="status" role="status" aria-live="polite"></p>
+</section>
+<section class="panel">
 <h2>Scanned PDF OCR · Image to Text</h2>
 <p class="muted">स्कैन की हुई PDF से text पहचानें। एक बार में अधिकतम 5 pages और 10 MB PDF। हिंदी, English या दोनों चुनें। OCR आपके browser में चलता है; PDF server पर upload नहीं होती। पहली बार language data डाउनलोड करने के लिए internet चाहिए।</p>
 <label for="ocrPdfInput">Choose scanned PDF</label><input id="ocrPdfInput" type="file" accept="application/pdf,.pdf">
