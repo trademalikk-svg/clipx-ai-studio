@@ -2,7 +2,7 @@
 "use strict";
 const $=id=>document.getElementById(id);
 let plans=[],cards=[],cardIndex=0,showBack=false,quiz=[];
-const safeDownload=(name,text)=>{const blob=new Blob([text],{type:"text/plain;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);};
+const safeDownload=(name,text)=>{const blob=new Blob([text],{type:"text/plain;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);};
 function setTab(tab){
  ["planner","cards","quiz"].forEach(x=>{$(x+"Panel").classList.toggle("hidden",x!==tab);document.querySelector('[data-tab="'+x+'"]').setAttribute("aria-pressed",String(x===tab));});
 }
