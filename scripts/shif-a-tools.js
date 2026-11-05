@@ -1,11 +1,11 @@
 (function(){
  "use strict";
  const tools=[
-  {id:"clipx-video",name:"ClipX Video Studio",category:"Video",description:"Browser video editing plus cloud AI video generation interface; provider setup and model activation are still pending.",status:"limited",href:"index.html#upload"},
+  {id:"clipx-video",name:"ClipX Video Studio",category:"Video",description:"Browser video editing, preview, trim, clip export and segment planning; cloud AI video generation is not connected yet.",status:"available",href:"index.html#upload"},
   {id:"video-prompts",name:"Video Prompt Builder",category:"Video",description:"Create structured Hindi and English prompts for video tools.",status:"limited",href:"index.html#promptStudio"},
   {id:"creator-kit",name:"Titles & Hashtags",category:"Writing",description:"Draft creator titles, descriptions and hashtags.",status:"limited",href:"index.html#freeCreatorKit"},
   {id:"thumbnail-tools",name:"Thumbnail Creator",category:"Design",description:"Browser-based thumbnail and creator design utilities.",status:"limited",href:"creator-tools.html"},
-  {id:"image-studio",name:"Image Studio",category:"Image",description:"Cloud AI image generation interface for phone and desktop, plus local image preview, resize and conversion; provider activation is pending.",status:"limited",href:"media-studio.html#image-studio"},
+  {id:"image-studio",name:"Image Studio",category:"Image",description:"Cloud AI image generation interface is planned for phone and desktop; AI generation is not connected yet. Local image preview, resize and conversion are available.",status:"limited",href:"media-studio.html#image-studio"},
   {id:"voice-studio",name:"Voice Studio",category:"Voice",description:"Use device speech voices and record audio locally. Hosted AI voice generation is not connected.",status:"limited",href:"media-studio.html#voice-studio"},
   {id:"ai-chat",name:"AI Chat & Research",category:"Chat & Research",description:"Connect a free local Ollama model or another OpenAI-compatible endpoint. Provider usage and device limits apply.",status:"limited",href:"chat.html"},
   {id:"writing-studio",name:"AI Writing Studio",category:"Writing",description:"Model-backed writing and document workflows are planned.",status:"limited",href:"tool-studio.html?tool=writing-studio"},
