@@ -9,6 +9,7 @@ class ShifAToolsContractTests(unittest.TestCase):
         html = (ROOT / "ai-tools.html").read_text(encoding="utf-8")
         self.assertIn('id="toolSearch"', html)
         self.assertIn('id="categoryFilter"', html)
+        self.assertIn('id="statusFilter"', html)
         self.assertIn('scripts/shif-a-tools.js', html)
         self.assertRegex(html, r'<link[^>]+rel="canonical"')
 
@@ -25,6 +26,9 @@ class ShifAToolsContractTests(unittest.TestCase):
         for tool in ("AI Image Studio", "AI Voice Studio", "AI Chat & Research", "AI Agents Studio", "AI Automation Studio"):
             self.assertRegex(js, re.compile(r'name:"' + re.escape(tool) + r'".{0,260}status:"coming-soon"', re.S))
         self.assertIn('if(t.href)', js)
+        self.assertIn('statusFilter.addEventListener("change",render)', js)
+        self.assertIn('t.status===status', js)
+        self.assertIn('totals["coming-soon"]', js)
 
 if __name__ == "__main__":
     unittest.main()
