@@ -24,8 +24,8 @@ class ShifAGeminiStudioContractTests(unittest.TestCase):
         self.assertIn('shif_a_consume_model_request', self.gateway)
 
     def test_shared_client_sends_authenticated_request_without_provider_secret(self):
-        self.assertIn('Authorization: "Bearer " + auth.session.access_token', self.client)
-        self.assertIn('apikey: KEY', self.client)
+        self.assertIn('"Authorization": "Bearer " + auth.session.access_token', self.client)
+        self.assertIn('"apikey": KEY', self.client)
         self.assertIn('model: MODEL', self.client)
         self.assertNotIn("GEMINI_API_KEY", self.client)
 
