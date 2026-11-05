@@ -23,7 +23,7 @@ function init(){
  button.style.cssText="padding:10px 14px;border-radius:8px;border:1px solid #2386c8;background:#075a9e;color:white;font-weight:700;cursor:pointer";
  const status=document.createElement("p");status.setAttribute("role","status");status.setAttribute("aria-live","polite");status.style.cssText="font-size:12px;line-height:1.5;margin:8px 0 0;color:#a9cce6";
  const answer=document.createElement("pre");answer.hidden=true;answer.style.cssText="white-space:pre-wrap;overflow-wrap:anywhere;margin:10px 0 0;padding:12px;border:1px solid #315a7d;border-radius:8px;background:#04101f;color:#e5f4ff;font:inherit;line-height:1.6";
- const privacy=document.createElement("small");privacy.textContent="AI request भेजने पर चुने हुए form inputs Gemini provider को भेजे जाएँगे। Password, private records या sensitive details न डालें। Login और verified email जरूरी हैं; gateway limit 10 requests/hour/account है।";
+ const privacy=document.createElement("small");privacy.textContent="AI request भेजने पर चुने हुए form inputs SHIF-A gateway के माध्यम से Cloudflare Workers AI को भेजे जाएँगे। Password, private records या sensitive details न डालें। Login और verified email जरूरी हैं; gateway limit 10 requests/hour/account है।";
  privacy.style.cssText="display:block;margin-top:8px;color:#9db8d3;line-height:1.5";
  wrap.append(button,status,answer,privacy);target.insertAdjacentElement("afterend",wrap);
  button.addEventListener("click",async()=>{

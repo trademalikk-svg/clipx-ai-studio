@@ -4,6 +4,49 @@ import unittest
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 
 class ShifAAIProviderContractTests(unittest.TestCase):
+    def test_tool_directory_has_no_duplicate_array_separator(self):
+        import re
+        source = (ROOT / "scripts" / "shif-a-tools.js").read_text(encoding="utf-8")
+        self.assertNotRegex(source, r",\s*,\s*\{")
+
+
+    def test_core_tools_describe_cloudflare_as_the_active_provider(self):
+        root = ROOT
+        for name in ("writing-studio.html", "coding-studio.html", "research-studio.html", "business-tools.html", "chat-studio.html", "education-studio.html", "documents-studio.html", "agents-studio.html", "automation-studio.html"):
+            page = (root / name).read_text(encoding="utf-8")
+            self.assertNotIn("Gemini", page, f"stale provider label in {name}")
+        helper = (root / "scripts" / "shif-a-ai-tools.js").read_text(encoding="utf-8")
+        self.assertNotIn("Gemini provider", helper)
+        self.assertIn("Cloudflare Workers AI", helper)
+
+    def test_chat_model_selector_matches_cloudflare_gateway_default(self):
+        page = (ROOT / "chat-studio.html").read_text(encoding="utf-8")
+        self.assertIn("@cf/qwen/qwen3-30b-a3b-fp8", page)
+        self.assertNotIn("gemini-3.8-flash", page)
+        self.assertNotIn("gemini-3.1-flash-lite", page)
+
+    def test_core_ai_tool_field_and_output_ids_exist_in_their_pages(self):
+        import re
+        helper = (ROOT / "scripts" / "shif-a-ai-tools.js").read_text(encoding="utf-8")
+        configs = {
+            "writing-studio.html": ("draftOutput", ["topic", "language", "format", "platform", "tone", "audience", "keywords", "details"]),
+            "business-tools.html": ("result", ["businessName", "businessType", "city", "language", "details", "customerMessage", "goal", "budget", "itemName", "itemPrice", "itemQty", "taxRate"]),
+            "coding-studio.html": ("codeEditor", ["projectMode", "activeFile", "codeEditor"]),
+            "research-studio.html": ("reportOutput", ["topic", "language", "question", "scope", "audience", "findings", "gaps", "conclusion"]),
+            "education-studio.html": ("quizArea", ["subject", "quizNotes", "flashQuestion", "flashAnswer"]),
+            "documents-studio.html": ("docBody", ["docTitle", "docAuthor", "docBody"]),
+            "agents-studio.html": ("blueprint", ["agentName", "agentRole", "agentGoal", "agentInstructions", "agentSteps", "agentLimits"]),
+            "automation-studio.html": ("flowOutput", ["flowName", "flowTrigger", "flowPurpose", "flowFrequency", "flowOwner", "stepList", "approvalMode", "failureMode", "dataRules"]),
+        }
+        for page_name, (target, fields) in configs.items():
+            with self.subTest(page=page_name):
+                page = (ROOT / page_name).read_text(encoding="utf-8")
+                ids = set(re.findall(r'id="([^"]+)"', page))
+                self.assertIn(target, ids)
+                for field in fields:
+                    self.assertIn(field, ids, f"{field} missing from {page_name}")
+                self.assertIn('"' + page_name + '"', helper)
+
     def test_cloudflare_is_default_and_gemini_remains_switchable(self):
         source = (ROOT / "supabase" / "functions" / "shif-a-model-gateway" / "index.ts").read_text(encoding="utf-8")
         self.assertIn('Deno.env.get("AI_PROVIDER") || "cloudflare"', source)
@@ -22,6 +65,11 @@ class ShifAAIProviderContractTests(unittest.TestCase):
         self.assertNotIn("CLOUDFLARE_API_TOKEN", source)
         self.assertNotIn("GEMINI_API_KEY", source)
         self.assertIn('@cf/qwen/qwen3-30b-a3b-fp8', source)
+
+    def test_gateway_enforces_verified_email_server_side(self):
+        source = (ROOT / "supabase" / "functions" / "shif-a-model-gateway" / "index.ts").read_text(encoding="utf-8")
+        self.assertIn("!authData.user.email_confirmed_at", source)
+        self.assertIn("Email verification is required.", source)
 
     def test_usage_guard_runs_before_provider_request_and_free_limit_has_no_fallback(self):
         source = (ROOT / "supabase" / "functions" / "shif-a-model-gateway" / "index.ts").read_text(encoding="utf-8")
