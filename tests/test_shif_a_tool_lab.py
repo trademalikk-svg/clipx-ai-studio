@@ -12,7 +12,7 @@ class ShifAToolLabContractTests(unittest.TestCase):
         cls.registry = (ROOT / "scripts/shif-a-tools.js").read_text(encoding="utf-8")
 
     def test_directory_links_select_the_requested_local_tool(self):
-        ids = re.findall(r'id:"([a-z-]+)".*?href:"tool-lab\.html\?tool=([a-z-]+)"', self.registry)
+        ids = re.findall(r'id:"([a-z0-9-]+)".*?href:"tool-lab\.html\?tool=([a-z0-9-]+)"', self.registry)
         self.assertGreaterEqual(len(ids), 22)
         self.assertTrue(all(tool_id == target_id for tool_id, target_id in ids))
 
@@ -33,7 +33,7 @@ class ShifAToolLabContractTests(unittest.TestCase):
         self.assertIn('status.textContent="Download शुरू हुआ ✓"', self.lab)
 
     def test_all_local_utilities_are_registered_in_tool_lab(self):
-        registry_ids = re.findall(r'id:"([a-z-]+)".*?href:"tool-lab\.html\?tool=([a-z-]+)"', self.registry)
+        registry_ids = re.findall(r'id:"([a-z0-9-]+)".*?href:"tool-lab\.html\?tool=([a-z0-9-]+)"', self.registry)
         self.assertEqual(len(registry_ids), 22)
         for tool_id, _ in registry_ids:
             self.assertIn('"'+tool_id+'"', self.lab)
