@@ -171,7 +171,7 @@ jobs:
           node --check scripts/shif-a-tools.js
           node --check scripts/shif-a-owner-security.js
       - name: Run JavaScript contract tests
-        run: node --test tests/homepage-layout.test.mjs tests/image-studio-contract.test.js tests/voice-studio-contract.test.js
+        run: node --test tests/homepage-layout.test.mjs tests/image-studio-contract.test.js tests/voice-studio-contract.test.js tests/browser-caption-unicode.test.js
       - name: Check FFmpeg worker syntax
         run: node --check worker/worker.js
       - name: Set up Deno
