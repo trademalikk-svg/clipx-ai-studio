@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="hi">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#07172c">
+<title>Owner Security | SHIF-A AI</title>
+<style>
+:root{color-scheme:dark;font-family:Inter,Arial,sans-serif;background:#030b19;color:#f4f9ff}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 75% -10%,#174b80 0,transparent 45%),#030b19}
+header{padding:16px 5%;border-bottom:1px solid #164d7c;background:#041327ed}header a{color:#fff;text-decoration:none;font-weight:900;font-size:22px}
+main{width:min(780px,94%);margin:28px auto}.panel{padding:22px;border:1px solid #16558b;border-radius:18px;background:linear-gradient(145deg,#0a2442,#06162b);box-shadow:0 12px 35px #0005;margin:16px 0}
+h1{font-size:clamp(26px,5vw,40px);margin:8px 0}h2{font-size:18px}.muted{color:#a8c1d9;line-height:1.65}
+button{border:1px solid #228bd4;border-radius:10px;padding:12px 16px;background:linear-gradient(100deg,#087fe8,#0753a7);color:white;font-weight:700;cursor:pointer;margin:5px 5px 5px 0}
+input{width:100%;max-width:440px;padding:12px;border:1px solid #315d83;border-radius:10px;background:#061326;color:#fff;margin:6px 0 12px}button:disabled{opacity:.55;cursor:not-allowed}.secondary{background:#142b48;border-color:#315d83}
+.status{min-height:26px;color:#8de7c6;line-height:1.5}.warning{color:#ffd48b}.hidden{display:none!important}
+li{margin:8px 0;line-height:1.5}.tag{display:inline-block;border:1px solid #286b9e;border-radius:99px;padding:5px 10px;color:#aeeaff;font-size:12px}
+@media(max-width:600px){main{width:calc(100% - 20px);margin:14px auto}.panel{padding:16px}}
+pre{white-space:pre-wrap;word-break:break-word;background:#04101f;border:1px solid #28547a;border-radius:10px;padding:12px;color:#b9f4ff;font-size:14px;line-height:1.8}</style>
+</head>
+<body>
+<header><a href="dashboard.html">✦ SHIF-A AI · Owner Security</a></header>
+<main>
+<section class="panel">
+<span class="tag">OWNER-ONLY SECURITY</span>
+<h1>Owner Direct Passkey Login</h1>
+<p class="muted">Fingerprint, face unlock, device PIN या supported authenticator से sign-in करें। SHIF-A को आपका fingerprint/face data नहीं मिलता; verification आपके device और browser के WebAuthn system में होती है।</p>
+<p id="securityStatus" class="status" role="status" aria-live="polite">Security service जाँची जा रही है…</p>
+<div id="signedOut">
+<button id="directLogin" type="button">Direct Passkey Login</button>
+<p class="muted">यह discoverable passkey flow है—पहले email या Owner ID लिखने की जरूरत नहीं।</p>
+</div>
+<div id="ownerControls" class="hidden">
+<h2>Passkey Management</h2>
+<p class="muted">पहली बार passkey जोड़ने से पहले इस browser में verified Owner session होना जरूरी है। नए device पर enrollment के लिए सामान्य login और MFA policy लागू रहेगी।</p>
+<button id="registerPasskey" type="button">इस Device पर Passkey जोड़ें</button>
+<button id="listPasskeys" class="secondary" type="button">मेरी Passkeys देखें</button>
+<button id="signOut" class="secondary" type="button">Sign out</button>
+<div id="passkeyList" class="muted"></div>
+</div>
+</section>
+<section class="panel">
+<h2>जरूरी जानकारी</h2>
+<ul class="muted">
+<li>Fingerprint/face/iris का raw data SHIF-A server पर store नहीं होता।</li>
+<li>फोन का OS biometric या device screen-lock PIN इस्तेमाल कर सकता है; website यह तय नहीं कर सकती कि हर बार fingerprint ही मांगा जाए।</li>
+<li>Eye/iris तभी उपलब्ध होगा जब device authenticator और OS उसे WebAuthn के जरिए support करें। सामान्य camera से retina scan नहीं किया जाएगा।</li>
+<li>यह passkey feature Supabase Auth का experimental feature है। Production activation से पहले project configuration और origin verify करना जरूरी है।</li>
+</ul>
+</section>
+
+<section class="panel">
+<h2>Owner ID / Password Recovery</h2>
+<p class="muted">इस project में Owner ID आपका verified login email है। अगर ID याद नहीं है, तो वही email इस्तेमाल करें जिससे SHIF-A account verify किया गया था। सुरक्षा के लिए यह पेज account मौजूद होने या न होने की जानकारी नहीं देगा।</p>
+<label for="recoveryEmail">Owner ID (verified email)</label>
+<input id="recoveryEmail" type="email" autocomplete="username" maxlength="254" placeholder="अपना verified email लिखें">
+<button id="sendPasswordReset" type="button">Password Reset Link भेजें</button>
+<p id="recoveryStatus" class="status" role="status" aria-live="polite"></p>
+<div id="newPasswordPanel" class="hidden">
+<h2>नया Password सेट करें</h2>
+<label for="newOwnerPassword">नया Password</label>
+<input id="newOwnerPassword" type="password" autocomplete="new-password" minlength="10" maxlength="128">
+<label for="confirmOwnerPassword">Password दोबारा लिखें</label>
+<input id="confirmOwnerPassword" type="password" autocomplete="new-password" minlength="10" maxlength="128">
+<button id="saveNewOwnerPassword" type="button">Password Update करें</button>
+</div>
+</section>
+
+<section class="panel">
+<h2>One-time Recovery Codes</h2>
+<p class="muted">8 backup codes बनेंगे। इन्हें केवल एक बार दिखाया जाएगा। हर code एक बार ही इस्तेमाल हो सकता है और 365 दिनों में expire होगा। Generate करने के लिए verified Owner session और Supabase TOTP MFA का AAL2 जरूरी है।</p>
+<button id="generateRecoveryCodes" type="button">8 Recovery Codes बनाएं</button>
+<div id="recoveryCodesResult" class="hidden">
+<p class="status warning">इन codes को अभी सुरक्षित offline जगह पर लिखें। इस पेज को बंद करने के बाद दोबारा नहीं दिखाया जाएगा।</p>
+<pre id="recoveryCodesList"></pre>
+<button id="hideRecoveryCodes" class="secondary" type="button">Codes छिपाएँ</button>
+</div>
+<hr style="border:0;border-top:1px solid #245071;margin:18px 0">
+<h2>Lost Device Passkey Revoke</h2>
+<p class="muted">यह विकल्प पहले से signed-in Owner session में एक recovery code verify करके चुनी हुई passkey को server-side revoke करता है। Code अकेले login या MFA bypass नहीं करता। Code consume होने के बाद दोबारा इस्तेमाल नहीं होगा। पहले “मेरी Passkeys देखें” दबाकर सही device चुनें।</p>
+<label for="revokePasskeyId">जिस passkey को हटाना है</label>
+<select id="revokePasskeyId" style="display:block;width:100%;max-width:440px;padding:12px;border:1px solid #315d83;border-radius:10px;background:#061326;color:#fff;margin:6px 0 12px"><option value="">पहले “मेरी Passkeys देखें” दबाएँ</option></select>
+<label for="consumeRecoveryCode">Recovery Code</label>
+<input id="consumeRecoveryCode" type="text" autocomplete="off" maxlength="40" placeholder="XXXX-XXXX-XXXX-XXXX-XXXX-XXXX-XXXX-XXXX">
+<button id="consumeRecoveryCodeButton" type="button">Code Verify और Consume करें</button>
+<p id="recoveryCodeStatus" class="status" role="status" aria-live="polite"></p>
+</section>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.105.0"></script>
+<script src="scripts/shif-a-owner-security.js"></script>
+</body></html>
