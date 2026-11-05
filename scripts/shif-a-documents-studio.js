@@ -194,8 +194,8 @@ async function runPdfOcr(){
   const count=Math.min(requested,pdf.numPages,MAX_OCR_PAGES);
   if(!count)throw new Error("PDF में पढ़ने योग्य pages नहीं हैं।");
   worker=await window.Tesseract.createWorker(language,1,{
-   workerPath:"https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/worker.min.js",
-   corePath:"https://cdn.jsdelivr.net/npm/tesseract.js-core@5/tesseract-core.wasm.js",
+   workerPath:window.SHIFA_TESSERACT_WORKER_URL||"https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/worker.min.js",
+   corePath:window.SHIFA_TESSERACT_CORE_URL||"https://cdn.jsdelivr.net/npm/tesseract.js-core@5/tesseract-core.wasm.js",
    langPath:"https://tessdata.projectnaptha.com/4.0.0",
    logger:message=>{
     if(message&&message.status==="recognizing text"){
