@@ -2,7 +2,8 @@
   "use strict";
   const $ = id => document.getElementById(id);
   const text = () => $("textInput").value;
-  let selectedImage = null;\n  let imageRequestId = 0;
+  let selectedImage = null;
+  let imageRequestId = 0;
 
   function updateStats() {
     const value = text();
@@ -86,6 +87,7 @@
     selectedImage = null;
   }
   $("imageFile").addEventListener("change", () => {
+    const requestId = ++imageRequestId;
     releaseSelectedImage();
     $("imageStatus").textContent = "";
     $("imageWidth").value = "";
