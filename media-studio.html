@@ -31,6 +31,14 @@ header{padding:22px max(5vw,20px);border-bottom:1px solid var(--line);display:fl
 <button id="connectImageModel" class="secondary">Test model connection</button><button id="generateImage">Generate image</button><button id="cancelImage" class="secondary" disabled>Cancel</button>
 <div id="generationStatus" class="status" aria-live="polite">Model not connected.</div><img id="generatedImage" class="preview" alt="Generated image" hidden><a id="downloadGenerated" hidden download="shif-a-generated-image.png">Download generated image</a>
 <p class="notice">Requires a computer running Stable Diffusion WebUI or Forge with its API enabled and browser CORS configured for this site. A phone browser cannot host the model itself. Do not expose the local model API to the public internet.</p></section>
+<section class="panel" id="cloud-image-studio"><h2>Cloud AI Image Generation</h2><p class="muted">यह engine Android phone और computer दोनों पर चलेगा। Model cloud में चलेगा; computer पर Stable Diffusion install करने की जरूरत नहीं। Verified SHIF-A login और configured provider जरूरी है।</p>
+<label for="cloudImagePrompt">Image prompt</label><textarea id="cloudImagePrompt" maxlength="1800" placeholder="Describe the image you want…"></textarea>
+<label for="cloudImageRatio">Aspect ratio</label><select id="cloudImageRatio"><option>1:1</option><option>9:16</option><option>16:9</option><option>4:5</option><option>3:2</option><option>2:3</option></select>
+<label for="cloudImageNegative">Negative prompt (optional)</label><input id="cloudImageNegative" maxlength="800" placeholder="blurry, low quality…">
+<button id="cloudImageGenerate">Generate in Cloud</button><button id="cloudImageStop" class="secondary" disabled>Stop waiting</button>
+<div id="cloudImageStatus" class="status" role="status" aria-live="polite">Cloud provider is not activated until Owner configures server secrets.</div>
+<img id="cloudImageResult" class="preview" alt="Cloud-generated image" hidden><a id="cloudImageDownload" hidden download="shif-a-cloud-image.png">Download image</a>
+<p class="notice">Cloud generation may consume provider credits. No paid provider has been activated and no API key is stored in this page. Provider secrets belong only in Supabase Edge Function secrets.</p></section>
 <section class="panel" id="voice-studio"><h2>Voice Studio</h2><p class="muted">Use the speech voices available in this browser/device. Voice quality and language availability depend on your device.</p>
 <label for="voiceText">Text to speak</label><textarea id="voiceText" placeholder="Type or paste your narration..."></textarea>
 <label for="voiceChoice">Available voice</label><select id="voiceChoice"><option value="">System default voice</option></select>
@@ -42,6 +50,9 @@ header{padding:22px max(5vw,20px);border-bottom:1px solid var(--line);display:fl
 </section></div>
 <p class="notice">Privacy: image previews use a temporary local object URL. Microphone access is requested only when you press Start recording. No files are sent to SHIF-A servers by this page. Speech synthesis uses your browser's installed speech engine.</p>
 </main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="scripts/shif-a-auth.js"></script>
+<script src="scripts/shif-a-cloud-media.js"></script>
 <script>
 (()=>{'use strict';
 const $=id=>document.getElementById(id);let imageUrl=null,selectedImage=null,processedUrl=null,recorder=null,chunks=[];
@@ -56,6 +67,29 @@ function imageApiBase(){return $('imageApi').value.trim().replace(/\\/+$/,'');}
 $('connectImageModel').addEventListener('click',async()=>{const base=imageApiBase();$('generationStatus').textContent='Checking local model…';try{const r=await fetch(base+'/sdapi/v1/options',{method:'GET'});if(!r.ok)throw new Error('HTTP '+r.status);const data=await r.json();$('generationStatus').textContent='Connected · '+(data.sd_model_checkpoint||'Stable Diffusion API responding');}catch(e){$('generationStatus').textContent='Connection failed. Start WebUI/Forge API and check CORS. '+e.message;}});
 $('generateImage').addEventListener('click',async()=>{const prompt=$('generationPrompt').value.trim();if(!prompt){$('generationStatus').textContent='Enter an image prompt first.';return;}const [width,height]=$('genSize').value.split('x').map(Number);imageAbort=new AbortController();$('generateImage').disabled=true;$('cancelImage').disabled=false;$('generationStatus').textContent='Sending prompt to your local image model…';$('generatedImage').hidden=true;try{const response=await fetch(imageApiBase()+'/sdapi/v1/txt2img',{method:'POST',headers:{'Content-Type':'application/json'},signal:imageAbort.signal,body:JSON.stringify({prompt,negative_prompt:$('negativePrompt').value.trim(),width,height,steps:Number($('genSteps').value),batch_size:1,n_iter:1})});if(!response.ok)throw new Error('Model API returned HTTP '+response.status);const result=await response.json();if(!result.images?.length)throw new Error('The model returned no image.');const raw=result.images[0].replace(/^data:image\\/[^;]+;base64,/,'');const binary=atob(raw);const bytes=new Uint8Array(binary.length);for(let i=0;i<binary.length;i++)bytes[i]=binary.charCodeAt(i);const blob=new Blob([bytes],{type:'image/png'});const url=URL.createObjectURL(blob);if(window.generatedImageUrl)URL.revokeObjectURL(window.generatedImageUrl);window.generatedImageUrl=url;$('generatedImage').src=url;$('generatedImage').hidden=false;$('downloadGenerated').href=url;$('downloadGenerated').hidden=false;$('generationStatus').textContent='Image generated successfully · '+(blob.size/1024).toFixed(0)+' KB';}catch(e){$('generationStatus').textContent=e.name==='AbortError'?'Generation cancelled.':'Generation failed: '+e.message;}finally{$('generateImage').disabled=false;$('cancelImage').disabled=true;imageAbort=null;}});
 $('cancelImage').addEventListener('click',()=>imageAbort?.abort());
+
+const cloudImageController={current:null};
+$('cloudImageGenerate').addEventListener('click',async()=>{
+ const prompt=$('cloudImagePrompt').value.trim();
+ if(!prompt){$('cloudImageStatus').textContent='पहले image prompt लिखें।';return;}
+ $('cloudImageGenerate').disabled=true;$('cloudImageStop').disabled=false;$('cloudImageStatus').textContent='Cloud generation request भेज रहे हैं…';
+ try{
+  const task=await window.ShifACloudMedia.create({kind:'image',prompt,aspect_ratio:$('cloudImageRatio').value,negative_prompt:$('cloudImageNegative').value.trim()});
+  if(task.status==='succeeded'){
+   const immediate=window.ShifACloudMedia.outputUrl(task.output);
+   if(immediate){$('cloudImageResult').src=immediate;$('cloudImageResult').hidden=false;$('cloudImageDownload').href=immediate;$('cloudImageDownload').hidden=false;$('cloudImageStatus').textContent='Image तैयार है।';return;}
+  }
+  cloudImageController.current=new AbortController();
+  const done=await window.ShifACloudMedia.wait(task.task_token,result=>{$('cloudImageStatus').textContent='Generation status: '+result.status+'…';},cloudImageController.current.signal);
+  if(done.status!=='succeeded')throw Error(done.error||'Generation did not complete.');
+  const url=window.ShifACloudMedia.outputUrl(done.output);
+  if(!url)throw Error('Provider ने image URL नहीं लौटाया।');
+  $('cloudImageResult').src=url;$('cloudImageResult').hidden=false;$('cloudImageDownload').href=url;$('cloudImageDownload').hidden=false;$('cloudImageStatus').textContent='Image तैयार है।';
+ }catch(e){$('cloudImageStatus').textContent=e.name==='AbortError'?'Status checking stopped.':e.message;}
+ finally{$('cloudImageGenerate').disabled=false;$('cloudImageStop').disabled=true;cloudImageController.current=null;}
+});
+$('cloudImageStop').addEventListener('click',()=>cloudImageController.current?.abort());
+
 function loadVoices(){if(!('speechSynthesis'in window)){$('voiceStatus').textContent='Speech synthesis is not supported in this browser.';return;}const sel=$('voiceChoice'),old=sel.value;sel.innerHTML='<option value="">System default voice</option>';speechSynthesis.getVoices().forEach((v,i)=>{const o=document.createElement('option');o.value=String(i);o.textContent=v.name+' ('+v.lang+')';sel.append(o);});if(old)sel.value=old;}
 if('speechSynthesis'in window){loadVoices();speechSynthesis.onvoiceschanged=loadVoices;}
 $('speak').addEventListener('click',()=>{const t=$('voiceText').value.trim();if(!t){$('voiceStatus').textContent='Enter text to speak.';return;}if(!('speechSynthesis'in window))return; speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);const voices=speechSynthesis.getVoices();const i=$('voiceChoice').value;if(i!==''&&voices[Number(i)])u.voice=voices[Number(i)];u.rate=Number($('rate').value);u.onstart=()=>$('voiceStatus').textContent='Speaking…';u.onend=()=>$('voiceStatus').textContent='Finished.';u.onerror=()=>$('voiceStatus').textContent='Speech could not be played.';speechSynthesis.speak(u);});
