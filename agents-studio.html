@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="hi"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#06162c">
+<title>Agent Workflow Designer | SHIF-A AI</title><meta name="description" content="Design reusable AI agent workflows, roles, instructions, steps and permission boundaries.">
+<link rel="canonical" href="https://trademalikk-svg.github.io/clipx-ai-studio/agents-studio.html">
+<style>
+:root{color-scheme:dark;font-family:Arial,sans-serif;background:#030b19;color:#f4f9ff}*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 70% -15%,#104276 0,transparent 44%),#030b19}a{color:#8edcff;text-decoration:none}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px clamp(14px,4vw,48px);border-bottom:1px solid #164d7c;background:#041327ed;position:sticky;top:0;z-index:5}.brand{font-size:22px;font-weight:900;color:#fff}.brand span{color:#28d8f3}.top nav{display:flex;gap:15px;flex-wrap:wrap;font-size:13px}
+main{width:min(1120px,94%);margin:24px auto 60px}.hero,.panel{border:1px solid #16558b;border-radius:17px;background:linear-gradient(145deg,#0a2442,#06162b);padding:20px;margin-bottom:15px}h1{font-size:clamp(28px,5vw,42px);margin:0 0 8px}.muted{color:#9db8d3;line-height:1.6}.notice{padding:11px 13px;border:1px solid #8a6729;background:#30230b;color:#ffe4a6;border-radius:10px;font-size:13px;line-height:1.55;margin-top:12px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.wide{grid-column:1/-1}label{display:block;font-size:13px;color:#c7ddf2;margin:8px 0 5px}input,select,textarea{width:100%;padding:12px;border:1px solid #28649a;border-radius:9px;background:#071a31;color:#fff;font:inherit}textarea{min-height:110px;resize:vertical}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}button{padding:11px 15px;border:1px solid #2386c8;border-radius:9px;background:linear-gradient(100deg,#087fe8,#0753a7);color:#fff;font-weight:700;cursor:pointer}button.secondary{background:#102a47;border-color:#315b80}
+.checks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:8px}.check{display:flex;align-items:flex-start;gap:8px;padding:10px;border:1px solid #254a6b;border-radius:9px;background:#071a31;font-size:13px}.check input{width:auto;margin-top:2px}.output{white-space:pre-wrap;overflow-wrap:anywhere;background:#04101f;border:1px solid #315a7d;border-radius:11px;padding:14px;min-height:180px;color:#d9efff;font:13px/1.6 ui-monospace,monospace}.status{font-size:12px;color:#82e0bd;min-height:18px;margin-top:9px}
+@media(max-width:700px){.top{align-items:flex-start;flex-direction:column}main{width:calc(100% - 22px);margin:14px auto 40px}.grid,.checks{grid-template-columns:1fr}.wide{grid-column:auto}.hero,.panel{padding:16px}}
+</style></head><body>
+<header class="top"><a class="brand" href="index.html">✦ SHIF-A <span>AI</span></a><nav><a href="index.html">Home</a><a href="ai-tools.html">AI Tools</a><a href="dashboard.html">My Workspace</a><a href="productivity-studio.html">Productivity</a></nav></header>
+<main>
+<section class="hero"><h1>Agent Workflow Designer</h1><p class="muted">अपने काम के लिए agent की भूमिका, लक्ष्य, निर्देश, चरण और permissions का reusable blueprint बनाएँ। Hindi और English दोनों में इस्तेमाल करें।</p>
+<div class="notice"><strong>स्पष्ट स्थिति:</strong> यह अभी workflow designer है, autonomous AI agent runner नहीं। कोई AI model, external tool या scheduled execution connected नहीं है। यहाँ बना blueprint copy/download करके future backend integration के लिए इस्तेमाल किया जा सकता है। सभी काम browser में होते हैं; कोई paid API call नहीं।</div></section>
+<section class="panel"><h2>1. Agent profile</h2><div class="grid">
+<div><label for="agentName">Agent name</label><input id="agentName" maxlength="70" value="My Task Agent" placeholder="जैसे: Content Planner"></div>
+<div><label for="agentRole">Role / template</label><select id="agentRole"><option value="General assistant">General assistant</option><option value="Research assistant">Research assistant</option><option value="Content planner">Content planner</option><option value="Coding assistant">Coding assistant</option><option value="Business assistant">Business assistant</option><option value="Study coach">Study coach</option><option value="Customer support assistant">Customer support assistant</option></select></div>
+<div class="wide"><label for="agentGoal">Main objective</label><textarea id="agentGoal" maxlength="1500" placeholder="Agent को कौन-सा परिणाम तैयार करना है?"></textarea></div>
+<div class="wide"><label for="agentInstructions">Instructions / working rules</label><textarea id="agentInstructions" maxlength="3000" placeholder="काम करने का तरीका, भाषा, output format और quality rules लिखें।"></textarea></div>
+<div class="wide"><label for="agentSteps">Workflow steps (हर line एक step)</label><textarea id="agentSteps" maxlength="2500" placeholder="1. Request समझो&#10;2. जरूरी जानकारी जाँचो&#10;3. Draft तैयार करो&#10;4. Final output review करो"></textarea></div>
+<div class="wide"><label for="agentLimits">Boundaries / approval rules</label><textarea id="agentLimits" maxlength="1500" placeholder="उदाहरण: बिना अनुमति कोई email न भेजें; कोई purchase न करें; uncertain facts को flag करें।"></textarea></div>
+</div></section>
+<section class="panel"><h2>2. Tool permissions</h2><p class="muted">केवल वे capabilities चुनें जिन्हें भविष्य में इस agent को देने का इरादा है। Selection अपने-आप किसी tool को connect या permission grant नहीं करता।</p>
+<div class="checks">
+<label class="check"><input type="checkbox" name="perm" value="Read user-provided text/files">Read user-provided text/files</label>
+<label class="check"><input type="checkbox" name="perm" value="Search public web sources">Search public web sources</label>
+<label class="check"><input type="checkbox" name="perm" value="Draft text and documents">Draft text and documents</label>
+<label class="check"><input type="checkbox" name="perm" value="Analyze structured data">Analyze structured data</label>
+<label class="check"><input type="checkbox" name="perm" value="Create code suggestions">Create code suggestions</label>
+<label class="check"><input type="checkbox" name="perm" value="Use connected external apps (approval required)">Use connected external apps (approval required)</label>
+</div>
+<div class="actions"><button id="buildBlueprint">Generate workflow blueprint</button><button class="secondary" id="resetForm" type="button">Reset</button></div><p class="status" id="formStatus" role="status"></p></section>
+<section class="panel"><h2>3. Blueprint output</h2><div id="blueprint" class="output" aria-live="polite">आपका workflow blueprint यहाँ दिखाई देगा। पहले ऊपर agent profile भरें।</div><div class="actions"><button id="copyBlueprint">Copy blueprint</button><button class="secondary" id="downloadJson">Download JSON</button><button class="secondary" id="downloadText">Download TXT</button></div><p class="status" id="outputStatus" role="status"></p></section>
+</main><script src="scripts/shif-a-agents-studio.js"></script></body></html>
