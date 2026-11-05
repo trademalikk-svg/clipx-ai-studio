@@ -30,6 +30,17 @@ class ShifADocumentsStudioTests(unittest.TestCase):
         self.assertIn('id="documentLibrary"', html)
         self.assertIn("local browser", html.lower())
 
+    def test_pdf_import_extracts_text_in_browser_with_limits(self):
+        js = (ROOT / "scripts/shif-a-documents-studio.js").read_text(encoding="utf-8")
+        html = (ROOT / "documents-studio.html").read_text(encoding="utf-8")
+        self.assertIn("async function importPdfFile(", js)
+        self.assertIn("MAX_PDF_BYTES=20971520", js)
+        self.assertIn("MAX_PDF_PAGES=100", js)
+        self.assertIn("pdfjsLib.getDocument", js)
+        self.assertIn('id="pdfImportInput"', html)
+        self.assertIn("pdfjs-dist", html)
+        self.assertIn("PDF text extraction happens locally", html)
+
     def test_document_studio_explains_local_draft_persistence(self):
         html = (ROOT / "documents-studio.html").read_text(encoding="utf-8")
         self.assertIn("local browser", html.lower())
