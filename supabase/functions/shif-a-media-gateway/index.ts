@@ -24,9 +24,9 @@ async function readTaskToken(token: string, secret: string, userId: string) {
   if (!payload || !signature || extra) throw new Error("Invalid task token.");
   const expected = await sign(payload, secret);
   const a = encoder.encode(signature), b = encoder.encode(expected);
-  if (a.length !== b.length || !crypto.subtle.timingSafeEqual) {
-    if (signature !== expected) throw new Error("Invalid task token.");
-  } else if (!crypto.subtle.timingSafeEqual(a, b)) throw new Error("Invalid task token.");
+  let mismatch = a.length ^ b.length;
+  for (let i = 0; i < Math.max(a.length, b.length); i++) mismatch |= (a[i] || 0) ^ (b[i] || 0);
+  if (mismatch !== 0) throw new Error("Invalid task token.");
   const data = JSON.parse(new TextDecoder().decode(unb64url(payload)));
   if (data.u !== userId || typeof data.p !== "string" || data.e < Date.now()) throw new Error("Task token expired or belongs to another account.");
   return data.p as string;
