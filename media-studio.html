@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>SHIF-A AI | Image & Voice Studio</title>
+<style>
+:root{color-scheme:dark;--bg:#080d1b;--panel:#111a30;--line:#263653;--text:#f4f7ff;--muted:#9eacc7;--blue:#438cff;--cyan:#38d5e8}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 15% 0,#14264a 0,transparent 42%),var(--bg);color:var(--text);font:15px/1.55 Inter,system-ui,sans-serif}
+header{padding:22px max(5vw,20px);border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:15px}a{color:#9ec8ff;text-decoration:none}.brand{font-weight:850;letter-spacing:.12em}.wrap{max-width:1100px;margin:auto;padding:42px 20px 70px}.eyebrow{color:var(--cyan);font-size:12px;font-weight:800;letter-spacing:.16em}.hero h1{font-size:clamp(32px,5vw,54px);line-height:1.08;margin:10px 0}.hero p,.muted{color:var(--muted)}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:20px;margin-top:28px}.panel{background:linear-gradient(145deg,#141f38,#0e172a);border:1px solid var(--line);border-radius:20px;padding:24px;box-shadow:0 18px 50px #0003}.panel h2{margin:0 0 5px;font-size:22px}label{display:block;margin:15px 0 7px;color:#cbd7ef;font-size:13px;font-weight:700}input,select,textarea{width:100%;background:#091225;border:1px solid #344767;color:var(--text);padding:12px 13px;border-radius:10px;font:inherit}textarea{min-height:112px;resize:vertical}button{border:0;border-radius:10px;background:linear-gradient(100deg,var(--blue),#675cff);color:white;font-weight:800;padding:12px 17px;margin:12px 8px 0 0;cursor:pointer}button.secondary{background:#1b2b49;border:1px solid #3a5277}button:disabled{opacity:.45;cursor:not-allowed}.preview{display:block;max-width:100%;max-height:300px;margin-top:14px;border-radius:12px}.output{white-space:pre-wrap;background:#081225;border:1px solid var(--line);border-radius:10px;padding:13px;margin-top:12px;min-height:48px}.notice{font-size:12px;color:var(--muted);margin-top:12px}.status{color:var(--cyan);font-size:13px;min-height:22px}.pill{display:inline-block;border:1px solid #36517c;color:#b9d7ff;border-radius:99px;padding:4px 9px;font-size:11px;margin:10px 4px 0 0}
+@media(max-width:600px){header{align-items:flex-start;flex-direction:column}.wrap{padding-top:30px}.panel{padding:18px}}
+</style></head>
+<body>
+<header><div class="brand">✦ SHIF-A AI</div><a href="ai-tools.html">← Back to AI Tools</a></header>
+<main class="wrap">
+<section class="hero"><div class="eyebrow">CREATOR WORKSPACE · LOCAL-FIRST</div><h1>Image & Voice Studio</h1><p>Prepare image prompts, preview your own images, create spoken audio with your browser's built-in voice, and record audio locally.</p><span class="pill">No paid API connected</span><span class="pill">Files stay on this device</span></section>
+<div class="grid">
+<section class="panel"><h2>Image Prompt Studio</h2><p class="muted">Build a detailed prompt for an image model. This page does not generate AI images by itself.</p>
+<label for="subject">What should the image show?</label><textarea id="subject" placeholder="Describe the subject, scene or idea..."></textarea>
+<label for="style">Visual style</label><select id="style"><option>Cinematic photorealism</option><option>3D illustration</option><option>Minimal vector art</option><option>Watercolor painting</option><option>Anime-inspired illustration</option><option>Editorial photography</option></select>
+<label for="ratio">Aspect ratio</label><select id="ratio"><option>1:1 square</option><option>9:16 vertical</option><option>16:9 landscape</option><option>4:5 portrait</option></select>
+<label for="lighting">Lighting / mood</label><input id="lighting" placeholder="e.g. soft golden-hour light, calm mood">
+<button id="buildPrompt">Build image prompt</button><button class="secondary" id="copyPrompt">Copy prompt</button><div id="imagePrompt" class="output" aria-live="polite">Your prompt will appear here.</div>
+<label for="imageFile">Preview an image from your device</label><input id="imageFile" type="file" accept="image/*"><img id="imagePreview" class="preview" alt="Selected local image preview" hidden><div id="imageStatus" class="status"></div>
+</section>
+<section class="panel"><h2>Voice Studio</h2><p class="muted">Use the speech voices available in this browser/device. Voice quality and language availability depend on your device.</p>
+<label for="voiceText">Text to speak</label><textarea id="voiceText" placeholder="Type or paste your narration..."></textarea>
+<label for="voiceChoice">Available voice</label><select id="voiceChoice"><option value="">System default voice</option></select>
+<label for="rate">Speaking speed</label><input id="rate" type="range" min=".6" max="1.4" step=".1" value="1">
+<button id="speak">Speak text</button><button class="secondary" id="stopSpeak">Stop</button><div id="voiceStatus" class="status" aria-live="polite"></div>
+<hr style="border:0;border-top:1px solid var(--line);margin:24px 0">
+<h2>Audio Recorder</h2><p class="muted">Record from your microphone after granting browser permission. Recording is not uploaded.</p>
+<button id="record">Start recording</button><button class="secondary" id="stopRecord" disabled>Stop recording</button><div id="recordStatus" class="status" aria-live="polite"></div><audio id="audioPreview" controls hidden style="width:100%;margin-top:12px"></audio><a id="downloadAudio" hidden download="shif-a-recording.webm">Download recording</a>
+</section></div>
+<p class="notice">Privacy: image previews use a temporary local object URL. Microphone access is requested only when you press Start recording. No files are sent to SHIF-A servers by this page. Speech synthesis uses your browser's installed speech engine.</p>
+</main>
+<script>
+(()=>{'use strict';
+const $=id=>document.getElementById(id);let imageUrl=null,recorder=null,chunks=[];
+$('buildPrompt').addEventListener('click',()=>{const subject=$('subject').value.trim();if(!subject){$('imagePrompt').textContent='Please describe the image first.';return;}const p=subject+'. Visual style: '+$('style').value+'. Aspect ratio: '+$('ratio').value+'. Lighting and mood: '+($('lighting').value.trim()||'balanced, polished lighting')+'. High-quality composition, clear subject, coherent details.';$('imagePrompt').textContent=p;});
+$('copyPrompt').addEventListener('click',async()=>{const p=$('imagePrompt').textContent;if(!p||p==='Your prompt will appear here.'){return;}try{await navigator.clipboard.writeText(p);$('imageStatus').textContent='Prompt copied.';}catch{$('imageStatus').textContent='Copy unavailable in this browser. Select the prompt text manually.';}});
+$('imageFile').addEventListener('change',()=>{const f=$('imageFile').files?.[0];if(!f)return;if(!f.type.startsWith('image/'))return;if(imageUrl)URL.revokeObjectURL(imageUrl);imageUrl=URL.createObjectURL(f);$('imagePreview').src=imageUrl;$('imagePreview').hidden=false;$('imageStatus').textContent='Local preview only — not uploaded.';});
+function loadVoices(){if(!('speechSynthesis'in window)){$('voiceStatus').textContent='Speech synthesis is not supported in this browser.';return;}const sel=$('voiceChoice'),old=sel.value;sel.innerHTML='<option value="">System default voice</option>';speechSynthesis.getVoices().forEach((v,i)=>{const o=document.createElement('option');o.value=String(i);o.textContent=v.name+' ('+v.lang+')';sel.append(o);});if(old)sel.value=old;}
+if('speechSynthesis'in window){loadVoices();speechSynthesis.onvoiceschanged=loadVoices;}
+$('speak').addEventListener('click',()=>{const t=$('voiceText').value.trim();if(!t){$('voiceStatus').textContent='Enter text to speak.';return;}if(!('speechSynthesis'in window))return; speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);const voices=speechSynthesis.getVoices();const i=$('voiceChoice').value;if(i!==''&&voices[Number(i)])u.voice=voices[Number(i)];u.rate=Number($('rate').value);u.onstart=()=>$('voiceStatus').textContent='Speaking…';u.onend=()=>$('voiceStatus').textContent='Finished.';u.onerror=()=>$('voiceStatus').textContent='Speech could not be played.';speechSynthesis.speak(u);});
+$('stopSpeak').addEventListener('click',()=>{if('speechSynthesis'in window)speechSynthesis.cancel();$('voiceStatus').textContent='Speech stopped.';});
+$('record').addEventListener('click',async()=>{if(!navigator.mediaDevices?.getUserMedia||!window.MediaRecorder){$('recordStatus').textContent='Audio recording is not supported here. Try a current browser over HTTPS.';return;}try{const stream=await navigator.mediaDevices.getUserMedia({audio:true});chunks=[];recorder=new MediaRecorder(stream);recorder.ondataavailable=e=>{if(e.data.size)chunks.push(e.data);};recorder.onstop=()=>{const blob=new Blob(chunks,{type:recorder.mimeType||'audio/webm'});const url=URL.createObjectURL(blob);$('audioPreview').src=url;$('audioPreview').hidden=false;$('downloadAudio').href=url;$('downloadAudio').hidden=false;stream.getTracks().forEach(t=>t.stop());$('recordStatus').textContent='Recording ready. Download it to keep a copy.';};recorder.start();$('record').disabled=true;$('stopRecord').disabled=false;$('recordStatus').textContent='Recording…';}catch(e){$('recordStatus').textContent='Microphone permission was not granted or the device is unavailable.';}});
+$('stopRecord').addEventListener('click',()=>{if(recorder?.state==='recording'){recorder.stop();$('record').disabled=false;$('stopRecord').disabled=true;}});
+window.addEventListener('beforeunload',()=>{if(imageUrl)URL.revokeObjectURL(imageUrl);});
+})();
+</script></body></html>
