@@ -23,6 +23,15 @@ class ShifACodingStudioTests(unittest.TestCase):
         for token in ('website', 'android', 'MainActivity.kt', 'AndroidManifest.xml', 'exportProject', 'zipProject', 'application/zip', 'shif-a-android-project.zip', 'localStorage.setItem', 'localStorage.getItem', 'restoreProject', 'saveProject'):
             self.assertIn(token, js)
 
+    def test_editor_autosaves_and_boot_restores_existing_project(self):
+        js = (ROOT / "scripts" / "shif-a-coding-studio.js").read_text(encoding="utf-8")
+        self.assertIn("function scheduleAutoSave()", js)
+        self.assertIn("saveProject({ quiet: true })", js)
+        self.assertIn('if (!restoreProject({ quiet: true })) createProject("website")', js)
+        self.assertIn("MAX_PROJECT_BYTES", js)
+        self.assertIn("Object.keys(saved.files).length > 100", js)
+        self.assertIn("scheduleAutoSave();", js)
+
     def test_catalog_marks_studio_limited_until_ai_engine_exists(self):
         js = (ROOT / "scripts" / "shif-a-tools.js").read_text(encoding="utf-8")
         self.assertRegex(js, re.compile(r'id:"coding-studio".{0,260}status:"limited"', re.S))
