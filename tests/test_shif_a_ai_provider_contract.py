@@ -34,6 +34,9 @@ class ShifAAIProviderContractTests(unittest.TestCase):
             "coding-studio.html": ("codeEditor", ["projectMode", "activeFile", "codeEditor"]),
             "research-studio.html": ("reportOutput", ["topic", "language", "question", "scope", "audience", "findings", "gaps", "conclusion"]),
             "education-studio.html": ("quizArea", ["subject", "quizNotes", "flashQuestion", "flashAnswer"]),
+            "documents-studio.html": ("docBody", ["docTitle", "docAuthor", "docBody"]),
+            "agents-studio.html": ("blueprint", ["agentName", "agentRole", "agentGoal", "agentInstructions", "agentSteps", "agentLimits"]),
+            "automation-studio.html": ("flowOutput", ["flowName", "flowTrigger", "flowPurpose", "flowFrequency", "flowOwner", "stepList", "approvalMode", "failureMode", "dataRules"]),
         }
         for page_name, (target, fields) in configs.items():
             with self.subTest(page=page_name):
