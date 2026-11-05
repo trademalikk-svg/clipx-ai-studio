@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="hi"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#06162c">
+<title>Study Studio | SHIF-A AI</title><meta name="description" content="Free browser-based study planner, flashcards, practice quiz from your own notes and progress checklist.">
+<link rel="canonical" href="https://trademalikk-svg.github.io/clipx-ai-studio/education-studio.html">
+<style>
+:root{color-scheme:dark;font-family:Arial,sans-serif;background:#030b19;color:#f4f9ff}*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 70% -15%,#104276 0,transparent 44%),#030b19}
+a{color:#8edcff;text-decoration:none}.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px clamp(14px,4vw,48px);border-bottom:1px solid #164d7c;background:#041327ed;position:sticky;top:0;z-index:5}.brand{font-size:22px;font-weight:900;color:#fff}.brand span{color:#28d8f3}.top nav{display:flex;gap:15px;flex-wrap:wrap;font-size:13px}
+main{width:min(1120px,94%);margin:24px auto 60px}.hero,.panel{border:1px solid #16558b;border-radius:17px;background:linear-gradient(145deg,#0a2442,#06162b);padding:20px;margin-bottom:15px}h1{font-size:clamp(28px,5vw,42px);margin:0 0 8px}.muted{color:#9db8d3;line-height:1.6}.notice{padding:11px 13px;border:1px solid #267b69;background:#092b2a;color:#b8f5dc;border-radius:10px;font-size:13px;line-height:1.5;margin-top:12px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0}.tabs button{background:#102a47;border-color:#315b80}.tabs button[aria-pressed=true]{background:linear-gradient(100deg,#087fe8,#0753a7);border-color:#2386c8}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.wide{grid-column:1/-1}label{display:block;font-size:13px;color:#c7ddf2;margin:8px 0 5px}input,select,textarea{width:100%;padding:12px;border:1px solid #28649a;border-radius:9px;background:#071a31;color:#fff;font:inherit}textarea{min-height:100px;resize:vertical;line-height:1.5}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}button{padding:11px 15px;border:1px solid #2386c8;border-radius:9px;background:linear-gradient(100deg,#087fe8,#0753a7);color:#fff;font-weight:700;cursor:pointer}button.secondary{background:#102a47;border-color:#315b80}
+.output{min-height:120px;white-space:pre-wrap;overflow-wrap:anywhere;padding:15px;border:1px solid #315a7d;border-radius:11px;background:#041226;color:#e2f2ff;line-height:1.65}.status{font-size:12px;color:#82e0bd;margin-top:9px;min-height:18px}.hidden{display:none!important}
+.card{border:1px solid #315a7d;border-radius:12px;padding:16px;background:#071a31;margin-top:12px}.flash-side{font-size:12px;color:#9db8d3;text-transform:uppercase;letter-spacing:.08em}.flash-text{font-size:20px;line-height:1.5;margin:12px 0;white-space:pre-wrap}.checkrow{display:flex;align-items:flex-start;gap:9px;padding:9px 0;border-bottom:1px solid #173956}.checkrow input{width:auto;margin-top:3px}
+@media(max-width:700px){.top{align-items:flex-start;flex-direction:column}main{width:calc(100% - 22px);margin:14px auto 40px}.grid{grid-template-columns:1fr}.wide{grid-column:auto}.hero,.panel{padding:16px}}
+</style></head><body>
+<header class="top"><a class="brand" href="index.html">✦ SHIF-A <span>AI</span></a><nav><a href="index.html">Home</a><a href="ai-tools.html">AI Tools</a><a href="dashboard.html">My Workspace</a><a href="writing-studio.html">Writing Studio</a></nav></header>
+<main>
+<section class="hero"><h1>Study Studio</h1><p class="muted">अपनी पढ़ाई व्यवस्थित करें, flashcards बनाएँ और अपने notes से practice quiz तैयार करें।</p><div class="notice">Free browser-based study tools · आपके notes और study data इस page पर ही process होते हैं। कोई AI API नहीं जुड़ी है। Quiz आपके लिखे notes से simple practice questions बनाता है; इसे official exam answer key न मानें।</div></section>
+<section class="panel"><h2>Study tools</h2><div class="tabs" role="group" aria-label="Study tools"><button type="button" data-tab="planner" aria-pressed="true">Study Planner</button><button type="button" data-tab="cards" aria-pressed="false">Flashcards</button><button type="button" data-tab="quiz" aria-pressed="false">Notes Quiz</button></div>
+<section id="plannerPanel">
+<div class="grid"><div><label for="subject">Subject / विषय</label><input id="subject" maxlength="100" placeholder="उदाहरण: इतिहास"></div><div><label for="studyDate">Study date</label><input id="studyDate" type="date"></div><div><label for="minutes">Planned minutes</label><input id="minutes" type="number" min="5" max="600" step="5" value="30"></div><div><label for="priority">Priority</label><select id="priority"><option>High</option><option selected>Medium</option><option>Low</option></select></div><div class="wide"><label for="tasks">Tasks (one per line)</label><textarea id="tasks" maxlength="3000" placeholder="Chapter 1 पढ़ना&#10;अपने notes revise करना&#10;Practice questions हल करना"></textarea></div></div>
+<div class="actions"><button type="button" id="addPlan">Add to checklist</button><button type="button" class="secondary" id="exportPlan">Download plan</button></div><p class="status" id="planStatus" role="status"></p><div id="planList" class="card">आपकी study checklist यहाँ दिखाई देगी।</div>
+</section>
+<section id="cardsPanel" class="hidden">
+<div class="grid"><div><label for="flashQuestion">Question / Front</label><textarea id="flashQuestion" maxlength="500" placeholder="सवाल या term लिखें"></textarea></div><div><label for="flashAnswer">Answer / Back</label><textarea id="flashAnswer" maxlength="1000" placeholder="जवाब या explanation लिखें"></textarea></div></div>
+<div class="actions"><button type="button" id="addFlash">Add flashcard</button><button type="button" class="secondary" id="exportFlash">Download flashcards</button></div><p class="status" id="flashStatus" role="status"></p>
+<div class="card"><div class="flash-side" id="flashSide">Front · Question</div><div class="flash-text" id="flashText">पहला flashcard जोड़ें।</div><div class="actions"><button type="button" id="flipFlash" class="secondary">Show answer</button><button type="button" id="prevFlash" class="secondary">Previous</button><button type="button" id="nextFlash" class="secondary">Next</button></div><p class="status" id="flashCount"></p></div>
+</section>
+<section id="quizPanel" class="hidden">
+<label for="quizNotes">अपने notes paste करें (एक line में एक fact या definition)</label><textarea id="quizNotes" maxlength="8000" placeholder="भारत का संविधान 26 जनवरी 1950 को लागू हुआ।&#10;पानी का रासायनिक सूत्र H2O है।"></textarea>
+<div class="actions"><button type="button" id="makeQuiz">Create practice quiz</button></div><p class="status" id="quizStatus" role="status"></p><div id="quizArea" class="card">Notes डालकर quiz बनाएँ।</div>
+</section>
+</section>
+</main><script src="scripts/shif-a-education-studio.js"></script></body></html>
