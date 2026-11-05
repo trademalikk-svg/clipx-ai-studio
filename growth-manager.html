@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="hi">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#06162c">
+<title>Growth Manager | SHIF-A AI</title>
+<meta name="description" content="Owner-only SHIF-A AI organic growth and keyword management workspace.">
+<style>
+:root{color-scheme:dark;font-family:Inter,Arial,sans-serif;background:#030b19;color:#f4f9ff;--line:#16558b;--muted:#9db8d3}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 65% -15%,#104276 0,transparent 45%),#030b19}
+a{color:#79d9ff;text-decoration:none}header{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:16px clamp(14px,4vw,44px);border-bottom:1px solid #164d7c;background:#041327ed}
+.brand{font-size:21px;font-weight:900;color:#fff}.brand span{color:#28d8f3}main{width:min(1120px,94%);margin:26px auto 60px}
+.hero,.panel{border:1px solid var(--line);border-radius:17px;background:linear-gradient(145deg,#0a2442,#06162b);padding:21px;margin:14px 0;box-shadow:0 12px 35px #0004}
+h1{font-size:clamp(27px,5vw,42px);margin:6px 0}h2{font-size:18px;margin:0 0 12px}.muted{color:var(--muted);line-height:1.6}.status{color:#70e2bd;min-height:22px;font-size:13px}.warning{color:#f2ce8a}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.metric{padding:14px;border:1px solid #174d78;border-radius:12px;background:#071a30}.metric strong{display:block;font-size:23px}.metric span{font-size:12px;color:var(--muted)}
+table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;padding:11px 9px;border-bottom:1px solid #1b4568;vertical-align:top}th{color:#8fe6ff;font-size:11px;text-transform:uppercase;letter-spacing:.5px}
+.table-wrap{overflow-x:auto;border:1px solid #174d78;border-radius:12px}button,input{font:inherit}input{width:100%;padding:11px 12px;background:#06162a;color:#fff;border:1px solid #2a628e;border-radius:9px;margin:10px 0}
+button{border:1px solid #277ab6;border-radius:9px;padding:10px 13px;background:#075eaa;color:white;font-weight:700;cursor:pointer}
+.pill{display:inline-block;padding:4px 8px;border:1px solid #3b6f91;border-radius:99px;font-size:10px;color:#b9e9ff}
+.task-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.task{padding:12px;border:1px solid #174d78;border-radius:11px;background:#071a30;font-size:13px}
+.hidden{display:none!important}
+@media(max-width:700px){main{width:calc(100% - 20px);margin:14px auto}.hero,.panel{padding:15px}.grid,.task-list{grid-template-columns:1fr}header{align-items:flex-start;flex-direction:column}th,td{padding:9px 7px}}
+</style></head>
+<body>
+<header><a class="brand" href="workspace.html">✦ SHIF-A <span>AI</span> · Growth Manager</a><nav><a href="dashboard.html">My Account</a> · <a href="workspace.html">Workspace</a></nav></header>
+<main>
+<section class="hero">
+<span class="pill">OWNER-ONLY · ORGANIC GROWTH · ₹0 BUDGET</span>
+<h1>Growth & Keyword Manager</h1>
+<p class="muted">Daily keyword research, content targets, SEO mapping और organic growth review का एक ही स्थान। यह पेज verified Owner session के बिना नहीं खुलेगा।</p>
+<p id="growthStatus" class="status" role="status" aria-live="polite">Owner access जाँचा जा रहा है…</p>
+</section>
+<div id="growthContent" class="hidden">
+<section class="grid" aria-label="Daily content targets">
+<div class="metric"><strong>2</strong><span>YouTube Shorts / day</span></div>
+<div class="metric"><strong>2</strong><span>Instagram Reels / day</span></div>
+<div class="metric"><strong>2</strong><span>Facebook Posts / day</span></div>
+<div class="metric"><strong>3</strong><span>Pinterest Pins / day</span></div>
+<div class="metric"><strong>1</strong><span>SEO Article / day</span></div>
+<div class="metric"><strong>15 min</strong><span>Community Engagement / day</span></div>
+</section>
+<section class="panel">
+<h2>Keyword Map</h2>
+<p class="muted">हर keyword को उसके सही पेज से जोड़ा गया है। Trend तभी verified दिखेगा जब daily research में source evidence मिले; seed terms को trend नहीं माना जाएगा।</p>
+<p id="keywordUpdated" class="status"></p>
+<input id="keywordSearch" type="search" placeholder="Keyword या target page खोजें…" aria-label="Search keywords">
+<div class="table-wrap"><table><thead><tr><th>Keyword</th><th>Language</th><th>Intent</th><th>Target Page</th><th>Trend</th><th>Priority</th></tr></thead><tbody id="keywordTable"><tr><td colspan="6">Keywords लोड हो रहे हैं…</td></tr></tbody></table></div>
+<p id="keywordSourceNote" class="muted warning"></p>
+</section>
+<section class="panel">
+<h2>Daily Growth Workflow</h2>
+<div class="task-list">
+<div class="task">08:00 · Hindi + English trend research और source capture</div>
+<div class="task">08:00 · Keyword Map refresh और relevant SEO copy updates का draft</div>
+<div class="task">08:00 · Scripts, captions, hashtags और creatives तैयार करना</div>
+<div class="task">08:00 · 15-minute community engagement checklist</div>
+<div class="task">17:00 · Content targets और connected analytics review</div>
+<div class="task">17:00 · Missing content और अगले दिन की keyword plan तैयार करना</div>
+</div>
+<p class="muted">₹0 खर्च सीमा: कोई paid API, ads या subscription नहीं। Website SEO बदलाव development branch में प्रस्तावित होंगे; merge, deployment और social publishing के लिए Owner approval जरूरी है।</p>
+</section>
+</div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="scripts/shif-a-auth.js"></script>
+<script src="scripts/shif-a-growth-manager.js"></script>
+</body></html>
