@@ -881,18 +881,78 @@ body.clipx-locked .workspace-content>#authBox{grid-column:2;grid-row:1;display:b
 body.clipx-locked .workspace-content>#video-editor-guide{display:none!important}
 @media(max-width:760px){body.clipx-locked .workspace-content{display:flex!important;flex-direction:column!important;align-items:stretch!important}body.clipx-locked .workspace-content>#home,body.clipx-locked .workspace-content>#authBox{width:100%!important;max-width:none!important}}
 </style>
+
+<style id="shifa-clean-light-minimal-theme">
+:root{--brand-purple:#6842c2;--brand-purple-dark:#4e2b9e;--brand-blue:#2563eb;--brand-blue-dark:#1d4ed8;--brand-ink:#17233d;--brand-muted:#64748b;--brand-line:#e4eaf4;--brand-surface:#ffffff;--brand-soft:#f5f8ff}
+html{scroll-behavior:smooth}
+body{background:#f7f9fd!important;background-image:none!important;color:var(--brand-ink)!important}
+body>header{position:sticky!important;top:0!important;z-index:30!important;display:flex!important;align-items:center!important;gap:20px!important;padding:13px clamp(14px,4vw,48px)!important;background:#ffffffed!important;border-bottom:1px solid var(--brand-line)!important;box-shadow:0 3px 18px #17233d0a!important;backdrop-filter:blur(12px)}
+body>header .logo{font-size:23px!important;font-weight:900!important;color:var(--brand-purple)!important;letter-spacing:.2px!important;white-space:nowrap}
+body>header .logo span{background:linear-gradient(90deg,var(--brand-purple),var(--brand-blue))!important;-webkit-background-clip:text!important;color:transparent!important}
+.header-edition{display:none!important}
+.top-platform-nav{display:flex!important;align-items:center!important;justify-content:center!important;gap:clamp(10px,2vw,24px)!important;flex:1!important;min-width:0!important}
+.top-platform-nav a{color:#475569!important;font-size:13px!important;font-weight:650!important;text-decoration:none!important;padding:9px 2px!important;white-space:nowrap!important}
+.top-platform-nav a:hover,.top-platform-nav a.top-nav-active{color:var(--brand-purple)!important}
+body>header .auth-buttons{display:flex!important;gap:8px!important;flex:0 0 auto!important}
+body>header .auth-buttons button{padding:9px 14px!important;border-radius:9px!important;background:var(--brand-blue)!important;border:1px solid var(--brand-blue)!important;color:#fff!important}
+body>header .auth-buttons #signupNavButton{background:#fff!important;color:var(--brand-purple)!important;border-color:#d8cafa!important}
+main{background:transparent!important}
+.workspace-content{min-width:0!important}
+.hero{display:flex!important;align-items:center!important;min-height:250px!important;padding:clamp(22px,4vw,42px)!important;border:1px solid #e4e8f5!important;border-radius:22px!important;background:linear-gradient(115deg,#fff 0%,#f7f8ff 62%,#eef5ff 100%)!important;box-shadow:0 12px 35px #24345a0c!important}
+.hero-copy{max-width:660px!important}
+.hero .vip{display:inline-flex!important;align-items:center!important;padding:7px 12px!important;border:1px solid #e3d9fb!important;border-radius:30px!important;background:#f4efff!important;color:var(--brand-purple)!important;font-size:11px!important;font-weight:800!important;letter-spacing:.7px!important}
+.hero h1{font-size:clamp(32px,4.5vw,52px)!important;line-height:1.08!important;color:var(--brand-ink)!important;letter-spacing:-1.4px!important;margin:16px 0 10px!important}
+.hero h1 span{background:linear-gradient(90deg,var(--brand-purple),var(--brand-blue))!important;-webkit-background-clip:text!important;color:transparent!important}
+.hero .hero-subtitle{font-size:18px!important;color:#34425e!important;margin:0 0 8px!important}
+.hero p{max-width:560px!important;color:var(--brand-muted)!important;font-size:15px!important;line-height:1.7!important}
+.hero .hero-cta{display:inline-flex!important;align-items:center!important;gap:12px!important;margin-top:12px!important;padding:12px 18px!important;border-radius:10px!important;background:var(--brand-blue)!important;color:#fff!important;text-decoration:none!important;font-weight:750!important;box-shadow:0 5px 14px #2563eb25!important}
+.hero .hero-cta:hover{background:var(--brand-blue-dark)!important}
+.hero-art{display:none!important}
+.hero-trust{color:#64748b!important}
+.clipx-share-panel{border:1px solid var(--brand-line)!important;border-radius:15px!important;background:#fff!important}
+.platform-tool-library{padding:20px!important;border:1px solid var(--brand-line)!important;border-radius:18px!important;background:#fff!important;box-shadow:0 8px 25px #17233d08!important}
+.platform-eyebrow{color:var(--brand-purple)!important}
+.platform-section-heading h2{color:var(--brand-ink)!important}
+.platform-section-heading p{color:var(--brand-muted)!important}
+.catalog-link{color:var(--brand-blue)!important}
+.tool-category-grid{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:12px!important}
+.tool-category{min-height:130px!important;padding:16px!important;border:1px solid var(--brand-line)!important;border-radius:14px!important;background:#fff!important;color:var(--brand-ink)!important;text-decoration:none!important;box-shadow:0 3px 12px #17233d06!important;transition:transform .18s,border-color .18s,box-shadow .18s!important}
+.tool-category:hover{transform:translateY(-2px)!important;border-color:#c9b8f2!important;box-shadow:0 8px 20px #17233d0c!important}
+.tool-icon{width:36px!important;height:36px!important;border-radius:10px!important;background:#f0eaff!important;color:var(--brand-purple)!important;box-shadow:none!important}
+.tool-category strong{color:var(--brand-ink)!important;font-size:14px!important}
+.tool-category small{color:var(--brand-muted)!important;font-size:11px!important}
+.tool-category em{color:#15805d!important;font-size:10px!important;font-weight:700!important}
+.tool-planned{background:#f9faff!important;border-style:dashed!important}
+.tool-planned .tool-icon{background:#edf1fa!important;color:#68758f!important}
+.tool-planned em{color:#718096!important}
+.dashboard-shortcuts,.dashboard-support-grid,.card{border:1px solid var(--brand-line)!important;border-radius:16px!important;background:#fff!important;color:var(--brand-ink)!important;box-shadow:0 8px 24px #17233d08!important}
+.card h2,.card h3,h1,h2,h3{color:var(--brand-ink)!important}
+p,li,.muted{color:var(--brand-muted)}
+input,select,textarea{background:#fff!important;color:var(--brand-ink)!important;border-color:#d7deeb!important}
+button,.primary{background:var(--brand-blue)!important;border-color:var(--brand-blue)!important;color:#fff!important}
+.secondary{background:#f4efff!important;color:var(--brand-purple)!important;border-color:#e2d8f8!important}
+.preview{background:#f7f9fd!important;border-color:var(--brand-line)!important;color:var(--brand-muted)!important}
+.result{background:#f7f9fd!important;border-color:var(--brand-line)!important;color:var(--brand-ink)!important}
+.rail-panel{background:#fff!important;border-color:var(--brand-line)!important}
+.rail-panel h2{color:var(--brand-ink)!important}
+.rail-panel>a{background:#f7f9ff!important;border-color:var(--brand-line)!important;color:var(--brand-blue)!important}
+footer{background:#fff!important;color:var(--brand-muted)!important;border-top:1px solid var(--brand-line)!important}
+body.clipx-locked main{background:transparent!important}
+body.clipx-locked .workspace-content>#authBox{background:#fff!important;border:1px solid var(--brand-line)!important;box-shadow:0 12px 30px #17233d0b!important}
+@media(max-width:900px){body>header{flex-wrap:wrap!important}.top-platform-nav{order:3;flex:0 0 100%!important;justify-content:flex-start!important;overflow-x:auto!important}.tool-category-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+@media(max-width:760px){body>header{gap:8px!important;padding:10px 12px!important}.top-platform-nav{gap:17px!important;padding:2px 0!important}.top-platform-nav a{font-size:12px!important}.auth-buttons button{font-size:12px!important;padding:8px 10px!important}main{width:100%!important;padding:12px 10px 90px!important}.hero{min-height:0!important;padding:23px 18px!important;border-radius:17px!important}.hero h1{font-size:34px!important}.hero .hero-subtitle{font-size:16px!important}.platform-tool-library{padding:14px!important}.tool-category-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important}.tool-category{min-height:124px!important;padding:12px!important}.tool-category small{font-size:10px!important}.platform-section-heading{align-items:flex-start!important}.mobile-bottom-nav{background:#fff!important;border-top:1px solid var(--brand-line)!important}.mobile-bottom-nav a{color:#53617a!important}.mobile-bottom-nav .bottom-create{background:var(--brand-blue)!important;color:#fff!important}}
+@media(max-width:360px){.tool-category-grid{grid-template-columns:1fr!important}body>header .logo{font-size:20px!important}.hero h1{font-size:30px!important}}
+</style>
 </head>
 <body class="clipx-locked">
 <header>
  <div class="logo">SHIF-A <span>AI</span></div>
  <div class="header-edition">✦ AI WORKSPACE</div>
  <nav class="top-platform-nav" aria-label="Main platform navigation">
-  <a class="top-nav-active" href="#home">⌂ Home</a>
-  <a href="ai-tools.html">✣ AI Tools</a>
-  <a href="dashboard.html">▣ My Workspace</a>
-  <a href="#marketplacePanel">▣ Marketplace</a>
-  <a href="#agentPanel">♧ Agents</a>
-  <a href="#automationPanel">⌘ Automation</a>
+  <a class="top-nav-active" href="#home">Home</a>
+  <a href="ai-tools.html">AI Tools</a>
+  <a href="#paymentSandbox">Pricing</a>
+  <a href="contact.html">Support</a>
  </nav>
  <div class="auth-buttons" id="authControls">
   <button type="button" id="loginNavButton" onclick="showAuth('login')">Login</button>
@@ -937,11 +997,11 @@ body.clipx-locked .workspace-content>#video-editor-guide{display:none!important}
  <section class="hero" id="home">
   <div class="hero-copy">
    <p class="hero-kicker">ONE ACCOUNT · ONE CREATIVE WORKSPACE</p>
-   <div class="vip">✦ SHIF-A AI PLATFORM</div>
-   <h1>Your AI Workspace. <span>Everything in One Place.</span></h1>
-   <h2 class="hero-subtitle">Create. Edit. Publish. Grow.</h2>
-   <p>SHIF-A AI is your unified creative workspace. Use the built-in ClipX Video Studio for Shorts and Reels, explore creator tools and access your work through one account.</p>
-   <a class="hero-cta" href="#promptStudio" data-toolview="prompts">🚀 Explore SHIF-A AI <b>→</b></a>
+   <div class="vip">✦ YOUR CREATIVE AI WORKSPACE</div>
+   <h1>Make more with <span>SHIF-A AI.</span></h1>
+   <h2 class="hero-subtitle">Simple tools. One workspace.</h2>
+   <p>Explore creator tools for videos, content and everyday work — with one SHIF-A AI account.</p>
+   <a class="hero-cta" href="ai-tools.html">Explore AI Tools <b>→</b></a>
    <div class="hero-trust"><span>✓ Easy to use</span><span>✓ Creator tools</span><span>✓ Hindi + English</span></div>
   </div>
   <div class="hero-art hero-visual-art" aria-hidden="true">
@@ -999,18 +1059,13 @@ body.clipx-locked .workspace-content>#video-editor-guide{display:none!important}
    <a href="#tools" class="catalog-link">Explore current tools →</a>
   </div>
   <div class="tool-category-grid">
-   <a class="tool-category tool-ready" href="#upload" data-view="studio"><span class="tool-icon">▣</span><strong>AI Video Studio</strong><small>ClipX editor, Shorts tools, captions and prompts</small><em>Available tools</em></a>
-   <a class="tool-category" href="#promptStudio" data-toolview="prompts"><span class="tool-icon">✧</span><strong>AI Content Studio</strong><small>Titles, descriptions, hashtags and prompts</small><em>Available tools</em></a>
-   <a class="tool-category tool-planned" href="#imageStudio"><span class="tool-icon">▧</span><strong>AI Image Studio</strong><small>Generate, edit, enhance and transform images</small><em>Planned module</em></a>
-   <a class="tool-category tool-planned" href="#voiceStudio"><span class="tool-icon">♫</span><strong>AI Voice Studio</strong><small>Text-to-speech, transcription and voice tools</small><em>Planned module</em></a>
-   <a class="tool-category tool-planned" href="#chatStudio"><span class="tool-icon">◉</span><strong>AI Chat & Research</strong><small>Assistants, research and question answering</small><em>Planned module</em></a>
-   <a class="tool-category tool-planned" href="#writingStudio"><span class="tool-icon">✎</span><strong>AI Writing</strong><small>Articles, scripts, documents and summaries</small><em>Planned module</em></a>
-   <a class="tool-category tool-planned" href="#codingStudio"><span class="tool-icon">⌘</span><strong>AI Coding</strong><small>Code help, debugging and app development</small><em>Planned module</em></a>
-   <a class="tool-category tool-planned" id="agentPanel" href="#agentPanel"><span class="tool-icon">♧</span><strong>AI Agents</strong><small>Custom assistants for focused tasks</small><em>Planned module</em></a>
-   <a class="tool-category tool-planned" id="automationPanel" href="#automationPanel"><span class="tool-icon">⌁</span><strong>AI Automation</strong><small>Connect tools into repeatable workflows</small><em>Planned module</em></a>
-   <a class="tool-category tool-planned" href="#documentStudio"><span class="tool-icon">▤</span><strong>Documents & PDF</strong><small>Read, summarize and organize documents</small><em>Planned module</em></a>
-   <a class="tool-category tool-planned" href="#designStudio"><span class="tool-icon">◈</span><strong>AI Design</strong><small>Branding, graphics and design assistance</small><em>Planned module</em></a>
-   <a class="tool-category tool-planned" id="marketplacePanel" href="#marketplacePanel"><span class="tool-icon">▣</span><strong>AI Marketplace</strong><small>Discover and sell tools, agents and workflows</small><em>Planned module</em></a>
+   <a class="tool-category tool-ready" href="#upload" data-view="studio"><span class="tool-icon">▣</span><strong>Video Studio</strong><small>ClipX editor, Shorts and captions</small><em>Available tools</em></a>
+   <a class="tool-category" href="#promptStudio" data-toolview="prompts"><span class="tool-icon">✧</span><strong>Content Studio</strong><small>Titles, descriptions and prompts</small><em>Available tools</em></a>
+   <a class="tool-category tool-planned" href="#imageStudio"><span class="tool-icon">▧</span><strong>Image Studio</strong><small>Image creation and editing</small><em>Planned module</em></a>
+   <a class="tool-category tool-planned" href="#voiceStudio"><span class="tool-icon">♫</span><strong>Voice Studio</strong><small>Voice and audio tools</small><em>Planned module</em></a>
+   <a class="tool-category tool-planned" href="#chatStudio"><span class="tool-icon">◉</span><strong>Chat & Research</strong><small>AI assistance and research tools</small><em>Planned module</em></a>
+   <a class="tool-category tool-planned" href="#codingStudio"><span class="tool-icon">⌘</span><strong>Coding Studio</strong><small>Code help and development tools</small><em>Planned module</em></a>
+   <a class="tool-category" href="ai-tools.html"><span class="tool-icon">＋</span><strong>More AI Tools</strong><small>Browse the complete tools directory</small><em>Explore directory</em></a>
   </div>
  </section>
  <section class="dashboard-shortcuts" id="tools" aria-label="Video tools menu">
