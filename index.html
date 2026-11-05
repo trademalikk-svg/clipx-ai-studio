@@ -2278,7 +2278,7 @@ async function loadHomeOwnerAccess(user) {
   if (!data.session || !data.session.access_token) throw new Error("Active session unavailable.");
   const response = await fetch(SUPABASE_URL + "/functions/v1/shif-a-access", {
    method: "GET",
-   headers: { apikey: SUPABASE_ANON_KEY, Authorization: "Bearer " + data.session.access_token }
+   headers: { apikey: SUPABASE_KEY, Authorization: "Bearer " + data.session.access_token }
   });
   const profile = await response.json().catch(() => ({}));
   if (!response.ok) throw new Error(profile.error || "Access profile could not be loaded.");
