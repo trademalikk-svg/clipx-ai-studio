@@ -98,6 +98,67 @@ async function importPdfFile(file){
  }catch(error){$("docStatus").textContent="PDF पढ़ी नहीं जा सकी। File password-protected, damaged या unsupported हो सकती है।";}
  $("pdfImportInput").value="";
 }
+
+const MAX_OCR_PDF_BYTES=10485760;
+const MAX_OCR_PAGES=5;
+const MAX_OCR_CHARS=15000;
+async function runPdfOcr(){
+ const file=$("ocrPdfInput").files&&$("ocrPdfInput").files[0];
+ if(!file){$("ocrStatus").textContent="OCR के लिए scanned PDF चुनें।";return;}
+ if(file.type!=="application/pdf"&&!file.name.toLowerCase().endsWith(".pdf")){$("ocrStatus").textContent="कृपया PDF file चुनें।";return;}
+ if(file.size>MAX_OCR_PDF_BYTES){$("ocrStatus").textContent="OCR के लिए PDF 10 MB तक होनी चाहिए।";return;}
+ if(!window.pdfjsLib||!window.Tesseract){$("ocrStatus").textContent="OCR libraries load नहीं हुईं। Internet connection जाँचकर page reload करें।";return;}
+ const language=$("ocrLanguage").value;
+ const requested=Number($("ocrPageCount").value);
+ if(!["eng","hin","eng+hin"].includes(language)||!Number.isInteger(requested)||requested<1||requested>MAX_OCR_PAGES){$("ocrStatus").textContent="Language या page count सही चुनें।";return;}
+ $("runPdfOcrBtn").disabled=true;
+ let worker=null;
+ try{
+  $("ocrStatus").textContent="PDF pages तैयार किए जा रहे हैं…";
+  const pdf=await window.pdfjsLib.getDocument({data:await file.arrayBuffer()}).promise;
+  const count=Math.min(requested,pdf.numPages,MAX_OCR_PAGES);
+  if(!count)throw new Error("PDF में पढ़ने योग्य pages नहीं हैं।");
+  worker=await window.Tesseract.createWorker(language,1,{
+   workerPath:"https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/worker.min.js",
+   corePath:"https://cdn.jsdelivr.net/npm/tesseract.js-core@5/tesseract-core.wasm.js",
+   langPath:"https://tessdata.projectnaptha.com/4.0.0",
+   logger:message=>{
+    if(message&&message.status==="recognizing text"){
+     $("ocrStatus").textContent="OCR चल रहा है… "+Math.round((message.progress||0)*100)+"% (page processing)";
+    }
+   }
+  });
+  const extracted=[];
+  for(let pageNumber=1;pageNumber<=count;pageNumber++){
+   $("ocrStatus").textContent="OCR page "+pageNumber+" / "+count+"…";
+   const page=await pdf.getPage(pageNumber);
+   const base=page.getViewport({scale:1});
+   const scale=Math.min(1.35,Math.sqrt(12000000/(base.width*base.height)));
+   const viewport=page.getViewport({scale});
+   const canvas=document.createElement("canvas");
+   canvas.width=Math.ceil(viewport.width);canvas.height=Math.ceil(viewport.height);
+   const context=canvas.getContext("2d",{willReadFrequently:true});
+   await page.render({canvasContext:context,viewport}).promise;
+   const result=await worker.recognize(canvas);
+   const text=(result.data.text||"").trim();
+   if(text)extracted.push("--- OCR Page "+pageNumber+" ---\n"+text);
+   canvas.width=0;canvas.height=0;
+   if(extracted.join("\n\n").length>=MAX_OCR_CHARS)break;
+  }
+  const output=extracted.join("\n\n").slice(0,MAX_OCR_CHARS);
+  if(!output)throw new Error("इन pages से text नहीं मिला। PDF की quality जाँचें।");
+  $("docTitle").value=file.name.replace(/\.pdf$/i,"").slice(0,120);
+  $("docBody").value=output;
+  updateStats();updatePreview();saveDraft();
+  $("docStatus").textContent="OCR text Document Editor में आ गया है।";
+  $("ocrStatus").textContent=count+" pages का OCR पूरा हुआ। निकला हुआ text editor में उपलब्ध है।";
+ }catch(error){
+  $("ocrStatus").textContent=error&&error.message?error.message:"OCR पूरा नहीं हो सका। PDF या internet connection जाँचें।";
+ }finally{
+  if(worker){try{await worker.terminate();}catch(error){}}
+  $("runPdfOcrBtn").disabled=false;
+ }
+}
 function updateStats(){const value=$("docBody").value,words=value.trim()?value.trim().split(/\s+/u).length:0;$("docStats").textContent=words+" words · "+value.length+" characters";}
 function updatePreview(){
  const title=$("docTitle").value.trim()||"Untitled Document";
@@ -178,6 +239,7 @@ function restoreDraft(){
 $("updatePreviewBtn").addEventListener("click",updatePreview);
 $("saveLibraryBtn").addEventListener("click",saveToLibrary);
 $("pdfImportInput").addEventListener("change",event=>importPdfFile(event.target.files&&event.target.files[0]));
+$("runPdfOcrBtn").addEventListener("click",runPdfOcr);
 $("mergePdfBtn").addEventListener("click",mergePdfFiles);
 $("splitPdfBtn").addEventListener("click",splitPdfFile);
 $("documentLibrary").addEventListener("click",event=>{const button=event.target.closest("button[data-action][data-id]");if(!button)return;if(button.dataset.action==="open")openLibraryDocument(button.dataset.id);if(button.dataset.action==="delete")deleteLibraryDocument(button.dataset.id);});
