@@ -4,6 +4,36 @@ const $=id=>document.getElementById(id);
 const STORAGE_KEY="shifA.documentsStudio.draft.v1";
 const LIBRARY_KEY="shifA.documentsStudio.library.v1";
 const MAX_LIBRARY_ITEMS=30;
+const MAX_PDF_BYTES=20971520;
+const MAX_PDF_PAGES=100;
+const MAX_IMPORTED_CHARS=30000;
+async function importPdfFile(file){
+ if(!file)return;
+ if(file.type!=="application/pdf"&&!file.name.toLowerCase().endsWith(".pdf")){$("docStatus").textContent="कृपया PDF file चुनें।";$("pdfImportInput").value="";return;}
+ if(file.size>MAX_PDF_BYTES){$("docStatus").textContent="PDF 20 MB से छोटी होनी चाहिए।";$("pdfImportInput").value="";return;}
+ if(!window.pdfjsLib){$("docStatus").textContent="PDF reader load नहीं हुआ। Internet connection जाँचकर page reload करें।";$("pdfImportInput").value="";return;}
+ $("docStatus").textContent="PDF से text निकाला जा रहा है…";
+ try{
+  const bytes=await file.arrayBuffer();
+  const pdf=await window.pdfjsLib.getDocument({data:bytes}).promise;
+  if(pdf.numPages>MAX_PDF_PAGES){$("docStatus").textContent="इस tool में अधिकतम 100 pages वाली PDF import कर सकते हैं।";$("pdfImportInput").value="";return;}
+  const pages=[];let total=0;
+  for(let pageNumber=1;pageNumber<=pdf.numPages;pageNumber++){
+   const page=await pdf.getPage(pageNumber);
+   const content=await page.getTextContent();
+   const text=content.items.filter(item=>typeof item.str==="string").map(item=>item.str).join(" ").trim();
+   if(text){const section=(pageNumber>1?"\n\n":"")+"--- Page "+pageNumber+" ---\n"+text;const remaining=MAX_IMPORTED_CHARS-total;if(remaining<=0)break;pages.push(section.slice(0,remaining));total+=Math.min(section.length,remaining);}
+   if(total>=MAX_IMPORTED_CHARS)break;
+  }
+  const extracted=pages.join("\n").slice(0,MAX_IMPORTED_CHARS);
+  if(!extracted){$("docStatus").textContent="इस PDF में selectable text नहीं मिला। Scanned PDF के लिए OCR अभी उपलब्ध नहीं है।";$("pdfImportInput").value="";return;}
+  $("docTitle").value=file.name.replace(/\.pdf$/i,"").slice(0,120);
+  $("docBody").value=extracted;
+  updateStats();updatePreview();saveDraft();
+  $("docStatus").textContent="PDF text import हो गया। "+pdf.numPages+" pages जाँचे गए; content editor में आ गया है।";
+ }catch(error){$("docStatus").textContent="PDF पढ़ी नहीं जा सकी। File password-protected, damaged या unsupported हो सकती है।";}
+ $("pdfImportInput").value="";
+}
 function updateStats(){const value=$("docBody").value,words=value.trim()?value.trim().split(/\s+/u).length:0;$("docStats").textContent=words+" words · "+value.length+" characters";}
 function updatePreview(){
  const title=$("docTitle").value.trim()||"Untitled Document";
@@ -83,6 +113,7 @@ function restoreDraft(){
 ["docSize","docLine"].forEach(id=>$(id).addEventListener("change",()=>{updatePreview();saveDraft();}));
 $("updatePreviewBtn").addEventListener("click",updatePreview);
 $("saveLibraryBtn").addEventListener("click",saveToLibrary);
+$("pdfImportInput").addEventListener("change",event=>importPdfFile(event.target.files&&event.target.files[0]));
 $("documentLibrary").addEventListener("click",event=>{const button=event.target.closest("button[data-action][data-id]");if(!button)return;if(button.dataset.action==="open")openLibraryDocument(button.dataset.id);if(button.dataset.action==="delete")deleteLibraryDocument(button.dataset.id);});
 $("printPdfBtn").addEventListener("click",()=>{updatePreview();window.print();$("docStatus").textContent="Print dialog opened. Destination में Save as PDF चुनें।";});
 $("downloadTxtBtn").addEventListener("click",()=>{
