@@ -55,7 +55,7 @@ $("copyBtn").addEventListener("click",async()=>{
 $("downloadBtn").addEventListener("click",()=>{
  if(!latest){$("resultStatus").textContent="पहले draft तैयार करें।";return;}
  const blob=new Blob([latest],{type:"text/plain;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");
- a.href=url;a.download="shif-a-business-draft.txt";document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);$("resultStatus").textContent="TXT download started.";
+ a.href=url;a.download="shif-a-business-draft.txt";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);$("resultStatus").textContent="TXT download started.";
 });
 $("clearBtn").addEventListener("click",()=>{
  ["businessName","businessType","city","details","customerMessage","goal","budget","itemName","itemPrice","taxRate"].forEach(id=>$(id).value="");
