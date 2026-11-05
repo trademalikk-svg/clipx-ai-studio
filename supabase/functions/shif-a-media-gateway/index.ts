@@ -52,6 +52,9 @@ Deno.serve(async (req: Request) => {
   const auth = createClient(supabaseUrl, anonKey, { auth: { persistSession: false, autoRefreshToken: false } });
   const { data, error } = await auth.auth.getUser(jwt);
   if (error || !data.user || !data.user.email_confirmed_at) return reply({ error: "Verified sign-in required." }, 401);
+  if (data.user.app_metadata?.shif_role !== "owner") {
+    return reply({ error: "Cloud media is Owner-only during the private pilot. Member quotas and billing controls must be enforced before wider access." }, 403);
+  }
 
   let body: Record<string, unknown>;
   try {
