@@ -53,7 +53,7 @@ class ShifAToolLabContractTests(unittest.TestCase):
     def test_regex_tester_exposes_flags_and_safe_examples(self):
         self.assertIn('id="regexFlags"', self.lab)
         self.assertIn('id="regexExample"', self.lab)
-        self.assertIn('data-pattern=', self.lab)
+        self.assertIn("Find 4-digit numbers", self.lab)
         self.assertIn('new RegExp(data.pattern,data.flags)', self.lab)
         self.assertIn('flags:$("regexFlags").value', self.lab)
         self.assertIn("Invalid regular expression", self.lab)
