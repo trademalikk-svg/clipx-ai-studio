@@ -101,29 +101,41 @@ button.secondary{background:#102a47;border-color:#315b80}
 <section class="panel"><h2>Document Preview</h2><div class="preview-wrap"><article id="paperPreview"><h1 id="previewTitle">Untitled Document</h1><div id="previewMeta"></div><div id="previewBody">आपका document preview यहाँ दिखाई देगा।</div></article></div></section>
 </main>
 <script>
-/* Resilient CDN loader: try independent providers before reporting a library failure. */
+/* Resilient CDN loader: retain the provider that actually loaded each library. */
 (function(){
  const sources={
-  pdfjs:["https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js","https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js","https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.min.js"],
-  tesseract:["https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js","https://unpkg.com/tesseract.js@5/dist/tesseract.min.js"],
-  pdflib:["https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js","https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js","https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"]
+  pdfjs:[
+   {src:"https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js",worker:"https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js"},
+   {src:"https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js",worker:"https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js"},
+   {src:"https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.min.js",worker:"https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js"}
+  ],
+  tesseract:[
+   {src:"https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js",worker:"https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/worker.min.js",core:"https://cdn.jsdelivr.net/npm/tesseract.js-core@5/tesseract-core.wasm.js"},
+   {src:"https://unpkg.com/tesseract.js@5/dist/tesseract.min.js",worker:"https://unpkg.com/tesseract.js@5/dist/worker.min.js",core:"https://unpkg.com/tesseract.js-core@5/tesseract-core.wasm.js"}
+  ],
+  pdflib:[
+   "https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js",
+   "https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js",
+   "https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"
+  ]
  };
- function load(urls){
+ function load(entries){
   return new Promise(resolve=>{
    const next=index=>{
-    if(index>=urls.length){resolve(false);return;}
-    const script=document.createElement("script");script.src=urls[index];script.async=false;
-    script.onload=()=>resolve(true);script.onerror=()=>{script.remove();next(index+1);};
+    if(index>=entries.length){resolve(null);return;}
+    const entry=typeof entries[index]==="string"?{src:entries[index]}:entries[index];
+    const script=document.createElement("script");script.src=entry.src;script.async=false;
+    script.onload=()=>resolve(entry);script.onerror=()=>{script.remove();next(index+1);};
     document.head.appendChild(script);
    };next(0);
   });
  }
  window.SHIFA_PDF_LIBRARIES_READY=(async()=>{
-  const results=await Promise.all([load(sources.pdfjs),load(sources.tesseract),load(sources.pdflib)]);
-  if(window.pdfjsLib)window.pdfjsLib.GlobalWorkerOptions.workerSrc="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
-  window.SHIFA_TESSERACT_WORKER_URL="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/worker.min.js";
-  window.SHIFA_TESSERACT_CORE_URL="https://cdn.jsdelivr.net/npm/tesseract.js-core@5/tesseract-core.wasm.js";
-  window.SHIFA_PDF_LIBRARIES_STATUS={pdfjs:results[0],tesseract:results[1],pdflib:results[2]};
+  const [pdfjs,tesseract,pdflib]=await Promise.all([load(sources.pdfjs),load(sources.tesseract),load(sources.pdflib)]);
+  if(pdfjs&&window.pdfjsLib)window.pdfjsLib.GlobalWorkerOptions.workerSrc=pdfjs.worker;
+  window.SHIFA_TESSERACT_WORKER_URL=tesseract&&tesseract.worker;
+  window.SHIFA_TESSERACT_CORE_URL=tesseract&&tesseract.core;
+  window.SHIFA_PDF_LIBRARIES_STATUS={pdfjs:!!pdfjs,tesseract:!!tesseract,pdflib:!!pdflib};
   return window.SHIFA_PDF_LIBRARIES_STATUS;
  })();
 })();
