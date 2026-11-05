@@ -7,6 +7,70 @@ const MAX_LIBRARY_ITEMS=30;
 const MAX_PDF_BYTES=20971520;
 const MAX_PDF_PAGES=100;
 const MAX_IMPORTED_CHARS=30000;
+const MAX_PDF_INPUT_FILES=10;
+const MAX_PDF_TOTAL_BYTES=52428800;
+const MAX_MERGED_PAGES=300;
+function downloadPdfBytes(bytes,filename){
+ const blob=new Blob([bytes],{type:"application/pdf"}),url=URL.createObjectURL(blob),a=document.createElement("a");
+ a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),2000);
+}
+function safePdfName(value){return (value||"document").replace(/\.pdf$/i,"").replace(/[^\p{L}\p{N}-]+/gu,"-").replace(/^-|-$/g,"").slice(0,60)||"document";}
+function parsePageRanges(value,pageCount){
+ const chunks=value.split(",").map(part=>part.trim()).filter(Boolean);
+ if(!chunks.length)throw new Error("कम-से-कम एक page range दें।");
+ const ranges=chunks.map(part=>{
+  const match=part.match(/^(\d+)(?:\s*-\s*(\d+))?$/);
+  if(!match)throw new Error("Page range सही लिखें, जैसे 1-3,5");
+  const start=Number(match[1]),end=Number(match[2]||match[1]);
+  if(start<1||end<start||end>pageCount)throw new Error("Page range PDF के कुल pages के भीतर होना चाहिए।");
+  return {start,end};
+ });
+ return ranges;
+}
+async function mergePdfFiles(){
+ const files=Array.from($("pdfMergeInput").files||[]);
+ if(files.length<2){$("pdfToolsStatus").textContent="Merge के लिए कम-से-कम 2 PDF चुनें।";return;}
+ if(files.length>MAX_PDF_INPUT_FILES){$("pdfToolsStatus").textContent="एक बार में अधिकतम 10 PDF चुन सकते हैं।";return;}
+ if(files.some(file=>file.size>MAX_PDF_BYTES)||files.reduce((sum,file)=>sum+file.size,0)>MAX_PDF_TOTAL_BYTES){$("pdfToolsStatus").textContent="हर PDF 20 MB तक और सभी PDFs मिलाकर 50 MB तक होनी चाहिए।";return;}
+ if(!window.PDFLib){$("pdfToolsStatus").textContent="PDF editor library load नहीं हुई। Internet connection जाँचें।";return;}
+ $("mergePdfBtn").disabled=true;$("pdfToolsStatus").textContent="PDF files merge हो रही हैं…";
+ try{
+  const merged=await PDFLib.PDFDocument.create();let totalPages=0;
+  for(const file of files){
+   if(file.type!=="application/pdf"&&!file.name.toLowerCase().endsWith(".pdf"))throw new Error("सभी selected files PDF होनी चाहिए।");
+   const source=await PDFLib.PDFDocument.load(await file.arrayBuffer());
+   totalPages+=source.getPageCount();
+   if(totalPages>MAX_MERGED_PAGES)throw new Error("Merged PDF में अधिकतम 300 pages हो सकते हैं।");
+   const copied=await merged.copyPages(source,source.getPageIndices());copied.forEach(page=>merged.addPage(page));
+  }
+  const bytes=await merged.save();downloadPdfBytes(bytes,"shif-a-merged-document.pdf");
+  $("pdfToolsStatus").textContent=files.length+" PDFs merge हो गईं ("+totalPages+" pages)। Download शुरू हुआ।";
+ }catch(error){$("pdfToolsStatus").textContent=error.message||"PDF merge नहीं हो सकी। File damaged या password-protected हो सकती है।";}
+ finally{$("mergePdfBtn").disabled=false;}
+}
+async function splitPdfFile(){
+ const file=$("pdfSplitInput").files&&$("pdfSplitInput").files[0];
+ if(!file){$("pdfToolsStatus").textContent="Split करने के लिए PDF चुनें।";return;}
+ if(file.size>MAX_PDF_BYTES){$("pdfToolsStatus").textContent="PDF 20 MB से छोटी होनी चाहिए।";return;}
+ if(!window.PDFLib){$("pdfToolsStatus").textContent="PDF editor library load नहीं हुई। Internet connection जाँचें।";return;}
+ $("splitPdfBtn").disabled=true;$("pdfToolsStatus").textContent="PDF pages अलग किए जा रहे हैं…";
+ try{
+  if(file.type!=="application/pdf"&&!file.name.toLowerCase().endsWith(".pdf"))throw new Error("कृपया PDF file चुनें।");
+  const source=await PDFLib.PDFDocument.load(await file.arrayBuffer());
+  const pageCount=source.getPageCount();
+  if(pageCount>MAX_PDF_PAGES)throw new Error("Split के लिए अधिकतम 100 pages वाली PDF चुनें।");
+  const ranges=parsePageRanges($("pdfPageRanges").value,pageCount);
+  for(let index=0;index<ranges.length;index++){
+   const range=ranges[index],output=await PDFLib.PDFDocument.create();
+   const indices=Array.from({length:range.end-range.start+1},(_,offset)=>range.start-1+offset);
+   const pages=await output.copyPages(source,indices);pages.forEach(page=>output.addPage(page));
+   const suffix=ranges.length>1?"-part-"+(index+1):"-pages-"+range.start+"-"+range.end;
+   downloadPdfBytes(await output.save(),safePdfName(file.name)+suffix+".pdf");
+  }
+  $("pdfToolsStatus").textContent=ranges.length+" PDF part(s) download के लिए तैयार हैं। Browser multiple downloads की permission माँग सकता है।";
+ }catch(error){$("pdfToolsStatus").textContent=error.message||"PDF split नहीं हो सकी।";}
+ finally{$("splitPdfBtn").disabled=false;}
+}
 async function importPdfFile(file){
  if(!file)return;
  if(file.type!=="application/pdf"&&!file.name.toLowerCase().endsWith(".pdf")){$("docStatus").textContent="कृपया PDF file चुनें।";$("pdfImportInput").value="";return;}
@@ -114,6 +178,8 @@ function restoreDraft(){
 $("updatePreviewBtn").addEventListener("click",updatePreview);
 $("saveLibraryBtn").addEventListener("click",saveToLibrary);
 $("pdfImportInput").addEventListener("change",event=>importPdfFile(event.target.files&&event.target.files[0]));
+$("mergePdfBtn").addEventListener("click",mergePdfFiles);
+$("splitPdfBtn").addEventListener("click",splitPdfFile);
 $("documentLibrary").addEventListener("click",event=>{const button=event.target.closest("button[data-action][data-id]");if(!button)return;if(button.dataset.action==="open")openLibraryDocument(button.dataset.id);if(button.dataset.action==="delete")deleteLibraryDocument(button.dataset.id);});
 $("printPdfBtn").addEventListener("click",()=>{updatePreview();window.print();$("docStatus").textContent="Print dialog opened. Destination में Save as PDF चुनें।";});
 $("downloadTxtBtn").addEventListener("click",()=>{
