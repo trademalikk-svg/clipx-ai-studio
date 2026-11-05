@@ -23,16 +23,21 @@
   });
 
   function makeCaptions(value, max) {
+    const segmenter = typeof Intl !== "undefined" && Intl.Segmenter
+      ? new Intl.Segmenter(undefined, { granularity: "grapheme" }) : null;
+    const splitGraphemes = value => segmenter
+      ? Array.from(segmenter.segment(value), part => part.segment) : Array.from(value);
     const words = value.trim().split(/\s+/u).filter(Boolean), lines = [];
     let line = "";
     for (const word of words) {
-      if (word.length > max) {
+      const parts = splitGraphemes(word);
+      if (parts.length > max) {
         if (line) { lines.push(line); line = ""; }
-        for (let i = 0; i < word.length; i += max) lines.push(word.slice(i, i + max));
+        for (let i = 0; i < parts.length; i += max) lines.push(parts.slice(i, i + max).join(""));
         continue;
       }
       const next = line ? line + " " + word : word;
-      if (next.length > max) { lines.push(line); line = word; } else line = next;
+      if (splitGraphemes(next).length > max) { lines.push(line); line = word; } else line = next;
     }
     if (line) lines.push(line);
     return lines.join("\n");
