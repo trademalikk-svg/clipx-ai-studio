@@ -29,7 +29,7 @@ button.secondary{background:#102a47;border-color:#315b80}
 <body>
 <header class="top"><a class="brand" href="index.html">✦ SHIF-A <span>AI</span></a><nav><a href="index.html">Home</a><a href="ai-tools.html">AI Tools</a><a href="dashboard.html">My Workspace</a><a href="browser-tools.html">Browser Tools</a></nav></header>
 <main>
-<section class="hero"><h1>Writing Studio</h1><p class="muted">Hindi और English creator content के लिए ready-to-edit writing templates। Topic डालें, format चुनें और draft तैयार करें।</p><div class="notice">Free browser-based toolkit · आपके inputs इस page पर ही process होते हैं · local templates के साथ optional SHIF-A AI writing assistance उपलब्ध है। Active provider Cloudflare Workers AI है; server-side credentials configure होने के बाद verified login से AI request चलेगी।</div></section>
+<section class="hero"><h1>Writing Studio</h1><p class="muted">Hindi और English creator content के लिए ready-to-edit writing templates। Topic डालें, format चुनें और draft तैयार करें।</p><div class="notice">Free browser-based toolkit · आपके inputs इस page पर ही process होते हैं · local templates के साथ Gemini 3.8 Flash AI writing assistance उपलब्ध है। Login और verified email आवश्यक हैं; API key server-side रखी जाती है।</div></section>
 <section class="panel">
 <h2>अपना draft तैयार करें</h2>
 <div class="form-grid">
@@ -42,10 +42,9 @@ button.secondary{background:#102a47;border-color:#315b80}
 <div><label for="keywords">Keywords (optional)</label><input id="keywords" maxlength="180" placeholder="comma separated keywords"></div>
 <div class="wide"><label for="details">Important points (optional)</label><textarea id="details" maxlength="700" placeholder="वे बातें लिखें जिन्हें draft में शामिल करना है…"></textarea></div>
 </div>
-<div class="actions"><button id="generateBtn">Generate draft</button><button class="secondary" id="clearBtn">Clear</button></div>
+<div class="actions"><button id="generateBtn">Generate local template</button><button id="generateAiBtn">Generate with Gemini AI</button><button class="secondary" id="clearBtn">Clear</button></div>
 <p class="status" id="formStatus" role="status"></p>
 </section>
 <section class="panel"><h2>Your draft</h2><div id="draftOutput" class="output" aria-live="polite">आपका draft यहाँ दिखाई देगा। Generate draft दबाएँ।</div><div class="actions"><button id="copyBtn">Copy draft</button><button class="secondary" id="downloadBtn">Download .txt</button></div><p class="status" id="outputStatus" role="status"></p></section>
 </main>
-<script src="scripts/shif-a-writing-studio.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.89.0"></script><script src="scripts/shif-a-auth.js"></script><script src="scripts/shif-a-ai-tools.js"></script></body></html>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.89.0"></script><script src="scripts/shif-a-auth.js"></script><script src="scripts/shif-a-ai-client.js"></script><script src="scripts/shif-a-writing-studio.js"></script><script src="scripts/shif-a-ai-tools.js"></script></body></html>
