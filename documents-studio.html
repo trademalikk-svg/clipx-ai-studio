@@ -41,7 +41,7 @@ button.secondary{background:#102a47;border-color:#315b80}
 <body>
 <header class="top"><a class="brand" href="index.html">✦ SHIF-A <span>AI</span></a><nav><a href="index.html">Home</a><a href="ai-tools.html">AI Tools</a><a href="dashboard.html">My Workspace</a><a href="writing-studio.html">Writing Studio</a></nav></header>
 <main>
-<section class="hero"><h1>Documents & PDF Studio</h1><p class="muted">Browser में document तैयार करें, format करें, TXT डाउनलोड करें या Print के जरिए PDF में save करें।</p><div class="notice">Free local tool · आपका document किसी server पर upload नहीं होता। Draft इसी device के local browser में अपने-आप save होता है; Clear दबाने पर saved draft भी हट जाता है। PDF export के लिए Print dialog में “Save as PDF” चुनें। PDF text extraction इसी browser में होता है; file server पर upload नहीं होती। Scanned PDF के लिए OCR अभी उपलब्ध नहीं है। PDF Merge और Split browser में locally काम करते हैं। Optional SHIF-A AI document assistance के लिए verified login और Gemini API server-side credentials जरूरी हैं।</div></section>
+<section class="hero"><h1>Documents & PDF Studio</h1><p class="muted">Browser में document तैयार करें, format करें, TXT डाउनलोड करें या Print के जरिए PDF में save करें।</p><div class="notice">Free local tool · आपका document किसी server पर upload नहीं होता। Draft इसी device के local browser में अपने-आप save होता है; Clear दबाने पर saved draft भी हट जाता है। PDF export के लिए Print dialog में “Save as PDF” चुनें। PDF text extraction इसी browser में होता है; file server पर upload नहीं होती। Scanned PDF के लिए नीचे दिया गया OCR section इस्तेमाल करें (अधिकतम 5 pages)। PDF Merge और Split browser में locally काम करते हैं। Optional SHIF-A AI document assistance के लिए verified login और Gemini API server-side credentials जरूरी हैं।</div></section>
 <section class="panel">
 <h2>PDF Merge</h2><p class="muted">2 से 10 PDF को एक file में जोड़ें। हर file 20 MB तक, कुल 50 MB और merged output 300 pages तक सीमित है।</p>
 <label for="pdfMergeInput">Choose PDF files</label><input id="pdfMergeInput" type="file" accept="application/pdf,.pdf" multiple>
@@ -54,7 +54,8 @@ button.secondary{background:#102a47;border-color:#315b80}
 <div class="actions"><button id="splitPdfBtn">Split PDF</button></div>
 <p class="muted">Split के लिए PDF अधिकतम 20 MB और 100 pages तक हो सकती है।</p>
 <p id="pdfToolsStatus" class="status" role="status" aria-live="polite"></p>
-</section>\n<section class="panel">\n<h2>Import PDF Text</h2><p class="muted">20 MB तक और अधिकतम 100 pages वाली PDF से selectable text निकालकर editor में लाएँ। Scanned image PDF का OCR अभी नहीं है।</p><label for="pdfImportInput">Choose PDF file</label><input id="pdfImportInput" type="file" accept="application/pdf,.pdf"><p class="muted">PDF text extraction happens locally in your browser. PDF.js library load करने के लिए internet connection चाहिए।</p></section>
+</section>
+<section> class="panel">\n<h2>Import PDF Text</h2><p class="muted">20 MB तक और अधिकतम 100 pages वाली PDF से selectable text निकालकर editor में लाएँ। Scanned PDF के लिए नीचे दिया गया OCR section इस्तेमाल करें (अधिकतम 5 pages)।</p><label for="pdfImportInput">Choose PDF file</label><input id="pdfImportInput" type="file" accept="application/pdf,.pdf"><p class="muted">PDF text extraction happens locally in your browser. PDF.js library load करने के लिए internet connection चाहिए।</p></section>
 <section class="panel">
 <h2>Scanned PDF OCR · Image to Text</h2>
 <p class="muted">स्कैन की हुई PDF से text पहचानें। एक बार में अधिकतम 5 pages और 10 MB PDF। हिंदी, English या दोनों चुनें। OCR आपके browser में चलता है; PDF server पर upload नहीं होती। पहली बार language data डाउनलोड करने के लिए internet चाहिए।</p>
