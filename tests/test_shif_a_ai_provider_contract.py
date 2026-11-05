@@ -10,20 +10,22 @@ class ShifAAIProviderContractTests(unittest.TestCase):
         self.assertNotRegex(source, r",\s*,\s*\{")
 
 
-    def test_core_tools_describe_cloudflare_as_the_active_provider(self):
+    def test_core_tools_describe_gemini_as_the_active_provider(self):
         root = ROOT
         for name in ("writing-studio.html", "coding-studio.html", "research-studio.html", "business-tools.html", "chat-studio.html", "education-studio.html", "documents-studio.html", "agents-studio.html", "automation-studio.html"):
             page = (root / name).read_text(encoding="utf-8")
-            self.assertNotIn("Gemini", page, f"stale provider label in {name}")
+            if name in ("writing-studio.html", "coding-studio.html", "chat-studio.html"):
+                self.assertIn("Gemini", page, f"Gemini provider label missing in {name}")
+            else:
+                self.assertNotIn("Cloudflare Workers AI", page, f"stale provider label in {name}")
         helper = (root / "scripts" / "shif-a-ai-tools.js").read_text(encoding="utf-8")
         self.assertNotIn("Gemini provider", helper)
-        self.assertIn("Cloudflare Workers AI", helper)
+        self.assertIn("Gemini", helper)
 
-    def test_chat_model_selector_matches_cloudflare_gateway_default(self):
+    def test_chat_model_selector_matches_gemini_gateway_default(self):
         page = (ROOT / "chat-studio.html").read_text(encoding="utf-8")
-        self.assertIn("@cf/qwen/qwen3-30b-a3b-fp8", page)
-        self.assertNotIn("gemini-3.8-flash", page)
-        self.assertNotIn("gemini-3.1-flash-lite", page)
+        self.assertIn("gemini-3.8-flash", page)
+        self.assertNotIn("@cf/qwen/qwen3-30b-a3b-fp8", page)
 
     def test_core_ai_tool_field_and_output_ids_exist_in_their_pages(self):
         import re
@@ -47,24 +49,23 @@ class ShifAAIProviderContractTests(unittest.TestCase):
                     self.assertIn(field, ids, f"{field} missing from {page_name}")
                 self.assertIn('"' + page_name + '"', helper)
 
-    def test_cloudflare_is_default_and_gemini_remains_switchable(self):
+    def test_gemini_is_the_only_enabled_provider(self):
         source = (ROOT / "supabase" / "functions" / "shif-a-model-gateway" / "index.ts").read_text(encoding="utf-8")
-        self.assertIn('Deno.env.get("AI_PROVIDER") || "cloudflare"', source)
-        self.assertIn('provider === "gemini"', source)
+        self.assertIn('const GEMINI_MODEL = "gemini-3.8-flash"', source)
         self.assertIn("GEMINI_API_KEY", source)
+        self.assertNotIn("CLOUDFLARE_API_TOKEN", source)
 
-    def test_cloudflare_model_is_fixed_server_side(self):
+    def test_gemini_model_is_fixed_server_side(self):
         source = (ROOT / "supabase" / "functions" / "shif-a-model-gateway" / "index.ts").read_text(encoding="utf-8")
-        self.assertIn('@cf/qwen/qwen3-30b-a3b-fp8', source)
-        self.assertIn("CLOUDFLARE_ACCOUNT_ID", source)
-        self.assertIn("CLOUDFLARE_API_TOKEN", source)
-        self.assertIn("api.cloudflare.com/client/v4/accounts/", source)
+        self.assertIn('const GEMINI_MODEL = "gemini-3.8-flash"', source)
+        self.assertIn("generativelanguage.googleapis.com/v1beta/models/", source)
+        self.assertIn('provider: "gemini"', source)
 
     def test_provider_secrets_are_not_read_from_browser(self):
         source = (ROOT / "scripts" / "shif-a-ai-tools.js").read_text(encoding="utf-8")
         self.assertNotIn("CLOUDFLARE_API_TOKEN", source)
         self.assertNotIn("GEMINI_API_KEY", source)
-        self.assertIn('@cf/qwen/qwen3-30b-a3b-fp8', source)
+        self.assertIn("gemini-3.8-flash", (ROOT / "scripts" / "shif-a-ai-client.js").read_text(encoding="utf-8"))
 
     def test_gateway_enforces_verified_email_server_side(self):
         source = (ROOT / "supabase" / "functions" / "shif-a-model-gateway" / "index.ts").read_text(encoding="utf-8")
@@ -73,7 +74,7 @@ class ShifAAIProviderContractTests(unittest.TestCase):
 
     def test_usage_guard_runs_before_provider_request_and_free_limit_has_no_fallback(self):
         source = (ROOT / "supabase" / "functions" / "shif-a-model-gateway" / "index.ts").read_text(encoding="utf-8")
-        self.assertLess(source.index('adminClient.rpc('), source.index('https://api.cloudflare.com/client/v4/accounts/'))
+        self.assertLess(source.index('adminClient.rpc('), source.index('https://generativelanguage.googleapis.com/v1beta/models/'))
         self.assertIn("no paid fallback will be used", source)
         self.assertIn("maximum 10 model requests per hour", source)
 
