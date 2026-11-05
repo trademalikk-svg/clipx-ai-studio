@@ -170,6 +170,8 @@ jobs:
           node --check scripts/shif-a-browser-tools.js
           node --check scripts/shif-a-tools.js
           node --check scripts/shif-a-owner-security.js
+      - name: Run JavaScript contract tests
+        run: node --test tests/*.test.js tests/*.test.mjs
       - name: Check FFmpeg worker syntax
         run: node --check worker/worker.js
       - name: Set up Deno
