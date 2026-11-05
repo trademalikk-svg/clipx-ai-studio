@@ -31,6 +31,20 @@ The public site is configured to avoid unexpected paid-provider charges:
 - Read the new Video Guides hub for practical walkthroughs on Shorts editing, Hindi subtitles/SRT and YouTube thumbnails.
 - Experimental face detection/face-follow tools may depend on model downloads and compatible devices.
 
+## Cloud Image & Video Generation (in progress)
+
+The Image Studio and Video Studio now include a shared, responsive cloud-generation interface for Android and desktop browsers. The browser sends authenticated requests to a Supabase Edge Function; provider credentials stay server-side. Generation tasks are bound to the signed-in user with short-lived signed task tokens.
+
+The cloud gateway is an integration scaffold, not an active generation service. It uses the Replicate prediction API adapter and remains disabled until the Owner deliberately configures all of these Supabase Edge Function secrets:
+- `SHIF_A_REPLICATE_API_TOKEN`
+- `SHIF_A_MEDIA_TASK_SECRET` (at least 32 characters, generated privately)
+- `SHIF_A_REPLICATE_IMAGE_MODEL` (provider model slug in `owner/name` form)
+- `SHIF_A_REPLICATE_VIDEO_MODEL` (provider model slug in `owner/name` form)
+
+Image/video model input schemas differ. The selected models must accept the gateway's documented prompt, aspect-ratio and duration inputs; test them in a non-production environment first. Provider pricing, free credits, model availability, output retention and licensing must be checked before configuration. No provider token, model, paid service, Supabase deployment or production setting has been activated by this code change. Do not put provider tokens in browser JavaScript or Git.
+
+The browser UI requires a verified SHIF-A account and internet access. Phone and computer use the same cloud endpoint; actual inference runs on the provider's servers. Stopping browser status polling does not cancel a provider prediction. Cloud task output links are provider-hosted URLs and may expire under provider policy.
+
 ## Important limitations
 
 - Automatic Shorts splits by chosen duration; it does not understand speech, story or semantic highlights.
