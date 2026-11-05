@@ -2,7 +2,10 @@
 "use strict";
 const $=id=>document.getElementById(id);
 let currentTool="profile",latest="";
-const WORKSPACE_KEY="shifA.businessTools.workspace.v1";\nconst LIBRARY_KEY="shifA.businessTools.library.v1";\nconst MAX_LIBRARY_ITEMS=30;\nlet restoring=false;
+const WORKSPACE_KEY="shifA.businessTools.workspace.v1";
+const LIBRARY_KEY="shifA.businessTools.library.v1";
+const MAX_LIBRARY_ITEMS=30;
+let restoring=false;
 const fields={profile:["detailWrap"],listing:["detailWrap","itemWrap","priceWrap"],reply:["customerWrap"],plan:["goalWrap","budgetWrap"],quote:["itemWrap","priceWrap","qtyWrap","taxWrap"]};
 function selectTool(tool){
  currentTool=tool;
@@ -110,5 +113,10 @@ $("clearBtn").addEventListener("click",()=>{
  $("formStatus").textContent="Fields cleared."; $("resultStatus").textContent="";
  try{localStorage.removeItem(WORKSPACE_KEY);}catch(error){}
 });
-FIELD_IDS.forEach(id=>$(id).addEventListener("input",saveWorkspace));\nrestoring=true;\nselectTool("profile");\nrestoring=false;\nrestoreWorkspace();\nrenderLibrary();
+FIELD_IDS.forEach(id=>$(id).addEventListener("input",saveWorkspace));
+restoring=true;
+selectTool("profile");
+restoring=false;
+restoreWorkspace();
+renderLibrary();
 })();
