@@ -50,6 +50,14 @@ class ShifAToolLabContractTests(unittest.TestCase):
         self.assertIn("REGEX_MAX_INPUT", self.lab)
         self.assertIn("REGEX_MAX_PATTERN", self.lab)
 
+    def test_regex_tester_exposes_flags_and_safe_examples(self):
+        self.assertIn('id="regexFlags"', self.lab)
+        self.assertIn('id="regexExample"', self.lab)
+        self.assertIn('data-pattern=', self.lab)
+        self.assertIn('new RegExp(data.pattern,data.flags)', self.lab)
+        self.assertIn('flags:$("regexFlags").value', self.lab)
+        self.assertIn("Invalid regular expression", self.lab)
+
     def test_copy_and_download_report_success_or_failure(self):
         self.assertIn("async function copyOutput()", self.lab)
         self.assertIn("Clipboard permission नहीं मिली", self.lab)
