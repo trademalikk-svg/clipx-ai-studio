@@ -40,23 +40,6 @@ Deno.serve(async (req: Request) => {
   const { data: authData, error: authError } = await authClient.auth.getUser(token);
   if (authError || !authData.user) return json({ error: "Invalid or expired session." }, 401, origin);
 
-  const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
-  if (!serviceKey) return json({ error: "Usage protection is not configured." }, 503, origin);
-  const adminClient = createClient(supabaseUrl, serviceKey, {
-    auth: { persistSession: false, autoRefreshToken: false },
-  });
-  const { data: allowed, error: limitError } = await adminClient.rpc(
-    "shif_a_consume_model_request",
-    { p_user_id: authData.user.id },
-  );
-  if (limitError) {
-    console.error("SHIF-A model rate-limit check failed:", limitError.message);
-    return json({ error: "Usage protection is temporarily unavailable." }, 503, origin);
-  }
-  if (allowed !== true) {
-    return json({ error: "USER_RATE_LIMIT_REACHED", message: "Limit reached: maximum 10 model requests per hour for this account." }, 429, origin);
-  }
-
   let payload: { message?: unknown; model?: unknown; mode?: unknown };
   try {
     payload = await req.json();
@@ -78,6 +61,23 @@ Deno.serve(async (req: Request) => {
       error: "MODEL_PROVIDER_NOT_CONFIGURED",
       message: "The secure gateway is ready, but the provider credential has not been configured by an authorized adult. No model request was sent.",
     }, 503, origin);
+  }
+
+  const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+  if (!serviceKey) return json({ error: "Usage protection is not configured." }, 503, origin);
+  const adminClient = createClient(supabaseUrl, serviceKey, {
+    auth: { persistSession: false, autoRefreshToken: false },
+  });
+  const { data: allowed, error: limitError } = await adminClient.rpc(
+    "shif_a_consume_model_request",
+    { p_user_id: authData.user.id },
+  );
+  if (limitError) {
+    console.error("SHIF-A model rate-limit check failed:", limitError.message);
+    return json({ error: "Usage protection is temporarily unavailable." }, 503, origin);
+  }
+  if (allowed !== true) {
+    return json({ error: "USER_RATE_LIMIT_REACHED", message: "Limit reached: maximum 10 model requests per hour for this account." }, 429, origin);
   }
 
   const systemText = [
