@@ -7,12 +7,13 @@ function setSpeechStatus(message){$("speechStatus").textContent=message;}
 function updateCount(){$("charCount").textContent=$("speechText").value.length+" / 5000 characters";}
 function refreshVoices(){
  if(!supported){$("voiceSelect").replaceChildren(new Option("Speech synthesis not supported",""));setSpeechStatus("इस browser में Text-to-Speech उपलब्ध नहीं है। Chrome के updated version में कोशिश करें।");$("speakBtn").disabled=true;return;}
- const language=$("voiceLanguage").value,selected=$("voiceSelect").value;
+ const language=$("voiceLanguage").value,select=$("voiceSelect");
+ const selectedName=voices[Number(select.value)]?.name;
  voices=window.speechSynthesis.getVoices().filter(v=>language==="all"||v.lang.toLowerCase().startsWith(language));
- const select=$("voiceSelect");select.replaceChildren();
+ select.replaceChildren();
  if(!voices.length){select.add(new Option("इस भाषा की कोई installed voice नहीं मिली",""));return;}
  voices.forEach((voice,index)=>select.add(new Option(voice.name+" ("+voice.lang+")"+(voice.default?" · Default":""),String(index))));
- const match=voices.findIndex(v=>v.name===selected);if(match>=0)select.value=String(match);
+ const match=voices.findIndex(v=>v.name===selectedName);if(match>=0)select.value=String(match);
 }
 function updateSpeechButtons(){const active=supported&&window.speechSynthesis.speaking;$("pauseBtn").disabled=!active||window.speechSynthesis.paused;$("resumeBtn").disabled=!active||!window.speechSynthesis.paused;$("stopBtn").disabled=!active;}
 $("speechText").addEventListener("input",updateCount);
