@@ -38,7 +38,7 @@ class ShifADocumentsStudioTests(unittest.TestCase):
         self.assertIn("MAX_PDF_PAGES=100", js)
         self.assertIn("pdfjsLib.getDocument", js)
         self.assertIn('id="pdfImportInput"', html)
-        self.assertIn("pdfjs-dist", html)
+        self.assertIn("pdf.min.js", html)
         self.assertIn("PDF text extraction happens locally", html)
 
     def test_document_studio_explains_local_draft_persistence(self):
