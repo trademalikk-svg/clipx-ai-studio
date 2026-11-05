@@ -939,6 +939,7 @@ button,.primary{background:var(--brand-blue)!important;border-color:var(--brand-
 footer{background:#fff!important;color:var(--brand-muted)!important;border-top:1px solid var(--brand-line)!important}
 body.clipx-locked main{background:transparent!important}
 body.clipx-locked .workspace-content>#authBox{background:#fff!important;border:1px solid var(--brand-line)!important;box-shadow:0 12px 30px #17233d0b!important}
+body.clipx-locked .workspace-content>#allToolsDirectory{display:block!important;grid-column:1/-1!important;width:100%!important}
 @media(max-width:900px){body>header{flex-wrap:wrap!important}.top-platform-nav{order:3;flex:0 0 100%!important;justify-content:flex-start!important;overflow-x:auto!important}.tool-category-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 @media(max-width:760px){body>header{gap:8px!important;padding:10px 12px!important}.top-platform-nav{gap:17px!important;padding:2px 0!important}.top-platform-nav a{font-size:12px!important}.auth-buttons button{font-size:12px!important;padding:8px 10px!important}main{width:100%!important;padding:12px 10px 90px!important}.hero{min-height:0!important;padding:23px 18px!important;border-radius:17px!important}.hero h1{font-size:34px!important}.hero .hero-subtitle{font-size:16px!important}.platform-tool-library{padding:14px!important}.tool-category-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important}.tool-category{min-height:124px!important;padding:12px!important}.tool-category small{font-size:10px!important}.platform-section-heading{align-items:flex-start!important}.mobile-bottom-nav{background:#fff!important;border-top:1px solid var(--brand-line)!important}.mobile-bottom-nav a{color:#53617a!important}.mobile-bottom-nav .bottom-create{background:var(--brand-blue)!important;color:#fff!important}}
 @media(max-width:360px){.tool-category-grid{grid-template-columns:1fr!important}body>header .logo{font-size:20px!important}.hero h1{font-size:30px!important}}
@@ -1498,8 +1499,8 @@ function clipxCopyCreatorKit(){
 <script>
 function showWorkspaceView(view) {
  const groups = {
-  home:["home","tools","features","homeOwnerPanel"],
-  tools:["tools"],
+  home:["home","tools","features","homeOwnerPanel","allToolsDirectory"],
+  tools:["tools","allToolsDirectory"],
   editor:["upload","clipSettings","manualCutter","faceTrackingLab"],
   manualCutter:["upload","clipSettings","manualCutter"],
   shorts:["upload","clipSettings","autoShorts","faceTrackingLab"],
@@ -1512,7 +1513,7 @@ function showWorkspaceView(view) {
   settings:["backendConnection","authBox","paymentSandbox"],
   billing:["paymentSandbox"]
  };
- const allowed = [...(groups[view] || groups.home), ...(view === "home" || view === "tools" ? ["platformTools"] : [])];
+ const allowed = [...(groups[view] || groups.home), ...(view === "home" || view === "tools" ? ["platformTools","allToolsDirectory"] : [])];
  document.querySelectorAll(".workspace-content > section").forEach(section => {
   section.hidden = !allowed.includes(section.id);
   section.classList.toggle("view-hidden", !allowed.includes(section.id));
