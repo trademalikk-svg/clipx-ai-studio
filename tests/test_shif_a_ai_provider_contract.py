@@ -38,7 +38,7 @@ class ShifAAIProviderContractTests(unittest.TestCase):
         for page_name, (target, fields) in configs.items():
             with self.subTest(page=page_name):
                 page = (ROOT / page_name).read_text(encoding="utf-8")
-                ids = set(re.findall(r"id=['\\"]([^'\\"]+)['\\"]", page))
+                ids = set(re.findall(r'id="([^"]+)"', page))
                 self.assertIn(target, ids)
                 for field in fields:
                     self.assertIn(field, ids, f"{field} missing from {page_name}")
