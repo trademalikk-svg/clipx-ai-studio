@@ -48,11 +48,11 @@
   {id:"filename-clean",name:"Filename Cleaner",category:"Files",description:"Clean unsafe filename characters.",status:"available",href:"tool-lab.html?tool=filename-clean"},
   {id:"image-info",name:"Image Dimensions Inspector",category:"Image",description:"Read image dimensions and file details.",status:"available",href:"tool-lab.html?tool=image-info"},
  ];
- const grid=document.getElementById("toolGrid"),search=document.getElementById("toolSearch"),filter=document.getElementById("categoryFilter");
+ const grid=document.getElementById("toolGrid"),search=document.getElementById("toolSearch"),filter=document.getElementById("categoryFilter"),statusFilter=document.getElementById("statusFilter");
  [...new Set(tools.map(t=>t.category))].sort().forEach(category=>{const o=document.createElement("option");o.value=category;o.textContent=category;filter.appendChild(o);});
  function render(){
-  const q=search.value.trim().toLowerCase(),cat=filter.value;
-  const matches=tools.filter(t=>(cat==="all"||t.category===cat)&&[t.name,t.category,t.description].join(" ").toLowerCase().includes(q));
+  const q=search.value.trim().toLowerCase(),cat=filter.value,status=statusFilter.value;
+  const matches=tools.filter(t=>(cat==="all"||t.category===cat)&&(status==="all"||t.status===status)&&[t.name,t.category,t.description].join(" ").toLowerCase().includes(q));
   grid.replaceChildren();
   matches.forEach(t=>{
    const card=document.createElement("article");card.className="tool";
@@ -64,8 +64,9 @@
    if(t.href){const a=document.createElement("a");a.className="launch";a.href=t.href;a.textContent="Open tool →";meta.appendChild(a);}
    card.append(h,p,meta);grid.appendChild(card);
   });
-  document.getElementById("toolCount").textContent=matches.length+" tools shown · "+tools.filter(t=>t.status==="available"||t.status==="limited").length+" currently available/limited";
+  const totals=tools.reduce((counts,t)=>{counts[t.status]=(counts[t.status]||0)+1;return counts;},{available:0,limited:0,"coming-soon":0});
+  document.getElementById("toolCount").textContent=matches.length+" shown · "+totals.available+" available · "+totals.limited+" limited · "+totals["coming-soon"]+" coming soon";
   document.getElementById("emptyState").hidden=matches.length!==0;
  }
- search.addEventListener("input",render);filter.addEventListener("change",render);render();
+ search.addEventListener("input",render);filter.addEventListener("change",render);statusFilter.addEventListener("change",render);render();
 })();
