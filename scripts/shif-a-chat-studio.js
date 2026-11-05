@@ -43,7 +43,7 @@ async function sendMessage(){
   if(!auth.user||!auth.user.email_confirmed_at){setStatus("पहले अपने account का email confirm करें।");return;}
   if(!activeId||!active())newChat();
   addMessage("user",content,$("modelSelect").value);
-  $("messageInput").value="";$("charCount").textContent="0 / 12000";
+  $("messageInput").value="";$("charCount").textContent="0 / 4000";
   setStatus("SHIF-A Gateway से सुरक्षित अनुरोध भेज रहे हैं…");
   const response=await fetch(GATEWAY,{method:"POST",headers:{"Content-Type":"application/json","apikey":SUPABASE_KEY,"Authorization":"Bearer "+auth.session.access_token},body:JSON.stringify({message:content,model:$("modelSelect").value,mode:$("modeSelect").value})});
   const data=await response.json().catch(()=>({}));
@@ -61,11 +61,11 @@ async function sendMessage(){
  finally{sending=false;$("sendMessageBtn").disabled=false;}
 }
 $("newChatBtn").addEventListener("click",newChat);
-$("messageInput").addEventListener("input",()=>{$("charCount").textContent=$("messageInput").value.length+" / 12000";});
-$("saveMessageBtn").addEventListener("click",()=>{const content=$("messageInput").value.trim();if(!content){setStatus("पहले अपना prompt लिखें।");return;}if(!activeId||!active())newChat();addMessage("user",content);$("messageInput").value="";$("charCount").textContent="0 / 12000";setStatus("Draft इस browser में save हो गया।");});
+$("messageInput").addEventListener("input",()=>{$("charCount").textContent=$("messageInput").value.length+" / 4000";});
+$("saveMessageBtn").addEventListener("click",()=>{const content=$("messageInput").value.trim();if(!content){setStatus("पहले अपना prompt लिखें।");return;}if(!activeId||!active())newChat();addMessage("user",content);$("messageInput").value="";$("charCount").textContent="0 / 4000";setStatus("Draft इस browser में save हो गया।");});
 $("sendMessageBtn").addEventListener("click",sendMessage);
 $("messageInput").addEventListener("keydown",e=>{if(e.key==="Enter"&&(e.ctrlKey||e.metaKey)){e.preventDefault();sendMessage();}});
-document.querySelectorAll("[data-preset]").forEach(b=>b.addEventListener("click",()=>{$("messageInput").value=presets[b.dataset.preset];$("charCount").textContent=$("messageInput").value.length+" / 12000";$("messageInput").focus();}));
+document.querySelectorAll("[data-preset]").forEach(b=>b.addEventListener("click",()=>{$("messageInput").value=presets[b.dataset.preset];$("charCount").textContent=$("messageInput").value.length+" / 4000";$("messageInput").focus();}));
 $("deleteChatBtn").addEventListener("click",()=>{if(!active())return;chats=chats.filter(c=>c.id!==activeId);activeId=chats.length?chats[0].id:null;persist();render();setStatus("Conversation इस browser से delete कर दी गई।");});
 $("exportTxtBtn").addEventListener("click",()=>{const c=active();if(!c)return;const body=(c.title||"Conversation")+"\n\n"+c.messages.map(m=>m.role.toUpperCase()+"\n"+m.content).join("\n\n");download("shif-a-chat.txt",body,"text/plain;charset=utf-8");});
 $("exportJsonBtn").addEventListener("click",()=>{const c=active();if(c)download("shif-a-chat.json",JSON.stringify(c,null,2),"application/json");});
