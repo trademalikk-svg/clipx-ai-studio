@@ -1,0 +1,108 @@
+{
+  "project": "SHIF-A AI",
+  "lastUpdated": "2026-11-05",
+  "updateStatus": "initial-seed-needs-live-validation",
+  "note": "These are initial product-intent seed keywords, not verified live trends or search-volume claims. The daily growth workflow must validate each term against current sources before changing public SEO copy.",
+  "keywords": [
+    {
+      "keyword": "online video editor",
+      "language": "en",
+      "intent": "transactional",
+      "targetPage": "index.html",
+      "source": "Initial product-intent seed; validate with current search evidence",
+      "checkedAt": "2026-11-05",
+      "trend": "unverified",
+      "priority": "high"
+    },
+    {
+      "keyword": "YouTube Shorts maker",
+      "language": "en",
+      "intent": "transactional",
+      "targetPage": "index.html",
+      "source": "Initial product-intent seed; validate with current search evidence",
+      "checkedAt": "2026-11-05",
+      "trend": "unverified",
+      "priority": "high"
+    },
+    {
+      "keyword": "Hindi video editor",
+      "language": "en",
+      "intent": "transactional",
+      "targetPage": "index.html",
+      "source": "Initial product-intent seed; validate with current search evidence",
+      "checkedAt": "2026-11-05",
+      "trend": "unverified",
+      "priority": "high"
+    },
+    {
+      "keyword": "free AI tools",
+      "language": "en",
+      "intent": "commercial-investigation",
+      "targetPage": "ai-tools.html",
+      "source": "Initial product-intent seed; validate with current search evidence",
+      "checkedAt": "2026-11-05",
+      "trend": "unverified",
+      "priority": "medium"
+    },
+    {
+      "keyword": "AI tools online",
+      "language": "en",
+      "intent": "commercial-investigation",
+      "targetPage": "ai-tools.html",
+      "source": "Initial product-intent seed; validate with current search evidence",
+      "checkedAt": "2026-11-05",
+      "trend": "unverified",
+      "priority": "medium"
+    },
+    {
+      "keyword": "video to shorts converter",
+      "language": "en",
+      "intent": "transactional",
+      "targetPage": "split-video-into-multiple-clips.html",
+      "source": "Initial product-intent seed; validate with current search evidence",
+      "checkedAt": "2026-11-05",
+      "trend": "unverified",
+      "priority": "high"
+    },
+    {
+      "keyword": "YouTube Shorts kaise banaye",
+      "language": "hi",
+      "intent": "informational",
+      "targetPage": "guide-youtube-shorts.html",
+      "source": "Initial product-intent seed; validate with current search evidence",
+      "checkedAt": "2026-11-05",
+      "trend": "unverified",
+      "priority": "high"
+    },
+    {
+      "keyword": "Hindi subtitles kaise lagaye",
+      "language": "hi",
+      "intent": "informational",
+      "targetPage": "guide-hindi-subtitles.html",
+      "source": "Initial product-intent seed; validate with current search evidence",
+      "checkedAt": "2026-11-05",
+      "trend": "unverified",
+      "priority": "medium"
+    },
+    {
+      "keyword": "free thumbnail maker",
+      "language": "en",
+      "intent": "transactional",
+      "targetPage": "creator-tools.html",
+      "source": "Initial product-intent seed; validate with current search evidence",
+      "checkedAt": "2026-11-05",
+      "trend": "unverified",
+      "priority": "medium"
+    },
+    {
+      "keyword": "social media content planner",
+      "language": "en",
+      "intent": "commercial-investigation",
+      "targetPage": "ai-tools.html",
+      "source": "Initial product-intent seed; validate with current search evidence",
+      "checkedAt": "2026-11-05",
+      "trend": "unverified",
+      "priority": "low"
+    }
+  ]
+}
