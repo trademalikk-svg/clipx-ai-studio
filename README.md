@@ -1,6 +1,15 @@
-# ClipX AI Studio
+# SHIF-A AI — powered by ClipX
 
-ClipX AI Studio is a Hindi and English browser-based video creator toolkit for preparing short clips, captions, subtitles, thumbnails and video scripts. It is hosted on GitHub Pages and currently offers a free browser mode.
+SHIF-A AI is being built as an all-in-one AI workspace on the existing ClipX AI Studio project. ClipX remains the integrated Video Studio. The current SHIF-A workspace adds a responsive dashboard, a searchable AI tools catalog, and a private customer workspace shell. New model-backed categories remain marked coming soon until real providers are connected and tested.
+
+## SHIF-A AI workspace status
+
+- Public dashboard: https://trademalikk-svg.github.io/clipx-ai-studio/
+- AI tools catalog: https://trademalikk-svg.github.io/clipx-ai-studio/ai-tools.html
+- Private customer workspace: https://trademalikk-svg.github.io/clipx-ai-studio/dashboard.html (login required)
+- Existing video editor: retained in the main workspace as ClipX Video Studio.
+- Image, Voice, Chat, Writing, Coding, Agents, Automation, Documents and Marketplace are planned categories, not active generation engines yet.
+- Owner and invited-user unlimited platform access requires secure server-managed role assignment; it does not override external provider quotas or compute limits.
 
 ## Free Browser Mode
 

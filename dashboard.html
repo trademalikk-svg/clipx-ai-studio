@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en-IN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#06162c">
+<title>My Workspace | SHIF-A AI</title><meta name="description" content="Your private SHIF-A AI workspace.">
+<style>
+:root{color-scheme:dark;font-family:Inter,Arial,sans-serif;background:#030b19;color:#f4f9ff}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 70% -15%,#104276 0,transparent 45%),#030b19;min-height:100vh}
+a{color:#79d9ff;text-decoration:none}.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px clamp(14px,4vw,48px);border-bottom:1px solid #164d7c;background:#041327ed;position:sticky;top:0}
+.brand{font-size:22px;font-weight:900}.brand span{color:#28d8f3}.top nav{display:flex;gap:16px;flex-wrap:wrap;font-size:13px}
+main{width:min(1180px,94%);margin:26px auto 60px}.hero,.panel{border:1px solid #16558b;border-radius:18px;background:linear-gradient(145deg,#0a2442,#06162b);padding:22px;box-shadow:0 12px 35px #0004}
+.hero h1{margin:0 0 8px;font-size:clamp(26px,5vw,42px)}.muted{color:#9db8d3;line-height:1.6}.status{color:#70e2bd;font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:16px}.panel h2{font-size:17px;margin:0 0 12px}.value{font-size:19px;font-weight:750;overflow-wrap:anywhere}
+.btn{display:inline-block;border:1px solid #228bd4;border-radius:10px;padding:10px 14px;background:linear-gradient(100deg,#087fe8,#0753a7);color:white;font-weight:700}
+button{cursor:pointer}.pill{display:inline-block;border:1px solid #276b9e;border-radius:99px;padding:5px 9px;color:#aeeaff;font-size:11px}
+#loginPrompt{margin-top:18px}.empty{padding:14px;border:1px dashed #315a7d;border-radius:12px;color:#a8c1d9;font-size:13px}
+@media(max-width:760px){.top{align-items:flex-start;flex-direction:column}.top nav{gap:12px}main{width:calc(100% - 22px);margin:14px auto 40px}.grid{grid-template-columns:1fr}.hero,.panel{padding:17px}}
+</style></head>
+<body>
+<header class="top"><a class="brand" href="index.html">✦ SHIF-A <span>AI</span></a><nav><a href="index.html">Home</a><a href="ai-tools.html">AI Tools</a><a href="index.html#upload">ClipX Video Studio</a><a href="contact.html">Support</a></nav></header>
+<main>
+<section class="hero"><span class="pill">PRIVATE WORKSPACE</span><h1>My AI Workspace</h1><p class="muted">एक ही जगह पर आपके tools, projects और account access की जानकारी।</p><p id="dashboardStatus" class="status" role="status" aria-live="polite">Account जाँचा जा रहा है…</p></section>
+<section id="loginPrompt" class="panel" hidden><h2>Login required</h2><p class="muted">अपना मौजूदा ClipX account इस्तेमाल करके SHIF-A AI में प्रवेश करें।</p><a class="btn" href="index.html#authBox">Go to Login</a></section>
+<div id="dashboardContent" hidden>
+<div class="grid">
+<section class="panel"><h2>Account</h2><div class="value" id="accountEmail">—</div><p class="muted">Signed-in account</p></section>
+<section class="panel"><h2>Access Role</h2><div class="value" id="accountRole">—</div><p class="muted" id="accessSummary">—</p></section>
+<section class="panel"><h2>Available Tools</h2><div class="value" id="toolAccess">—</div><p class="muted">Access data is shown only when supplied by the trusted account metadata.</p></section>
+</div>
+<div class="grid">
+<section class="panel"><h2>My Projects</h2><div class="empty">Project history backend अभी connect नहीं है।</div></section>
+<section class="panel"><h2>Credits & Membership</h2><div class="empty">Plan और credit ledger तैयार होने के बाद यहाँ वास्तविक विवरण दिखेगा। Provider quotas और device limits फिर भी लागू रहेंगे।</div></section>
+<section class="panel"><h2>History & Downloads</h2><div class="empty">अभी कोई connected history source नहीं है।</div></section>
+</div>
+<section id="ownerPanel" class="panel" hidden style="margin-top:14px"><h2>Owner Control Center</h2><p class="muted">Owner-only controls तभी दिखेंगे जब Supabase server-managed access role owner निर्धारित करेगा।</p><p><a class="btn" href="owner-security.html">Open Owner Security Center</a></p><div class="empty">Model Manager, User Access, Tool Pricing और Usage Analytics अगली सुरक्षित backend phase में जुड़ेंगे।</div></section>
+<section id="invitePanel" class="panel" hidden style="margin-top:14px"><h2>Invited Users</h2><p class="muted">Invitations server-side permission checks और audit log के साथ जोड़े जाएँगे।</p></section>
+<section class="panel" style="margin-top:14px"><button class="btn" id="signOutButton" type="button">Sign out</button></section>
+</div></main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="scripts/shif-a-auth.js"></script><script src="scripts/shif-a-dashboard.js"></script>
+</body></html>
