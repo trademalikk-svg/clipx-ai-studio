@@ -60,6 +60,20 @@ class ShifADocumentsStudioTests(unittest.TestCase):
         self.assertIn("local browser", html.lower())
         self.assertIn('id="docStatus"', html)
 
+    def test_scanned_pdf_ocr_is_opt_in_local_and_bounded(self):
+        js = (ROOT / "scripts/shif-a-documents-studio.js").read_text(encoding="utf-8")
+        html = (ROOT / "documents-studio.html").read_text(encoding="utf-8")
+        self.assertIn("async function runPdfOcr(", js)
+        self.assertIn("MAX_OCR_PAGES=5", js)
+        self.assertIn("MAX_OCR_PDF_BYTES=10485760", js)
+        self.assertIn("Tesseract.createWorker", js)
+        self.assertIn("pdfjsLib.getDocument", js)
+        self.assertIn('id="ocrLanguage"', html)
+        self.assertIn('id="ocrPageCount"', html)
+        self.assertIn('id="runPdfOcrBtn"', html)
+        self.assertIn("tesseract.js", html.lower())
+        self.assertIn("OCR runs locally", html)
+
 
 if __name__ == "__main__":
     unittest.main()
