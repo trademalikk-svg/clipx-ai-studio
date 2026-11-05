@@ -1,7 +1,8 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const ALLOWED_ORIGINS = new Set(["https://trademalikk-svg.github.io"]);
-const ALLOWED_MODELS = new Set(["gemini-3.8-flash", "gemini-3.1-flash-lite"]);
+const CLOUDFLARE_MODEL = "@cf/qwen/qwen3-30b-a3b-fp8";
+const GEMINI_MODELS = new Set(["gemini-3.8-flash", "gemini-3.1-flash-lite"]);
 const MAX_MESSAGE_CHARS = 4000;
 const MAX_OUTPUT_TOKENS = 512;
 const corsHeaders = (origin: string) => ({
@@ -40,8 +41,45 @@ Deno.serve(async (req: Request) => {
   const { data: authData, error: authError } = await authClient.auth.getUser(token);
   if (authError || !authData.user) return json({ error: "Invalid or expired session." }, 401, origin);
 
+  let payload: { message?: unknown; model?: unknown; mode?: unknown };
+  try {
+    payload = await req.json();
+  } catch {
+    return json({ error: "Valid JSON is required." }, 400, origin);
+  }
+
+  const message = typeof payload.message === "string" ? payload.message.trim() : "";
+  const mode = typeof payload.mode === "string" ? payload.mode : "chat";
+  if (!message) return json({ error: "Message is required." }, 400, origin);
+  if (message.length > MAX_MESSAGE_CHARS) return json({ error: "Message exceeds 4,000 characters." }, 413, origin);
+  if (!["chat", "writing", "coding", "research"].includes(mode)) return json({ error: "Unsupported mode." }, 400, origin);
+
+  // Provider choice is server-side only. Browser input can never switch providers or models.
+  const provider = (Deno.env.get("AI_PROVIDER") || "cloudflare").trim().toLowerCase();
+  const requestedModel = typeof payload.model === "string" ? payload.model : "";
+  const model = provider === "cloudflare" ? CLOUDFLARE_MODEL : requestedModel;
+  if (provider === "gemini" && !GEMINI_MODELS.has(model)) {
+    return json({ error: "Model is not enabled for the selected provider." }, 400, origin);
+  }
+  if (provider !== "cloudflare" && provider !== "gemini") {
+    return json({ error: "Configured AI provider is not supported." }, 503, origin);
+  }
+
   const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
   if (!serviceKey) return json({ error: "Usage protection is not configured." }, 503, origin);
+
+  const providerReady = provider === "cloudflare"
+    ? Boolean(Deno.env.get("CLOUDFLARE_ACCOUNT_ID") && Deno.env.get("CLOUDFLARE_API_TOKEN"))
+    : Boolean(Deno.env.get("GEMINI_API_KEY"));
+  if (!providerReady) {
+    return json({
+      error: "MODEL_PROVIDER_NOT_CONFIGURED",
+      message: provider === "cloudflare"
+        ? "Cloudflare Workers AI is selected, but its server-side account settings are not configured. No model request was sent."
+        : "Gemini is selected, but its server-side credential is not configured. No model request was sent.",
+    }, 503, origin);
+  }
+
   const adminClient = createClient(supabaseUrl, serviceKey, {
     auth: { persistSession: false, autoRefreshToken: false },
   });
@@ -57,29 +95,6 @@ Deno.serve(async (req: Request) => {
     return json({ error: "USER_RATE_LIMIT_REACHED", message: "Limit reached: maximum 10 model requests per hour for this account." }, 429, origin);
   }
 
-  let payload: { message?: unknown; model?: unknown; mode?: unknown };
-  try {
-    payload = await req.json();
-  } catch {
-    return json({ error: "Valid JSON is required." }, 400, origin);
-  }
-
-  const message = typeof payload.message === "string" ? payload.message.trim() : "";
-  const model = typeof payload.model === "string" ? payload.model : "";
-  const mode = typeof payload.mode === "string" ? payload.mode : "chat";
-  if (!message) return json({ error: "Message is required." }, 400, origin);
-  if (message.length > MAX_MESSAGE_CHARS) return json({ error: "Message exceeds 4,000 characters." }, 413, origin);
-  if (!ALLOWED_MODELS.has(model)) return json({ error: "Model is not enabled." }, 400, origin);
-  if (!["chat", "writing", "coding", "research"].includes(mode)) return json({ error: "Unsupported mode." }, 400, origin);
-
-  const apiKey = Deno.env.get("GEMINI_API_KEY");
-  if (!apiKey) {
-    return json({
-      error: "MODEL_PROVIDER_NOT_CONFIGURED",
-      message: "The secure gateway is ready, but the provider credential has not been configured by an authorized adult. No model request was sent.",
-    }, 503, origin);
-  }
-
   const systemText = [
     "You are SHIF-A AI, a helpful Hindi and English assistant.",
     "Be accurate, explain uncertainty, and never invent sources or claim actions you did not perform.",
@@ -89,31 +104,70 @@ Deno.serve(async (req: Request) => {
   ].join(" ");
 
   try {
-    const upstream = await fetch(
-      "https://generativelanguage.googleapis.com/v1beta/models/" + model + ":generateContent",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "x-goog-api-key": apiKey },
-        body: JSON.stringify({
-          systemInstruction: { parts: [{ text: systemText }] },
-          contents: [{ role: "user", parts: [{ text: message }] }],
-          generationConfig: { maxOutputTokens: MAX_OUTPUT_TOKENS, temperature: 0.5 },
-        }),
-        signal: AbortSignal.timeout(25000),
-      },
-    );
-    const data = await upstream.json().catch(() => ({}));
-    if (!upstream.ok) {
-      console.error("Gemini provider returned status:", upstream.status);
-      return json({ error: upstream.status === 429 ? "PROVIDER_LIMIT_REACHED" : "PROVIDER_REQUEST_FAILED",
-        message: upstream.status === 429 ? "Provider limit reached. Try again later." : "The model provider could not complete the request." },
-        upstream.status === 429 ? 429 : 502, origin);
+    let answer = "";
+    if (provider === "cloudflare") {
+      const accountId = Deno.env.get("CLOUDFLARE_ACCOUNT_ID")!;
+      const apiToken = Deno.env.get("CLOUDFLARE_API_TOKEN")!;
+      const upstream = await fetch(
+        "https://api.cloudflare.com/client/v4/accounts/" + encodeURIComponent(accountId) + "/ai/run/" + CLOUDFLARE_MODEL,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "Authorization": "Bearer " + apiToken },
+          body: JSON.stringify({
+            messages: [
+              { role: "system", content: systemText },
+              { role: "user", content: message },
+            ],
+            max_tokens: MAX_OUTPUT_TOKENS,
+          }),
+          signal: AbortSignal.timeout(25000),
+        },
+      );
+      const data = await upstream.json().catch(() => ({}));
+      if (!upstream.ok || data?.success === false) {
+        const providerStatus = upstream.status;
+        console.error("Cloudflare Workers AI returned status:", providerStatus);
+        return json({
+          error: providerStatus === 429 ? "PROVIDER_LIMIT_REACHED" : "PROVIDER_REQUEST_FAILED",
+          message: providerStatus === 429
+            ? "Cloudflare AI usage limit reached. Requests are paused; no paid fallback will be used."
+            : "Cloudflare Workers AI could not complete the request.",
+        }, providerStatus === 429 ? 429 : 502, origin);
+      }
+      answer = typeof data?.result?.response === "string"
+        ? data.result.response.trim()
+        : typeof data?.result?.choices?.[0]?.message?.content === "string"
+          ? data.result.choices[0].message.content.trim()
+          : "";
+    } else {
+      const apiKey = Deno.env.get("GEMINI_API_KEY")!;
+      const upstream = await fetch(
+        "https://generativelanguage.googleapis.com/v1beta/models/" + model + ":generateContent",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "x-goog-api-key": apiKey },
+          body: JSON.stringify({
+            systemInstruction: { parts: [{ text: systemText }] },
+            contents: [{ role: "user", parts: [{ text: message }] }],
+            generationConfig: { maxOutputTokens: MAX_OUTPUT_TOKENS, temperature: 0.5 },
+          }),
+          signal: AbortSignal.timeout(25000),
+        },
+      );
+      const data = await upstream.json().catch(() => ({}));
+      if (!upstream.ok) {
+        console.error("Gemini provider returned status:", upstream.status);
+        return json({
+          error: upstream.status === 429 ? "PROVIDER_LIMIT_REACHED" : "PROVIDER_REQUEST_FAILED",
+          message: upstream.status === 429 ? "Provider limit reached. Try again later." : "The model provider could not complete the request.",
+        }, upstream.status === 429 ? 429 : 502, origin);
+      }
+      answer = Array.isArray(data?.candidates?.[0]?.content?.parts)
+        ? data.candidates[0].content.parts.map((part: { text?: string }) => part.text || "").join("").trim()
+        : "";
     }
-    const answer = Array.isArray(data?.candidates?.[0]?.content?.parts)
-      ? data.candidates[0].content.parts.map((part: { text?: string }) => part.text || "").join("").trim()
-      : "";
     if (!answer) return json({ error: "EMPTY_MODEL_RESPONSE", message: "The model returned no text. Try a shorter prompt." }, 502, origin);
-    return json({ answer, model, mode, provider: "google-gemini" }, 200, origin);
+    return json({ answer, model, mode, provider }, 200, origin);
   } catch (error) {
     console.error("SHIF-A model gateway request failed:", error instanceof Error ? error.message : "unknown error");
     return json({ error: "MODEL_GATEWAY_UNAVAILABLE", message: "The model service is temporarily unavailable." }, 502, origin);

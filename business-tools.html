@@ -15,7 +15,7 @@ main{width:min(1120px,94%);margin:24px auto 60px}.hero,.panel{border:1px solid #
 </style></head><body>
 <header class="top"><a class="brand" href="index.html">✦ SHIF-A <span>AI</span></a><nav><a href="index.html">Home</a><a href="ai-tools.html">AI Tools</a><a href="dashboard.html">My Workspace</a><a href="writing-studio.html">Writing Studio</a></nav></header>
 <main>
-<section class="hero"><h1>Business Toolkit</h1><p class="muted">छोटे व्यवसायों, दुकानदारों और creators के लिए काम के templates एक जगह।</p><div class="notice">Free browser-based toolkit · कोई AI API नहीं और कोई data upload नहीं। Drafts templates से बनते हैं—भेजने या इस्तेमाल करने से पहले जानकारी जाँच लें। Quotation केवल estimate है, GST tax invoice नहीं।</div></section>
+<section class="hero"><h1>Business Toolkit</h1><p class="muted">छोटे व्यवसायों, दुकानदारों और creators के लिए काम के templates एक जगह।</p><div class="notice">Free browser-based toolkit · Local templates के साथ optional Gemini assistance उपलब्ध है। AI request के लिए verified login और configured provider जरूरी है। Quotation केवल estimate है, GST tax invoice नहीं।</div></section>
 <section class="panel"><h2>Choose a business tool</h2><div class="tabs" role="group" aria-label="Business tools">
 <button type="button" data-tool="profile" aria-pressed="true">Business Profile</button><button type="button" data-tool="listing" aria-pressed="false">Product Listing</button><button type="button" data-tool="reply" aria-pressed="false">Customer Reply</button><button type="button" data-tool="plan" aria-pressed="false">Marketing Plan</button><button type="button" data-tool="quote" aria-pressed="false">Quotation Estimate</button></div>
 <div class="form-grid">
@@ -34,4 +34,4 @@ main{width:min(1120px,94%);margin:24px auto 60px}.hero,.panel{border:1px solid #
 </div>
 <div class="actions"><button type="button" id="generateBtn">Create Draft</button><button type="button" class="secondary" id="clearBtn">Clear</button></div><p class="status" id="formStatus" role="status"></p></section>
 <section class="panel"><h2>Generated Draft</h2><div class="output" id="result" aria-live="polite">Choose a tool, enter details and tap Create Draft.</div><div class="actions"><button type="button" id="copyBtn">Copy Draft</button><button type="button" class="secondary" id="downloadBtn">Download TXT</button></div><p class="status" id="resultStatus" role="status"></p></section>
-</main><script src="scripts/shif-a-business-tools.js"></script></body></html>
+</main><script src="scripts/shif-a-business-tools.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.89.0"></script><script src="scripts/shif-a-auth.js"></script><script src="scripts/shif-a-ai-tools.js"></script></body></html>
