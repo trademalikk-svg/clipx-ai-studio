@@ -40,6 +40,7 @@ Deno.serve(async (req: Request) => {
   });
   const { data: authData, error: authError } = await authClient.auth.getUser(token);
   if (authError || !authData.user) return json({ error: "Invalid or expired session." }, 401, origin);
+  if (!authData.user.email_confirmed_at) return json({ error: "EMAIL_VERIFICATION_REQUIRED", message: "Email verification is required." }, 403, origin);
 
   let payload: { message?: unknown; model?: unknown; mode?: unknown };
   try {
