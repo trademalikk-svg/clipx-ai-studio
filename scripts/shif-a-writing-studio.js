@@ -54,7 +54,7 @@ $("generateAiBtn").addEventListener("click",async()=>{
   "Platform: "+data.platform,"Tone: "+data.tone,"Audience: "+(data.audience||"general audience"),
   "Keywords: "+(data.keywords||"none"),"Required points: "+(data.details||"Choose relevant points without inventing factual claims."),
   "Use clear structure, a strong opening, useful substance and a suitable ending. If facts are uncertain, mark them for verification. Return only the finished draft."
- ].join("\\n");
+ ].join("\n");
  $("generateAiBtn").disabled=true;
  $("formStatus").textContent="Gemini 3.8 Flash से draft तैयार हो रहा है…";
  try{
@@ -65,4 +65,4 @@ $("generateAiBtn").addEventListener("click",async()=>{
  }catch(error){$("formStatus").textContent=error.message||"Gemini request पूरी नहीं हुई।";}
  finally{$("generateAiBtn").disabled=false;}
 });
-\n})();
+})();
