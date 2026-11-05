@@ -5,7 +5,7 @@ const KEY="shifa_productivity_v1";
 let state={tasks:[],plans:{},notes:""};
 function load(){try{const v=JSON.parse(localStorage.getItem(KEY)||"{}");if(v&&typeof v==="object")state={tasks:Array.isArray(v.tasks)?v.tasks:[],plans:v.plans&&typeof v.plans==="object"?v.plans:{},notes:typeof v.notes==="string"?v.notes:""};}catch{}}
 function persist(){try{localStorage.setItem(KEY,JSON.stringify(state));return true;}catch{$("taskStatus").textContent="Browser storage unavailable or full; export important work.";return false;}}
-function download(name,content){const blob=new Blob([content],{type:"text/plain;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);}
+function download(name,content){const blob=new Blob([content],{type:"text/plain;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);}
 function today(){const d=new Date(),offset=d.getTimezoneOffset();return new Date(d.getTime()-offset*60000).toISOString().slice(0,10);}
 function setTab(tab){["tasks","planner","notes","focus"].forEach(x=>{$(x+"Panel").classList.toggle("hidden",x!==tab);document.querySelector('[data-tab="'+x+'"]').setAttribute("aria-pressed",String(x===tab));});}
 document.querySelectorAll("[data-tab]").forEach(b=>b.addEventListener("click",()=>setTab(b.dataset.tab)));
