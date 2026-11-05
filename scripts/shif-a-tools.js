@@ -25,7 +25,6 @@
   {id:"ai-chat-research",name:"AI Chat & Research",category:"Chat & Research",description:"Live web research and source verification are not connected yet.",status:"coming-soon"},
   {id:"ai-agents-studio",name:"AI Agents Studio",category:"Agents",description:"Autonomous agent execution and external tool permissions are not connected yet.",status:"coming-soon"},
   {id:"ai-automation-studio",name:"AI Automation Studio",category:"Automation",description:"Scheduled automation and external actions are not connected yet.",status:"coming-soon"},
-,
   {id:"word-count",name:"Word & Character Counter",category:"Text",description:"Count words, characters and sentences locally.",status:"available",href:"tool-lab.html"},
   {id:"case-converter",name:"Text Case Converter",category:"Text",description:"Convert text case in your browser.",status:"available",href:"tool-lab.html"},
   {id:"remove-duplicates",name:"Duplicate Line Remover",category:"Text",description:"Remove repeated lines.",status:"available",href:"tool-lab.html"},
