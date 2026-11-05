@@ -41,7 +41,7 @@ $("generateBtn").addEventListener("click",()=>{
 });
 $("clearBtn").addEventListener("click",()=>{["topic","audience","keywords","details"].forEach(id=>$(id).value="");latestDraft="";$("draftOutput").textContent="आपका draft यहाँ दिखाई देगा।";$("formStatus").textContent="Fields clear कर दिए गए।";$("outputStatus").textContent="";});
 $("copyBtn").addEventListener("click",async()=>{if(!latestDraft){$("outputStatus").textContent="पहले draft तैयार करें।";return;}try{await navigator.clipboard.writeText(latestDraft);$("outputStatus").textContent="Draft copied."; }catch{$("outputStatus").textContent="Clipboard permission नहीं मिली। Text select करके copy करें।";}});
-$("downloadBtn").addEventListener("click",()=>{if(!latestDraft){$("outputStatus").textContent="पहले draft तैयार करें।";return;}const blob=new Blob([latestDraft],{type:"text/plain;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="shif-a-writing-draft.txt";document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);$("outputStatus").textContent="Text file download शुरू हुआ।";});
+$("downloadBtn").addEventListener("click",()=>{if(!latestDraft){$("outputStatus").textContent="पहले draft तैयार करें।";return;}const blob=new Blob([latestDraft],{type:"text/plain;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="shif-a-writing-draft.txt";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);$("outputStatus").textContent="Text file download शुरू हुआ।";});
 
 $("generateAiBtn").addEventListener("click",async()=>{
  const topic=clean($("topic").value);
