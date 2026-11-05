@@ -315,6 +315,7 @@ $("updatePreviewBtn").addEventListener("click",updatePreview);
 $("saveLibraryBtn").addEventListener("click",saveToLibrary);
 $("pdfImportInput").addEventListener("change",event=>importPdfFile(event.target.files&&event.target.files[0]));
 $("runPdfOcrBtn").addEventListener("click",runPdfOcr);
+$("compressPdfBtn").addEventListener("click",compressPdfFile);
 $("imagesToPdfBtn").addEventListener("click",convertImagesToPdf);
 $("mergePdfBtn").addEventListener("click",mergePdfFiles);
 $("splitPdfBtn").addEventListener("click",splitPdfFile);
