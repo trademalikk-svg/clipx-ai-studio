@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="hi">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#06162c">
+<title>Writing Studio | SHIF-A AI</title>
+<meta name="description" content="Free Hindi and English creator writing templates for video scripts, hooks, descriptions, social posts and calls to action.">
+<link rel="canonical" href="https://trademalikk-svg.github.io/clipx-ai-studio/writing-studio.html">
+<style>
+:root{color-scheme:dark;font-family:Arial,sans-serif;background:#030b19;color:#f4f9ff}*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 70% -15%,#104276 0,transparent 44%),#030b19}
+a{color:#8edcff;text-decoration:none}.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px clamp(14px,4vw,48px);border-bottom:1px solid #164d7c;background:#041327ed;position:sticky;top:0;z-index:5}
+.brand{font-size:22px;font-weight:900;color:#fff}.brand span{color:#28d8f3}.top nav{display:flex;gap:15px;flex-wrap:wrap;font-size:13px}
+main{width:min(1120px,94%);margin:24px auto 60px}.hero,.panel{border:1px solid #16558b;border-radius:17px;background:linear-gradient(145deg,#0a2442,#06162b);padding:20px;margin-bottom:15px}
+.hero h1{font-size:clamp(28px,5vw,42px);margin:0 0 8px}.muted{color:#9db8d3;line-height:1.6}
+.notice{padding:11px 13px;border:1px solid #267b69;background:#092b2a;color:#b8f5dc;border-radius:10px;font-size:13px;line-height:1.5;margin-top:12px}
+.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+label{display:block;font-size:13px;color:#c7ddf2;margin:8px 0 5px}
+input,select,textarea{width:100%;padding:12px;border:1px solid #28649a;border-radius:9px;background:#071a31;color:#fff;font:inherit}
+textarea{min-height:105px;resize:vertical}.wide{grid-column:1/-1}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}
+button{padding:11px 15px;border:1px solid #2386c8;border-radius:9px;background:linear-gradient(100deg,#087fe8,#0753a7);color:#fff;font-weight:700;cursor:pointer}
+button.secondary{background:#102a47;border-color:#315b80}
+.output{min-height:240px;white-space:pre-wrap;overflow-wrap:anywhere;padding:15px;border:1px solid #315a7d;border-radius:11px;background:#041226;color:#e2f2ff;line-height:1.65}
+.status{font-size:12px;color:#82e0bd;margin-top:9px;min-height:18px}
+@media(max-width:700px){.top{align-items:flex-start;flex-direction:column}main{width:calc(100% - 22px);margin:14px auto 40px}.form-grid{grid-template-columns:1fr}.wide{grid-column:auto}.hero,.panel{padding:16px}}
+</style>
+</head>
+<body>
+<header class="top"><a class="brand" href="index.html">✦ SHIF-A <span>AI</span></a><nav><a href="index.html">Home</a><a href="ai-tools.html">AI Tools</a><a href="dashboard.html">My Workspace</a><a href="browser-tools.html">Browser Tools</a></nav></header>
+<main>
+<section class="hero"><h1>Writing Studio</h1><p class="muted">Hindi और English creator content के लिए ready-to-edit writing templates। Topic डालें, format चुनें और draft तैयार करें।</p><div class="notice">Free browser-based toolkit · आपके inputs इस page पर ही process होते हैं · यह version AI model/API का उपयोग नहीं करता; output editable templates से बनता है।</div></section>
+<section class="panel">
+<h2>अपना draft तैयार करें</h2>
+<div class="form-grid">
+<div><label for="language">Language</label><select id="language"><option value="hi">Hindi</option><option value="en">English</option><option value="both">Hindi + English</option></select></div>
+<div><label for="format">Content format</label><select id="format"><option value="script">Short video script</option><option value="youtube">YouTube description</option><option value="social">Social media post</option><option value="hooks">Opening hooks</option><option value="cta">Call to action ideas</option></select></div>
+<div><label for="platform">Platform</label><select id="platform"><option>YouTube Shorts</option><option>Instagram Reels</option><option>Facebook Reels</option><option>YouTube</option><option>All platforms</option></select></div>
+<div><label for="tone">Tone</label><select id="tone"><option value="friendly">Friendly</option><option value="emotional">Emotional</option><option value="informative">Informative</option><option value="professional">Professional</option><option value="energetic">Energetic</option></select></div>
+<div class="wide"><label for="topic">Topic / Main idea *</label><input id="topic" maxlength="180" placeholder="उदाहरण: मेहनत और लगातार कोशिश की अहमियत"></div>
+<div><label for="audience">Target audience (optional)</label><input id="audience" maxlength="100" placeholder="उदाहरण: नए content creators"></div>
+<div><label for="keywords">Keywords (optional)</label><input id="keywords" maxlength="180" placeholder="comma separated keywords"></div>
+<div class="wide"><label for="details">Important points (optional)</label><textarea id="details" maxlength="700" placeholder="वे बातें लिखें जिन्हें draft में शामिल करना है…"></textarea></div>
+</div>
+<div class="actions"><button id="generateBtn">Generate draft</button><button class="secondary" id="clearBtn">Clear</button></div>
+<p class="status" id="formStatus" role="status"></p>
+</section>
+<section class="panel"><h2>Your draft</h2><div id="draftOutput" class="output" aria-live="polite">आपका draft यहाँ दिखाई देगा। Generate draft दबाएँ।</div><div class="actions"><button id="copyBtn">Copy draft</button><button class="secondary" id="downloadBtn">Download .txt</button></div><p class="status" id="outputStatus" role="status"></p></section>
+</main>
+<script src="scripts/shif-a-writing-studio.js"></script>
+</body></html>
