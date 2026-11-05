@@ -6,12 +6,45 @@
 <header><div class="brand">✦ SHIF-A AI</div><a href="ai-tools.html">← AI Tools</a></header>
 <main class="wrap"><div class="muted">CREATOR WORKSPACE · LOCAL VIDEO PROCESSING</div><h1>Video Studio</h1><p class="muted">Preview your own video, select a section, prepare clip timing and export where your browser supports media recording. Processing happens in this browser.</p>
 <section class="panel"><h2>1. Load video</h2><label for="videoFile">Choose a video file</label><input id="videoFile" type="file" accept="video/*"><video id="preview" controls playsinline hidden></video><div id="meta" class="status"></div></section>
+<section class="panel" id="cloud-video-studio"><h2>Cloud AI Video Generation</h2><p class="muted">फोन और कंप्यूटर दोनों पर prompt से छोटा AI video बनाने का interface। Generation cloud में होगी; verified SHIF-A login और configured video model जरूरी है।</p>
+<label for="cloudVideoPrompt">Video prompt</label><textarea id="cloudVideoPrompt" maxlength="1800" placeholder="Scene, subject, movement, camera and visual style…"></textarea>
+<div class="row"><div><label for="cloudVideoDuration">Duration</label><select id="cloudVideoDuration"><option value="5">5 seconds</option><option value="10">10 seconds</option></select></div><div><label for="cloudVideoRatio">Aspect ratio</label><select id="cloudVideoRatio"><option>16:9</option><option>9:16</option><option>1:1</option></select></div></div>
+<button id="cloudVideoGenerate">Generate Video in Cloud</button><button id="cloudVideoStop" class="secondary" disabled>Stop waiting</button>
+<div id="cloudVideoStatus" class="status" role="status" aria-live="polite">Cloud provider is not activated until Owner configures server secrets.</div>
+<video id="cloudVideoResult" controls playsinline hidden></video><a id="cloudVideoDownload" hidden download="shif-a-cloud-video.mp4">Open / download generated video</a>
+<p class="notice">Video generation is usually more compute-intensive than images and may consume provider credits. No paid provider has been activated. Provider secrets must remain on the server.</p></section>
 <section class="panel"><h2>2. Select a clip</h2><div class="row"><div><label for="start">Start time (seconds)</label><input id="start" type="number" min="0" step=".1" value="0"></div><div><label for="end">End time (seconds)</label><input id="end" type="number" min="0" step=".1" value="15"></div><div><label for="format">Frame layout (planning only)</label><select id="format"><option>Original video frame</option><option>9:16 vertical — crop in editor</option><option>1:1 square — crop in editor</option><option>16:9 landscape</option></select></div></div><div class="timeline"><div class="fill" id="progress"></div></div><div class="row"><button id="setStart" class="secondary">Set start to current time</button><button id="setEnd" class="secondary">Set end to current time</button><button id="previewClip">Preview selected section</button></div><div id="selectionStatus" class="status"></div></section>
 <section class="panel"><h2>3. Export selected clip</h2><p class="muted">Export is enabled only if this browser exposes video capture and MediaRecorder. Some Android/browser combinations may not support it.</p><button id="export" disabled>Export selected clip</button><button id="stop" class="secondary" disabled>Stop export</button><div id="exportStatus" class="status" aria-live="polite"></div><a id="download" hidden download="shif-a-clip.webm">Download clip</a></section>
 <section class="panel"><h2>4. Clip plan</h2><p class="muted">Create a timestamp plan for multiple sections. This does not automatically detect highlights.</p><div class="row"><div><label for="duration">Segment length (seconds)</label><select id="duration"><option>15</option><option selected>30</option><option>45</option><option>60</option><option>90</option></select></div><div><label for="count">Maximum segments</label><select id="count"><option>3</option><option selected>5</option><option>10</option></select></div></div><button id="makePlan">Build clip plan</button><div id="plan" class="output">Your clip plan will appear here.</div></section>
 <p class="notice">Limitations: this is a browser-based utility, not an AI highlight detector or cloud rendering service. Export may record playback in real time and may omit audio on browsers that do not expose the media stream. Large videos can use substantial device memory. Use footage you own or have permission to edit.</p>
-</main><script>
-(()=>{'use strict';const $=id=>document.getElementById(id);const v=$('preview');let fileUrl=null,stream=null,rec=null,chunks=[],stopAt=0,raf=0;
+</main><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="scripts/shif-a-auth.js"></script>
+<script src="scripts/shif-a-cloud-media.js"></script>
+<script>
+(()=>{'use strict';const $=id=>document.getElementById(id);
+
+const cloudVideoController={current:null};
+$('cloudVideoGenerate').addEventListener('click',async()=>{
+ const prompt=$('cloudVideoPrompt').value.trim();
+ if(!prompt){$('cloudVideoStatus').textContent='पहले video prompt लिखें।';return;}
+ $('cloudVideoGenerate').disabled=true;$('cloudVideoStop').disabled=false;$('cloudVideoStatus').textContent='Cloud video request भेज रहे हैं…';
+ try{
+  const task=await window.ShifACloudMedia.create({kind:'video',prompt,duration:Number($('cloudVideoDuration').value),aspect_ratio:$('cloudVideoRatio').value});
+  if(task.status==='succeeded'){
+   const immediate=window.ShifACloudMedia.outputUrl(task.output);
+   if(immediate){$('cloudVideoResult').src=immediate;$('cloudVideoResult').hidden=false;$('cloudVideoDownload').href=immediate;$('cloudVideoDownload').hidden=false;$('cloudVideoStatus').textContent='Video तैयार है।';return;}
+  }
+  cloudVideoController.current=new AbortController();
+  const done=await window.ShifACloudMedia.wait(task.task_token,result=>{$('cloudVideoStatus').textContent='Generation status: '+result.status+'…';},cloudVideoController.current.signal);
+  if(done.status!=='succeeded')throw Error(done.error||'Generation did not complete.');
+  const url=window.ShifACloudMedia.outputUrl(done.output);
+  if(!url)throw Error('Provider ने video URL नहीं लौटाया।');
+  $('cloudVideoResult').src=url;$('cloudVideoResult').hidden=false;$('cloudVideoDownload').href=url;$('cloudVideoDownload').hidden=false;$('cloudVideoStatus').textContent='Video तैयार है।';
+ }catch(e){$('cloudVideoStatus').textContent=e.name==='AbortError'?'Status checking stopped.':e.message;}
+ finally{$('cloudVideoGenerate').disabled=false;$('cloudVideoStop').disabled=true;cloudVideoController.current=null;}
+});
+$('cloudVideoStop').addEventListener('click',()=>cloudVideoController.current?.abort());
+const v=$('preview');let fileUrl=null,stream=null,rec=null,chunks=[],stopAt=0,raf=0;
 const time=n=>Number.isFinite(n)?Math.max(0,n):0;
 $('videoFile').addEventListener('change',()=>{const f=$('videoFile').files?.[0];if(!f)return;if(!f.type.startsWith('video/')){$('meta').textContent='Please select a video file.';return;}if(fileUrl)URL.revokeObjectURL(fileUrl);fileUrl=URL.createObjectURL(f);v.src=fileUrl;v.hidden=false;$('meta').textContent='Loading video metadata…';v.onloadedmetadata=()=>{$('meta').textContent='Duration: '+v.duration.toFixed(1)+' sec · Resolution: '+v.videoWidth+' × '+v.videoHeight+' · '+(f.size/1048576).toFixed(1)+' MB';$('start').value='0';$('end').value=Math.min(15,v.duration).toFixed(1);$('export').disabled=!(v.captureStream||v.mozCaptureStream)&&!window.MediaRecorder;};});
 v.addEventListener('timeupdate',()=>{if(v.duration)$('progress').style.width=(v.currentTime/v.duration*100)+'%';});
