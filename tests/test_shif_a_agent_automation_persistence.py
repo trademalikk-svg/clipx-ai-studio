@@ -17,6 +17,10 @@ class AgentAndAutomationPersistenceTests(unittest.TestCase):
         self.assertIn("input[name='perm']", script)
         self.assertIn("Reset करने पर saved draft मिट जाएगा", page)
         self.assertIn("setTimeout(()=>URL.revokeObjectURL(url),1500)", script)
+        self.assertIn('$("copyFlow").addEventListener("click",async()=>{renderOutput();', script)
+        self.assertIn('$("jsonFlow").addEventListener("click",()=>{renderOutput();', script)
+        self.assertIn('$("copyBlueprint").addEventListener("click",async()=>{render();', script)
+        self.assertIn('$("downloadJson").addEventListener("click",()=>{render();', script)
 
     def test_automation_studio_autosaves_steps_restores_and_clears(self):
         script = (ROOT / "scripts/shif-a-automation-studio.js").read_text(encoding="utf-8")
