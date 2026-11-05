@@ -4,7 +4,7 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#06162c">
 <title>Documents & PDF Studio | SHIF-A AI</title>
-<meta name="description" content="Create and format documents, extract PDF text, merge PDF files and split selected page ranges locally in your browser.">
+<meta name="description" content="Create and format documents, extract PDF text with OCR, merge PDF files and split selected page ranges locally in your browser.">
 <link rel="canonical" href="https://trademalikk-svg.github.io/clipx-ai-studio/documents-studio.html">
 <style>
 :root{color-scheme:dark;font-family:Arial,sans-serif;background:#030b19;color:#f4f9ff}*{box-sizing:border-box}
@@ -56,6 +56,17 @@ button.secondary{background:#102a47;border-color:#315b80}
 <p id="pdfToolsStatus" class="status" role="status" aria-live="polite"></p>
 </section>\n<section class="panel">\n<h2>Import PDF Text</h2><p class="muted">20 MB तक और अधिकतम 100 pages वाली PDF से selectable text निकालकर editor में लाएँ। Scanned image PDF का OCR अभी नहीं है।</p><label for="pdfImportInput">Choose PDF file</label><input id="pdfImportInput" type="file" accept="application/pdf,.pdf"><p class="muted">PDF text extraction happens locally in your browser. PDF.js library load करने के लिए internet connection चाहिए।</p></section>
 <section class="panel">
+<h2>Scanned PDF OCR · Image to Text</h2>
+<p class="muted">स्कैन की हुई PDF से text पहचानें। एक बार में अधिकतम 5 pages और 10 MB PDF। हिंदी, English या दोनों चुनें। OCR आपके browser में चलता है; PDF server पर upload नहीं होती। पहली बार language data डाउनलोड करने के लिए internet चाहिए।</p>
+<label for="ocrPdfInput">Choose scanned PDF</label><input id="ocrPdfInput" type="file" accept="application/pdf,.pdf">
+<div class="grid">
+<div><label for="ocrLanguage">OCR language</label><select id="ocrLanguage"><option value="eng">English</option><option value="hin">हिंदी</option><option value="eng+hin" selected>English + हिंदी</option></select></div>
+<div><label for="ocrPageCount">Pages to scan (max 5)</label><select id="ocrPageCount"><option value="1">First 1 page</option><option value="2">First 2 pages</option><option value="3" selected>First 3 pages</option><option value="4">First 4 pages</option><option value="5">First 5 pages</option></select></div>
+</div>
+<div class="actions"><button id="runPdfOcrBtn">Extract Scanned PDF Text (OCR)</button></div>
+<p id="ocrStatus" class="status" role="status" aria-live="polite"></p>
+</section>
+<section class="panel">
 <h2>Document Editor</h2>
 <div class="grid">
 <div><label for="docTitle">Document title</label><input id="docTitle" maxlength="120" placeholder="उदाहरण: Project Report"></div>
@@ -71,5 +82,5 @@ button.secondary{background:#102a47;border-color:#315b80}
 <section class="panel"><h2>Saved Documents</h2><p class="muted">इस browser में अधिकतम 30 documents save कर सकते हैं। Open करके edit करें या Delete करें।</p><div id="documentLibrary" class="library-list" aria-live="polite"></div></section>
 <section class="panel"><h2>Document Preview</h2><div class="preview-wrap"><article id="paperPreview"><h1 id="previewTitle">Untitled Document</h1><div id="previewMeta"></div><div id="previewBody">आपका document preview यहाँ दिखाई देगा।</div></article></div></section>
 </main>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script><script>if(window.pdfjsLib){pdfjsLib.GlobalWorkerOptions.workerSrc="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";}</script><script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script><script src="scripts/shif-a-documents-studio.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script><script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script><script>if(window.pdfjsLib){pdfjsLib.GlobalWorkerOptions.workerSrc="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";}</script><script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script><script src="scripts/shif-a-documents-studio.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.89.0"></script><script src="scripts/shif-a-auth.js"></script><script src="scripts/shif-a-ai-client.js"></script><script src="scripts/shif-a-ai-tools.js"></script></body></html>
