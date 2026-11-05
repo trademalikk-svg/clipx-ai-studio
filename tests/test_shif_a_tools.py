@@ -25,11 +25,18 @@ class ShifAToolsContractTests(unittest.TestCase):
         self.assertIn('name:"AI Chat & Research"', js)
         self.assertIn('status:"limited",href:"chat.html"', js)
 
-    def test_future_tools_are_not_claimed_as_available(self):
+    def test_local_image_and_voice_tools_are_limited_and_linked(self):
         js = (ROOT / "scripts/shif-a-tools.js").read_text(encoding="utf-8")
-        for tool in ("AI Image Studio", "AI Voice Studio", "AI Agents Studio", "AI Automation Studio"):
-            self.assertRegex(js, re.compile(r'name:"' + re.escape(tool) + r'".{0,260}status:"coming-soon"', re.S))
+        self.assertRegex(js, re.compile(r'name:"Image Studio".{0,320}status:"limited",href:"media-studio.html#image-studio"', re.S))
+        self.assertRegex(js, re.compile(r'name:"Voice Studio".{0,320}status:"limited",href:"media-studio.html#voice-studio"', re.S))
+        self.assertIn("AI generation is not connected", js)
+        self.assertIn("Hosted AI voice generation is not connected", js)
         self.assertIn('if(t.href)', js)
+
+    def test_future_agent_and_automation_tools_remain_coming_soon(self):
+        js = (ROOT / "scripts/shif-a-tools.js").read_text(encoding="utf-8")
+        for tool in ("AI Agents Studio", "AI Automation Studio"):
+            self.assertRegex(js, re.compile(r'name:"' + re.escape(tool) + r'".{0,260}status:"coming-soon"', re.S))
 
 if __name__ == "__main__":
     unittest.main()
