@@ -1,4 +1,4 @@
-import json
+import os
 import tempfile
 import unittest
 from datetime import datetime, timezone
@@ -45,7 +45,7 @@ class DailySeoResearchTests(unittest.TestCase):
             self.assertEqual(path.name, "2026-11-06.md")
             self.assertIn("directional snapshot", report.lower())
             self.assertIn("not search volume", report.lower())
-            self.assertIn("not SHIF-A ranking data", report)
+            self.assertIn("not shif-a ranking data", report.lower())
             self.assertIn("Google Trends RSS", report)
 
     def test_research_does_not_modify_homepage_or_require_api_key(self):
@@ -57,7 +57,7 @@ class DailySeoResearchTests(unittest.TestCase):
             daily_seo.run_research(output_dir=Path(tmp), fetcher=fetcher)
         after = homepage.read_bytes() if homepage.exists() else None
         self.assertEqual(before, after)
-        self.assertNotIn("OPENAI_API_KEY", daily_seo.os.environ)
+        self.assertNotIn("OPENAI_API_KEY", os.environ)
 
     def test_keyword_map_candidates_are_reported_without_volume_claims(self):
         with tempfile.TemporaryDirectory() as tmp:
