@@ -1,8 +1,8 @@
 {
   "project": "SHIF-A AI",
-  "lastUpdated": "2026-11-05",
-  "updateStatus": "initial-seed-needs-live-validation",
-  "note": "These are initial product-intent seed keywords, not verified live trends or search-volume claims. The daily growth workflow must validate each term against current sources before changing public SEO copy.",
+  "lastUpdated": "2026-11-06",
+  "updateStatus": "daily-research-2026-11-06",
+  "note": "No SHIF-A Search Console property is registered in the connected GSC Wizard account. English trend signals below come from a secondary report dated 2026-10-20 that attributes figures to Google Trends; they are directional only, not SHIF-A rankings or exact phrase volumes. Hindi long-tail terms are candidate queries with no verified query metrics. Do not make volume or ranking claims.",
   "keywords": [
     {
       "keyword": "online video editor",
@@ -103,6 +103,76 @@
       "checkedAt": "2026-11-05",
       "trend": "unverified",
       "priority": "low"
+    },
+    {
+      "keyword": "AI tools India",
+      "language": "en",
+      "intent": "commercial-investigation",
+      "targetPage": "ai-tools.html",
+      "source": "Adithya Reddy, AI search trends in India 2026 (2026-10-20): reports broad AI search interest in India at about +50% year over year; exact phrase not isolated.",
+      "sourceUrl": "https://www.adithyareddy.online/blog/ai-search-trends-india-2026",
+      "checkedAt": "2026-11-06",
+      "trend": "rising-category-signal; broad AI topic reportedly ~+50% YoY, exact query unverified",
+      "priority": "medium",
+      "evidenceType": "secondary Google Trends summary"
+    },
+    {
+      "keyword": "AI tools directory",
+      "language": "en",
+      "intent": "commercial-investigation",
+      "targetPage": "ai-tools.html",
+      "source": "Same 2026-10-20 report describes OpenFuture AI as a breakout query and discusses AI-tool discovery directories; generic phrase itself was not measured.",
+      "sourceUrl": "https://www.adithyareddy.online/blog/ai-search-trends-india-2026",
+      "checkedAt": "2026-11-06",
+      "trend": "related discovery signal; exact phrase unverified",
+      "priority": "medium",
+      "evidenceType": "secondary Google Trends summary"
+    },
+    {
+      "keyword": "AI video",
+      "language": "en",
+      "intent": "informational",
+      "targetPage": "index.html",
+      "source": "Same 2026-10-20 report lists the broad query “ai video” at +20% versus its prior comparison period; no absolute volume supplied.",
+      "sourceUrl": "https://www.adithyareddy.online/blog/ai-search-trends-india-2026",
+      "checkedAt": "2026-11-06",
+      "trend": "rising +20% reported by secondary source; query scope and volume not independently verified",
+      "priority": "medium",
+      "evidenceType": "secondary Google Trends summary",
+      "editorialCaveat": "Use only in relevant context for existing browser video/creator workflows. Do not claim SHIF-A is an active AI video generator; cloud generation is not configured."
+    },
+    {
+      "keyword": "लंबे वीडियो से YouTube Shorts कैसे बनाएं",
+      "language": "hi",
+      "intent": "informational",
+      "targetPage": "guide-youtube-shorts.html",
+      "source": "Hindi long-tail wording mapped to the existing Shorts guide; no connected Search Console query data or independent volume evidence.",
+      "checkedAt": "2026-11-06",
+      "trend": "unverified candidate; no live Hindi query data",
+      "priority": "medium",
+      "evidenceType": "localized content hypothesis"
+    },
+    {
+      "keyword": "वीडियो को कई छोटे क्लिप में कैसे बाँटें",
+      "language": "hi",
+      "intent": "informational",
+      "targetPage": "split-video-into-multiple-clips.html",
+      "source": "Hindi long-tail wording mapped to the existing clip-splitting guide; no connected Search Console query data or independent volume evidence.",
+      "checkedAt": "2026-11-06",
+      "trend": "unverified candidate; no live Hindi query data",
+      "priority": "medium",
+      "evidenceType": "localized content hypothesis"
+    },
+    {
+      "keyword": "हिंदी सबटाइटल कैसे बनाएं",
+      "language": "hi",
+      "intent": "informational",
+      "targetPage": "guide-hindi-subtitles.html",
+      "source": "Hindi long-tail wording mapped to the existing subtitles guide; no connected Search Console query data or independent volume evidence.",
+      "checkedAt": "2026-11-06",
+      "trend": "unverified candidate; no live Hindi query data",
+      "priority": "medium",
+      "evidenceType": "localized content hypothesis"
     }
   ]
 }
