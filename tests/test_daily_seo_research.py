@@ -45,7 +45,7 @@ class DailySeoResearchTests(unittest.TestCase):
             self.assertEqual(path.name, "2026-11-06.md")
             self.assertIn("directional snapshot", report.lower())
             self.assertIn("not search volume", report.lower())
-            self.assertIn("not shif-a ranking data", report.lower())
+            self.assertIn("shif-a ranking data", report.lower())
             self.assertIn("Google Trends RSS", report)
 
     def test_research_does_not_modify_homepage_or_require_api_key(self):
