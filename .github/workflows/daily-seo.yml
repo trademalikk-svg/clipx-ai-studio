@@ -2,8 +2,8 @@ name: SHIF-A Daily SEO Research
 
 on:
   schedule:
-    # 06:00 India Standard Time (UTC+05:30)
-    - cron: '30 0 * * *'
+    # 08:00 India Standard Time (UTC+05:30)
+    - cron: '30 2 * * *'
   workflow_dispatch:
 
 permissions:
