@@ -26,10 +26,12 @@ class SignupAnalyticsContractTests(unittest.TestCase):
 
     def test_daily_growth_script_generates_draft_only_report(self):
         script = (ROOT / "scripts/daily_growth.py").read_text(encoding="utf-8")
-        for marker in ("verificationStatus", "No content was published", "growth/daily", "SEO article", "YouTube Shorts"):
+        for marker in ("verificationStatus", "No content was published", "growth-reports", "SEO article", "YouTube Shorts"):
             self.assertIn(marker, script)
         self.assertNotIn("requests.post", script)
         self.assertNotIn("subprocess", script)
+        self.assertIn("def build(", script)
+        self.assertIn("No content was published", script)
 
     def test_daily_growth_workflow_is_free_read_only_and_artifact_only(self):
         workflow = (ROOT / ".github/workflows/daily-seo.yml").read_text(encoding="utf-8")
