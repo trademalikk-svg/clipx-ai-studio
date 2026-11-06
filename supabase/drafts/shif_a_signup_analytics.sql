@@ -2,6 +2,7 @@
 -- Counts only email-verified account transitions. Stores one row per UTC date and an aggregate count only; no user IDs, emails,
 -- IP addresses, user agents, referral tokens, or content are persisted.
 create schema if not exists private;
+grant usage on schema private to service_role;
 
 create table if not exists private.shif_a_growth_daily (
   day_utc date primary key,
