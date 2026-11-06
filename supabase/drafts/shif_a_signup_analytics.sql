@@ -29,12 +29,21 @@ begin
 end;
 $$;
 
-revoke all on function private.shif_a_record_signup_daily() from public, anon, authenticated;
+revoke all on function private.shif_a_record_verified_signup_daily() from public, anon, authenticated;
 
-drop trigger if exists shif_a_auth_signup_daily on auth.users;
-create trigger shif_a_auth_signup_daily
+drop trigger if exists shif_a_auth_signup_daily_insert on auth.users;
+create trigger shif_a_auth_signup_daily_insert
 after insert on auth.users
-for each row execute function private.shif_a_record_signup_daily();
+for each row
+when (new.email_confirmed_at is not null)
+execute function private.shif_a_record_verified_signup_daily();
+
+drop trigger if exists shif_a_auth_signup_daily_confirm on auth.users;
+create trigger shif_a_auth_signup_daily_confirm
+after update of email_confirmed_at on auth.users
+for each row
+when (old.email_confirmed_at is null and new.email_confirmed_at is not null)
+execute function private.shif_a_record_verified_signup_daily();
 
 create or replace function public.shif_a_get_growth_daily_counts(p_from date, p_to date)
 returns table(day_utc date, signup_count bigint)
