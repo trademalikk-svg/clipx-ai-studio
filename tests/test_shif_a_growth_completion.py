@@ -10,14 +10,14 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 class SignupAnalyticsContractTests(unittest.TestCase):
     def test_analytics_sql_stores_only_daily_aggregate_counts(self):
         sql = (ROOT / "supabase/drafts/shif_a_signup_analytics.sql").read_text(encoding="utf-8").lower()
-        for marker in ("private.shif_a_growth_daily", "signup_count", "auth.users", "security definer", "enable row level security", "revoke all", "after insert on auth.users", "after update of email_confirmed_at"):
+        for marker in ("private.shif_a_growth_daily", "signup_count", "auth.users", "security definer", "enable row level security", "revoke all", "grant usage on schema private to service_role", "after insert on auth.users", "after update of email_confirmed_at"):
             self.assertIn(marker, sql)
         for forbidden in ("email text", "user_id uuid", "ip_address", "user_agent", "raw_prompt"):
             self.assertNotIn(forbidden, sql)
 
     def test_growth_analytics_endpoint_is_owner_only_and_server_authenticated(self):
         ts = (ROOT / "supabase/functions/shif-a-growth-analytics/index.ts").read_text(encoding="utf-8")
-        for marker in ('auth.getUser(', 'shif_a_get_membership', 'role !== "owner"', 'shif_a_get_growth_daily_counts', 'SUPABASE_SERVICE_ROLE_KEY'):
+        for marker in ('auth.getUser(', 'OWNER_EMAIL', 'user.email?.toLowerCase() !== OWNER_EMAIL', 'shif_a_get_growth_daily_counts', 'SUPABASE_SERVICE_ROLE_KEY'):
             self.assertIn(marker, ts)
         self.assertIn('Cache-Control": "no-store"', ts)
 
