@@ -1,5 +1,5 @@
 -- DRAFT ONLY: SHIF-A signup analytics. Do not apply until Owner approval.
--- Stores one row per UTC date and an aggregate count only; no user IDs, emails,
+-- Counts only email-verified account transitions. Stores one row per UTC date and an aggregate count only; no user IDs, emails,
 -- IP addresses, user agents, referral tokens, or content are persisted.
 create schema if not exists private;
 
@@ -13,7 +13,7 @@ alter table private.shif_a_growth_daily enable row level security;
 revoke all on private.shif_a_growth_daily from public, anon, authenticated;
 grant select on private.shif_a_growth_daily to service_role;
 
-create or replace function private.shif_a_record_signup_daily()
+create or replace function private.shif_a_record_verified_signup_daily()
 returns trigger
 language plpgsql
 security definer
