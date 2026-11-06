@@ -1,4 +1,4 @@
-name: ClipX Daily SEO
+name: SHIF-A Daily SEO Research
 
 on:
   schedule:
@@ -7,10 +7,10 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
-  group: clipx-daily-seo
+  group: shif-a-daily-seo-research
   cancel-in-progress: false
 
 jobs:
@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - name: Check out site
+      - name: Check out repository
         uses: actions/checkout@v4
 
       - name: Set up Python
@@ -26,23 +26,16 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Run SEO automation tests
-        run: python -m unittest discover -s tests -v
+      - name: Run daily SEO research contract tests
+        run: python -m unittest discover -s tests -p 'test_daily_seo*.py' -v
 
-      - name: Research trends and update safe homepage metadata
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          OPENAI_SEO_MODEL: ${{ vars.OPENAI_SEO_MODEL }}
+      - name: Collect free trend snapshots and draft research report
         run: python scripts/daily_seo.py
 
-      - name: Commit SEO metadata and daily report
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add index.html seo-reports/
-          if git diff --cached --quiet; then
-            echo "No SEO changes to commit."
-          else
-            git commit -m "chore(seo): daily trend-informed metadata update"
-            git push
-          fi
+      - name: Upload dated research report
+        uses: actions/upload-artifact@v4
+        with:
+          name: shif-a-daily-seo-report-\${{ github.run_id }}
+          path: seo-reports/*.md
+          if-no-files-found: error
+          retention-days: 14
