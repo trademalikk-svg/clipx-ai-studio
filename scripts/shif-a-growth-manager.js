@@ -5,12 +5,19 @@
  function showError(message){status.textContent=message;status.className="status warning";}
  function renderKeywords(items){
   const q=$("keywordSearch").value.trim().toLowerCase();
-  const rows=items.filter(item=>[item.keyword,item.targetPage,item.intent,item.language].join(" ").toLowerCase().includes(q));
+  const rows=items.filter(item=>[item.keyword,item.targetPage,item.intent,item.language,item.source,item.trend].join(" ").toLowerCase().includes(q));
   const body=$("keywordTable");body.replaceChildren();
-  if(!rows.length){const tr=document.createElement("tr"),td=document.createElement("td");td.colSpan=6;td.textContent="इस खोज में कोई keyword नहीं मिला।";tr.appendChild(td);body.appendChild(tr);return;}
+  if(!rows.length){const tr=document.createElement("tr"),td=document.createElement("td");td.colSpan=8;td.textContent="इस खोज में कोई keyword नहीं मिला।";tr.appendChild(td);body.appendChild(tr);return;}
   rows.forEach(item=>{
    const tr=document.createElement("tr");
-   [item.keyword,item.language==="hi"?"Hindi":"English",item.intent,item.targetPage,item.trend,item.priority].forEach(value=>{const td=document.createElement("td");td.textContent=String(value||"—");tr.appendChild(td);});
+   [item.keyword,item.language==="hi"?"Hindi":"English",item.intent,item.targetPage,item.trend,item.priority,item.checkedAt].forEach(value=>{
+    const td=document.createElement("td");td.textContent=String(value||"—");tr.appendChild(td);
+   });
+   const evidence=document.createElement("td");
+   if(item.sourceUrl){
+    const link=document.createElement("a");link.href=item.sourceUrl;link.target="_blank";link.rel="noopener noreferrer";link.textContent=item.source||"Open source";evidence.appendChild(link);
+   }else evidence.textContent=item.source||"No external source; candidate / unverified";
+   tr.appendChild(evidence);
    body.appendChild(tr);
   });
  }
