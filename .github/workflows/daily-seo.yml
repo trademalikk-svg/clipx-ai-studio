@@ -32,9 +32,6 @@ jobs:
       - name: Run SHIF-A growth completion contract tests
         run: python -m unittest discover -s tests -p 'test_shif_a_growth_completion.py' -v
 
-      - name: Collect free trend snapshots and draft research report
-        run: python scripts/daily_seo.py
-
       - name: Generate daily organic content drafts
         run: python scripts/daily_growth.py
 
@@ -45,6 +42,9 @@ jobs:
           path: growth-reports/*.md
           if-no-files-found: error
           retention-days: 14
+
+      - name: Collect free trend snapshots and draft research report
+        run: python scripts/daily_seo.py
 
       - name: Upload dated research report
         uses: actions/upload-artifact@v4
