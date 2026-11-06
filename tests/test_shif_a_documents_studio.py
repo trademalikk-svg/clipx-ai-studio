@@ -53,7 +53,7 @@ class ShifADocumentsStudioTests(unittest.TestCase):
         self.assertIn('id="pdfSplitInput"', html)
         self.assertIn('id="splitPdfBtn"', html)
         self.assertIn("pdf-lib", html)
-        self.assertEqual(html.count("pdf.min.js"), 1)
+        self.assertEqual(html.count("pdf.min.js"), 3)\n        self.assertEqual(html.count("pdf-lib"), 3)
 
     def test_document_studio_explains_local_draft_persistence(self):
         html = (ROOT / "documents-studio.html").read_text(encoding="utf-8")
