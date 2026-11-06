@@ -19,6 +19,8 @@ jobs:
           node-version: 22
       - name: Run SHIF-A workspace, tools and technical SEO contract tests
         run: python3 -m unittest discover -s tests -p 'test_shif_a_*.py'
+      - name: Run daily SEO research and workflow safety tests
+        run: python3 -m unittest discover -s tests -p 'test_daily_seo*.py' -v
       - name: Check inline JavaScript syntax in all pages
         shell: bash
         run: |
