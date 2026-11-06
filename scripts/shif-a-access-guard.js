@@ -24,7 +24,10 @@
  function blockInteraction(event){
   if(authorized||isAuthControl(event.target))return;
   event.preventDefault();event.stopImmediatePropagation();
-  showGate("Access restricted","इस tool को इस्तेमाल करने के लिए Login और Admin द्वारा दी गई अनुमति जरूरी है।");
+  showGate("Access restricted","इस tool को इस्तेमाल करने के लिए पहले Login करें।");
+ }
+ function isOwnerOnlyTool(id){
+  return id==="owner-security";
  }
  document.addEventListener("click",blockInteraction,true);
  document.addEventListener("submit",blockInteraction,true);
@@ -35,15 +38,18 @@
  async function verify(){
   if(!window.ShifAAuth){showGate("Login required","Authentication service load नहीं हुई। Page refresh करें।");return;}
   const result=await window.ShifAAuth.requireSession();
-  if(result.error||!result.session||!result.user){showGate("Login required","कोई भी tool बिना Login के इस्तेमाल नहीं किया जा सकता।");return;}
+  if(result.error||!result.session||!result.user){showGate("Login required","कोई भी tool इस्तेमाल करने के लिए Login करें।");return;}
   let access;
   try{access=await window.ShifAAuth.getAccessProfile(result.session);}
-  catch(error){showGate("Access verification failed","Server permission verify नहीं कर सका। सुरक्षा के लिए access बंद रखा गया है।");return;}
-  const enabled=Array.isArray(access.enabledTools)?access.enabledTools:[];
-  const allowed=access.role==="owner"||(!!toolId&&(enabled.includes("*")||enabled.includes(toolId)));
-  if(!allowed){showGate("Access denied","इस tool की अनुमति Admin/Owner ने आपके account को नहीं दी है। Admin से access माँगें।");return;}
+  catch(error){showGate("Access verification failed","Server से Login verify नहीं हो सका। कृपया दोबारा Login करें।");return;}
+  // All signed-in accounts can use the currently free tools. Only the
+  // Owner Security Center remains restricted to the server-verified owner.
+  if(isOwnerOnlyTool(toolId)&&access.role!=="owner"){
+   showGate("Access denied","Owner Security Center केवल verified Owner account के लिए है।");
+   return;
+  }
   authorized=true;
-  document.dispatchEvent(new CustomEvent("shifa:access-granted",{detail:{toolId,role:access.role,unlimitedPlatformCredits:access.unlimitedPlatformCredits===true}}));
+  document.dispatchEvent(new CustomEvent("shifa:access-granted",{detail:{toolId,role:access.role,unlimitedPlatformCredits:access.role==="owner"&&access.unlimitedPlatformCredits===true}}));
  }
  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",verify,{once:true});else verify();
 })();
