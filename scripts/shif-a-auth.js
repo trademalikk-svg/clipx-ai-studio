@@ -35,11 +35,21 @@
   if(!response.ok)throw new Error(payload.error||"Access profile could not be loaded.");
   return payload;
  }
+ async function getGrowthAnalytics(session){
+  if(!session||!session.access_token)throw new Error("A verified Owner session is required.");
+  const response=await fetch(SUPABASE_URL+"/functions/v1/shif-a-growth-analytics",{
+   method:"GET",
+   headers:{apikey:SUPABASE_PUBLISHABLE_KEY,Authorization:"Bearer "+session.access_token}
+  });
+  const payload=await response.json().catch(()=>({}));
+  if(!response.ok)throw new Error(payload.error||"Growth analytics could not be loaded.");
+  return payload;
+ }
  function getDisplayAccess(user){
   const meta=user&&user.app_metadata&&typeof user.app_metadata==="object"?user.app_metadata:{};
   const role=["owner","invited","customer"].includes(meta.shif_role)?meta.shif_role:"unassigned";
   const access=Array.isArray(meta.shif_access)?meta.shif_access.filter(x=>typeof x==="string"):[];
   return {role,access,unlimitedPlatformCredits:role==="owner"||role==="invited"};
  }
- window.ShifAAuth=Object.freeze({getSession,requireSession,signOut,getDisplayAccess,getAccessProfile});
+ window.ShifAAuth=Object.freeze({getSession,requireSession,signOut,getDisplayAccess,getAccessProfile,getGrowthAnalytics});
 })();
