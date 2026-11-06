@@ -6,7 +6,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 class AccessGuardTests(unittest.TestCase):
     def test_guard_requires_verified_session_and_explicit_tool_permission(self):
         script = (ROOT / "scripts/shif-a-access-guard.js").read_text(encoding="utf-8")
-        for marker in ("requireSession()", "getAccessProfile(", 'access.role==="owner"', "enabledTools.includes(toolId)", "Login required", "Access denied"):
+        for marker in ("requireSession()", "getAccessProfile(", 'access.role==="owner"', 'enabled.includes("*")', "enabled.includes(toolId)", "Login required", "Access denied"):
             self.assertIn(marker, script)
 
     def test_all_tool_entry_pages_load_the_central_guard(self):
