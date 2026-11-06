@@ -33,12 +33,12 @@ class WebManagerTests(unittest.TestCase):
         page = (ROOT / "web-manager.html").read_text(encoding="utf-8")
         self.assertIn('scripts/shif-a-tools.js', page)
 
-    def test_tool_registry_has_40_unique_entries(self):
+    def test_tool_registry_has_41_unique_entries(self):
         import re
         registry = (ROOT / "scripts/shif-a-tools.js").read_text(encoding="utf-8")
         ids = re.findall(r'id:"([^"]+)",name:', registry)
-        self.assertEqual(len(ids), 40)
-        self.assertEqual(len(set(ids)), 40)
+        self.assertEqual(len(ids), 41)
+        self.assertEqual(len(set(ids)), 41)
         self.assertIn('status:"coming-soon"', registry)
 
     def test_local_ai_tool_studio_supports_text_tool_execution(self):
