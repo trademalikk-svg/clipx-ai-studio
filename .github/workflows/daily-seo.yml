@@ -29,6 +29,9 @@ jobs:
       - name: Run daily SEO research contract tests
         run: python -m unittest discover -s tests -p 'test_daily_seo*.py' -v
 
+      - name: Run SHIF-A growth completion contract tests
+        run: python -m unittest tests/test_shif_a_growth_completion.py -v
+
       - name: Collect free trend snapshots and draft research report
         run: python scripts/daily_seo.py
 
@@ -46,7 +49,7 @@ jobs:
       - name: Upload dated research report
         uses: actions/upload-artifact@v4
         with:
-          name: shif-a-daily-seo-report-\${{ github.run_id }}
+          name: shif-a-daily-seo-report-${{ github.run_id }}
           path: seo-reports/*.md
           if-no-files-found: error
           retention-days: 14
