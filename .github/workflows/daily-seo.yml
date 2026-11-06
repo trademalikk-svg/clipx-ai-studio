@@ -30,7 +30,7 @@ jobs:
         run: python -m unittest discover -s tests -p 'test_daily_seo*.py' -v
 
       - name: Run SHIF-A growth completion contract tests
-        run: python -m unittest tests/test_shif_a_growth_completion.py -v
+        run: python -m unittest discover -s tests -p 'test_shif_a_growth_completion.py' -v
 
       - name: Collect free trend snapshots and draft research report
         run: python scripts/daily_seo.py
