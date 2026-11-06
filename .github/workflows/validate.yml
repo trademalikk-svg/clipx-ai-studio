@@ -186,3 +186,4 @@ jobs:
           deno check supabase/functions/shif-a-access/index.ts
           deno check supabase/functions/shif-a-security-audit/index.ts
           deno check supabase/functions/shif-a-owner-recovery/index.ts
+          deno check supabase/functions/shif-a-team-access/index.ts

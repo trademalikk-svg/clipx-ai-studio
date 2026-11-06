@@ -1,0 +1,207 @@
+{
+  "project": "SHIF-A AI",
+  "lastUpdated": "2026-11-06",
+  "updateStatus": "daily-research-2026-11-06",
+  "note": "Google Search Console is now connected for the ClipX GitHub Pages property used by SHIF-A: https://trademalikk-svg.github.io/clipx-ai-studio/. Latest settled 28-day web summary through 2026-11-03: 2 clicks, 5 impressions, 40% CTR, average position 5.2. The only visible query row is contentstudio.io (0 clicks, 1 impression, position 15); Google reports 100% of clicks and 80% of impressions hidden from query rows, so this is not a reliable keyword opportunity. Keep candidate phrases unverified and do not infer volume or rankings.",
+  "keywords": [
+    {
+      "keyword": "online video editor",
+      "language": "en",
+      "intent": "transactional",
+      "targetPage": "index.html",
+      "source": "Initial product-intent seed; validate with current search evidence",
+      "checkedAt": "2026-11-05",
+      "trend": "unverified",
+      "priority": "high"
+    },
+    {
+      "keyword": "YouTube Shorts maker",
+      "language": "en",
+      "intent": "transactional",
+      "targetPage": "index.html",
+      "source": "Initial product-intent seed; validate with current search evidence",
+      "checkedAt": "2026-11-05",
+      "trend": "unverified",
+      "priority": "high"
+    },
+    {
+      "keyword": "Hindi video editor",
+      "language": "en",
+      "intent": "transactional",
+      "targetPage": "index.html",
+      "source": "Initial product-intent seed; validate with current search evidence",
+      "checkedAt": "2026-11-05",
+      "trend": "unverified",
+      "priority": "high"
+    },
+    {
+      "keyword": "free AI tools",
+      "language": "en",
+      "intent": "commercial-investigation",
+      "targetPage": "ai-tools.html",
+      "source": "Initial product-intent seed; validate with current search evidence",
+      "checkedAt": "2026-11-05",
+      "trend": "unverified",
+      "priority": "medium"
+    },
+    {
+      "keyword": "AI tools online",
+      "language": "en",
+      "intent": "commercial-investigation",
+      "targetPage": "ai-tools.html",
+      "source": "Initial product-intent seed; validate with current search evidence",
+      "checkedAt": "2026-11-05",
+      "trend": "unverified",
+      "priority": "medium"
+    },
+    {
+      "keyword": "video to shorts converter",
+      "language": "en",
+      "intent": "transactional",
+      "targetPage": "split-video-into-multiple-clips.html",
+      "source": "Initial product-intent seed; validate with current search evidence",
+      "checkedAt": "2026-11-05",
+      "trend": "unverified",
+      "priority": "high"
+    },
+    {
+      "keyword": "YouTube Shorts kaise banaye",
+      "language": "hi",
+      "intent": "informational",
+      "targetPage": "guide-youtube-shorts.html",
+      "source": "Initial product-intent seed; validate with current search evidence",
+      "checkedAt": "2026-11-05",
+      "trend": "unverified",
+      "priority": "high"
+    },
+    {
+      "keyword": "Hindi subtitles kaise lagaye",
+      "language": "hi",
+      "intent": "informational",
+      "targetPage": "guide-hindi-subtitles.html",
+      "source": "Initial product-intent seed; validate with current search evidence",
+      "checkedAt": "2026-11-05",
+      "trend": "unverified",
+      "priority": "medium"
+    },
+    {
+      "keyword": "free thumbnail maker",
+      "language": "en",
+      "intent": "transactional",
+      "targetPage": "creator-tools.html",
+      "source": "Initial product-intent seed; validate with current search evidence",
+      "checkedAt": "2026-11-05",
+      "trend": "unverified",
+      "priority": "medium"
+    },
+    {
+      "keyword": "social media content planner",
+      "language": "en",
+      "intent": "commercial-investigation",
+      "targetPage": "ai-tools.html",
+      "source": "Initial product-intent seed; validate with current search evidence",
+      "checkedAt": "2026-11-05",
+      "trend": "unverified",
+      "priority": "low"
+    },
+    {
+      "keyword": "AI tools India",
+      "language": "en",
+      "intent": "commercial-investigation",
+      "targetPage": "ai-tools.html",
+      "source": "Adithya Reddy, AI search trends in India 2026 (2026-10-20): reports broad AI search interest in India at about +50% year over year; exact phrase not isolated.",
+      "sourceUrl": "https://www.adithyareddy.online/blog/ai-search-trends-india-2026",
+      "checkedAt": "2026-11-06",
+      "trend": "rising-category-signal; broad AI topic reportedly ~+50% YoY, exact query unverified",
+      "priority": "medium",
+      "evidenceType": "secondary Google Trends summary"
+    },
+    {
+      "keyword": "AI tools directory",
+      "language": "en",
+      "intent": "commercial-investigation",
+      "targetPage": "ai-tools.html",
+      "source": "Same 2026-10-20 report describes OpenFuture AI as a breakout query and discusses AI-tool discovery directories; generic phrase itself was not measured.",
+      "sourceUrl": "https://www.adithyareddy.online/blog/ai-search-trends-india-2026",
+      "checkedAt": "2026-11-06",
+      "trend": "related discovery signal; exact phrase unverified",
+      "priority": "medium",
+      "evidenceType": "secondary Google Trends summary"
+    },
+    {
+      "keyword": "AI video",
+      "language": "en",
+      "intent": "informational",
+      "targetPage": "index.html",
+      "source": "Same 2026-10-20 report lists the broad query “ai video” at +20% versus its prior comparison period; no absolute volume supplied.",
+      "sourceUrl": "https://www.adithyareddy.online/blog/ai-search-trends-india-2026",
+      "checkedAt": "2026-11-06",
+      "trend": "rising +20% reported by secondary source; query scope and volume not independently verified",
+      "priority": "medium",
+      "evidenceType": "secondary Google Trends summary",
+      "editorialCaveat": "Use only in relevant context for existing browser video/creator workflows. Do not claim SHIF-A is an active AI video generator; cloud generation is not configured."
+    },
+    {
+      "keyword": "लंबे वीडियो से YouTube Shorts कैसे बनाएं",
+      "language": "hi",
+      "intent": "informational",
+      "targetPage": "guide-youtube-shorts.html",
+      "source": "Hindi long-tail wording mapped to the existing Shorts guide; no connected Search Console query data or independent volume evidence.",
+      "checkedAt": "2026-11-06",
+      "trend": "unverified candidate; no live Hindi query data",
+      "priority": "medium",
+      "evidenceType": "localized content hypothesis"
+    },
+    {
+      "keyword": "वीडियो को कई छोटे क्लिप में कैसे बाँटें",
+      "language": "hi",
+      "intent": "informational",
+      "targetPage": "split-video-into-multiple-clips.html",
+      "source": "Hindi long-tail wording mapped to the existing clip-splitting guide; no connected Search Console query data or independent volume evidence.",
+      "checkedAt": "2026-11-06",
+      "trend": "unverified candidate; no live Hindi query data",
+      "priority": "medium",
+      "evidenceType": "localized content hypothesis"
+    },
+    {
+      "keyword": "हिंदी सबटाइटल कैसे बनाएं",
+      "language": "hi",
+      "intent": "informational",
+      "targetPage": "guide-hindi-subtitles.html",
+      "source": "Hindi long-tail wording mapped to the existing subtitles guide; no connected Search Console query data or independent volume evidence.",
+      "checkedAt": "2026-11-06",
+      "trend": "unverified candidate; no live Hindi query data",
+      "priority": "medium",
+      "evidenceType": "localized content hypothesis"
+    }
+  ],
+  "gscObservations": [
+    {
+      "property": "https://trademalikk-svg.github.io/clipx-ai-studio/",
+      "searchType": "web",
+      "period": "2026-10-07 to 2026-11-03",
+      "settledThrough": "2026-11-03",
+      "totals": {
+        "clicks": 2,
+        "impressions": 5,
+        "ctrPercent": 40,
+        "averagePosition": 5.2
+      },
+      "visibleQueryRows": [
+        {
+          "query": "contentstudio.io",
+          "clicks": 0,
+          "impressions": 1,
+          "ctrPercent": 0,
+          "averagePosition": 15
+        }
+      ],
+      "coverage": {
+        "hiddenClicksShare": 1,
+        "hiddenImpressionsShare": 0.8
+      },
+      "source": "Google Search Console via GSC Wizard",
+      "caveat": "Query-level data is heavily privacy-filtered. The visible query is not a relevant product-intent keyword; do not promote it as a target keyword."
+    }
+  ]
+}
