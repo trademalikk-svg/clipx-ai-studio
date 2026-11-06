@@ -4,7 +4,7 @@
 
 ### Task 4 — privacy-safe signup analytics
 - Added `supabase/drafts/shif_a_signup_analytics.sql`.
-- The proposed database trigger counts only the transition from unconfirmed to email-confirmed in `auth.users`.
+- The proposed database triggers count an account once when it is already email-confirmed at insert, or when its email changes from unconfirmed to confirmed.
 - The proposed data model stores one UTC date and an aggregate count. It does not store email, user ID, IP address, user agent, referral token, prompt, or content.
 - The proposed owner endpoint is `supabase/functions/shif-a-growth-analytics/index.ts`. It validates the JWT with Supabase Auth, checks the server-managed membership role, and returns only daily counts to the Owner.
 - Added `scripts/shif-a-growth-analytics.js` and an aggregate analytics panel to the owner-only `growth-manager.html`.
@@ -16,7 +16,7 @@
 - Added `scripts/daily_growth.py` to generate a dated content draft pack from the current keyword map.
 - The pack contains two YouTube Shorts, two Instagram Reels, two Facebook posts, three Pinterest Pins, an SEO article outline, and a 15-minute engagement checklist.
 - Each draft labels keyword evidence and avoids claiming unavailable AI features.
-- The daily GitHub Actions workflow now creates and uploads the growth draft pack as a 14-day artifact.
+- The daily GitHub Actions workflow is scheduled for 08:00 IST and creates/uploads the growth draft pack as a 14-day artifact.
 - The workflow uses the Python standard library, public RSS research and GitHub Actions; it requires no paid API key.
 - Nothing is posted, scheduled, pushed or published automatically. Owner review remains mandatory.
 
@@ -41,6 +41,14 @@ At the time of inspection:
 7. Perform Android Chrome and desktop browser smoke tests.
 8. Review the leaked-password-protection setting and decide whether to enable it in Supabase Auth.
 9. Complete independent security/load testing before a public scale-up.
+
+## Latest validation
+- GitHub Actions validation passed on commit `e525cea85eab826cc67aa4d44e476eb117e36d2b`.
+- Full Python suite: 109 tests passed.
+- 12 inline JavaScript blocks across 27 HTML pages passed syntax checks.
+- 15 workspace routes and 14 sitemap pages passed the contract checks.
+- SHIF-A browser scripts, FFmpeg worker, and all Supabase Edge Functions (including the new analytics function) passed syntax/type checks.
+- This is automated CI validation, not a live browser/device test or database integration test.
 
 ## Explicitly not done
 
