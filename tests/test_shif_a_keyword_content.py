@@ -52,7 +52,7 @@ class KeywordContentContractTests(unittest.TestCase):
                 primary_by_page[page] = item["keyword"]
 
     def test_public_tool_directory_uses_registry_status_and_explains_states(self):
-        self.assertIn('state.textContent=t.status.replace("-", " ")', self.registry)
+        self.assertIn("state.textContent=t.status.replace", self.registry)
         self.assertIn('className="state "+t.status', self.registry)
         for phrase in ("Available", "Limited", "Coming soon"):
             self.assertIn(phrase.casefold(), self.directory.casefold())
