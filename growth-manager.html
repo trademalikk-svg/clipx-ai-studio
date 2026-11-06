@@ -39,6 +39,17 @@ button{border:1px solid #277ab6;border-radius:9px;padding:10px 13px;background:#
 <div class="metric"><strong>1</strong><span>SEO Article / day</span></div>
 <div class="metric"><strong>15 min</strong><span>Community Engagement / day</span></div>
 </section>
+<section class="panel" id="signupAnalytics">
+<h2>Verified Signup Analytics</h2>
+<p class="muted">पिछले 30 UTC दिनों के verified signups की कुल गिनती। किसी user का नाम, email, IP या content यहाँ store या display नहीं होता।</p>
+<div class="grid">
+<div class="metric"><strong id="signupTotal">लोड हो रहा है…</strong><span>Verified signups · 30 days</span></div>
+<div class="metric"><strong>Aggregate only</strong><span>No personal identifiers</span></div>
+<div class="metric"><strong>Owner only</strong><span>Server-side access check</span></div>
+</div>
+<p id="signupAnalyticsStatus" class="status" role="status" aria-live="polite">Analytics service जाँची जा रही है…</p>
+<ul id="signupDaily" class="muted"></ul>
+</section>
 <section class="panel">
 <h2>Keyword Map</h2>
 <p class="muted">हर keyword को उसके सही पेज से जोड़ा गया है। Trend तभी verified दिखेगा जब daily research में source evidence मिले; seed terms को trend नहीं माना जाएगा।</p>
@@ -64,5 +75,6 @@ button{border:1px solid #277ab6;border-radius:9px;padding:10px 13px;background:#
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="scripts/shif-a-auth.js"></script>
 <script src="scripts/shif-a-growth-manager.js"></script>
+<script src="scripts/shif-a-growth-analytics.js"></script>
 <script src="scripts/shif-a-access-guard.js"></script>
 </body></html>
