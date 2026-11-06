@@ -5,6 +5,7 @@ const CORS = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
   "Access-Control-Allow-Methods": "GET, OPTIONS",
 };
+const OWNER_EMAIL = "trademalikk@gmail.com";
 const reply = (body: unknown, status = 200) => new Response(JSON.stringify(body), {
   status,
   headers: { ...CORS, "Content-Type": "application/json", "Cache-Control": "no-store" },
@@ -32,15 +33,13 @@ Deno.serve(async (req: Request) => {
     return reply({ error: "Verified sign-in required." }, 401);
   }
 
-  const admin = createClient(url, serviceKey, { auth: { persistSession: false, autoRefreshToken: false } });
-  const { data: membership, error: membershipError } = await admin.rpc("shif_a_get_membership", { p_user_id: user.id });
-  if (membershipError) {
-    console.error("Growth analytics membership lookup failed:", membershipError.message);
-    return reply({ error: "Owner access could not be verified." }, 503);
+  // Match the existing deployed SHIF-A access function: exact confirmed owner email only.
+  // Do not trust user_metadata or an undeployed membership RPC for authorization.
+  if (user.email?.toLowerCase() !== OWNER_EMAIL) {
+    return reply({ error: "Owner access required." }, 403);
   }
-  const profile = Array.isArray(membership) ? membership[0] : null;
-  if (profile?.role !== "owner") return reply({ error: "Owner access required." }, 403);
 
+  const admin = createClient(url, serviceKey, { auth: { persistSession: false, autoRefreshToken: false } });
   const today = new Date();
   const from = new Date(today.getTime() - 29 * 86400000);
   const { data, error } = await admin.rpc("shif_a_get_growth_daily_counts", {
