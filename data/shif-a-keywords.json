@@ -12,7 +12,11 @@
       "source": "Initial product-intent seed; validate with current search evidence",
       "checkedAt": "2026-11-05",
       "trend": "unverified",
-      "priority": "high"
+      "priority": "high",
+      "verificationStatus": "candidate",
+      "market": "India + Global",
+      "evidenceType": "product-intent seed; no direct query evidence",
+      "clusterRole": "primary"
     },
     {
       "keyword": "YouTube Shorts maker",
@@ -22,7 +26,11 @@
       "source": "Initial product-intent seed; validate with current search evidence",
       "checkedAt": "2026-11-05",
       "trend": "unverified",
-      "priority": "high"
+      "priority": "high",
+      "verificationStatus": "candidate",
+      "market": "India + Global",
+      "evidenceType": "product-intent seed; no direct query evidence",
+      "clusterRole": "supporting"
     },
     {
       "keyword": "Hindi video editor",
@@ -32,7 +40,11 @@
       "source": "Initial product-intent seed; validate with current search evidence",
       "checkedAt": "2026-11-05",
       "trend": "unverified",
-      "priority": "high"
+      "priority": "high",
+      "verificationStatus": "candidate",
+      "market": "India + Global",
+      "evidenceType": "product-intent seed; no direct query evidence",
+      "clusterRole": "supporting"
     },
     {
       "keyword": "free AI tools",
@@ -42,7 +54,11 @@
       "source": "Initial product-intent seed; validate with current search evidence",
       "checkedAt": "2026-11-05",
       "trend": "unverified",
-      "priority": "medium"
+      "priority": "medium",
+      "verificationStatus": "candidate",
+      "market": "India + Global",
+      "evidenceType": "product-intent seed; no direct query evidence",
+      "clusterRole": "supporting"
     },
     {
       "keyword": "AI tools online",
@@ -52,7 +68,11 @@
       "source": "Initial product-intent seed; validate with current search evidence",
       "checkedAt": "2026-11-05",
       "trend": "unverified",
-      "priority": "medium"
+      "priority": "medium",
+      "verificationStatus": "candidate",
+      "market": "India + Global",
+      "evidenceType": "product-intent seed; no direct query evidence",
+      "clusterRole": "supporting"
     },
     {
       "keyword": "video to shorts converter",
@@ -62,7 +82,11 @@
       "source": "Initial product-intent seed; validate with current search evidence",
       "checkedAt": "2026-11-05",
       "trend": "unverified",
-      "priority": "high"
+      "priority": "high",
+      "verificationStatus": "candidate",
+      "market": "India + Global",
+      "evidenceType": "product-intent seed; no direct query evidence",
+      "clusterRole": "primary"
     },
     {
       "keyword": "YouTube Shorts kaise banaye",
@@ -72,7 +96,11 @@
       "source": "Initial product-intent seed; validate with current search evidence",
       "checkedAt": "2026-11-05",
       "trend": "unverified",
-      "priority": "high"
+      "priority": "high",
+      "verificationStatus": "candidate",
+      "market": "India",
+      "evidenceType": "product-intent seed; no direct query evidence",
+      "clusterRole": "primary"
     },
     {
       "keyword": "Hindi subtitles kaise lagaye",
@@ -82,7 +110,11 @@
       "source": "Initial product-intent seed; validate with current search evidence",
       "checkedAt": "2026-11-05",
       "trend": "unverified",
-      "priority": "medium"
+      "priority": "medium",
+      "verificationStatus": "candidate",
+      "market": "India",
+      "evidenceType": "product-intent seed; no direct query evidence",
+      "clusterRole": "primary"
     },
     {
       "keyword": "free thumbnail maker",
@@ -92,7 +124,11 @@
       "source": "Initial product-intent seed; validate with current search evidence",
       "checkedAt": "2026-11-05",
       "trend": "unverified",
-      "priority": "medium"
+      "priority": "medium",
+      "verificationStatus": "candidate",
+      "market": "India + Global",
+      "evidenceType": "product-intent seed; no direct query evidence",
+      "clusterRole": "primary"
     },
     {
       "keyword": "social media content planner",
@@ -102,7 +138,11 @@
       "source": "Initial product-intent seed; validate with current search evidence",
       "checkedAt": "2026-11-05",
       "trend": "unverified",
-      "priority": "low"
+      "priority": "low",
+      "verificationStatus": "candidate",
+      "market": "India + Global",
+      "evidenceType": "product-intent seed; no direct query evidence",
+      "clusterRole": "supporting"
     },
     {
       "keyword": "AI tools India",
@@ -114,7 +154,10 @@
       "checkedAt": "2026-11-06",
       "trend": "rising-category-signal; broad AI topic reportedly ~+50% YoY, exact query unverified",
       "priority": "medium",
-      "evidenceType": "secondary Google Trends summary"
+      "evidenceType": "secondary Google Trends summary",
+      "verificationStatus": "unverified",
+      "market": "India + Global",
+      "clusterRole": "supporting"
     },
     {
       "keyword": "AI tools directory",
@@ -126,7 +169,10 @@
       "checkedAt": "2026-11-06",
       "trend": "related discovery signal; exact phrase unverified",
       "priority": "medium",
-      "evidenceType": "secondary Google Trends summary"
+      "evidenceType": "secondary Google Trends summary",
+      "verificationStatus": "unverified",
+      "market": "India + Global",
+      "clusterRole": "primary"
     },
     {
       "keyword": "AI video",
@@ -139,7 +185,10 @@
       "trend": "rising +20% reported by secondary source; query scope and volume not independently verified",
       "priority": "medium",
       "evidenceType": "secondary Google Trends summary",
-      "editorialCaveat": "Use only in relevant context for existing browser video/creator workflows. Do not claim SHIF-A is an active AI video generator; cloud generation is not configured."
+      "editorialCaveat": "Use only in relevant context for existing browser video/creator workflows. Do not claim SHIF-A is an active AI video generator; cloud generation is not configured.",
+      "verificationStatus": "unverified",
+      "market": "India + Global",
+      "clusterRole": "supporting"
     },
     {
       "keyword": "लंबे वीडियो से YouTube Shorts कैसे बनाएं",
@@ -150,7 +199,10 @@
       "checkedAt": "2026-11-06",
       "trend": "unverified candidate; no live Hindi query data",
       "priority": "medium",
-      "evidenceType": "localized content hypothesis"
+      "evidenceType": "localized content hypothesis",
+      "verificationStatus": "unverified",
+      "market": "India",
+      "clusterRole": "supporting"
     },
     {
       "keyword": "वीडियो को कई छोटे क्लिप में कैसे बाँटें",
@@ -161,7 +213,10 @@
       "checkedAt": "2026-11-06",
       "trend": "unverified candidate; no live Hindi query data",
       "priority": "medium",
-      "evidenceType": "localized content hypothesis"
+      "evidenceType": "localized content hypothesis",
+      "verificationStatus": "unverified",
+      "market": "India",
+      "clusterRole": "supporting"
     },
     {
       "keyword": "हिंदी सबटाइटल कैसे बनाएं",
@@ -172,7 +227,10 @@
       "checkedAt": "2026-11-06",
       "trend": "unverified candidate; no live Hindi query data",
       "priority": "medium",
-      "evidenceType": "localized content hypothesis"
+      "evidenceType": "localized content hypothesis",
+      "verificationStatus": "unverified",
+      "market": "India",
+      "clusterRole": "supporting"
     }
   ],
   "gscObservations": [
@@ -203,5 +261,11 @@
       "source": "Google Search Console via GSC Wizard",
       "caveat": "Query-level data is heavily privacy-filtered. The visible query is not a relevant product-intent keyword; do not promote it as a target keyword."
     }
-  ]
+  ],
+  "schemaVersion": 2,
+  "evidencePolicy": {
+    "rule": "Only direct, dated first-party query evidence may be marked verified. Google Trends snapshots and secondary summaries are directional context, not search volume or SHIF-A ranking evidence.",
+    "currentGscBaseline": "Low-volume and privacy-filtered; not sufficient to verify individual keyword demand.",
+    "publicationGate": "Public content changes require owner review and approval."
+  }
 }
