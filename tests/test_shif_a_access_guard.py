@@ -9,7 +9,7 @@ class AccessGuardTests(unittest.TestCase):
         self.assertIn("requireSession()", script)
         self.assertIn("getAccessProfile(", script)
         self.assertIn("isOwnerOnlyTool", script)
-        self.assertIn('toolId==="owner-security"', script)
+        self.assertIn('return id==="owner-security"', script)
         self.assertIn("Access denied", script)
         self.assertIn("Login required", script)
 
