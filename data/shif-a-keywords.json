@@ -2,7 +2,7 @@
   "project": "SHIF-A AI",
   "lastUpdated": "2026-11-06",
   "updateStatus": "daily-research-2026-11-06",
-  "note": "No SHIF-A Search Console property is registered in the connected GSC Wizard account. English trend signals below come from a secondary report dated 2026-10-20 that attributes figures to Google Trends; they are directional only, not SHIF-A rankings or exact phrase volumes. Hindi long-tail terms are candidate queries with no verified query metrics. Do not make volume or ranking claims.",
+  "note": "Google Search Console is now connected for the ClipX GitHub Pages property used by SHIF-A: https://trademalikk-svg.github.io/clipx-ai-studio/. Latest settled 28-day web summary through 2026-11-03: 2 clicks, 5 impressions, 40% CTR, average position 5.2. The only visible query row is contentstudio.io (0 clicks, 1 impression, position 15); Google reports 100% of clicks and 80% of impressions hidden from query rows, so this is not a reliable keyword opportunity. Keep candidate phrases unverified and do not infer volume or rankings.",
   "keywords": [
     {
       "keyword": "online video editor",
@@ -173,6 +173,35 @@
       "trend": "unverified candidate; no live Hindi query data",
       "priority": "medium",
       "evidenceType": "localized content hypothesis"
+    }
+  ],
+  "gscObservations": [
+    {
+      "property": "https://trademalikk-svg.github.io/clipx-ai-studio/",
+      "searchType": "web",
+      "period": "2026-10-07 to 2026-11-03",
+      "settledThrough": "2026-11-03",
+      "totals": {
+        "clicks": 2,
+        "impressions": 5,
+        "ctrPercent": 40,
+        "averagePosition": 5.2
+      },
+      "visibleQueryRows": [
+        {
+          "query": "contentstudio.io",
+          "clicks": 0,
+          "impressions": 1,
+          "ctrPercent": 0,
+          "averagePosition": 15
+        }
+      ],
+      "coverage": {
+        "hiddenClicksShare": 1,
+        "hiddenImpressionsShare": 0.8
+      },
+      "source": "Google Search Console via GSC Wizard",
+      "caveat": "Query-level data is heavily privacy-filtered. The visible query is not a relevant product-intent keyword; do not promote it as a target keyword."
     }
   ]
 }
