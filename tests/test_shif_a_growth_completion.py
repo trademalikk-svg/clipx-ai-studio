@@ -21,7 +21,7 @@ class SignupAnalyticsContractTests(unittest.TestCase):
         page = (ROOT / "growth-manager.html").read_text(encoding="utf-8")
         script = (ROOT / "scripts/shif-a-growth-analytics.js").read_text(encoding="utf-8")
         self.assertIn('id="signupAnalytics"', page)
-        self.assertIn("shif-a-growth-analytics", script)
+        self.assertIn("getGrowthAnalytics", script)
         self.assertIn("getAccessProfile", script)
 
     def test_daily_growth_script_generates_draft_only_report(self):
