@@ -1,108 +1,132 @@
 {
   "project": "SHIF-A AI",
-  "lastUpdated": "2026-11-06",
-  "updateStatus": "daily-research-2026-11-06",
-  "note": "Google Search Console is now connected for the ClipX GitHub Pages property used by SHIF-A: https://trademalikk-svg.github.io/clipx-ai-studio/. Latest settled 28-day web summary through 2026-11-03: 2 clicks, 5 impressions, 40% CTR, average position 5.2. The only visible query row is contentstudio.io (0 clicks, 1 impression, position 15); Google reports 100% of clicks and 80% of impressions hidden from query rows, so this is not a reliable keyword opportunity. Keep candidate phrases unverified and do not infer volume or rankings.",
+  "lastUpdated": "2026-11-07",
+  "updateStatus": "daily-review-2026-11-07-17h",
+  "note": "Google Search Console is connected for the ClipX GitHub Pages property used by SHIF-A. Latest settled 28-day Web summary through 2026-11-04: 2 clicks, 5 impressions, 40% CTR and average position 5.2. The only visible query row is contentstudio.io (0 clicks, 1 impression); 100% of clicks and 80% of impressions are hidden from query rows, so no SHIF-A target query is confirmed. GA4 is not connected. The connected Metricool brand is Ishqwala scene, not SHIF-A, so its social metrics are excluded. External trend evidence is directional only; do not infer exact query volume or rankings. Evening review checked 2026-11-07: GSC still has no confirmed SHIF-A target query; latest settled data through 2026-11-04. GA4 is not connected for this property in the current GSC Wizard account. Metricool only exposes the separate Ishqwala scene brand, so those social metrics are not attributed to SHIF-A. Shared Supabase project counts are project-level only and are not SHIF-A-specific.",
   "keywords": [
     {
       "keyword": "online video editor",
       "language": "en",
       "intent": "transactional",
       "targetPage": "index.html",
-      "source": "Initial product-intent seed; validate with current search evidence",
-      "checkedAt": "2026-11-05",
+      "source": "SHIF-A page-fit audit rechecked 2026-11-07: the existing page/tool supports this task, but exact search demand has not been independently verified.",
+      "checkedAt": "2026-11-07",
       "trend": "unverified",
-      "priority": "high"
+      "priority": "high",
+      "verificationStatus": "unverified",
+      "sourceUrl": "https://trademalikk-svg.github.io/clipx-ai-studio/index.html"
     },
     {
       "keyword": "YouTube Shorts maker",
       "language": "en",
       "intent": "transactional",
       "targetPage": "index.html",
-      "source": "Initial product-intent seed; validate with current search evidence",
-      "checkedAt": "2026-11-05",
+      "source": "SHIF-A page-fit audit rechecked 2026-11-07: the existing page/tool supports this task, but exact search demand has not been independently verified.",
+      "checkedAt": "2026-11-07",
       "trend": "unverified",
-      "priority": "high"
+      "priority": "high",
+      "verificationStatus": "unverified",
+      "sourceUrl": "https://trademalikk-svg.github.io/clipx-ai-studio/index.html"
     },
     {
       "keyword": "Hindi video editor",
       "language": "en",
       "intent": "transactional",
       "targetPage": "index.html",
-      "source": "Initial product-intent seed; validate with current search evidence",
-      "checkedAt": "2026-11-05",
+      "source": "SHIF-A page-fit audit rechecked 2026-11-07: the existing page/tool supports this task, but exact search demand has not been independently verified.",
+      "checkedAt": "2026-11-07",
       "trend": "unverified",
-      "priority": "high"
+      "priority": "high",
+      "verificationStatus": "unverified",
+      "sourceUrl": "https://trademalikk-svg.github.io/clipx-ai-studio/index.html"
     },
     {
       "keyword": "free AI tools",
       "language": "en",
       "intent": "commercial-investigation",
       "targetPage": "ai-tools.html",
-      "source": "Initial product-intent seed; validate with current search evidence",
-      "checkedAt": "2026-11-05",
+      "source": "SHIF-A page-fit audit rechecked 2026-11-07: the existing page/tool supports this task, but exact search demand has not been independently verified.",
+      "checkedAt": "2026-11-07",
       "trend": "unverified",
-      "priority": "medium"
+      "priority": "medium",
+      "verificationStatus": "unverified",
+      "sourceUrl": "https://trademalikk-svg.github.io/clipx-ai-studio/ai-tools.html"
     },
     {
       "keyword": "AI tools online",
       "language": "en",
       "intent": "commercial-investigation",
       "targetPage": "ai-tools.html",
-      "source": "Initial product-intent seed; validate with current search evidence",
-      "checkedAt": "2026-11-05",
+      "source": "SHIF-A page-fit audit rechecked 2026-11-07: the existing page/tool supports this task, but exact search demand has not been independently verified.",
+      "checkedAt": "2026-11-07",
       "trend": "unverified",
-      "priority": "medium"
+      "priority": "medium",
+      "verificationStatus": "unverified",
+      "sourceUrl": "https://trademalikk-svg.github.io/clipx-ai-studio/ai-tools.html"
     },
     {
       "keyword": "video to shorts converter",
       "language": "en",
       "intent": "transactional",
       "targetPage": "split-video-into-multiple-clips.html",
-      "source": "Initial product-intent seed; validate with current search evidence",
-      "checkedAt": "2026-11-05",
+      "source": "SHIF-A page-fit audit rechecked 2026-11-07: the existing page/tool supports this task, but exact search demand has not been independently verified.",
+      "checkedAt": "2026-11-07",
       "trend": "unverified",
-      "priority": "high"
+      "priority": "high",
+      "verificationStatus": "unverified",
+      "sourceUrl": "https://trademalikk-svg.github.io/clipx-ai-studio/split-video-into-multiple-clips.html"
     },
     {
       "keyword": "YouTube Shorts kaise banaye",
       "language": "hi",
       "intent": "informational",
       "targetPage": "guide-youtube-shorts.html",
-      "source": "Initial product-intent seed; validate with current search evidence",
-      "checkedAt": "2026-11-05",
-      "trend": "unverified",
-      "priority": "high"
+      "source": "Pre Tutorials, How India Actually Searches YouTube: 10,781 Phrases Analysed (2026-10-25): the study reports 'kaise' in 965 phrases versus 'how to' in 380, and 'kaise banaye' in 175. These are aggregate phrasing counts, not measurements of this exact query.",
+      "checkedAt": "2026-11-07",
+      "trend": "Roman-Hinglish how-to phrasing pattern supported; exact query unverified",
+      "priority": "medium",
+      "sourceUrl": "https://pretutorials.com/blog/how-india-searches-youtube-hinglish-data",
+      "verificationStatus": "unverified",
+      "evidenceType": "secondary YouTube autocomplete study",
+      "script": "Roman Hinglish"
     },
     {
       "keyword": "Hindi subtitles kaise lagaye",
       "language": "hi",
       "intent": "informational",
       "targetPage": "guide-hindi-subtitles.html",
-      "source": "Initial product-intent seed; validate with current search evidence",
-      "checkedAt": "2026-11-05",
-      "trend": "unverified",
-      "priority": "medium"
+      "source": "Pre Tutorials, How India Actually Searches YouTube: 10,781 Phrases Analysed (2026-10-25): the study reports 'kaise' in 965 phrases versus 'how to' in 380, and 'kaise banaye' in 175. These are aggregate phrasing counts, not measurements of this exact query.",
+      "checkedAt": "2026-11-07",
+      "trend": "Roman-Hinglish how-to phrasing pattern supported; exact query unverified",
+      "priority": "medium",
+      "sourceUrl": "https://pretutorials.com/blog/how-india-searches-youtube-hinglish-data",
+      "verificationStatus": "unverified",
+      "evidenceType": "secondary YouTube autocomplete study",
+      "script": "Roman Hinglish"
     },
     {
       "keyword": "free thumbnail maker",
       "language": "en",
       "intent": "transactional",
       "targetPage": "creator-tools.html",
-      "source": "Initial product-intent seed; validate with current search evidence",
-      "checkedAt": "2026-11-05",
+      "source": "SHIF-A page-fit audit rechecked 2026-11-07: the existing page/tool supports this task, but exact search demand has not been independently verified.",
+      "checkedAt": "2026-11-07",
       "trend": "unverified",
-      "priority": "medium"
+      "priority": "medium",
+      "verificationStatus": "unverified",
+      "sourceUrl": "https://trademalikk-svg.github.io/clipx-ai-studio/creator-tools.html"
     },
     {
       "keyword": "social media content planner",
       "language": "en",
       "intent": "commercial-investigation",
       "targetPage": "ai-tools.html",
-      "source": "Initial product-intent seed; validate with current search evidence",
-      "checkedAt": "2026-11-05",
+      "source": "SHIF-A page-fit audit rechecked 2026-11-07: the existing page/tool supports this task, but exact search demand has not been independently verified.",
+      "checkedAt": "2026-11-07",
       "trend": "unverified",
-      "priority": "low"
+      "priority": "low",
+      "verificationStatus": "unverified",
+      "sourceUrl": "https://trademalikk-svg.github.io/clipx-ai-studio/ai-tools.html"
     },
     {
       "keyword": "AI tools India",
@@ -111,10 +135,11 @@
       "targetPage": "ai-tools.html",
       "source": "Adithya Reddy, AI search trends in India 2026 (2026-10-20): reports broad AI search interest in India at about +50% year over year; exact phrase not isolated.",
       "sourceUrl": "https://www.adithyareddy.online/blog/ai-search-trends-india-2026",
-      "checkedAt": "2026-11-06",
+      "checkedAt": "2026-11-07",
       "trend": "rising-category-signal; broad AI topic reportedly ~+50% YoY, exact query unverified",
       "priority": "medium",
-      "evidenceType": "secondary Google Trends summary"
+      "evidenceType": "secondary Google Trends summary",
+      "verificationStatus": "unverified"
     },
     {
       "keyword": "AI tools directory",
@@ -123,10 +148,11 @@
       "targetPage": "ai-tools.html",
       "source": "Same 2026-10-20 report describes OpenFuture AI as a breakout query and discusses AI-tool discovery directories; generic phrase itself was not measured.",
       "sourceUrl": "https://www.adithyareddy.online/blog/ai-search-trends-india-2026",
-      "checkedAt": "2026-11-06",
+      "checkedAt": "2026-11-07",
       "trend": "related discovery signal; exact phrase unverified",
       "priority": "medium",
-      "evidenceType": "secondary Google Trends summary"
+      "evidenceType": "secondary Google Trends summary",
+      "verificationStatus": "unverified"
     },
     {
       "keyword": "AI video",
@@ -135,11 +161,12 @@
       "targetPage": "index.html",
       "source": "Same 2026-10-20 report lists the broad query “ai video” at +20% versus its prior comparison period; no absolute volume supplied.",
       "sourceUrl": "https://www.adithyareddy.online/blog/ai-search-trends-india-2026",
-      "checkedAt": "2026-11-06",
+      "checkedAt": "2026-11-07",
       "trend": "rising +20% reported by secondary source; query scope and volume not independently verified",
       "priority": "medium",
       "evidenceType": "secondary Google Trends summary",
-      "editorialCaveat": "Use only in relevant context for existing browser video/creator workflows. Do not claim SHIF-A is an active AI video generator; cloud generation is not configured."
+      "editorialCaveat": "Use only in relevant context for existing browser video/creator workflows. Do not claim SHIF-A is an active AI video generator; cloud generation is not configured.",
+      "verificationStatus": "unverified"
     },
     {
       "keyword": "लंबे वीडियो से YouTube Shorts कैसे बनाएं",
@@ -147,10 +174,11 @@
       "intent": "informational",
       "targetPage": "guide-youtube-shorts.html",
       "source": "Hindi long-tail wording mapped to the existing Shorts guide; no connected Search Console query data or independent volume evidence.",
-      "checkedAt": "2026-11-06",
+      "checkedAt": "2026-11-07",
       "trend": "unverified candidate; no live Hindi query data",
       "priority": "medium",
-      "evidenceType": "localized content hypothesis"
+      "evidenceType": "localized content hypothesis",
+      "verificationStatus": "unverified"
     },
     {
       "keyword": "वीडियो को कई छोटे क्लिप में कैसे बाँटें",
@@ -158,10 +186,11 @@
       "intent": "informational",
       "targetPage": "split-video-into-multiple-clips.html",
       "source": "Hindi long-tail wording mapped to the existing clip-splitting guide; no connected Search Console query data or independent volume evidence.",
-      "checkedAt": "2026-11-06",
+      "checkedAt": "2026-11-07",
       "trend": "unverified candidate; no live Hindi query data",
       "priority": "medium",
-      "evidenceType": "localized content hypothesis"
+      "evidenceType": "localized content hypothesis",
+      "verificationStatus": "unverified"
     },
     {
       "keyword": "हिंदी सबटाइटल कैसे बनाएं",
@@ -169,18 +198,81 @@
       "intent": "informational",
       "targetPage": "guide-hindi-subtitles.html",
       "source": "Hindi long-tail wording mapped to the existing subtitles guide; no connected Search Console query data or independent volume evidence.",
-      "checkedAt": "2026-11-06",
+      "checkedAt": "2026-11-07",
       "trend": "unverified candidate; no live Hindi query data",
       "priority": "medium",
-      "evidenceType": "localized content hypothesis"
+      "evidenceType": "localized content hypothesis",
+      "verificationStatus": "unverified"
+    },
+    {
+      "keyword": "long video se YouTube Shorts kaise banaye",
+      "language": "hi",
+      "script": "Roman Hinglish",
+      "intent": "informational",
+      "targetPage": "guide-youtube-shorts.html",
+      "source": "Pre Tutorials, How India Actually Searches YouTube: 10,781 Phrases Analysed (2026-10-25): the study reports 'kaise' in 965 phrases versus 'how to' in 380, and 'kaise banaye' in 175. These are aggregate phrasing counts, not measurements of this exact query.",
+      "sourceUrl": "https://pretutorials.com/blog/how-india-searches-youtube-hinglish-data",
+      "checkedAt": "2026-11-07",
+      "trend": "Roman-Hinglish how-to phrasing pattern supported; exact query unverified",
+      "priority": "medium",
+      "verificationStatus": "unverified",
+      "evidenceType": "secondary YouTube autocomplete study",
+      "market": "India",
+      "clusterRole": "supporting"
+    },
+    {
+      "keyword": "video ko multiple clips mein kaise baante",
+      "language": "hi",
+      "script": "Roman Hinglish",
+      "intent": "informational",
+      "targetPage": "split-video-into-multiple-clips.html",
+      "source": "Pre Tutorials, How India Actually Searches YouTube: 10,781 Phrases Analysed (2026-10-25): the study reports 'kaise' in 965 phrases versus 'how to' in 380, and 'kaise banaye' in 175. These are aggregate phrasing counts, not measurements of this exact query.",
+      "sourceUrl": "https://pretutorials.com/blog/how-india-searches-youtube-hinglish-data",
+      "checkedAt": "2026-11-07",
+      "trend": "Roman-Hinglish how-to phrasing pattern supported; exact query unverified",
+      "priority": "medium",
+      "verificationStatus": "unverified",
+      "evidenceType": "secondary YouTube autocomplete study",
+      "market": "India",
+      "clusterRole": "supporting"
+    },
+    {
+      "keyword": "AI assistant tools",
+      "language": "en",
+      "intent": "commercial-investigation",
+      "targetPage": "ai-tools.html",
+      "source": "KalQLater, ChatGPT vs Gemini vs Claude in India (2026-10-23), summarizes Google Trends India: ChatGPT search interest +43%, Claude relative interest 1 to 15 over 12 months, and Gemini -17%. The generic phrase 'AI assistant tools' was not measured.",
+      "sourceUrl": "https://www.kalqlater.com/trends/technology/ai-work/chatgpt-gemini-claude-india-search-data",
+      "checkedAt": "2026-11-07",
+      "trend": "Adjacent AI-assistant interest signal; exact generic phrase unverified",
+      "priority": "low",
+      "verificationStatus": "unverified",
+      "evidenceType": "secondary Google Trends summary",
+      "market": "India",
+      "clusterRole": "supporting"
+    },
+    {
+      "keyword": "YouTube Shorts series",
+      "language": "en",
+      "intent": "informational",
+      "targetPage": "guide-youtube-shorts.html",
+      "source": "YouTube Blog, 23 September 2026: Shorts series began rolling out to creators across web, mobile and TV; the same announcement reported 6.5B+ microdrama views in H1 2026 and watch time growth above 50% YoY. This is platform-feature and format evidence, not proof of exact query demand.",
+      "sourceUrl": "https://blog.youtube/news-and-events/made-on-youtube-creators-shorts-series-tv-features/",
+      "checkedAt": "2026-11-07",
+      "trend": "New platform-feature opportunity; exact search trend unverified",
+      "priority": "low",
+      "verificationStatus": "exact query unverified",
+      "evidenceType": "official YouTube feature announcement",
+      "market": "India and worldwide",
+      "clusterRole": "supporting"
     }
   ],
   "gscObservations": [
     {
       "property": "https://trademalikk-svg.github.io/clipx-ai-studio/",
       "searchType": "web",
-      "period": "2026-10-07 to 2026-11-03",
-      "settledThrough": "2026-11-03",
+      "period": "last 28 settled days through 2026-11-04",
+      "settledThrough": "2026-11-04",
       "totals": {
         "clicks": 2,
         "impressions": 5,
@@ -196,12 +288,146 @@
           "averagePosition": 15
         }
       ],
+      "visiblePageRows": [
+        {
+          "page": "https://trademalikk-svg.github.io/clipx-ai-studio/",
+          "clicks": 2,
+          "impressions": 5,
+          "ctrPercent": 40,
+          "averagePosition": 5.2
+        }
+      ],
       "coverage": {
         "hiddenClicksShare": 1,
         "hiddenImpressionsShare": 0.8
       },
       "source": "Google Search Console via GSC Wizard",
-      "caveat": "Query-level data is heavily privacy-filtered. The visible query is not a relevant product-intent keyword; do not promote it as a target keyword."
+      "checkedAt": "2026-11-07",
+      "caveat": "The visible query is unrelated to SHIF-A and no target query is confirmed. Query rows hide all clicks and 80% of impressions; do not treat the visible row as a keyword target."
     }
-  ]
+  ],
+  "researchLog": [
+    {
+      "source": "Pre Tutorials — How India Actually Searches YouTube: 10,781 Autocomplete Phrases Analysed",
+      "sourceUrl": "https://pretutorials.com/blog/how-india-searches-youtube-hinglish-data",
+      "publishedAt": "2026-10-25",
+      "checkedAt": "2026-11-07",
+      "finding": "In the sample, 'kaise' appeared in 965 phrases versus 'how to' in 380; 'hindi' appeared in 411. This supports testing Roman-Hinglish how-to wording.",
+      "limitation": "The study covers 30 digital-marketing topics and does not measure the exact SHIF-A phrases or search volume."
+    },
+    {
+      "source": "Adithya Reddy — AI search trends in India 2026",
+      "sourceUrl": "https://www.adithyareddy.online/blog/ai-search-trends-india-2026",
+      "publishedAt": "2026-10-20",
+      "checkedAt": "2026-11-07",
+      "finding": "Secondary Google Trends summary reports broad AI search interest around +50% YoY and the broad query 'ai video' around +20%.",
+      "limitation": "Secondary summary; exact phrases 'AI tools India' and SHIF-A product queries were not isolated."
+    },
+    {
+      "source": "YouTube Blog — Shorts series and TV features",
+      "sourceUrl": "https://blog.youtube/news-and-events/made-on-youtube-creators-shorts-series-tv-features/",
+      "publishedAt": "2026-09-23",
+      "checkedAt": "2026-11-07",
+      "finding": "YouTube announced Shorts series rolling out across web, mobile and TV; its post also reported microdrama format growth.",
+      "limitation": "Feature adoption is not exact search-volume evidence; SHIF-A does not provide a Shorts-series publishing feature."
+    },
+    {
+      "source": "YouTube Blog — How we're updating the YouTube Shorts experience",
+      "sourceUrl": "https://blog.youtube/news-and-events/youtube-shorts-experience-updates-features/",
+      "publishedAt": "2026-06-25",
+      "checkedAt": "2026-11-07",
+      "finding": "Official Shorts viewer-experience update describes Clear Screen mode and other playback changes rolling out over time.",
+      "limitation": "This is a product-feature announcement, not evidence of search demand for a SHIF-A keyword. No new SEO target phrase or page update is justified."
+    },
+    {
+      "source": "Veedio — Trending YouTube Shorts in India today",
+      "sourceUrl": "https://www.veedio.co/trending/youtube-shorts/country/india",
+      "publishedAt": "2026-11-07",
+      "checkedAt": "2026-11-07",
+      "finding": "The refreshed India chart sample is led by entertainment/music/trailer videos rather than creator-workflow or AI-tool topics.",
+      "limitation": "Third-party chart, English-titled slice and small sample; ranks by views per day, not search volume. Not used to add or prioritize SHIF-A keywords."
+    }
+  ],
+  "eveningReview": {
+    "checkedAt": "2026-11-07T16:55:45+05:30",
+    "keywordDecision": "No new exact-query keyword promoted. Existing 20 terms retained; exact demand remains unverified where GSC has no target-query evidence.",
+    "tomorrowPlan": [
+      {
+        "keyword": "long video se YouTube Shorts kaise banaye",
+        "language": "Hindi / Roman Hinglish",
+        "intent": "informational",
+        "trendDirection": "aggregate Hinglish phrasing evidence; exact query unverified",
+        "targetPage": "guide-youtube-shorts.html",
+        "priority": "medium",
+        "nextCheck": "Free YouTube autocomplete and next settled GSC query rows"
+      },
+      {
+        "keyword": "Hindi subtitles kaise lagaye",
+        "language": "Hindi / Roman Hinglish",
+        "intent": "informational",
+        "trendDirection": "aggregate Hindi/Hinglish phrasing evidence; exact query unverified",
+        "targetPage": "guide-hindi-subtitles.html",
+        "priority": "medium",
+        "nextCheck": "Free YouTube autocomplete and next settled GSC query rows"
+      },
+      {
+        "keyword": "AI tools India",
+        "language": "English",
+        "intent": "commercial investigation",
+        "trendDirection": "secondary broad-category rising signal; exact phrase unverified",
+        "targetPage": "ai-tools.html",
+        "priority": "medium",
+        "nextCheck": "Recheck free Google Trends and exact Search Console queries"
+      },
+      {
+        "keyword": "YouTube Shorts series",
+        "language": "English",
+        "intent": "informational",
+        "trendDirection": "official feature opportunity; exact search trend unverified",
+        "targetPage": "guide-youtube-shorts.html",
+        "priority": "low",
+        "nextCheck": "Keep editorial-only unless direct query evidence appears"
+      }
+    ],
+    "analytics": {
+      "gscSettledThrough": "2026-11-04",
+      "gsc28Day": {
+        "clicks": 2,
+        "impressions": 5,
+        "ctrPercent": 40,
+        "averagePosition": 5.2
+      },
+      "visibleQuery": "contentstudio.io (0 clicks, 1 impression; unrelated)",
+      "hiddenQueryShare": {
+        "clicks": 1,
+        "impressions": 0.8
+      },
+      "topPage": "https://trademalikk-svg.github.io/clipx-ai-studio/ (2 clicks, 5 impressions)",
+      "ga4": "not connected for this property in current GSC Wizard account",
+      "metricool": "only Ishqwala scene brand is connected; excluded from SHIF-A metrics",
+      "sharedSupabaseProject": {
+        "totalAuthUsers": 3,
+        "signupsTodayIST": 0,
+        "signupsLast28Days": 3,
+        "emailConfirmedUsers": 2,
+        "profileRows": 3,
+        "clipJobs": 0,
+        "testOrders": 1,
+        "nonTestOrders": 0,
+        "modelRequests": 1
+      },
+      "attributionCaveat": "Supabase counts are for the shared ClipX project and cannot be attributed to SHIF-A alone."
+    },
+    "contentStatus": {
+      "youtubeShorts": 2,
+      "instagramReels": 2,
+      "facebookPosts": 2,
+      "pinterestPins": 3,
+      "seoArticles": 1,
+      "communityChecklistMinutes": 15,
+      "published": 0,
+      "scheduled": 0
+    },
+    "toolManager": "No persistent task-status write endpoint found; Growth Manager checklist is static."
+  }
 }

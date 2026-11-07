@@ -29,13 +29,15 @@ class GrowthManagerTests(unittest.TestCase):
         self.assertIn("AI tools India", by_keyword)
         self.assertIn("AI tools directory", by_keyword)
         self.assertEqual(by_keyword["AI tools India"]["targetPage"], "ai-tools.html")
-        self.assertEqual(by_keyword["AI tools directory"]["checkedAt"], "2026-11-06")
+        self.assertEqual(by_keyword["AI tools directory"]["checkedAt"], "2026-11-07")
+        self.assertIn("YouTube Shorts series", by_keyword)
+        self.assertEqual(by_keyword["YouTube Shorts series"]["targetPage"], "guide-youtube-shorts.html")
         for item in by_keyword.values():
             self.assertTrue(item["source"])
             self.assertTrue(item["trend"])
 
     def test_daily_plan_contains_all_requested_draft_targets_and_approval_controls(self):
-        plan = (ROOT / "growth/daily/2026-11-06.md").read_text(encoding="utf-8")
+        plan = (ROOT / "growth/daily/2026-11-07.md").read_text(encoding="utf-8")
         for marker in ("YouTube Shorts draft 1", "YouTube Shorts draft 2", "Instagram Reel draft 1", "Instagram Reel draft 2", "Facebook post 1", "Facebook post 2", "Pinterest Pin 1", "Pinterest Pin 2", "Pinterest Pin 3", "SEO article draft", "15-minute community-engagement checklist", "No social content published"):
             self.assertIn(marker, plan)
 
