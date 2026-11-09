@@ -53,7 +53,7 @@ class GrowthManagerTests(unittest.TestCase):
         by_keyword = {item["keyword"]: item for item in data["keywords"]}
         for keyword in ("Diwali wishes images", "Diwali wishes in Hindi", "AI editing for YouTube Shorts"):
             self.assertIn(keyword, by_keyword)
-            self.assertEqual(by_keyword[keyword]["checkedAt"], "2026-11-08")
+            self.assertEqual(by_keyword[keyword]["checkedAt"], "2026-11-09")
             self.assertTrue(by_keyword[keyword]["sourceUrl"])
             self.assertTrue(by_keyword[keyword]["targetPage"])
 
@@ -71,8 +71,21 @@ class GrowthManagerTests(unittest.TestCase):
 
     def test_growth_manager_links_latest_daily_report(self):
         page = (ROOT / "growth-manager.html").read_text(encoding="utf-8")
-        self.assertIn("growth/daily/2026-11-08.md", page)
-        self.assertIn("Open 8 November content drafts and Owner report", page)
+        self.assertIn("growth/daily/2026-11-09.md", page)
+        self.assertIn("Open 9 November content drafts and Owner report", page)
+
+    def test_daily_plan_2026_11_09_contains_all_requested_drafts_and_approval_controls(self):
+        plan = (ROOT / "growth/daily/2026-11-09.md").read_text(encoding="utf-8")
+        for marker in ("YouTube Shorts drafts", "Instagram Reels drafts", "Facebook post drafts", "Pinterest Pin drafts", "SEO article draft", "15-minute community-engagement checklist", "No social post published or scheduled", "No website merge or deployment"):
+            self.assertIn(marker, plan)
+
+    def test_instagram_edits_keyword_is_editorial_only_and_not_a_shifa_feature(self):
+        import json
+        data = json.loads((ROOT / "data/shif-a-keywords.json").read_text(encoding="utf-8"))
+        item = next(item for item in data["keywords"] if item["keyword"] == "Instagram Edits for Mac")
+        self.assertEqual(item["priority"], "low")
+        self.assertIn("No direct indexable SHIF-A page", item["targetPage"])
+        self.assertIn("not a SHIF-A feature", item["verificationStatus"])
 
 if __name__ == "__main__":
     unittest.main()
