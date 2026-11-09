@@ -2,7 +2,7 @@
   "project": "SHIF-A AI",
   "lastUpdated": "2026-11-09",
   "updateStatus": "daily-evening-review-2026-11-09-1700-ist",
-  "note": "Evening refresh 2026-11-09 17:00 IST. No fresh query-specific India trend with a strong SHIF-A page fit was verified. A current India trend snapshot was dominated by unrelated cricket/news, and a saved YouTube-trend export for 2026-10-09 to 2026-11-08 emphasized cricket and Diwali/rangoli; neither was promoted to SHIF-A SEO targets. Instagram Edits for Mac remains a low-priority editorial opportunity after its 2026-11-05 launch; launch coverage confirms Mac desktop features, but exact search demand is unverified and no indexable SHIF-A page directly fits. Existing Hindi/Roman-Hinglish how-to terms remain phrasing hypotheses, not measured exact-query demand. Connected GSC property is https://trademalikk-svg.github.io/clipx-ai-studio/ (ClipX GitHub Pages, not a dedicated SHIF-A domain): final Web data 2026-10-10 through 2026-11-06 shows 2 clicks, 5 impressions, 40% CTR, average position 5.2; visible query row contentstudio.io has 0 clicks/1 impression and the rest of the query totals are anonymized by Google. Only the homepage appears in page rows. GA4 is not connected; Metricool has only the separate Ishqwala scene brand and is not attributed to SHIF-A. No SHIF-A-specific views, reach, signups or customers are verified. No new public SEO HTML change was justified; the existing guide pages fit their mapped topics and Edits for Mac has no direct SHIF-A page fit. All 9 social drafts and 1 SEO article are complete; no posts were published or scheduled. Spend ₹0.",
+  "note": "Evening refresh 2026-11-09 17:00 IST. No fresh query-specific India trend with a strong SHIF-A page fit was verified. A current India trend snapshot was dominated by unrelated cricket/news, and a saved YouTube-trend export for 2026-10-09 to 2026-11-08 emphasized cricket and Diwali/rangoli; neither was promoted to SHIF-A SEO targets. Instagram Edits for Mac remains a low-priority editorial opportunity after its 2026-11-05 launch; launch coverage confirms Mac desktop features, but exact search demand is unverified and no indexable SHIF-A page directly fits. Existing Hindi/Roman-Hinglish how-to terms remain phrasing hypotheses, not measured exact-query demand. Connected GSC property is https://trademalikk-svg.github.io/clipx-ai-studio/ (ClipX GitHub Pages, not a dedicated SHIF-A domain): final Web data 2026-10-10 through 2026-11-06 shows 2 clicks, 5 impressions, 40% CTR, average position 5.2; visible query row contentstudio.io has 0 clicks/1 impression and the rest of the query totals are anonymized by Google. Only the homepage appears in page rows. GA4 is connected through HYPD to a shared property whose 28-day hostname is trademalikk-svg.github.io; it recorded 1 session, 1 user, 0 page views, 1 event, 0 key events and £0 purchase revenue, with landing page (not set). This is shared ClipX/SHIF-A-host data and cannot be attributed specifically to SHIF-A. Metricool has only the separate Ishqwala scene brand and is not attributed to SHIF-A. No SHIF-A-specific views, reach, signups or customers are verified. No new public SEO HTML change was justified; the existing guide pages fit their mapped topics and Edits for Mac has no direct SHIF-A page fit. All 9 social drafts and 1 SEO article are complete; no posts were published or scheduled. Spend ₹0.",
   "keywords": [
     {
       "keyword": "online video editor",
@@ -565,10 +565,26 @@
       "result": "Homepage had 2 clicks and 5 impressions in the current period; no previous-period row was returned, so no directional comparison is possible."
     },
     "analyticsAccess": {
-      "ga4": "No Google Analytics scope/property available in the connected account; sessions, users and conversion attribution unavailable.",
+      "ga4": {
+        "connection": "Connected through HYPD; GA4 property hostName report identifies trademalikk-svg.github.io, the shared ClipX/SHIF-A GitHub Pages host.",
+        "dateRange": "2026-10-13 to 2026-11-09 (last 28 days)",
+        "propertyTimeZone": "Etc/GMT",
+        "currencyCode": "GBP",
+        "sessions": 1,
+        "totalUsers": 1,
+        "screenPageViews": 0,
+        "eventCount": 1,
+        "keyEvents": 0,
+        "purchaseRevenue": 0,
+        "landingPage": "(not set)",
+        "engagementRate": 0,
+        "averageSessionDurationSeconds": 0,
+        "attributionCaveat": "This is shared-host data, not page-specific SHIF-A usage. The single session has no set landing page and zero page views, so no SHIF-A traffic, signup or customer attribution is supported."
+      },
       "metricool": "Only the separate Ishqwala scene brand is connected; not a SHIF-A account and excluded from SHIF-A performance.",
       "shifASocialMetrics": "Views, reach and post-level clicks unavailable.",
-      "signupsAndCustomers": "No SHIF-A-specific verified signup or customer metrics available."
+      "signupsAndCustomers": "No SHIF-A-specific verified signup or customer metrics available.",
+      "ga4Status": "Connected shared property; metrics too sparse and not SHIF-A-specific."
     },
     "contentTargets": {
       "youtubeShorts": {
