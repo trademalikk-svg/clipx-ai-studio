@@ -51,11 +51,16 @@ class GrowthManagerTests(unittest.TestCase):
         import json
         data = json.loads((ROOT / "data/shif-a-keywords.json").read_text(encoding="utf-8"))
         by_keyword = {item["keyword"]: item for item in data["keywords"]}
-        for keyword in ("Diwali wishes images", "Diwali wishes in Hindi", "AI editing for YouTube Shorts"):
+        for keyword in ("Diwali wishes images", "Diwali wishes in Hindi"):
             self.assertIn(keyword, by_keyword)
             self.assertEqual(by_keyword[keyword]["checkedAt"], "2026-11-09")
             self.assertTrue(by_keyword[keyword]["sourceUrl"])
             self.assertTrue(by_keyword[keyword]["targetPage"])
+        self.assertIn("AI editing for YouTube Shorts", by_keyword)
+        self.assertEqual(by_keyword["AI editing for YouTube Shorts"]["checkedAt"], "2026-11-10")
+        self.assertIn("YouTube Shorts AI editing assistant", by_keyword)
+        self.assertEqual(by_keyword["YouTube Shorts AI editing assistant"]["checkedAt"], "2026-11-10")
+        self.assertIn("not a SHIF-A capability", by_keyword["YouTube Shorts AI editing assistant"]["targetPage"])
 
     def test_daily_plan_2026_11_08_contains_all_requested_drafts_and_approval_controls(self):
         plan = (ROOT / "growth/daily/2026-11-08.md").read_text(encoding="utf-8")
@@ -71,8 +76,10 @@ class GrowthManagerTests(unittest.TestCase):
 
     def test_growth_manager_links_latest_daily_report(self):
         page = (ROOT / "growth-manager.html").read_text(encoding="utf-8")
-        self.assertIn("growth/daily/2026-11-09.md", page)
-        self.assertIn("Open 9 November content drafts and Owner report", page)
+        self.assertIn("growth/daily/2026-11-10.md", page)
+        self.assertIn("Open 10 November content drafts and Owner report", page)
+        self.assertIn("growth/reviews/2026-11-10-1700.md", page)
+        self.assertIn("Open 10 November 17:00 Owner review", page)
 
     def test_daily_plan_2026_11_09_contains_all_requested_drafts_and_approval_controls(self):
         plan = (ROOT / "growth/daily/2026-11-09.md").read_text(encoding="utf-8")
