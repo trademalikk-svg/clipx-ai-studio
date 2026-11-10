@@ -1,8 +1,8 @@
 {
   "project": "SHIF-A AI",
-  "lastUpdated": "2026-11-09",
-  "updateStatus": "daily-evening-review-2026-11-09-1700-ist",
-  "note": "Evening refresh 2026-11-09 17:00 IST. No fresh query-specific India trend with a strong SHIF-A page fit was verified. A current India trend snapshot was dominated by unrelated cricket/news, and a saved YouTube-trend export for 2026-10-09 to 2026-11-08 emphasized cricket and Diwali/rangoli; neither was promoted to SHIF-A SEO targets. Instagram Edits for Mac remains a low-priority editorial opportunity after its 2026-11-05 launch; launch coverage confirms Mac desktop features, but exact search demand is unverified and no indexable SHIF-A page directly fits. Existing Hindi/Roman-Hinglish how-to terms remain phrasing hypotheses, not measured exact-query demand. Connected GSC property is https://trademalikk-svg.github.io/clipx-ai-studio/ (ClipX GitHub Pages, not a dedicated SHIF-A domain): final Web data 2026-10-10 through 2026-11-06 shows 2 clicks, 5 impressions, 40% CTR, average position 5.2; visible query row contentstudio.io has 0 clicks/1 impression and the rest of the query totals are anonymized by Google. Only the homepage appears in page rows. GA4 is connected through HYPD to a shared property whose 28-day hostname is trademalikk-svg.github.io; it recorded 1 session, 1 user, 0 page views, 1 event, 0 key events and £0 purchase revenue, with landing page (not set). This is shared ClipX/SHIF-A-host data and cannot be attributed specifically to SHIF-A. Metricool has only the separate Ishqwala scene brand and is not attributed to SHIF-A. No SHIF-A-specific views, reach, signups or customers are verified. No new public SEO HTML change was justified; the existing guide pages fit their mapped topics and Edits for Mac has no direct SHIF-A page fit. All 9 social drafts and 1 SEO article are complete; no posts were published or scheduled. Spend ₹0.",
+  "lastUpdated": "2026-11-10",
+  "updateStatus": "daily-morning-research-2026-11-10-0800-ist",
+  "note": "Morning refresh 2026-11-10 08:00 IST. Added “YouTube Shorts series kaise banaye” as a medium-priority Roman-Hinglish candidate based on YouTube's 2026-09-23 Shorts Series rollout and official microdrama consumption signal (6.5B views in H1 2026; watch time +50% YoY); exact query demand remains unverified. Refreshed YouTube Shorts series and Instagram Edits for Mac evidence. The latter remains editorial-only because no direct indexable SHIF-A page fits and its features must not be attributed to SHIF-A. Refreshed four Hindi/Roman-Hinglish how-to candidates with 2026-11-07 GSC query-row caveat: no target query is visible, and 100% of clicks / 80% of impressions are hidden. GSC property is ClipX GitHub Pages, not a dedicated SHIF-A domain. Latest settled Web totals through 2026-11-07: 2 clicks, 5 impressions, 40% CTR, average position 5.2; only homepage page row and unrelated visible query contentstudio.io. GA4 shared host report (2026-10-13 to 2026-11-09) has 1 session, 1 active user, 0 new users, 0 page views, 1 event, 0 key events, £0 revenue and landing page (not set), so no SHIF-A attribution. Metricool only has the separate Ishqwala scene brand. No SHIF-A social metrics or verified customer/signup metrics. Existing Shorts guide already has a “Plan a YouTube Shorts series” section and relevant internal links; no public HTML SEO change was justified. All content assets remain drafts; no publishing, merge or deployment. Spend ₹0.",
   "keywords": [
     {
       "keyword": "online video editor",
@@ -81,13 +81,13 @@
       "language": "hi",
       "intent": "informational",
       "targetPage": "guide-youtube-shorts.html",
-      "source": "Pre Tutorials, How India Actually Searches YouTube: 10,781 Autocomplete Phrases Analysed (2026-10-25): aggregate pattern reports 'kaise' in 965 phrases versus 'how to' in 380. This is a phrasing signal only; it does not measure this exact query.",
-      "checkedAt": "2026-11-09",
-      "trend": "Aggregate Roman-Hinglish how-to phrasing pattern remains a content hypothesis; exact query demand is unverified. No matching target query is visible in the connected ClipX GSC query rows through 2026-11-06.",
+      "source": "Pre Tutorials, “How India Actually Searches YouTube: 10,781 Autocomplete Phrases Analysed” (2026-10-25): aggregate sample reports “kaise” in 965 phrases versus “how to” in 380. This is a phrasing pattern only, not exact-query demand.",
+      "checkedAt": "2026-11-10",
+      "trend": "Aggregate Roman-Hinglish how-to phrasing is a content hypothesis, not a measured trend for this exact query. Connected ClipX GitHub Pages GSC property has no visible row for this target query through 2026-11-07; query rows expose only contentstudio.io (0 clicks/1 impression), while 100% of clicks and 80% of impressions are hidden. Do not infer exact query volume or rankings.",
       "priority": "medium",
       "sourceUrl": "https://pretutorials.com/blog/how-india-searches-youtube-hinglish-data",
       "verificationStatus": "aggregate phrasing evidence only; exact query unverified",
-      "evidenceType": "secondary YouTube autocomplete study",
+      "evidenceType": "secondary YouTube autocomplete study + connected GSC query-row check",
       "script": "Roman Hinglish"
     },
     {
@@ -95,13 +95,13 @@
       "language": "hi",
       "intent": "informational",
       "targetPage": "guide-hindi-subtitles.html",
-      "source": "Pre Tutorials, How India Actually Searches YouTube: 10,781 Autocomplete Phrases Analysed (2026-10-25): aggregate pattern reports 'kaise' in 965 phrases versus 'how to' in 380. This is a phrasing signal only; it does not measure this exact query.",
-      "checkedAt": "2026-11-09",
-      "trend": "Aggregate Roman-Hinglish how-to phrasing pattern remains a content hypothesis; exact query demand is unverified. No matching target query is visible in the connected ClipX GSC query rows through 2026-11-06.",
+      "source": "Pre Tutorials, “How India Actually Searches YouTube: 10,781 Autocomplete Phrases Analysed” (2026-10-25): aggregate sample reports “kaise” in 965 phrases versus “how to” in 380. This is a phrasing pattern only, not exact-query demand.",
+      "checkedAt": "2026-11-10",
+      "trend": "Aggregate Roman-Hinglish how-to phrasing is a content hypothesis, not a measured trend for this exact query. Connected ClipX GitHub Pages GSC property has no visible row for this target query through 2026-11-07; query rows expose only contentstudio.io (0 clicks/1 impression), while 100% of clicks and 80% of impressions are hidden. Do not infer exact query volume or rankings.",
       "priority": "medium",
       "sourceUrl": "https://pretutorials.com/blog/how-india-searches-youtube-hinglish-data",
       "verificationStatus": "aggregate phrasing evidence only; exact query unverified",
-      "evidenceType": "secondary YouTube autocomplete study",
+      "evidenceType": "secondary YouTube autocomplete study + connected GSC query-row check",
       "script": "Roman Hinglish"
     },
     {
@@ -210,13 +210,13 @@
       "script": "Roman Hinglish",
       "intent": "informational",
       "targetPage": "guide-youtube-shorts.html",
-      "source": "Pre Tutorials, How India Actually Searches YouTube: 10,781 Autocomplete Phrases Analysed (2026-10-25): aggregate pattern reports 'kaise' in 965 phrases versus 'how to' in 380. This is a phrasing signal only; it does not measure this exact query.",
+      "source": "Pre Tutorials, “How India Actually Searches YouTube: 10,781 Autocomplete Phrases Analysed” (2026-10-25): aggregate sample reports “kaise” in 965 phrases versus “how to” in 380. This is a phrasing pattern only, not exact-query demand.",
       "sourceUrl": "https://pretutorials.com/blog/how-india-searches-youtube-hinglish-data",
-      "checkedAt": "2026-11-09",
-      "trend": "Aggregate Roman-Hinglish how-to phrasing pattern remains a content hypothesis; exact query demand is unverified. No matching target query is visible in the connected ClipX GSC query rows through 2026-11-06.",
+      "checkedAt": "2026-11-10",
+      "trend": "Aggregate Roman-Hinglish how-to phrasing is a content hypothesis, not a measured trend for this exact query. Connected ClipX GitHub Pages GSC property has no visible row for this target query through 2026-11-07; query rows expose only contentstudio.io (0 clicks/1 impression), while 100% of clicks and 80% of impressions are hidden. Do not infer exact query volume or rankings.",
       "priority": "medium",
       "verificationStatus": "aggregate phrasing evidence only; exact query unverified",
-      "evidenceType": "secondary YouTube autocomplete study",
+      "evidenceType": "secondary YouTube autocomplete study + connected GSC query-row check",
       "market": "India",
       "clusterRole": "supporting"
     },
@@ -226,13 +226,13 @@
       "script": "Roman Hinglish",
       "intent": "informational",
       "targetPage": "split-video-into-multiple-clips.html",
-      "source": "Pre Tutorials, How India Actually Searches YouTube: 10,781 Autocomplete Phrases Analysed (2026-10-25): aggregate pattern reports 'kaise' in 965 phrases versus 'how to' in 380. This is a phrasing signal only; it does not measure this exact query.",
+      "source": "Pre Tutorials, “How India Actually Searches YouTube: 10,781 Autocomplete Phrases Analysed” (2026-10-25): aggregate sample reports “kaise” in 965 phrases versus “how to” in 380. This is a phrasing pattern only, not exact-query demand.",
       "sourceUrl": "https://pretutorials.com/blog/how-india-searches-youtube-hinglish-data",
-      "checkedAt": "2026-11-09",
-      "trend": "Aggregate Roman-Hinglish how-to phrasing pattern remains a content hypothesis; exact query demand is unverified. No matching target query is visible in the connected ClipX GSC query rows through 2026-11-06.",
+      "checkedAt": "2026-11-10",
+      "trend": "Aggregate Roman-Hinglish how-to phrasing is a content hypothesis, not a measured trend for this exact query. Connected ClipX GitHub Pages GSC property has no visible row for this target query through 2026-11-07; query rows expose only contentstudio.io (0 clicks/1 impression), while 100% of clicks and 80% of impressions are hidden. Do not infer exact query volume or rankings.",
       "priority": "medium",
       "verificationStatus": "aggregate phrasing evidence only; exact query unverified",
-      "evidenceType": "secondary YouTube autocomplete study",
+      "evidenceType": "secondary YouTube autocomplete study + connected GSC query-row check",
       "market": "India",
       "clusterRole": "supporting"
     },
@@ -256,15 +256,16 @@
       "language": "en",
       "intent": "informational",
       "targetPage": "guide-youtube-shorts.html",
-      "source": "YouTube Blog, Connect with creators on the biggest screen with YouTube's latest features (2026-09-23): official Shorts Series rollout with seasons, episodes, custom thumbnails and sequential playback across web, mobile and TV. Feature evidence, not search-volume evidence.",
-      "sourceUrl": "https://blog.youtube/news-and-events/made-on-youtube-creators-shorts-series-tv-features/",
-      "checkedAt": "2026-11-09",
-      "trend": "Official feature rollout confirmed; exact search trend and query volume are unverified.",
-      "priority": "low",
-      "verificationStatus": "official feature opportunity; exact query unverified",
-      "evidenceType": "official YouTube product announcement",
+      "source": "Google India Blog, “Connect with creators on the biggest screen with YouTube’s latest features” (2026-09-23): official Shorts Series rollout to YouTube Partner Program creators across web, mobile and TV; YouTube reports 6.5B microdrama views in H1 2026 and watch time +50% YoY. Platform-consumption evidence, not search-volume evidence.",
+      "sourceUrl": "https://blog.google/intl/en-in/products/platforms/connect-with-creators-on-the-biggest-screen-with-youtubes-latest-features/",
+      "checkedAt": "2026-11-10",
+      "trend": "Strong platform-consumption signal for episodic Shorts/microdramas; exact search trend and query volume unverified.",
+      "priority": "medium",
+      "verificationStatus": "official platform feature and consumption evidence; exact query demand unverified",
+      "evidenceType": "official YouTube product announcement and platform viewing metric",
       "market": "India and worldwide",
-      "clusterRole": "supporting"
+      "clusterRole": "supporting",
+      "priorityBasis": "Strong topical fit with existing Shorts guide; not based on search volume."
     },
     {
       "keyword": "Diwali wishes images",
@@ -301,10 +302,10 @@
       "language": "en",
       "intent": "informational",
       "targetPage": "guide-youtube-shorts.html",
-      "source": "YouTube Blog, New tools to power your creation journey from start to finish (2026-09-23): official announcement of a Gemini conversational editing assistant for Shorts and YouTube Create. This is a YouTube capability, not a SHIF-A feature; exact query demand is unverified.",
-      "sourceUrl": "https://blog.youtube/news-and-events/made-on-youtube-new-tools-power-creation-journey/",
-      "checkedAt": "2026-11-09",
-      "trend": "Official YouTube feature announcement; exact search trend unverified. Do not describe this as a SHIF-A capability.",
+      "source": "YouTube Official Blog, “Innovation for the YouTube Era” (2026-09-23): Gemini conversational editing assistant announced for Shorts and YouTube Create. This is a YouTube capability, not SHIF-A/ClipX; exact query demand unverified.",
+      "sourceUrl": "https://blog.youtube/news-and-events/innovation-youtube-era-made-on-viewers-creators/",
+      "checkedAt": "2026-11-10",
+      "trend": "Official third-party feature announcement remains a content context signal; exact query demand unverified. Do not describe as SHIF-A capability.",
       "priority": "low",
       "verificationStatus": "official third-party feature opportunity; exact query unverified",
       "evidenceType": "official YouTube product announcement",
@@ -316,14 +317,32 @@
       "language": "en",
       "intent": "informational / product comparison",
       "targetPage": "No direct indexable SHIF-A page; editorial-only candidate",
-      "source": "9to5Mac (2026-11-05) and Times of India (checked 2026-11-09) report Instagram Edits for Mac with a multi-track timeline, keyframes, audio waveforms, colour grading and 4K export. News coverage is increasing after launch; exact query volume and Google Trends direction are unverified.",
+      "source": "9to5Mac (2026-11-05) and The Verge (checked 2026-11-10) report the new Mac desktop release, including multi-track timeline, keyframes, audio waveforms, colour tools and 4K export. Cross-device same-project editing was still described as in development. News coverage is current; exact search demand is unverified.",
       "sourceUrl": "https://9to5mac.com/2026/11/05/instagram-launches-edits-for-mac-with-multi-track-video-editing-and-4k-exports/",
-      "checkedAt": "2026-11-09",
-      "trend": "Rising news coverage after the 2026-11-05 Mac launch; exact search trend and volume unverified.",
+      "checkedAt": "2026-11-10",
+      "trend": "Recent news coverage after the 2026-11-05 launch; no verified Google Trends direction or exact search volume.",
       "priority": "low",
       "verificationStatus": "news-led editorial opportunity only; no direct indexable SHIF-A page fit; not a SHIF-A feature",
       "evidenceType": "recent secondary product-news coverage",
       "targetPageNote": "Do not map to media-studio.html or video-studio.html because those workspace pages are noindex; no dedicated public comparison page exists."
+    },
+    {
+      "keyword": "YouTube Shorts series kaise banaye",
+      "language": "hi",
+      "script": "Roman Hinglish",
+      "intent": "informational how-to",
+      "targetPage": "guide-youtube-shorts.html",
+      "source": "Google India Blog (2026-09-23) confirms Shorts Series seasons/episodes and reports 6.5B microdrama views in H1 2026 with watch time +50% YoY. Pre Tutorials (2026-10-25) provides aggregate “kaise” phrasing evidence. Neither source measures this exact query.",
+      "sourceUrl": "https://blog.google/intl/en-in/products/platforms/connect-with-creators-on-the-biggest-screen-with-youtubes-latest-features/",
+      "checkedAt": "2026-11-10",
+      "trend": "Rising episodic-Shorts consumption signal; exact Hindi/Roman-Hinglish search trend and volume unverified.",
+      "priority": "medium",
+      "priorityBasis": "Relevant to the existing series-planning section; content opportunity, not a volume-based SEO score.",
+      "verificationStatus": "official platform-consumption evidence plus aggregate phrasing pattern; exact query unverified",
+      "evidenceType": "official YouTube feature/viewing data + secondary autocomplete phrasing study",
+      "market": "India",
+      "clusterRole": "supporting",
+      "relatedEnglishTerm": "YouTube Shorts series"
     }
   ],
   "gscObservations": [
@@ -434,6 +453,43 @@
       "source": "Google Search Console via GSC Wizard",
       "checkedAt": "2026-11-08T17:01:47+05:30",
       "caveat": "Connected property is the ClipX GitHub Pages site, not a dedicated SHIF-A domain. The only visible query is unrelated. Query coverage was not returned by the evening query-row request; do not infer hidden query shares from this response."
+    },
+    {
+      "property": "https://trademalikk-svg.github.io/clipx-ai-studio/",
+      "searchType": "web",
+      "period": "last 28 settled days through 2026-11-07",
+      "settledThrough": "2026-11-07",
+      "totals": {
+        "clicks": 2,
+        "impressions": 5,
+        "ctrPercent": 40,
+        "averagePosition": 5.2
+      },
+      "visibleQueryRows": [
+        {
+          "query": "contentstudio.io",
+          "clicks": 0,
+          "impressions": 1,
+          "ctrPercent": 0,
+          "averagePosition": 15
+        }
+      ],
+      "visiblePageRows": [
+        {
+          "page": "https://trademalikk-svg.github.io/clipx-ai-studio/",
+          "clicks": 2,
+          "impressions": 5,
+          "ctrPercent": 40,
+          "averagePosition": 5.2
+        }
+      ],
+      "coverage": {
+        "hiddenClicksShare": 1,
+        "hiddenImpressionsShare": 0.8
+      },
+      "source": "Google Search Console via GSC Wizard",
+      "checkedAt": "2026-11-10",
+      "caveat": "This is the ClipX GitHub Pages URL-prefix property, not a dedicated SHIF-A domain. No target SHIF-A query is visible; Google anonymizes rare queries. Do not use the unrelated visible row as a keyword target."
     }
   ],
   "researchLog": [
@@ -524,6 +580,38 @@
       "checkedAt": "2026-11-08T17:01:47+05:30",
       "finding": "Past-24-hour snapshot shows 'Diwali wishes in Hindi' at 50K+ searches and +1,000%, active. 'Diwali wishes images' is not present in the first 25 visible rows; its earlier morning signal is not confirmed in the evening top-25 view.",
       "limitation": "Snapshot is time-sensitive and not SHIF-A traffic or long-term demand. Only the existing-image crop/resize/export workflow is relevant; no greeting generation or translation claim."
+    },
+    {
+      "source": "Google India Blog — Connect with creators on the biggest screen with YouTube’s latest features",
+      "sourceUrl": "https://blog.google/intl/en-in/products/platforms/connect-with-creators-on-the-biggest-screen-with-youtubes-latest-features/",
+      "publishedAt": "2026-09-23",
+      "checkedAt": "2026-11-10",
+      "finding": "YouTube says Shorts Series lets eligible creators organize Shorts into seasons and episodes; rollout began for YouTube Partner Program creators across web, mobile and TV. YouTube also reports microdramas exceeded 6.5 billion views in H1 2026, with watch time up over 50% YoY and TV views up over 90% YoY.",
+      "limitation": "Platform feature and viewing metrics are not search volume. Exact English or Hindi keyword demand is unverified. Do not imply SHIF-A publishes or manages YouTube Series."
+    },
+    {
+      "source": "9to5Mac — Instagram launches Edits for Mac with multi-track video editing and 4K exports",
+      "sourceUrl": "https://9to5mac.com/2026/11/05/instagram-launches-edits-for-mac-with-multi-track-video-editing-and-4k-exports/",
+      "publishedAt": "2026-11-05",
+      "checkedAt": "2026-11-10",
+      "finding": "Reports the Mac desktop release, multi-track timeline, keyframes, detailed audio waveforms, colour grading and 4K export. Same-project editing across Mac and mobile was still described as in development.",
+      "limitation": "News coverage is not exact-query search demand. This is an Instagram product, not a SHIF-A capability; no direct indexable SHIF-A page fit."
+    },
+    {
+      "source": "Google Search Console via GSC Wizard — ClipX GitHub Pages URL-prefix property",
+      "sourceUrl": "https://trademalikk-svg.github.io/clipx-ai-studio/",
+      "publishedAt": "latest settled data",
+      "checkedAt": "2026-11-10",
+      "finding": "28-day Web totals through 2026-11-07: 2 clicks, 5 impressions, 40% CTR, average position 5.2. Page rows show only the homepage. Query rows show contentstudio.io with 0 clicks/1 impression; hidden query shares are 100% of clicks and 80% of impressions.",
+      "limitation": "This is not a dedicated SHIF-A domain property. No target keyword is verified by visible query rows."
+    },
+    {
+      "source": "Pre Tutorials — How India Actually Searches YouTube: 10,781 Autocomplete Phrases Analysed",
+      "sourceUrl": "https://pretutorials.com/blog/how-india-searches-youtube-hinglish-data",
+      "publishedAt": "2026-10-25",
+      "checkedAt": "2026-11-10",
+      "finding": "Aggregate sample reports “kaise” in 965 phrases versus “how to” in 380; supports testing Roman-Hinglish how-to phrasing.",
+      "limitation": "Secondary aggregate study; does not measure any exact SHIF-A keyword."
     }
   ],
   "eveningReview": {
@@ -622,76 +710,64 @@
   },
   "nextDayPlan": [
     {
+      "keyword": "YouTube Shorts series kaise banaye",
+      "checkedAt": "2026-11-10",
+      "language": "Hindi / Roman Hinglish",
+      "intent": "Informational how-to",
+      "trend": "Official episodic-Shorts consumption signal; exact query demand unverified.",
+      "source": "Google India Blog (2026-09-23), Shorts Series and microdrama viewing data; Pre Tutorials (2026-10-25), aggregate “kaise” phrasing study.",
+      "sourceUrl": "https://blog.google/intl/en-in/products/platforms/connect-with-creators-on-the-biggest-screen-with-youtubes-latest-features/",
+      "targetPage": "guide-youtube-shorts.html",
+      "priority": "medium",
+      "verificationStatus": "Exact query unverified; page-fit and content opportunity only."
+    },
+    {
       "keyword": "long video se YouTube Shorts kaise banaye",
-      "checkedAt": "2026-11-09",
+      "checkedAt": "2026-11-10",
       "language": "Hindi / Roman Hinglish",
       "intent": "Informational how-to",
-      "trend": "Aggregate autocomplete phrasing evidence only; exact query trend and volume unverified.",
-      "source": "Pre Tutorials, How India Actually Searches YouTube: 10,781 Autocomplete Phrases Analysed (2026-10-25); 'kaise' phrasing count is an aggregate signal, not this exact query.",
+      "trend": "Aggregate phrasing pattern only; exact query demand unverified.",
+      "source": "Pre Tutorials (2026-10-25); connected GSC query rows through 2026-11-07 contain no visible matching query.",
       "sourceUrl": "https://pretutorials.com/blog/how-india-searches-youtube-hinglish-data",
       "targetPage": "guide-youtube-shorts.html",
       "priority": "medium",
-      "verificationStatus": "Exact query unverified; retain as a test candidate."
-    },
-    {
-      "keyword": "YouTube Shorts kaise banaye",
-      "checkedAt": "2026-11-09",
-      "language": "Hindi / Roman Hinglish",
-      "intent": "Informational how-to",
-      "trend": "Aggregate autocomplete phrasing evidence only; exact query trend and volume unverified.",
-      "source": "Pre Tutorials, 2026-10-25 aggregate autocomplete study; exact phrase not measured.",
-      "sourceUrl": "https://pretutorials.com/blog/how-india-searches-youtube-hinglish-data",
-      "targetPage": "guide-youtube-shorts.html",
-      "priority": "medium",
-      "verificationStatus": "Exact query unverified; check autocomplete and future settled GSC."
-    },
-    {
-      "keyword": "video ko multiple clips mein kaise baante",
-      "checkedAt": "2026-11-09",
-      "language": "Hindi / Roman Hinglish",
-      "intent": "Informational how-to",
-      "trend": "Aggregate autocomplete phrasing evidence only; exact query trend and volume unverified.",
-      "source": "Pre Tutorials, 2026-10-25 aggregate autocomplete study; exact phrase not measured.",
-      "sourceUrl": "https://pretutorials.com/blog/how-india-searches-youtube-hinglish-data",
-      "targetPage": "split-video-into-multiple-clips.html",
-      "priority": "medium",
-      "verificationStatus": "Exact query unverified; retain only as a page-fit candidate."
+      "verificationStatus": "Exact query unverified."
     },
     {
       "keyword": "Hindi subtitles kaise lagaye",
-      "checkedAt": "2026-11-09",
+      "checkedAt": "2026-11-10",
       "language": "Hindi / Roman Hinglish",
       "intent": "Informational how-to",
-      "trend": "Aggregate autocomplete phrasing evidence only; exact query trend and volume unverified.",
-      "source": "Pre Tutorials, 2026-10-25 aggregate autocomplete study; exact phrase not measured.",
+      "trend": "Aggregate phrasing pattern only; exact query demand unverified.",
+      "source": "Pre Tutorials (2026-10-25); connected GSC query rows through 2026-11-07 contain no visible matching query.",
       "sourceUrl": "https://pretutorials.com/blog/how-india-searches-youtube-hinglish-data",
       "targetPage": "guide-hindi-subtitles.html",
       "priority": "medium",
-      "verificationStatus": "Exact query unverified; check autocomplete and future settled GSC."
+      "verificationStatus": "Exact query unverified."
+    },
+    {
+      "keyword": "video ko multiple clips mein kaise baante",
+      "checkedAt": "2026-11-10",
+      "language": "Hindi / Roman Hinglish",
+      "intent": "Informational how-to",
+      "trend": "Aggregate phrasing pattern only; exact query demand unverified.",
+      "source": "Pre Tutorials (2026-10-25); connected GSC query rows through 2026-11-07 contain no visible matching query.",
+      "sourceUrl": "https://pretutorials.com/blog/how-india-searches-youtube-hinglish-data",
+      "targetPage": "split-video-into-multiple-clips.html",
+      "priority": "medium",
+      "verificationStatus": "Exact query unverified."
     },
     {
       "keyword": "Instagram Edits for Mac",
-      "checkedAt": "2026-11-09",
+      "checkedAt": "2026-11-10",
       "language": "English",
       "intent": "Informational / product comparison",
-      "trend": "News coverage increased after 2026-11-05 launch; exact search demand and trend direction unverified.",
-      "source": "MacRumors (2026-11-05) and TechCrunch (2026-11-05) launch coverage; product feature evidence, not keyword-volume evidence.",
-      "sourceUrl": "https://www.macrumors.com/2026/11/05/instagram-edits-mac/",
+      "trend": "Recent launch coverage; search trend and volume unverified.",
+      "source": "9to5Mac (2026-11-05) and The Verge (checked 2026-11-10).",
+      "sourceUrl": "https://9to5mac.com/2026/11/05/instagram-launches-edits-for-mac-with-multi-track-video-editing-and-4k-exports/",
       "targetPage": "Editorial-only; no direct indexable SHIF-A page fit",
       "priority": "low",
-      "verificationStatus": "Keep as editorial-only; do not create a SHIF-A product comparison landing page."
-    },
-    {
-      "keyword": "YouTube Shorts series",
-      "checkedAt": "2026-11-09",
-      "language": "English",
-      "intent": "Informational / creator workflow",
-      "trend": "Official YouTube feature opportunity confirmed; exact query demand unverified.",
-      "source": "YouTube Blog (2026-09-23), official Shorts Series announcement.",
-      "sourceUrl": "https://blog.youtube/news-and-events/made-on-youtube-creators-shorts-series-tv-features/",
-      "targetPage": "guide-youtube-shorts.html",
-      "priority": "low",
-      "verificationStatus": "Use only for factual series-planning guidance; do not claim SHIF-A manages YouTube series."
+      "verificationStatus": "Do not create a thin SHIF-A landing page or imply Instagram features belong to SHIF-A."
     }
   ]
 }
