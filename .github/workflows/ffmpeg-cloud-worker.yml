@@ -1,0 +1,41 @@
+name: FFmpeg Cloud Clip Processor
+
+on:
+  workflow_dispatch:
+    inputs:
+      job_id:
+        description: Supabase clip_jobs UUID (status must be uploaded)
+        required: true
+        type: string
+      clip_seconds:
+        description: Clip length in seconds
+        required: false
+        default: "30"
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  process:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install FFmpeg
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+
+      - name: Verify FFmpeg
+        run: ffmpeg -version
+
+      - name: Process uploaded video in Supabase Storage
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          CLIP_JOB_ID: ${{ inputs.job_id }}
+          CLIP_SECONDS: ${{ inputs.clip_seconds }}
+        run: python3 scripts/ffmpeg_cloud_worker.py
