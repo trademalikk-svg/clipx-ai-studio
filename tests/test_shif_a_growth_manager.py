@@ -72,7 +72,7 @@ class GrowthManagerTests(unittest.TestCase):
         self.assertIn("Plan a YouTube Shorts series", page)
         self.assertIn("series setup and publishing happen in YouTube", page)
         self.assertIn('href="split-video-into-multiple-clips.html"', page)
-        self.assertIn('"dateModified":"2026-11-08"', page)
+        self.assertIn('"dateModified":"2026-11-11"', page)
 
     def test_growth_manager_links_latest_daily_report(self):
         page = (ROOT / "growth-manager.html").read_text(encoding="utf-8")
