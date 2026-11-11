@@ -114,7 +114,8 @@ class GrowthManagerTests(unittest.TestCase):
     def test_shorts_guide_documents_three_minute_eligibility_and_copyright_rule(self):
         page = (ROOT / "guide-youtube-shorts.html").read_text(encoding="utf-8")
         self.assertIn("Can a YouTube Short be up to three minutes?", page)
-        self.assertIn("active third-party Content ID claim", page)
+        self.assertIn("active Content ID claim of any type, including manual claims", page)
+        self.assertIn("support.google.com/youtube/answer/15424877", page)
         self.assertIn("support.google.com/youtube/answer/15424877", page)
         self.assertIn('"dateModified":"2026-11-11"', page)
 
