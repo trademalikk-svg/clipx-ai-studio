@@ -134,7 +134,7 @@ class GrowthManagerTests(unittest.TestCase):
 
     def test_2026_11_12_daily_plan_contains_all_drafts_and_approval_controls(self):
         plan = (ROOT / "growth/daily/2026-11-12.md").read_text(encoding="utf-8")
-        for marker in ("YouTube Shorts draft 1", "YouTube Shorts draft 2", "Instagram Reel draft 1", "Instagram Reel draft 2", "Facebook post 1", "Facebook post 2", "Pinterest Pin 1", "Pinterest Pin 2", "Pinterest Pin 3", "SEO article draft", "15-minute community-engagement checklist", "No social post published or scheduled", "No website merge or deployment"):
+        for marker in ("YouTube Shorts draft 1", "YouTube Shorts draft 2", "Instagram Reel draft 1", "Instagram Reel draft 2", "Facebook post 1", "Facebook post 2", "Pinterest Pin 1", "Pinterest Pin 2", "Pinterest Pin 3", "SEO article draft", "15-minute community-engagement checklist", "No social posts published or scheduled", "No website merge or deployment"):
             self.assertIn(marker, plan)
 
     def test_shorts_guide_has_episode_template_and_ai_disclosure_source(self):
