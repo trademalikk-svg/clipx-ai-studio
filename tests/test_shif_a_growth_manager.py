@@ -178,7 +178,7 @@ class GrowthManagerTests(unittest.TestCase):
 
     def test_2026_11_13_evening_review_records_analytics_limits_and_no_publication(self):
         review = (ROOT / "growth/reviews/2026-11-13-1700.md").read_text(encoding="utf-8")
-        for marker in ("2 clicks", "6 impressions", "33.3%", "1 session", "0 page views", "Ishqwala scene", "No social posts published or scheduled", "No website merge, deployment", "Spend:** ₹0"):
+        for marker in ("2 clicks", "6 impressions", "33.3%", "Sessions: 1", "Page views: 0", "Ishqwala scene", "No social posts published or scheduled", "No website merge or deployment", "Actual spend:** ₹0"):
             self.assertIn(marker, review)
 
 if __name__ == "__main__":
