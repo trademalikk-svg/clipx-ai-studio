@@ -1,8 +1,8 @@
 {
   "project": "SHIF-A AI",
-  "lastUpdated": "2026-11-12",
-  "updateStatus": "daily-morning-growth-2026-11-12-0800-ist",
-  "note": "Morning refresh 2026-11-12 08:00 IST. Rechecked Shorts-series terms against the official YouTube feature announcement dated 2026-09-23: Shorts Series supports seasons and episodes, custom thumbnails and sequential playback. YouTube's same official report describes 6.5B+ microdrama views in H1 2026, watch time up 50%+ YoY and TV microdrama views up 90%+ YoY; these are platform-consumption signals, not search volume. Added two low-priority official-topic candidates: “Shorts Series” and “YouTube Shorts AI disclosure”; exact query demand is unverified. Expanded the existing Shorts guide with a practical episode-planning template and current AI-disclosure guidance; title, meta description and H1 remain unchanged because connected GSC shows no verified SHIF-A query opportunity. GSC shared ClipX GitHub Pages property, 2026-10-13 to 2026-11-09: 2 clicks, 6 impressions, 33.3% CTR, average position 15.33; only visible query contentstudio.io (0 clicks/1 impression), with 100% of clicks and 83.3% of impressions withheld/anonymised. GA4 shared-host stream labelled SHIF-A AI, 2026-10-15 to 2026-11-11: 1 session, 1 user, 0 page views, 0 engaged sessions, 0 conversions, 1 user_engagement event; figures are not clean SHIF-A-only acquisition data. Metricool remains connected only to the separate Ishqwala scene brand; no SHIF-A social metrics. No SHIF-A task-write endpoint found. No posts published, no merge/deployment, no paid spend.",
+  "lastUpdated": "2026-11-13",
+  "updateStatus": "daily-morning-growth-2026-11-13-0800-ist",
+  "note": "Morning refresh 2026-11-13 08:00 IST. Rechecked YouTube Shorts duration and microdrama/series opportunities. A secondary 2026-11-09 multi-channel report covering 25,796 channels and 4,615,125 videos reports the share of 2–3 minute Shorts rising from 6.1% in Q1 to 7.3% in Aug–Oct; this is upload-mix evidence, not search demand, viewer preference or guaranteed reach. Official YouTube Help confirms standard-channel square/vertical Shorts up to 3 minutes and the active Content ID restriction for Shorts over 1 minute. YouTube's 2026-09-23 official announcement reports Shorts Series (seasons, episodes, custom thumbnails, sequential playback) and H1 2026 microdrama consumption; an 2026-11-11 India trending-video tracker also lists a Hindi moral-story Short among high-view videos. These are feature/consumption/video-trend signals, not exact keyword search volume. Refreshed existing entries only; no duplicate keyword added. Connected GSC property is shared ClipX GitHub Pages URL-prefix, 2026-10-14 to 2026-11-10: 2 clicks, 6 impressions, 33.3% CTR, average position 15.33; only visible query contentstudio.io (0 clicks/1 impression), with 100% of clicks and 83.3% of impressions withheld/anonymised. GA4 shared-host stream labelled SHIF-A AI, 2026-10-17 to 2026-11-12: 1 session, 1 user, 0 page views, 0 engaged sessions, 0 conversions, 1 user_engagement event; not clean SHIF-A-only acquisition data. Metricool remains connected only to separate Ishqwala scene brand; no SHIF-A social metrics. No SHIF-A task-write endpoint found. No posts published, no merge/deployment, no paid spend.",
   "keywords": [
     {
       "keyword": "online video editor",
@@ -381,27 +381,32 @@
       "script": "Latin",
       "intent": "informational / platform eligibility",
       "targetPage": "guide-youtube-shorts.html",
-      "source": "YouTube Help, “Understand three-minute YouTube Shorts” (checked 2026-11-11): standard-channel square/vertical videos up to 3 minutes uploaded on/after 2024-10-15 are Shorts; any active Content ID claim on a Short over 1 minute, including manual claims, causes global blocking. Exact query demand is unverified.",
+      "source": "YouTube Help, “Understand three-minute YouTube Shorts” (checked 2026-11-13): standard-channel square/vertical videos up to 3 minutes uploaded on/after 2024-10-15 are Shorts; any active Content ID claim on a Short over 1 minute, including manual claims, causes global blocking. Secondary YouTube Trends Report updated 2026-11-09 analysed 25,796 channels and 4,615,125 videos and reports 2–3 minute Shorts' share rising from 6.1% in Q1 to 7.3% in Aug–Oct. The latter is upload-mix evidence only, not search volume, viewer preference or a performance guarantee.",
       "sourceUrl": "https://support.google.com/youtube/answer/15424877?hl=en-IN",
-      "checkedAt": "2026-11-11",
-      "trend": "Current official platform eligibility fact; exact search trend and SHIF-A query demand unverified.",
+      "checkedAt": "2026-11-13",
+      "trend": "Rising format-share signal in the cited channel sample: 2–3 minute Shorts rose from 6.1% in Q1 to 7.3% in Aug–Oct. Exact keyword search trend and SHIF-A query demand remain unverified; do not infer higher views or ranking.",
       "priority": "medium",
-      "verificationStatus": "official platform guidance verified; exact query demand unverified",
-      "evidenceType": "official YouTube Help"
+      "verificationStatus": "official platform eligibility verified; secondary upload-mix trend; exact query demand unverified",
+      "evidenceType": "official YouTube Help + secondary multi-channel upload-format analysis",
+      "relatedSourceUrl": "https://trendreport.com/trends/youtube-trends-report-2026/",
+      "trendDirection": "rising-format-share; exact search trend unverified",
+      "market": "multi-channel report sample; not India-specific"
     },
     {
       "keyword": "YouTube Shorts microdrama series",
       "language": "en",
       "intent": "informational / format discovery",
       "targetPage": "guide-youtube-shorts.html",
-      "source": "YouTube Blog, “Connect with creators on the biggest screen with YouTube’s latest features” (2026-09-23): YouTube reports 6.5B+ microdrama views in H1 2026, watch time up more than 50% YoY and microdrama views on TV up more than 90% YoY. These are platform-consumption metrics, not search volume or exact-query trend.",
-      "sourceUrl": "https://blog.youtube/news-and-events/made-on-youtube-creators-shorts-series-tv-features/",
-      "checkedAt": "2026-11-12",
-      "trend": "Strong platform-consumption signal for episodic microdramas; exact keyword search trend and SHIF-A query demand unverified.",
+      "source": "YouTube's official 2026-09-23 Shorts Series announcement reports seasons/episodes, custom thumbnails and sequential playback, plus 6.5B+ microdrama views on YouTube in H1 2026 and watch time up 50%+ YoY. A third-party India trending-video snapshot dated 2026-11-11 lists a Hindi moral-story Short among its top-viewed entries. These are platform/video-consumption signals, not exact search-query demand.",
+      "sourceUrl": "https://blog.google/intl/en-in/products/platforms/connect-with-creators-on-the-biggest-screen-with-youtubes-latest-features/",
+      "checkedAt": "2026-11-13",
+      "trend": "Strong episodic-video consumption signal from YouTube's H1 2026 report; Hindi moral-story content also appears in a third-party India trending-Shorts snapshot dated 2026-11-11. This is not keyword search volume; exact query trend and SHIF-A impressions remain unverified.",
       "priority": "low",
-      "verificationStatus": "official YouTube platform-consumption evidence; exact query demand unverified",
-      "evidenceType": "official YouTube product announcement and platform-consumption report",
-      "priorityBasis": "Relevant to the existing Shorts-series section; editorial opportunity only, not a volume-based SEO score."
+      "verificationStatus": "official platform-consumption signal plus third-party video-trend snapshot; exact query demand unverified",
+      "evidenceType": "official YouTube platform announcement + third-party India trending-video snapshot",
+      "priorityBasis": "Relevant to the existing Shorts-series section; editorial opportunity only, not a volume-based SEO score.",
+      "relatedSourceUrl": "https://viralhooks.org/trending-youtube-shorts-in/india/",
+      "trendDirection": "positive video-consumption signal; exact search trend unverified"
     },
     {
       "keyword": "Shorts Series",
