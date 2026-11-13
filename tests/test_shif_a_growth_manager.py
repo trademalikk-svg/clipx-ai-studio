@@ -78,8 +78,9 @@ class GrowthManagerTests(unittest.TestCase):
         page = (ROOT / "growth-manager.html").read_text(encoding="utf-8")
         self.assertIn("growth/daily/2026-11-13.md", page)
         self.assertIn("Open 13 November content drafts and Owner report", page)
-        self.assertIn("growth/reviews/2026-11-12-1700.md", page)
-        self.assertIn("Open 12 November 17:00 Owner review", page)
+        self.assertIn("growth/reviews/2026-11-13-1700.md", page)
+        self.assertIn("Open 13 November 17:00 Owner review", page)
+        self.assertIn("shif-a-organic-growth-2026-11-13/growth/reviews/2026-11-13-1700.md", page)
 
     def test_daily_plan_2026_11_09_contains_all_requested_drafts_and_approval_controls(self):
         plan = (ROOT / "growth/daily/2026-11-09.md").read_text(encoding="utf-8")
@@ -173,6 +174,12 @@ class GrowthManagerTests(unittest.TestCase):
         plan = (ROOT / "growth/daily/2026-11-13.md").read_text(encoding="utf-8")
         for marker in ("YouTube Shorts draft 1", "YouTube Shorts draft 2", "Instagram Reel draft 1", "Instagram Reel draft 2", "Facebook post 1", "Facebook post 2", "Pinterest Pin 1", "Pinterest Pin 2", "Pinterest Pin 3", "SEO article draft", "15-minute community-engagement checklist", "No social posts published or scheduled", "No website merge or deployment"):
             self.assertIn(marker, plan)
+
+
+    def test_2026_11_13_evening_review_records_analytics_limits_and_no_publication(self):
+        review = (ROOT / "growth/reviews/2026-11-13-1700.md").read_text(encoding="utf-8")
+        for marker in ("2 clicks", "6 impressions", "33.3%", "1 session", "0 page views", "Ishqwala scene", "No social posts published or scheduled", "No website merge, deployment", "Spend:** ₹0"):
+            self.assertIn(marker, review)
 
 if __name__ == "__main__":
     unittest.main()
