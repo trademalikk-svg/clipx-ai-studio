@@ -1,8 +1,8 @@
 {
   "project": "SHIF-A AI",
   "lastUpdated": "2026-11-13",
-  "updateStatus": "daily-morning-growth-2026-11-13-0800-ist",
-  "note": "Morning refresh 2026-11-13 08:00 IST. Rechecked YouTube Shorts duration and microdrama/series opportunities. A secondary 2026-11-09 multi-channel report covering 25,796 channels and 4,615,125 videos reports the share of 2–3 minute Shorts rising from 6.1% in Q1 to 7.3% in Aug–Oct; this is upload-mix evidence, not search demand, viewer preference or guaranteed reach. Official YouTube Help confirms standard-channel square/vertical Shorts up to 3 minutes and the active Content ID restriction for Shorts over 1 minute. YouTube's 2026-09-23 official announcement reports Shorts Series (seasons, episodes, custom thumbnails, sequential playback) and H1 2026 microdrama consumption; an 2026-11-11 India trending-video tracker also lists a Hindi moral-story Short among high-view videos. These are feature/consumption/video-trend signals, not exact keyword search volume. Refreshed existing entries only; no duplicate keyword added. Connected GSC property is shared ClipX GitHub Pages URL-prefix, 2026-10-14 to 2026-11-10: 2 clicks, 6 impressions, 33.3% CTR, average position 15.33; only visible query contentstudio.io (0 clicks/1 impression), with 100% of clicks and 83.3% of impressions withheld/anonymised. GA4 shared-host stream labelled SHIF-A AI, 2026-10-17 to 2026-11-12: 1 session, 1 user, 0 page views, 0 engaged sessions, 0 conversions, 1 user_engagement event; not clean SHIF-A-only acquisition data. Metricool remains connected only to separate Ishqwala scene brand; no SHIF-A social metrics. No SHIF-A task-write endpoint found. No posts published, no merge/deployment, no paid spend.",
+  "updateStatus": "daily-evening-growth-2026-11-13-1700-ist",
+  "note": "Morning refresh 2026-11-13 08:00 IST. Rechecked YouTube Shorts duration and microdrama/series opportunities. A secondary 2026-11-09 multi-channel report covering 25,796 channels and 4,615,125 videos reports the share of 2–3 minute Shorts rising from 6.1% in Q1 to 7.3% in Aug–Oct; this is upload-mix evidence, not search demand, viewer preference or guaranteed reach. Official YouTube Help confirms standard-channel square/vertical Shorts up to 3 minutes and the active Content ID restriction for Shorts over 1 minute. YouTube's 2026-09-23 official announcement reports Shorts Series (seasons, episodes, custom thumbnails, sequential playback) and H1 2026 microdrama consumption; an 2026-11-11 India trending-video tracker also lists a Hindi moral-story Short among high-view videos. These are feature/consumption/video-trend signals, not exact keyword search volume. Refreshed existing entries only; no duplicate keyword added. Connected GSC property is shared ClipX GitHub Pages URL-prefix, 2026-10-14 to 2026-11-10: 2 clicks, 6 impressions, 33.3% CTR, average position 15.33; only visible query contentstudio.io (0 clicks/1 impression), with 100% of clicks and 83.3% of impressions withheld/anonymised. GA4 shared-host stream labelled SHIF-A AI, 2026-10-17 to 2026-11-12: 1 session, 1 user, 0 page views, 0 engaged sessions, 0 conversions, 1 user_engagement event; not clean SHIF-A-only acquisition data. Metricool remains connected only to separate Ishqwala scene brand; no SHIF-A social metrics. No SHIF-A task-write endpoint found. No posts published, no merge/deployment, no paid spend. Evening review 2026-11-13 17:00 IST: no new keyword added. Rechecked India Shorts trend snapshots, GSC settled data through 2026-11-10 and the connected GA4 aggregate. Trend charts are video-popularity signals, not search volume; exact SHIF-A query demand remains unverified.",
   "keywords": [
     {
       "keyword": "online video editor",
@@ -724,21 +724,61 @@
       "checkedAt": "2026-11-12T16:58:00+05:30",
       "finding": "The reported 9 Oct–8 Nov 2026 Google Trends export shows broad topics including video, Hindi, episode and cartoon, and queries including video, cartoon, comedy and story. These are broad topic/query signals, not exact SHIF-A product-keyword demand.",
       "limitation": "Secondary report of relative Google Trends indices, not monthly search volumes. Broad terms are too ambiguous to add as SHIF-A SEO targets without exact-query evidence."
+    },
+    {
+      "source": "Veedio — Trending YouTube Shorts in India today",
+      "sourceUrl": "https://www.veedio.co/trending/youtube-shorts/country/india",
+      "publishedAt": "live chart updated 2026-11-13",
+      "checkedAt": "2026-11-13T17:04:41+05:30",
+      "finding": "English-titled India Shorts chart showed 24 Shorts from 24 channels, 9 new since 2026-11-12, with a median 548.3K views/day. Visible topics were broad entertainment/music/trailer content rather than SHIF-A creator workflow topics.",
+      "limitation": "Third-party chart of video views per day, not Google/YouTube query volume; English-titled slice excludes Hindi titles. Not used to add or prioritize a SHIF-A SEO keyword."
+    },
+    {
+      "source": "Bharat Metro Locator — YouTube Trends India",
+      "sourceUrl": "https://bharatmetrolocator.com/youtube-trends/india",
+      "publishedAt": "2026-11-13 11:29 IST",
+      "checkedAt": "2026-11-13T17:04:41+05:30",
+      "finding": "A secondary 50-video India trend snapshot included broad entertainment, episodic and technology/how-to content. No exact SHIF-A query demand was supplied.",
+      "limitation": "Video chart, not search-query data; aggregator source. Used only for editorial context."
+    },
+    {
+      "source": "Viral Hooks — Hindi moral-story Short performance snapshot",
+      "sourceUrl": "https://viralhooks.org/shorts/v/OxmM4x6g89k/",
+      "publishedAt": "video published 2026-11-02; data refreshed 2026-11-12",
+      "checkedAt": "2026-11-13",
+      "finding": "A Hindi moral-story Short appeared at #1 on the source's India Shorts list, with 41.4M total views and 4,872 views in the preceding 24 hours at its 2026-11-12 update.",
+      "limitation": "One video's performance is a content-consumption signal, not search volume or evidence that a SHIF-A page should target the phrase. Editorial-only."
+    },
+    {
+      "source": "MyShorts — YouTube video se Shorts kaise banaye? Hindi captions ke saath",
+      "sourceUrl": "https://myshorts.in/blog/youtube-video-se-shorts-kaise-banaye",
+      "publishedAt": "2026-11-04",
+      "checkedAt": "2026-11-13",
+      "finding": "A recent competitor guide uses a Hindi/Hinglish long-video-to-Shorts phrase and pairs it with Hindi captions. This supports testing natural phrasing on the existing Shorts guide.",
+      "limitation": "Competitor article title is not keyword-volume evidence or proof of ranking. Existing page already covers the same intent; do not create a duplicate page."
+    },
+    {
+      "source": "Google Search Console — ClipX GitHub Pages URL-prefix property",
+      "sourceUrl": "https://trademalikk-svg.github.io/clipx-ai-studio/",
+      "publishedAt": "latest finalized Web data through 2026-11-10",
+      "checkedAt": "2026-11-13T17:04:41+05:30",
+      "finding": "28-day totals for 2026-10-14 to 2026-11-10: 2 clicks, 6 impressions, 33.3% CTR, average position 15.33. Only homepage page row visible; only visible query contentstudio.io has 0 clicks and 1 impression. India 2 clicks/4 impressions.",
+      "limitation": "Shared ClipX GitHub Pages property, not a dedicated SHIF-A domain. Google anonymizes rare queries; previous equal-length period had no page row, so no valid comparison delta."
     }
   ],
   "eveningReview": {
-    "checkedAt": "2026-11-09T17:03:55+05:30",
+    "checkedAt": "2026-11-13T17:04:41+05:30",
     "gsc": {
       "property": "https://trademalikk-svg.github.io/clipx-ai-studio/",
-      "propertyScope": "ClipX GitHub Pages URL-prefix property; not a dedicated SHIF-A domain",
-      "startDate": "2026-10-10",
-      "endDate": "2026-11-06",
+      "propertyScope": "Shared ClipX GitHub Pages URL-prefix property; not a dedicated SHIF-A domain",
+      "startDate": "2026-10-14",
+      "endDate": "2026-11-10",
       "searchType": "web",
       "dataState": "final",
       "clicks": 2,
-      "impressions": 5,
-      "ctr": 0.4,
-      "averagePosition": 5.2,
+      "impressions": 6,
+      "ctr": 0.3333333333333333,
+      "averagePosition": 15.333333333333334,
       "visibleQueryRows": [
         {
           "query": "contentstudio.io",
@@ -752,39 +792,94 @@
         {
           "page": "https://trademalikk-svg.github.io/clipx-ai-studio/",
           "clicks": 2,
-          "impressions": 5,
-          "ctr": 0.4,
-          "position": 5.2
+          "impressions": 6,
+          "ctr": 0.3333333333333333,
+          "position": 15.333333333333334
         }
       ],
-      "caveat": "Google anonymizes rare queries; the visible query row does not account for all page totals."
+      "countryRows": [
+        {
+          "country": "ind",
+          "clicks": 2,
+          "impressions": 4,
+          "ctr": 0.5,
+          "position": 2.75
+        },
+        {
+          "country": "pak",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 15
+        },
+        {
+          "country": "rus",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 66
+        }
+      ],
+      "dailyRows": [
+        {
+          "date": "2026-11-01",
+          "clicks": 0,
+          "impressions": 1,
+          "position": 15
+        },
+        {
+          "date": "2026-11-02",
+          "clicks": 1,
+          "impressions": 3,
+          "position": 3
+        },
+        {
+          "date": "2026-11-03",
+          "clicks": 1,
+          "impressions": 1,
+          "position": 2
+        },
+        {
+          "date": "2026-11-08",
+          "clicks": 0,
+          "impressions": 1,
+          "position": 66
+        }
+      ],
+      "anonymizedQueriesNote": "Google withholds rare queries; visible query rows do not sum to property totals."
     },
     "comparison": {
-      "currentPeriod": "2026-10-31 to 2026-11-06",
-      "previousPeriod": "2026-10-24 to 2026-10-30",
-      "result": "Homepage had 2 clicks and 5 impressions in the current period; no previous-period row was returned, so no directional comparison is possible."
+      "currentPeriod": "2026-10-14 to 2026-11-10",
+      "previousPeriod": "2026-09-16 to 2026-10-13",
+      "result": "No previous-period page row returned; no valid period delta can be calculated."
+    },
+    "sitemap": {
+      "path": "https://trademalikk-svg.github.io/clipx-ai-studio/sitemap.xml",
+      "isPending": true,
+      "warnings": 0,
+      "errors": 0
     },
     "analyticsAccess": {
       "ga4": {
-        "connection": "Connected through HYPD; GA4 property hostName report identifies trademalikk-svg.github.io, the shared ClipX/SHIF-A GitHub Pages host.",
-        "dateRange": "2026-10-13 to 2026-11-09 (last 28 days)",
-        "propertyTimeZone": "Etc/GMT",
-        "currencyCode": "GBP",
+        "propertyId": "563048545",
+        "propertyCreatedAt": "2026-11-06T22:52:36Z",
+        "streamName": "SHIF-A AI",
+        "measurementId": "G-SFRF1B8RNB",
+        "defaultUri": "https://trademalikk-svg.github.io",
+        "reportPeriod": "2026-10-17 to 2026-11-13",
         "sessions": 1,
         "totalUsers": 1,
+        "newUsers": 0,
         "screenPageViews": 0,
-        "eventCount": 1,
-        "keyEvents": 0,
-        "purchaseRevenue": 0,
-        "landingPage": "(not set)",
+        "engagedSessions": 0,
         "engagementRate": 0,
-        "averageSessionDurationSeconds": 0,
-        "attributionCaveat": "This is shared-host data, not page-specific SHIF-A usage. The single session has no set landing page and zero page views, so no SHIF-A traffic, signup or customer attribution is supported."
+        "conversions": 0,
+        "detailStatus": "Daily and page-path report calls returned intermittent GA4 API 502 errors; aggregate report succeeded once.",
+        "attributionCaveat": "Shared GitHub host, not a dedicated SHIF-A hostname; one session with zero page views does not establish a verified SHIF-A visitor, signup or customer."
       },
-      "metricool": "Only the separate Ishqwala scene brand is connected; not a SHIF-A account and excluded from SHIF-A performance.",
-      "shifASocialMetrics": "Views, reach and post-level clicks unavailable.",
-      "signupsAndCustomers": "No SHIF-A-specific verified signup or customer metrics available.",
-      "ga4Status": "Connected shared property; metrics too sparse and not SHIF-A-specific."
+      "metricool": "Only the separate Ishqwala scene brand is connected; no SHIF-A-owned social brand is available.",
+      "shifASocialMetrics": "Views, reach, social clicks and post-level winners unavailable.",
+      "signupsAndCustomers": "No SHIF-A-specific verified signup or customer metrics available."
     },
     "contentTargets": {
       "youtubeShorts": {
@@ -815,71 +910,71 @@
       "communityChecklistMinutes": 15,
       "communityChecklist": "Prepared but not executed; SHIF-A-owned social account access is not connected."
     },
-    "topPerformers": "Cannot identify a SHIF-A top-performing post or page from available attributable analytics. GSC only returns the homepage row for this property.",
-    "growthManager": "scripts/shif-a-growth-manager.js reads the JSON keyword map and renders a static table; no persistent task-status write endpoint or task store is present in the inspected implementation.",
-    "seoDecision": "No public HTML title, meta description, heading or body copy changed at evening review. Existing guide pages fit their mapped subjects; the news-led Instagram Edits for Mac topic has no direct indexable SHIF-A page fit. No thin page created.",
+    "topPerformers": "Cannot identify a SHIF-A top-performing post or landing page from attributable analytics. GSC only returns the homepage row.",
+    "growthManager": "Growth Manager reads the JSON keyword map and links reports; no persistent task-status store or task-write endpoint is present. No task was marked complete in the app.",
+    "seoDecision": "No new keyword added and no public HTML title, meta description, H1 or body copy changed during evening review. Trend charts are video-popularity evidence, not exact search demand. No thin or duplicate page created.",
     "spendInr": 0
   },
   "nextDayPlan": [
     {
       "keyword": "YouTube Shorts series kaise banaye",
-      "checkedAt": "2026-11-10",
+      "checkedAt": "2026-11-13",
       "language": "Hindi / Roman Hinglish",
       "intent": "Informational how-to",
-      "trend": "Official episodic-Shorts consumption signal; exact query demand unverified.",
-      "source": "Google India Blog (2026-09-23), Shorts Series and microdrama viewing data; Pre Tutorials (2026-10-25), aggregate “kaise” phrasing study.",
-      "sourceUrl": "https://blog.google/intl/en-in/products/platforms/connect-with-creators-on-the-biggest-screen-with-youtubes-latest-features/",
+      "trend": "Official Shorts Series feature context remains relevant; exact query trend and SHIF-A impressions unverified.",
+      "source": "YouTube official Shorts Series announcement (2026-09-23); Pre Tutorials aggregate Hinglish phrase study (2026-10-25).",
+      "sourceUrl": "https://blog.youtube/news-and-events/made-on-youtube-creators-shorts-series-tv-features/",
       "targetPage": "guide-youtube-shorts.html",
       "priority": "medium",
-      "verificationStatus": "Exact query unverified; page-fit and content opportunity only."
+      "verificationStatus": "Existing mapped candidate; exact query demand unverified."
     },
     {
       "keyword": "long video se YouTube Shorts kaise banaye",
-      "checkedAt": "2026-11-10",
+      "checkedAt": "2026-11-13",
       "language": "Hindi / Roman Hinglish",
       "intent": "Informational how-to",
-      "trend": "Aggregate phrasing pattern only; exact query demand unverified.",
-      "source": "Pre Tutorials (2026-10-25); connected GSC query rows through 2026-11-07 contain no visible matching query.",
-      "sourceUrl": "https://pretutorials.com/blog/how-india-searches-youtube-hinglish-data",
+      "trend": "Recent competitor content uses closely related Hindi/Hinglish wording; exact query demand unverified.",
+      "source": "MyShorts guide (2026-11-04); Pre Tutorials aggregate Hinglish phrase study (2026-10-25).",
+      "sourceUrl": "https://myshorts.in/blog/youtube-video-se-shorts-kaise-banaye",
       "targetPage": "guide-youtube-shorts.html",
       "priority": "medium",
-      "verificationStatus": "Exact query unverified."
+      "verificationStatus": "Existing mapped candidate; keep on current page and avoid duplicate URL."
     },
     {
       "keyword": "Hindi subtitles kaise lagaye",
-      "checkedAt": "2026-11-10",
+      "checkedAt": "2026-11-13",
       "language": "Hindi / Roman Hinglish",
       "intent": "Informational how-to",
-      "trend": "Aggregate phrasing pattern only; exact query demand unverified.",
-      "source": "Pre Tutorials (2026-10-25); connected GSC query rows through 2026-11-07 contain no visible matching query.",
+      "trend": "No new exact-query trend evidence; aggregate Hinglish phrasing evidence only.",
+      "source": "Pre Tutorials aggregate Hinglish phrase study (2026-10-25); connected GSC visible rows show no exact matching query.",
       "sourceUrl": "https://pretutorials.com/blog/how-india-searches-youtube-hinglish-data",
       "targetPage": "guide-hindi-subtitles.html",
       "priority": "medium",
-      "verificationStatus": "Exact query unverified."
+      "verificationStatus": "Existing mapped candidate; exact query demand unverified."
     },
     {
       "keyword": "video ko multiple clips mein kaise baante",
-      "checkedAt": "2026-11-10",
+      "checkedAt": "2026-11-13",
       "language": "Hindi / Roman Hinglish",
       "intent": "Informational how-to",
-      "trend": "Aggregate phrasing pattern only; exact query demand unverified.",
-      "source": "Pre Tutorials (2026-10-25); connected GSC query rows through 2026-11-07 contain no visible matching query.",
+      "trend": "No new exact-query trend evidence; aggregate Hinglish phrasing evidence only.",
+      "source": "Pre Tutorials aggregate Hinglish phrase study (2026-10-25); connected GSC visible rows show no exact matching query.",
       "sourceUrl": "https://pretutorials.com/blog/how-india-searches-youtube-hinglish-data",
       "targetPage": "split-video-into-multiple-clips.html",
       "priority": "medium",
-      "verificationStatus": "Exact query unverified."
+      "verificationStatus": "Existing mapped candidate; exact query demand unverified."
     },
     {
-      "keyword": "Instagram Edits for Mac",
-      "checkedAt": "2026-11-10",
-      "language": "English",
-      "intent": "Informational / product comparison",
-      "trend": "Recent launch coverage; search trend and volume unverified.",
-      "source": "9to5Mac (2026-11-05) and The Verge (checked 2026-11-10).",
-      "sourceUrl": "https://9to5mac.com/2026/11/05/instagram-launches-edits-for-mac-with-multi-track-video-editing-and-4k-exports/",
+      "keyword": "Hindi moral story Shorts",
+      "checkedAt": "2026-11-13",
+      "language": "Hindi",
+      "intent": "Video discovery / editorial",
+      "trend": "Positive video-consumption signal in a third-party India Shorts snapshot refreshed 2026-11-12; not search-query evidence.",
+      "source": "Viral Hooks India Shorts performance snapshot (2026-11-12).",
+      "sourceUrl": "https://viralhooks.org/shorts/v/OxmM4x6g89k/",
       "targetPage": "Editorial-only; no direct indexable SHIF-A page fit",
       "priority": "low",
-      "verificationStatus": "Do not create a thin SHIF-A landing page or imply Instagram features belong to SHIF-A."
+      "verificationStatus": "Do not add to SEO map; use only for original storytelling editorial ideas."
     }
   ]
 }
