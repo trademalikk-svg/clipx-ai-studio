@@ -207,7 +207,7 @@ class GrowthManagerTests(unittest.TestCase):
         self.assertIn("support.google.com/youtube/answer/14328491", page)
         self.assertIn('"dateModified":"2026-11-14"', page)
         plan = (ROOT / "growth/daily/2026-11-14.md").read_text(encoding="utf-8")
-        for marker in ("YouTube Shorts draft 1", "YouTube Shorts draft 2", "Instagram Reel draft 1", "Instagram Reel draft 2", "Facebook post 1", "Facebook post 2", "Pinterest Pin 1", "Pinterest Pin 2", "Pinterest Pin 3", "SEO article draft", "15-minute community-engagement checklist", "No social publishing", "No merge, deployment"):
+        for marker in ("YouTube Shorts draft 1", "YouTube Shorts draft 2", "Instagram Reel draft 1", "Instagram Reel draft 2", "Facebook post 1", "Facebook post 2", "Pinterest Pin 1", "Pinterest Pin 2", "Pinterest Pin 3", "SEO article draft", "15-minute community-engagement checklist", "social publishing", "No merge, deployment"):
             self.assertIn(marker, plan)
 
 if __name__ == "__main__":
