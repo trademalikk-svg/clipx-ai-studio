@@ -72,7 +72,7 @@ class GrowthManagerTests(unittest.TestCase):
         self.assertIn("Plan a YouTube Shorts series", page)
         self.assertIn("series setup and publishing happen in YouTube", page)
         self.assertIn('href="split-video-into-multiple-clips.html"', page)
-        self.assertIn('"dateModified":"2026-11-13"', page)
+        self.assertIn('"dateModified":"2026-11-14"', page)
 
     def test_growth_manager_links_latest_daily_report(self):
         page = (ROOT / "growth-manager.html").read_text(encoding="utf-8")
@@ -118,7 +118,7 @@ class GrowthManagerTests(unittest.TestCase):
         self.assertIn("active Content ID claim of any type, including manual claims", page)
         self.assertIn("support.google.com/youtube/answer/15424877", page)
         self.assertIn("support.google.com/youtube/answer/15424877", page)
-        self.assertIn('"dateModified":"2026-11-13"', page)
+        self.assertIn('"dateModified":"2026-11-14"', page)
 
 
     def test_2026_11_12_candidates_remain_in_2026_11_13_map(self):
@@ -144,7 +144,7 @@ class GrowthManagerTests(unittest.TestCase):
         self.assertIn("official YouTube Shorts Series announcement", page)
         self.assertIn("When to disclose realistic AI-generated content", page)
         self.assertIn("blog.youtube/news-and-events/improving-ai-labels-viewers-creators", page)
-        self.assertIn('"dateModified":"2026-11-13"', page)
+        self.assertIn('"dateModified":"2026-11-14"', page)
 
 
     def test_2026_11_13_keyword_map_refreshes_duration_and_microdrama_evidence(self):
@@ -168,7 +168,7 @@ class GrowthManagerTests(unittest.TestCase):
         self.assertIn("6.1% in Q1 to 7.3% in August–October", page)
         self.assertIn("does not prove that longer Shorts get more views", page)
         self.assertIn("guide-hindi-subtitles.html", page)
-        self.assertIn('"dateModified":"2026-11-13"', page)
+        self.assertIn('"dateModified":"2026-11-14"', page)
 
     def test_daily_plan_2026_11_13_contains_all_drafts_and_approval_controls(self):
         plan = (ROOT / "growth/daily/2026-11-13.md").read_text(encoding="utf-8")
@@ -180,6 +180,35 @@ class GrowthManagerTests(unittest.TestCase):
         review = (ROOT / "growth/reviews/2026-11-13-1700.md").read_text(encoding="utf-8")
         for marker in ("2 clicks", "6 impressions", "33.3%", "Sessions: 1", "Page views: 0", "Ishqwala scene", "No social posts published or scheduled", "No website merge or deployment", "Actual spend:** ₹0"):
             self.assertIn(marker, review)
+
+
+    def test_2026_11_14_keyword_map_and_ai_disclosure_refresh(self):
+        import json
+        data = json.loads((ROOT / "data/shif-a-keywords.json").read_text(encoding="utf-8"))
+        by_keyword = {item["keyword"]: item for item in data["keywords"]}
+        self.assertEqual(data["lastUpdated"], "2026-11-14")
+        self.assertEqual(len(data["keywords"]), 33)
+        for keyword, language in (("children day 2026", "en"), ("बाल दिवस 2026", "hi")):
+            item = by_keyword[keyword]
+            self.assertEqual(item["language"], language)
+            self.assertEqual(item["checkedAt"], "2026-11-14")
+            self.assertEqual(item["priority"], "low")
+            self.assertIn("partial fit", item["targetPage"])
+            self.assertTrue(item["sourceUrl"])
+            self.assertTrue(item["trend"])
+        ai = by_keyword["YouTube Shorts AI disclosure"]
+        self.assertEqual(ai["checkedAt"], "2026-11-14")
+        self.assertIn("support.google.com/youtube/answer/14328491", ai["sourceUrl"])
+        self.assertIn("exact query demand unverified", ai["verificationStatus"])
+
+    def test_2026_11_14_guide_and_daily_plan_have_current_policy_and_all_drafts(self):
+        page = (ROOT / "guide-youtube-shorts.html").read_text(encoding="utf-8")
+        self.assertIn("YouTube AI disclosure: realistic versus non-realistic content", page)
+        self.assertIn("support.google.com/youtube/answer/14328491", page)
+        self.assertIn('"dateModified":"2026-11-14"', page)
+        plan = (ROOT / "growth/daily/2026-11-14.md").read_text(encoding="utf-8")
+        for marker in ("YouTube Shorts draft 1", "YouTube Shorts draft 2", "Instagram Reel draft 1", "Instagram Reel draft 2", "Facebook post 1", "Facebook post 2", "Pinterest Pin 1", "Pinterest Pin 2", "Pinterest Pin 3", "SEO article draft", "15-minute community-engagement checklist", "No social publishing", "No merge, deployment"):
+            self.assertIn(marker, plan)
 
 if __name__ == "__main__":
     unittest.main()
