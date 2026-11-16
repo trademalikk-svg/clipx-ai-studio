@@ -1233,6 +1233,8 @@
     },
     "seoDecision": "No title, meta description or H1 rewrite. Existing Shorts page metadata and internal anchors already match the page intent. Add one official, useful paragraph about track-specific Shorts music duration to the existing three-minute section; no new URL or unsupported product claim.",
     "analytics": "No fresh GSC/GA4/social account analytics queried in the 08:00 run. Last verified metrics remain shared-host/partial and are not presented as SHIF-A-only.",
-    "spendInr": 0
-  }
+    "spendInr": 0,
+    "nextDayPlanFor": "2026-11-17"
+  },
+  "nextDayPlanFor": "2026-11-17"
 }
