@@ -44,11 +44,11 @@ class ShifAEveningGrowth20261116Tests(unittest.TestCase):
     def test_daily_report_contains_all_requested_draft_sections(self):
         daily = (ROOT / "growth/daily/2026-11-16.md").read_text(encoding="utf-8")
         for marker in (
-            "YouTube Shorts draft 1", "YouTube Shorts draft 2",
-            "Instagram Reel draft 1", "Instagram Reel draft 2",
-            "Facebook post 1", "Facebook post 2",
-            "Pinterest Pin 1", "Pinterest Pin 2", "Pinterest Pin 3",
-            "SEO article draft", "15-minute community-engagement checklist"
+            "### YouTube Short 1", "### YouTube Short 2",
+            "### Instagram Reel 1", "### Instagram Reel 2",
+            "### Facebook Post 1", "### Facebook Post 2",
+            "### Pinterest Pin 1", "### Pinterest Pin 2", "### Pinterest Pin 3",
+            "## SEO article draft — existing Shorts guide expansion", "## 15-minute community engagement checklist"
         ):
             self.assertIn(marker, daily)
 
