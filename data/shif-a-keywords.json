@@ -17,7 +17,8 @@
       "verificationStatus": "unverified",
       "evidenceType": "secondary Google Trends summary",
       "market": "India",
-      "clusterRole": "supporting"
+      "clusterRole": "supporting",
+      "trendDirection": "Adjacent AI-assistant interest signal; exact generic phrase unverified"
     },
     {
       "keyword": "AI editing for YouTube Shorts",
@@ -32,7 +33,8 @@
       "verificationStatus": "official third-party feature opportunity; exact query unverified",
       "evidenceType": "official YouTube product announcement",
       "market": "India and worldwide",
-      "editorialCaveat": "This describes YouTube's announced tools, not SHIF-A/ClipX capability. Do not claim ClipX provides prompt-based AI editing."
+      "editorialCaveat": "This describes YouTube's announced tools, not SHIF-A/ClipX capability. Do not claim ClipX provides prompt-based AI editing.",
+      "trendDirection": "Official third-party feature announcement remains a content context signal; exact query demand unverified. Do not describe as SHIF-A capability."
     },
     {
       "keyword": "AI tools directory",
@@ -45,7 +47,8 @@
       "trend": "related discovery signal; exact phrase unverified",
       "priority": "medium",
       "evidenceType": "secondary Google Trends summary",
-      "verificationStatus": "unverified"
+      "verificationStatus": "unverified",
+      "trendDirection": "related discovery signal; exact phrase unverified"
     },
     {
       "keyword": "AI tools India",
@@ -58,7 +61,8 @@
       "trend": "rising-category-signal; broad AI topic reportedly ~+50% YoY, exact query unverified",
       "priority": "medium",
       "evidenceType": "secondary Google Trends summary",
-      "verificationStatus": "unverified"
+      "verificationStatus": "unverified",
+      "trendDirection": "rising-category-signal; broad AI topic reportedly ~+50% YoY, exact query unverified"
     },
     {
       "keyword": "AI tools online",
@@ -70,7 +74,8 @@
       "trend": "unverified",
       "priority": "medium",
       "verificationStatus": "unverified",
-      "sourceUrl": "https://trademalikk-svg.github.io/clipx-ai-studio/ai-tools.html"
+      "sourceUrl": "https://trademalikk-svg.github.io/clipx-ai-studio/ai-tools.html",
+      "trendDirection": "unverified"
     },
     {
       "keyword": "AI video",
@@ -84,7 +89,8 @@
       "priority": "medium",
       "evidenceType": "secondary Google Trends summary",
       "editorialCaveat": "Use only in relevant context for existing browser video/creator workflows. Do not claim SHIF-A is an active AI video generator; cloud generation is not configured.",
-      "verificationStatus": "unverified"
+      "verificationStatus": "unverified",
+      "trendDirection": "rising +20% reported by secondary source; query scope and volume not independently verified"
     },
     {
       "keyword": "children day 2026",
@@ -100,7 +106,8 @@
       "evidenceType": "Google Trends India 7-day trend snapshot",
       "editorialCaveat": "Use only for guidance on resizing an existing user-owned image. Do not claim SHIF-A creates greeting cards, templates, or AI images.",
       "status": "historical/inactive",
-      "active": false
+      "active": false,
+      "trendDirection": "Expired after the 2026-11-14 observance; retain as historical seasonal evidence only. Do not target in the current campaign."
     },
     {
       "keyword": "Diwali wishes images",
@@ -117,7 +124,8 @@
       "market": "India",
       "editorialCaveat": "Use only for guidance on preparing an existing image. Do not claim SHIF-A generates Diwali greeting images.",
       "status": "historical/inactive",
-      "active": false
+      "active": false,
+      "trendDirection": "Expired seasonal spike from the 2026-11-08 snapshot; no current trend evidence. Historical record only."
     },
     {
       "keyword": "Diwali wishes in Hindi",
@@ -134,7 +142,8 @@
       "market": "India",
       "editorialCaveat": "Do not imply automatic Hindi text generation or translation. The user supplies the image and its text.",
       "status": "historical/inactive",
-      "active": false
+      "active": false,
+      "trendDirection": "Expired seasonal spike from the 2026-11-08 snapshot; no current trend evidence. Historical record only."
     },
     {
       "keyword": "free AI tools",
@@ -146,7 +155,8 @@
       "trend": "unverified",
       "priority": "medium",
       "verificationStatus": "unverified",
-      "sourceUrl": "https://trademalikk-svg.github.io/clipx-ai-studio/ai-tools.html"
+      "sourceUrl": "https://trademalikk-svg.github.io/clipx-ai-studio/ai-tools.html",
+      "trendDirection": "unverified"
     },
     {
       "keyword": "free thumbnail maker",
@@ -158,7 +168,8 @@
       "trend": "unverified",
       "priority": "medium",
       "verificationStatus": "unverified",
-      "sourceUrl": "https://trademalikk-svg.github.io/clipx-ai-studio/creator-tools.html"
+      "sourceUrl": "https://trademalikk-svg.github.io/clipx-ai-studio/creator-tools.html",
+      "trendDirection": "unverified"
     },
     {
       "keyword": "Hindi subtitles kaise lagaye",
@@ -185,7 +196,8 @@
       "trend": "unverified",
       "priority": "high",
       "verificationStatus": "unverified",
-      "sourceUrl": "https://trademalikk-svg.github.io/clipx-ai-studio/index.html"
+      "sourceUrl": "https://trademalikk-svg.github.io/clipx-ai-studio/index.html",
+      "trendDirection": "unverified"
     },
     {
       "keyword": "Instagram Edits for Mac",
@@ -199,7 +211,8 @@
       "priority": "low",
       "verificationStatus": "news-led editorial opportunity only; no direct indexable SHIF-A page fit; not a SHIF-A feature",
       "evidenceType": "recent secondary product-news coverage",
-      "targetPageNote": "Do not map to media-studio.html or video-studio.html because those workspace pages are noindex; no dedicated public comparison page exists."
+      "targetPageNote": "Do not map to media-studio.html or video-studio.html because those workspace pages are noindex; no dedicated public comparison page exists.",
+      "trendDirection": "Recent news coverage after the 2026-11-05 launch; no verified Google Trends direction or exact search volume."
     },
     {
       "keyword": "long video se YouTube Shorts kaise banaye",
@@ -228,7 +241,8 @@
       "trend": "unverified",
       "priority": "high",
       "verificationStatus": "unverified",
-      "sourceUrl": "https://trademalikk-svg.github.io/clipx-ai-studio/index.html"
+      "sourceUrl": "https://trademalikk-svg.github.io/clipx-ai-studio/index.html",
+      "trendDirection": "unverified"
     },
     {
       "keyword": "shorts",
@@ -242,7 +256,8 @@
       "trend": "Observed in the latest dated India YouTube Search snapshot at relative index 4; not identified as a rising query. Exact SHIF-A query impressions remain unverified.",
       "priority": "medium",
       "verificationStatus": "exact query observed in a secondary reproduction of a Google Trends export; absolute volume and SHIF-A query demand unverified",
-      "evidenceType": "dated Google Trends YouTube Search export reported by a secondary source"
+      "evidenceType": "dated Google Trends YouTube Search export reported by a secondary source",
+      "trendDirection": "Observed in the latest dated India YouTube Search snapshot at relative index 4; not identified as a rising query. Exact SHIF-A query impressions remain unverified."
     },
     {
       "keyword": "Shorts Series",
@@ -258,7 +273,8 @@
       "evidenceType": "official YouTube product announcement",
       "market": "India and worldwide",
       "clusterRole": "supporting",
-      "priorityBasis": "Exact official feature name with direct fit to the existing Shorts guide; not a volume-based SEO score."
+      "priorityBasis": "Exact official feature name with direct fit to the existing Shorts guide; not a volume-based SEO score.",
+      "trendDirection": "New official feature rollout announced 2026-09-23; current query-level search trend is unverified."
     },
     {
       "keyword": "social media content planner",
@@ -270,7 +286,8 @@
       "trend": "unverified",
       "priority": "low",
       "verificationStatus": "unverified",
-      "sourceUrl": "https://trademalikk-svg.github.io/clipx-ai-studio/ai-tools.html"
+      "sourceUrl": "https://trademalikk-svg.github.io/clipx-ai-studio/ai-tools.html",
+      "trendDirection": "unverified"
     },
     {
       "keyword": "video ko multiple clips mein kaise baante",
@@ -301,7 +318,8 @@
       "trend": "unverified",
       "priority": "high",
       "verificationStatus": "unverified",
-      "sourceUrl": "https://trademalikk-svg.github.io/clipx-ai-studio/split-video-into-multiple-clips.html"
+      "sourceUrl": "https://trademalikk-svg.github.io/clipx-ai-studio/split-video-into-multiple-clips.html",
+      "trendDirection": "unverified"
     },
     {
       "keyword": "YouTube Shorts AI disclosure",
@@ -335,7 +353,8 @@
       "verificationStatus": "official third-party platform feature announcement; exact query demand unverified",
       "evidenceType": "official YouTube product announcement",
       "market": "India and worldwide",
-      "clusterRole": "supporting"
+      "clusterRole": "supporting",
+      "trendDirection": "Current official product-feature opportunity; exact search trend and query demand are unverified. Do not describe this third-party YouTube feature as a SHIF-A capability."
     },
     {
       "keyword": "YouTube Shorts kaise banaye",
@@ -362,7 +381,8 @@
       "trend": "unverified",
       "priority": "high",
       "verificationStatus": "unverified",
-      "sourceUrl": "https://trademalikk-svg.github.io/clipx-ai-studio/index.html"
+      "sourceUrl": "https://trademalikk-svg.github.io/clipx-ai-studio/index.html",
+      "trendDirection": "unverified"
     },
     {
       "keyword": "YouTube Shorts microdrama series",
@@ -395,7 +415,8 @@
       "market": "India and worldwide",
       "clusterRole": "supporting",
       "priorityBasis": "Strong topical fit with existing Shorts guide; not based on search volume.",
-      "relatedSourceUrl": "https://blog.youtube/culture-and-trends/the-evolution-of-web-series-on-youtube-microdramas/"
+      "relatedSourceUrl": "https://blog.youtube/culture-and-trends/the-evolution-of-web-series-on-youtube-microdramas/",
+      "trendDirection": "New Shorts Series feature rollout plus rising microdrama consumption on YouTube; exact query-level search direction and SHIF-A impressions remain unverified."
     },
     {
       "keyword": "YouTube Shorts series kaise banaye",
@@ -414,7 +435,8 @@
       "market": "India",
       "clusterRole": "supporting",
       "relatedEnglishTerm": "YouTube Shorts series",
-      "secondarySourceUrl": "https://pretutorials.com/blog/how-india-searches-youtube-hinglish-data"
+      "secondarySourceUrl": "https://pretutorials.com/blog/how-india-searches-youtube-hinglish-data",
+      "trendDirection": "Platform feature/format opportunity; aggregate Hinglish phrasing pattern is relevant, but exact Hindi query trend and SHIF-A impressions remain unverified."
     },
     {
       "keyword": "YouTube Shorts up to 3 minutes",
@@ -448,7 +470,8 @@
       "evidenceType": "dated Hindi editorial coverage",
       "editorialCaveat": "Only use as a same-day content idea for resizing an existing image; do not create a thin seasonal SEO page or imply poster-generation features.",
       "status": "historical/inactive",
-      "active": false
+      "active": false,
+      "trendDirection": "Expired after the 2026-11-14 observance; retain as historical editorial evidence only. Do not target in the current campaign."
     },
     {
       "keyword": "लंबे वीडियो से YouTube Shorts कैसे बनाएं",
@@ -572,7 +595,7 @@
       "trend": "Competitor page coverage present; exact query demand and trend unverified.",
       "trendDirection": "Related how-to coverage observed; no measurable search trend established.",
       "priority": "low",
-      "verificationStatus": "candidate only; competitor page coverage is not search-demand evidence",
+      "verificationStatus": "candidate only; competitor page coverage is not search-demand evidence; exact search demand unverified",
       "evidenceType": "competitor page coverage",
       "market": "India and worldwide",
       "clusterRole": "supporting",
