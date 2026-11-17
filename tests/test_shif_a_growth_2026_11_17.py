@@ -14,7 +14,7 @@ class ShifAGrowth20261117Tests(unittest.TestCase):
         cls.review = (ROOT / "growth/reviews/2026-11-17-0800.md").read_text(encoding="utf-8")
 
     def test_keyword_map_unique_and_current(self):
-        self.assertEqual(len(cls := self.data["keywords"]), len(self.by_keyword))
+        self.assertEqual(len(self.data["keywords"]), len(self.by_keyword))
         self.assertEqual(self.data["lastUpdated"], "2026-11-17")
         self.assertEqual(self.data["nextDayPlanFor"], "2026-11-18")
         self.assertEqual(len(self.data["nextDayPlan"]), 5)
