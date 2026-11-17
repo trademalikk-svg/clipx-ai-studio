@@ -1548,7 +1548,8 @@
       "sourceUrl": "https://myshorts.in/hindi-shorts-maker",
       "targetPage": "guide-youtube-shorts.html",
       "priority": "medium",
-      "verificationStatus": "existing mapped candidate; exact query demand unverified"
+      "verificationStatus": "existing mapped candidate; exact query demand unverified",
+      "trendDirection": "Recent Hindi/Hinglish competitor tutorial coverage; exact query demand unverified."
     },
     {
       "keyword": "video ko multiple clips mein kaise baante",
@@ -1560,7 +1561,8 @@
       "sourceUrl": "https://www.veed.io/tools/video-splitter",
       "targetPage": "split-video-into-multiple-clips.html",
       "priority": "medium",
-      "verificationStatus": "existing mapped candidate; exact query demand unverified"
+      "verificationStatus": "existing mapped candidate; exact query demand unverified",
+      "trendDirection": "Competitor splitter coverage present; exact Hindi query demand unverified."
     },
     {
       "keyword": "Hindi subtitles kaise lagaye",
@@ -1572,7 +1574,8 @@
       "sourceUrl": "https://myshorts.in/hindi-shorts-maker",
       "targetPage": "guide-hindi-subtitles.html",
       "priority": "medium",
-      "verificationStatus": "existing mapped candidate; exact query demand unverified"
+      "verificationStatus": "existing mapped candidate; exact query demand unverified",
+      "trendDirection": "Current Hindi/Hinglish caption and SRT instructional coverage; exact query demand unverified."
     },
     {
       "keyword": "Hindi SRT file kaise banaye",
@@ -1584,7 +1587,8 @@
       "sourceUrl": "https://quikbench.com/ai-subtitle-generator.html",
       "targetPage": "guide-hindi-subtitles.html",
       "priority": "low",
-      "verificationStatus": "candidate only; not verified search demand"
+      "verificationStatus": "candidate only; not verified search demand",
+      "trendDirection": "Competitor SRT workflow coverage; exact query demand unverified."
     },
     {
       "keyword": "YouTube Shorts music duration",
@@ -1596,7 +1600,8 @@
       "sourceUrl": "https://support.google.com/youtube/answer/15424877",
       "targetPage": "guide-youtube-shorts.html",
       "priority": "low",
-      "verificationStatus": "candidate only; policy relevance verified, search demand unverified"
+      "verificationStatus": "candidate only; policy relevance verified, search demand unverified",
+      "trendDirection": "Official policy source remains available; exact query demand unverified."
     }
   ],
   "morningReview": {
