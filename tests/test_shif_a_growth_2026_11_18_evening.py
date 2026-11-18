@@ -60,7 +60,7 @@ class ShifAGrowth20261118EveningTests(unittest.TestCase):
 
     def test_evening_controls_and_metrics_are_explicit(self):
         self.assertIn("Actual spend: ₹0", self.review)
-        self.assertIn("No social posts published or scheduled", self.review)
+        self.assertIn("No social post published or scheduled", self.review)
         self.assertIn("No fresh first-party SHIF-A analytics", self.review)
         self.assertIn("Full Python unit suite was not executed", self.review)
         self.assertIn("No public page metadata or page copy was changed", self.review)
