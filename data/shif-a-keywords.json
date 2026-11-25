@@ -2,7 +2,7 @@
   "project": "SHIF-A AI",
   "lastUpdated": "2026-11-25",
   "updateStatus": "daily-research-2026-11-25",
-  "note": "Refreshed 2026-11-25. This map separates product/page fit from measured demand. The 25 Oct third-party YouTube autocomplete sample supports Hinglish title ideas for video content, but it is not search volume or a time-series trend. Videosi is a third-party social-trend signal, not search-demand data. GSC Wizard requests were refused because the trial has ended and a subscription is required; no paid subscription or service was used. GA4 properties checked did not identify a SHIF-A property; Metricool exposed only the Ishqwala scene brand; vidIQ returned no connected channels. Do not treat unavailable metrics as zero.",
+  "note": "Refreshed 2026-11-25. This map separates page fit from measured demand. The 25 Oct third-party YouTube autocomplete sample supports Hinglish title ideas, but it is not search volume or a time-series trend. The 25 Nov India trend snapshot did not show a clear SHIF-A-fit query; no new keyword was added. GSC: HYPD reports connected sites but none selected, so no Search Console metrics are available; GSC Wizard remained subscription-gated and was not used. GA4: the SHIF-A AI web stream was identified, but reports for 2026-11-06 to 2026-11-25 returned 1 user, 1 session, 0 page views, 1 user_engagement event and 0 conversions; this is too little data to infer actual audience size and suggests page_view tracking needs QA. Metricool exposed only the unrelated Ishqwala scene brand; vidIQ returned no connected channels. Signups and customers are not measurable from the returned events. Do not treat unavailable metrics as zero.",
   "keywords": [
     {
       "keyword": "Hindi video editor",
