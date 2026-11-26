@@ -2,7 +2,7 @@
   "project": "SHIF-A AI",
   "lastUpdated": "2026-11-26",
   "updateStatus": "daily-research-2026-11-26",
-  "note": "Refreshed 2026-11-26. The map now has 26 records: one low-priority aspect-ratio content candidate was added from verified SHIF-A Clip Settings (9:16, 16:9, 1:1); no search volume is claimed. The Hindi long-video-to-Shorts phrase was remapped from the English guide to guide-hindi-shorts.html after checking page language. Four how-to phrases were rechecked against the visible India top-24h Google Trends list; no relevant creator-tool topic appeared there, so exact trend direction remains unverified. The AI video prompt phrase was rechecked using a third-party editorial prompt page dated 20–22 Nov; this is social-format context only. Do not treat it as query demand. Keep titles/meta/H1s unchanged unless first-party query evidence supports a better match. Analytics are deferred to the 17:00 IST review; no paid analytics connectors, subscriptions, ads or APIs used in this 08:00 run. Do not treat unavailable metrics as zero.",
+  "note": "Refreshed 2026-11-26. The map now has 26 records: one low-priority aspect-ratio content candidate was added from verified SHIF-A Clip Settings (9:16, 16:9, 1:1); no search volume is claimed. The Hindi long-video-to-Shorts phrase was remapped from the English guide to guide-hindi-shorts.html after checking page language. Four how-to phrases were rechecked against the visible India top-24h Google Trends list; no relevant creator-tool topic appeared there, so exact trend direction remains unverified. The AI video prompt phrase was rechecked using a third-party editorial prompt page dated 20–22 Nov; this is social-format context only. Do not treat it as query demand. Keep titles/meta/H1s unchanged unless first-party query evidence supports a better match. Analytics are deferred to the 17:00 IST review; no paid analytics connectors, subscriptions, ads or APIs used in this 08:00 run. Do not treat unavailable metrics as zero. Every record now has an explicit trendDirection field; where no exact time-series evidence exists, the direction is marked unverified.",
   "keywords": [
     {
       "keyword": "Hindi video editor",
@@ -15,7 +15,8 @@
       "priority": "high",
       "fitCheckedAt": "2026-11-25",
       "evidenceType": "page-fit verified; search demand unverified",
-      "sourceUrl": "https://trademalikk-svg.github.io/clipx-ai-studio/index.html"
+      "sourceUrl": "https://trademalikk-svg.github.io/clipx-ai-studio/index.html",
+      "trendDirection": "unverified; page fit does not establish search trend direction"
     },
     {
       "keyword": "long video se YouTube Shorts kaise banaye",
@@ -28,7 +29,8 @@
       "trend": "No matching creator-tool query in the visible India top-24h trend entries checked 2026-11-26; exact query demand and time-series direction remain unverified.",
       "priority": "high",
       "evidenceType": "third-party topic-level autocomplete pattern plus current top-trend exclusion check; not search volume",
-      "trendSourceUrl": "https://trends.google.com/trending?geo=IN&hl=hi"
+      "trendSourceUrl": "https://trends.google.com/trending?geo=IN&hl=hi",
+      "trendDirection": "unverified; no matching creator-tool topic in the visible India top-24h trend entries"
     },
     {
       "keyword": "online video editor",
@@ -41,7 +43,8 @@
       "priority": "high",
       "fitCheckedAt": "2026-11-25",
       "evidenceType": "page-fit verified; search demand unverified",
-      "sourceUrl": "https://trademalikk-svg.github.io/clipx-ai-studio/index.html"
+      "sourceUrl": "https://trademalikk-svg.github.io/clipx-ai-studio/index.html",
+      "trendDirection": "unverified; page fit does not establish search trend direction"
     },
     {
       "keyword": "video to shorts converter",
@@ -54,7 +57,8 @@
       "priority": "high",
       "fitCheckedAt": "2026-11-25",
       "evidenceType": "page-fit verified; search demand unverified",
-      "sourceUrl": "https://trademalikk-svg.github.io/clipx-ai-studio/split-video-into-multiple-clips.html"
+      "sourceUrl": "https://trademalikk-svg.github.io/clipx-ai-studio/split-video-into-multiple-clips.html",
+      "trendDirection": "unverified; page fit does not establish search trend direction"
     },
     {
       "keyword": "YouTube Shorts kaise banaye",
@@ -68,7 +72,8 @@
       "fitCheckedAt": "2026-11-26",
       "evidenceType": "third-party topic-level autocomplete pattern plus current top-trend exclusion check; not search volume",
       "sourceUrl": "https://pretutorials.com/blog/how-india-searches-youtube-hinglish-data",
-      "trendSourceUrl": "https://trends.google.com/trending?geo=IN&hl=hi"
+      "trendSourceUrl": "https://trends.google.com/trending?geo=IN&hl=hi",
+      "trendDirection": "unverified; no matching creator-tool topic in the visible India top-24h trend entries"
     },
     {
       "keyword": "YouTube Shorts maker",
@@ -81,7 +86,8 @@
       "priority": "high",
       "fitCheckedAt": "2026-11-25",
       "evidenceType": "page-fit verified; search demand unverified",
-      "sourceUrl": "https://trademalikk-svg.github.io/clipx-ai-studio/index.html"
+      "sourceUrl": "https://trademalikk-svg.github.io/clipx-ai-studio/index.html",
+      "trendDirection": "unverified; page fit does not establish search trend direction"
     },
     {
       "keyword": "AI tools directory",
@@ -94,7 +100,8 @@
       "trend": "related discovery signal; exact phrase unverified",
       "priority": "medium",
       "evidenceType": "secondary Google Trends summary",
-      "fitCheckedAt": "2026-11-25"
+      "fitCheckedAt": "2026-11-25",
+      "trendDirection": "unverified; page fit does not establish search trend direction"
     },
     {
       "keyword": "AI tools India",
@@ -107,7 +114,8 @@
       "trend": "rising-category-signal; broad AI topic reportedly ~+50% YoY, exact query unverified",
       "priority": "medium",
       "evidenceType": "secondary Google Trends summary",
-      "fitCheckedAt": "2026-11-25"
+      "fitCheckedAt": "2026-11-25",
+      "trendDirection": "unverified; older broad-category signal only, not current exact-query evidence"
     },
     {
       "keyword": "AI tools online",
@@ -120,7 +128,8 @@
       "priority": "medium",
       "fitCheckedAt": "2026-11-25",
       "evidenceType": "page-fit verified; search demand unverified",
-      "sourceUrl": "https://trademalikk-svg.github.io/clipx-ai-studio/ai-tools.html"
+      "sourceUrl": "https://trademalikk-svg.github.io/clipx-ai-studio/ai-tools.html",
+      "trendDirection": "unverified; page fit does not establish search trend direction"
     },
     {
       "keyword": "AI video prompt kaise likhe",
@@ -134,7 +143,8 @@
       "priority": "medium",
       "evidenceType": "third-party editorial/social-format signal plus product-fit check; not search volume",
       "editorialCaveat": "Describe prompt drafting only; do not claim SHIF-A generates video.",
-      "fitCheckedAt": "2026-11-26"
+      "fitCheckedAt": "2026-11-26",
+      "trendDirection": "unverified for search; third-party social/editorial signal only"
     },
     {
       "keyword": "free thumbnail maker",
@@ -147,7 +157,8 @@
       "priority": "medium",
       "fitCheckedAt": "2026-11-25",
       "evidenceType": "page-fit verified; search demand unverified",
-      "sourceUrl": "https://trademalikk-svg.github.io/clipx-ai-studio/creator-tools.html"
+      "sourceUrl": "https://trademalikk-svg.github.io/clipx-ai-studio/creator-tools.html",
+      "trendDirection": "unverified; page fit does not establish search trend direction"
     },
     {
       "keyword": "Hindi subtitles kaise lagaye",
@@ -160,7 +171,8 @@
       "priority": "medium",
       "fitCheckedAt": "2026-11-25",
       "evidenceType": "page-fit verified; search demand unverified",
-      "sourceUrl": "https://trademalikk-svg.github.io/clipx-ai-studio/guide-hindi-subtitles.html"
+      "sourceUrl": "https://trademalikk-svg.github.io/clipx-ai-studio/guide-hindi-subtitles.html",
+      "trendDirection": "unverified; page fit does not establish search trend direction"
     },
     {
       "keyword": "YouTube thumbnail kaise banaye",
@@ -173,7 +185,8 @@
       "trend": "No matching creator-tool query in the visible India top-24h trend entries checked 2026-11-26; exact query demand and time-series direction remain unverified.",
       "priority": "medium",
       "evidenceType": "third-party topic-level autocomplete pattern plus current top-trend exclusion check; not search volume",
-      "trendSourceUrl": "https://trends.google.com/trending?geo=IN&hl=hi"
+      "trendSourceUrl": "https://trends.google.com/trending?geo=IN&hl=hi",
+      "trendDirection": "unverified; no matching creator-tool topic in the visible India top-24h trend entries"
     },
     {
       "keyword": "लंबे वीडियो से YouTube Shorts कैसे बनाएं",
@@ -186,7 +199,8 @@
       "priority": "medium",
       "evidenceType": "page-language and intent fit verified; search demand unverified",
       "fitCheckedAt": "2026-11-26",
-      "sourceUrl": "https://trademalikk-svg.github.io/clipx-ai-studio/guide-hindi-shorts.html"
+      "sourceUrl": "https://trademalikk-svg.github.io/clipx-ai-studio/guide-hindi-shorts.html",
+      "trendDirection": "unverified; page fit does not establish search trend direction"
     },
     {
       "keyword": "वीडियो को कई छोटे क्लिप में कैसे बाँटें",
@@ -199,7 +213,8 @@
       "priority": "medium",
       "evidenceType": "localized content hypothesis",
       "fitCheckedAt": "2026-11-25",
-      "sourceUrl": "https://trademalikk-svg.github.io/clipx-ai-studio/split-video-into-multiple-clips.html"
+      "sourceUrl": "https://trademalikk-svg.github.io/clipx-ai-studio/split-video-into-multiple-clips.html",
+      "trendDirection": "unverified; page fit does not establish search trend direction"
     },
     {
       "keyword": "हिंदी सबटाइटल कैसे बनाएं",
@@ -212,7 +227,8 @@
       "priority": "medium",
       "evidenceType": "localized content hypothesis",
       "fitCheckedAt": "2026-11-25",
-      "sourceUrl": "https://trademalikk-svg.github.io/clipx-ai-studio/guide-hindi-subtitles.html"
+      "sourceUrl": "https://trademalikk-svg.github.io/clipx-ai-studio/guide-hindi-subtitles.html",
+      "trendDirection": "unverified; page fit does not establish search trend direction"
     },
     {
       "keyword": "free AI tools",
@@ -226,7 +242,8 @@
       "fitCheckedAt": "2026-11-25",
       "evidenceType": "page-fit verified; search demand unverified",
       "sourceUrl": "https://trademalikk-svg.github.io/clipx-ai-studio/ai-tools.html",
-      "editorialCaveat": "Do not describe the entire directory as free unless every listed tool's current terms are verified."
+      "editorialCaveat": "Do not describe the entire directory as free unless every listed tool's current terms are verified.",
+      "trendDirection": "unverified; page fit does not establish search trend direction"
     },
     {
       "keyword": "Hindi SRT file kaise banaye",
@@ -239,7 +256,8 @@
       "trend": "No matching creator-tool query in the visible India top-24h trend entries checked 2026-11-26; exact query demand and time-series direction remain unverified.",
       "priority": "low",
       "evidenceType": "third-party topic-level autocomplete pattern plus current top-trend exclusion check; not search volume",
-      "trendSourceUrl": "https://trends.google.com/trending?geo=IN&hl=hi"
+      "trendSourceUrl": "https://trends.google.com/trending?geo=IN&hl=hi",
+      "trendDirection": "unverified; no matching creator-tool topic in the visible India top-24h trend entries"
     },
     {
       "keyword": "AI cartoon video generator",
@@ -251,7 +269,8 @@
       "checkedAt": "2026-11-25",
       "trend": "Unverified candidate; excluded from SEO targeting due to product-fit mismatch",
       "priority": "exclude",
-      "evidenceType": "current product-fit check"
+      "evidenceType": "current product-fit check",
+      "trendDirection": "not applicable — excluded from SEO targeting"
     },
     {
       "keyword": "AI cartoon video kaise banaye",
@@ -263,7 +282,8 @@
       "checkedAt": "2026-11-25",
       "trend": "Unverified candidate; excluded from SEO targeting due to product-fit mismatch",
       "priority": "exclude",
-      "evidenceType": "current product-fit check"
+      "evidenceType": "current product-fit check",
+      "trendDirection": "not applicable — excluded from SEO targeting"
     },
     {
       "keyword": "AI image vs real image",
@@ -275,7 +295,8 @@
       "checkedAt": "2026-11-25",
       "trend": "Unverified candidate; excluded from SEO targeting due to product-fit mismatch",
       "priority": "exclude",
-      "evidenceType": "current product-fit check"
+      "evidenceType": "current product-fit check",
+      "trendDirection": "not applicable — excluded from SEO targeting"
     },
     {
       "keyword": "AI music video generator",
@@ -287,7 +308,8 @@
       "checkedAt": "2026-11-25",
       "trend": "Unverified candidate; excluded from SEO targeting due to product-fit mismatch",
       "priority": "exclude",
-      "evidenceType": "current product-fit check"
+      "evidenceType": "current product-fit check",
+      "trendDirection": "not applicable — excluded from SEO targeting"
     },
     {
       "keyword": "AI video",
@@ -301,7 +323,8 @@
       "priority": "exclude",
       "evidenceType": "secondary Google Trends summary",
       "editorialCaveat": "SHIF-A's Video Prompt Builder creates text prompts only; it does not generate video.",
-      "fitCheckedAt": "2026-11-25"
+      "fitCheckedAt": "2026-11-25",
+      "trendDirection": "not applicable — excluded from SEO targeting"
     },
     {
       "keyword": "ChatGPT workflow ideas",
@@ -313,7 +336,8 @@
       "checkedAt": "2026-11-25",
       "trend": "Unverified candidate; excluded from SEO targeting due to product-fit mismatch",
       "priority": "exclude",
-      "evidenceType": "current product-fit check"
+      "evidenceType": "current product-fit check",
+      "trendDirection": "not applicable — excluded from SEO targeting"
     },
     {
       "keyword": "social media content planner",
@@ -326,7 +350,8 @@
       "priority": "exclude",
       "fitCheckedAt": "2026-11-25",
       "evidenceType": "page-fit verified; search demand unverified",
-      "sourceUrl": "https://trademalikk-svg.github.io/clipx-ai-studio/ai-tools.html"
+      "sourceUrl": "https://trademalikk-svg.github.io/clipx-ai-studio/ai-tools.html",
+      "trendDirection": "not applicable — excluded from SEO targeting"
     },
     {
       "keyword": "video aspect ratio for Shorts and YouTube",
@@ -340,7 +365,8 @@
       "fitCheckedAt": "2026-11-26",
       "trend": "No matching creator-tool query in the visible India top-24h trend entries checked 2026-11-26; exact query demand and time-series direction unverified.",
       "priority": "low",
-      "evidenceType": "feature-fit verified; search demand unverified"
+      "evidenceType": "feature-fit verified; search demand unverified",
+      "trendDirection": "unverified; no matching creator-tool topic in the visible India top-24h trend entries"
     }
   ],
   "gscObservations": [
