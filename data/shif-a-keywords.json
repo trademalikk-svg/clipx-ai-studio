@@ -1,8 +1,8 @@
 {
   "project": "SHIF-A AI",
-  "lastUpdated": "2026-11-25",
-  "updateStatus": "daily-research-2026-11-25",
-  "note": "Refreshed 2026-11-25. This map separates page fit from measured demand. The 25 Oct third-party YouTube autocomplete sample supports Hinglish title ideas, but it is not search volume or a time-series trend. The 25 Nov India trend snapshot did not show a clear SHIF-A-fit query; no new keyword was added. GSC: HYPD reports connected sites but none selected, so no Search Console metrics are available; GSC Wizard remained subscription-gated and was not used. GA4: the SHIF-A AI web stream was identified, but reports for 2026-11-06 to 2026-11-25 returned 1 user, 1 session, 0 page views, 1 user_engagement event and 0 conversions; this is too little data to infer actual audience size and suggests page_view tracking needs QA. Metricool exposed only the unrelated Ishqwala scene brand; vidIQ returned no connected channels. GA4 was read through an existing connected analytics integration; no new purchase or subscription was initiated, but the connector's own billing status is not exposed here. Signups and customers are not measurable from the returned events. Do not treat unavailable metrics as zero.",
+  "lastUpdated": "2026-11-26",
+  "updateStatus": "daily-research-2026-11-26",
+  "note": "Refreshed 2026-11-26. The map now has 26 records: one low-priority aspect-ratio content candidate was added from verified SHIF-A Clip Settings (9:16, 16:9, 1:1); no search volume is claimed. The Hindi long-video-to-Shorts phrase was remapped from the English guide to guide-hindi-shorts.html after checking page language. Four how-to phrases were rechecked against the visible India top-24h Google Trends list; no relevant creator-tool topic appeared there, so exact trend direction remains unverified. The AI video prompt phrase was rechecked using a third-party editorial prompt page dated 20–22 Nov; this is social-format context only. Do not treat it as query demand. Keep titles/meta/H1s unchanged unless first-party query evidence supports a better match. Analytics are deferred to the 17:00 IST review; no paid analytics connectors, subscriptions, ads or APIs used in this 08:00 run. Do not treat unavailable metrics as zero.",
   "keywords": [
     {
       "keyword": "Hindi video editor",
@@ -22,12 +22,13 @@
       "language": "hi",
       "intent": "informational how-to",
       "targetPage": "guide-hindi-shorts.html",
-      "source": "Pre Tutorials India YouTube autocomplete sample (Oct 2026): YouTube topic had 96 'kaise' phrases vs 15 'how to'; exact phrase not isolated. Existing Hindi Shorts guide rechecked 2026-11-25.",
+      "source": "Pre Tutorials India YouTube autocomplete sample (Oct 2026) provides topic-level Hinglish 'kaise' wording only; Google Trends India last-24h visible trend list rechecked 2026-11-26 and showed no matching creator-tool topic. Exact phrase volume and direction are not established.",
       "sourceUrl": "https://pretutorials.com/blog/how-india-searches-youtube-hinglish-data",
-      "checkedAt": "2026-11-25",
-      "trend": "Topic-specific Hinglish language-pattern signal; exact query demand and time-series direction unknown",
+      "checkedAt": "2026-11-26",
+      "trend": "No matching creator-tool query in the visible India top-24h trend entries checked 2026-11-26; exact query demand and time-series direction remain unverified.",
       "priority": "high",
-      "evidenceType": "third-party YouTube autocomplete sample; not search volume"
+      "evidenceType": "third-party topic-level autocomplete pattern plus current top-trend exclusion check; not search volume",
+      "trendSourceUrl": "https://trends.google.com/trending?geo=IN&hl=hi"
     },
     {
       "keyword": "online video editor",
@@ -60,13 +61,14 @@
       "language": "hi",
       "intent": "informational",
       "targetPage": "guide-hindi-shorts.html",
-      "source": "Pre Tutorials India YouTube autocomplete sample (Oct 2026): YouTube topic had 96 'kaise' phrases vs 15 'how to'; exact phrase not isolated. Existing Hindi guide rechecked 2026-11-25.",
-      "checkedAt": "2026-11-25",
-      "trend": "YouTube-topic Hinglish autocomplete pattern observed in Oct 2026 sample; exact query volume and time-series direction unknown",
+      "source": "Pre Tutorials India YouTube autocomplete sample (Oct 2026) provides topic-level Hinglish 'kaise' wording only; Google Trends India last-24h visible trend list rechecked 2026-11-26 and showed no matching creator-tool topic. Exact phrase volume and direction are not established.",
+      "checkedAt": "2026-11-26",
+      "trend": "No matching creator-tool query in the visible India top-24h trend entries checked 2026-11-26; exact query demand and time-series direction remain unverified.",
       "priority": "high",
-      "fitCheckedAt": "2026-11-25",
-      "evidenceType": "third-party YouTube autocomplete sample; not search volume",
-      "sourceUrl": "https://pretutorials.com/blog/how-india-searches-youtube-hinglish-data"
+      "fitCheckedAt": "2026-11-26",
+      "evidenceType": "third-party topic-level autocomplete pattern plus current top-trend exclusion check; not search volume",
+      "sourceUrl": "https://pretutorials.com/blog/how-india-searches-youtube-hinglish-data",
+      "trendSourceUrl": "https://trends.google.com/trending?geo=IN&hl=hi"
     },
     {
       "keyword": "YouTube Shorts maker",
@@ -125,13 +127,14 @@
       "language": "hi",
       "intent": "informational how-to",
       "targetPage": "index.html#promptStudio",
-      "source": "Videosi AI video trend page dated 2026-11-23 shows active AI photo/video remix formats; SHIF-A homepage's Video Prompt Builder was checked 2026-11-25 and is text-prompt-only. No exact search-demand evidence.",
-      "sourceUrl": "https://videosi.io/trending/2026-11-23",
-      "checkedAt": "2026-11-25",
-      "trend": "Social-format signal active in the week to 2026-11-23; search trend unverified",
+      "source": "Tarun Editz article 'All New Trending Video Editing Prompts 2026' dated 2026-11-20 and updated 2026-11-22; used only as a third-party social/editorial format signal. SHIF-A Video Prompt Builder rechecked 2026-11-26 and creates text prompts only. Exact search demand and time-series direction are unverified.",
+      "sourceUrl": "https://taruneditz.com/all-new-trending-video-editing-prompts/",
+      "checkedAt": "2026-11-26",
+      "trend": "Recent third-party social/editorial prompt-format signal (20–22 Nov); no exact search trend or demand data verified.",
       "priority": "medium",
-      "evidenceType": "third-party social trend observation plus current product-fit check",
-      "editorialCaveat": "Describe prompt drafting only; do not claim SHIF-A generates video."
+      "evidenceType": "third-party editorial/social-format signal plus product-fit check; not search volume",
+      "editorialCaveat": "Describe prompt drafting only; do not claim SHIF-A generates video.",
+      "fitCheckedAt": "2026-11-26"
     },
     {
       "keyword": "free thumbnail maker",
@@ -164,25 +167,26 @@
       "language": "hi",
       "intent": "informational how-to",
       "targetPage": "guide-youtube-thumbnail.html",
-      "source": "Pre Tutorials India YouTube autocomplete sample (Oct 2026): thumbnail topic had 90 'kaise' phrases vs 14 'how to'; exact phrase not isolated. Existing phone thumbnail guide rechecked 2026-11-25.",
+      "source": "Pre Tutorials India YouTube autocomplete sample (Oct 2026) provides topic-level Hinglish 'kaise' wording only; Google Trends India last-24h visible trend list rechecked 2026-11-26 and showed no matching creator-tool topic. Exact phrase volume and direction are not established.",
       "sourceUrl": "https://pretutorials.com/blog/how-india-searches-youtube-hinglish-data",
-      "checkedAt": "2026-11-25",
-      "trend": "Topic-specific Hinglish language-pattern signal; exact query demand and time-series direction unknown",
+      "checkedAt": "2026-11-26",
+      "trend": "No matching creator-tool query in the visible India top-24h trend entries checked 2026-11-26; exact query demand and time-series direction remain unverified.",
       "priority": "medium",
-      "evidenceType": "third-party YouTube autocomplete sample; not search volume"
+      "evidenceType": "third-party topic-level autocomplete pattern plus current top-trend exclusion check; not search volume",
+      "trendSourceUrl": "https://trends.google.com/trending?geo=IN&hl=hi"
     },
     {
       "keyword": "लंबे वीडियो से YouTube Shorts कैसे बनाएं",
       "language": "hi",
       "intent": "informational",
-      "targetPage": "guide-youtube-shorts.html",
-      "source": "Hindi long-tail wording mapped to the existing Shorts guide; no connected Search Console query data or independent volume evidence.",
-      "checkedAt": "2026-11-25",
-      "trend": "unverified candidate; no live Hindi query data",
+      "targetPage": "guide-hindi-shorts.html",
+      "source": "Target corrected 2026-11-26 after checking page language: the query is Hindi and the matching Hindi-first step-by-step guide is guide-hindi-shorts.html; guide-youtube-shorts.html is the English guide. No exact query-demand data is available.",
+      "checkedAt": "2026-11-26",
+      "trend": "Language/page-fit correction only; search trend and exact query demand unverified.",
       "priority": "medium",
-      "evidenceType": "localized content hypothesis",
-      "fitCheckedAt": "2026-11-25",
-      "sourceUrl": "https://trademalikk-svg.github.io/clipx-ai-studio/guide-youtube-shorts.html"
+      "evidenceType": "page-language and intent fit verified; search demand unverified",
+      "fitCheckedAt": "2026-11-26",
+      "sourceUrl": "https://trademalikk-svg.github.io/clipx-ai-studio/guide-hindi-shorts.html"
     },
     {
       "keyword": "वीडियो को कई छोटे क्लिप में कैसे बाँटें",
@@ -229,12 +233,13 @@
       "language": "hi",
       "intent": "informational how-to",
       "targetPage": "guide-hindi-subtitles.html",
-      "source": "Existing Hindi subtitles/SRT guide rechecked 2026-11-25; general Hinglish 'kaise' pattern is not exact SRT-query evidence.",
-      "sourceUrl": "https://trademalikk-svg.github.io/clipx-ai-studio/guide-hindi-subtitles.html",
-      "checkedAt": "2026-11-25",
-      "trend": "Unverified candidate; exact query demand and time-series direction unknown",
+      "source": "Pre Tutorials India YouTube autocomplete sample (Oct 2026) provides topic-level Hinglish 'kaise' wording only; Google Trends India last-24h visible trend list rechecked 2026-11-26 and showed no matching creator-tool topic. Exact phrase volume and direction are not established.",
+      "sourceUrl": "https://pretutorials.com/blog/how-india-searches-youtube-hinglish-data",
+      "checkedAt": "2026-11-26",
+      "trend": "No matching creator-tool query in the visible India top-24h trend entries checked 2026-11-26; exact query demand and time-series direction remain unverified.",
       "priority": "low",
-      "evidenceType": "page-fit verified; exact demand unverified"
+      "evidenceType": "third-party topic-level autocomplete pattern plus current top-trend exclusion check; not search volume",
+      "trendSourceUrl": "https://trends.google.com/trending?geo=IN&hl=hi"
     },
     {
       "keyword": "AI cartoon video generator",
@@ -322,6 +327,20 @@
       "fitCheckedAt": "2026-11-25",
       "evidenceType": "page-fit verified; search demand unverified",
       "sourceUrl": "https://trademalikk-svg.github.io/clipx-ai-studio/ai-tools.html"
+    },
+    {
+      "keyword": "video aspect ratio for Shorts and YouTube",
+      "language": "en",
+      "intent": "informational how-to",
+      "targetPage": "index.html#clipSettings",
+      "source": "SHIF-A homepage Clip Settings rechecked 2026-11-26: the live interface offers 9:16 Shorts, 16:9 Landscape and 1:1 Square options. Added as a low-priority content candidate for a practical format guide; no exact query-demand evidence.",
+      "sourceUrl": "https://trademalikk-svg.github.io/clipx-ai-studio/#clipSettings",
+      "trendSourceUrl": "https://trends.google.com/trending?geo=IN&hl=hi",
+      "checkedAt": "2026-11-26",
+      "fitCheckedAt": "2026-11-26",
+      "trend": "No matching creator-tool query in the visible India top-24h trend entries checked 2026-11-26; exact query demand and time-series direction unverified.",
+      "priority": "low",
+      "evidenceType": "feature-fit verified; search demand unverified"
     }
   ],
   "gscObservations": [
