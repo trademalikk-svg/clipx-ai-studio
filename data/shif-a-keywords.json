@@ -1,8 +1,8 @@
 {
   "project": "SHIF-A AI",
   "lastUpdated": "2026-11-26",
-  "updateStatus": "daily-research-2026-11-26",
-  "note": "Refreshed 2026-11-26. The map now has 26 records: one low-priority aspect-ratio content candidate was added from verified SHIF-A Clip Settings (9:16, 16:9, 1:1); no search volume is claimed. The Hindi long-video-to-Shorts phrase was remapped from the English guide to guide-hindi-shorts.html after checking page language. Four how-to phrases were rechecked against the visible India top-24h Google Trends list; no relevant creator-tool topic appeared there, so exact trend direction remains unverified. The AI video prompt phrase was rechecked using a third-party editorial prompt page dated 20–22 Nov; this is social-format context only. Do not treat it as query demand. Keep titles/meta/H1s unchanged unless first-party query evidence supports a better match. Analytics are deferred to the 17:00 IST review; no paid analytics connectors, subscriptions, ads or APIs used in this 08:00 run. Do not treat unavailable metrics as zero. Every record now has an explicit trendDirection field; where no exact time-series evidence exists, the direction is marked unverified.",
+  "updateStatus": "daily-research-and-1700-review-2026-11-26",
+  "note": "Refreshed 2026-11-26. The map now has 26 records: one low-priority aspect-ratio content candidate was added from verified SHIF-A Clip Settings (9:16, 16:9, 1:1); no search volume is claimed. The Hindi long-video-to-Shorts phrase was remapped from the English guide to guide-hindi-shorts.html after checking page language. Four how-to phrases were rechecked against the visible India top-24h Google Trends list; no relevant creator-tool topic appeared there, so exact trend direction remains unverified. The AI video prompt phrase was rechecked using a third-party editorial prompt page dated 20–22 Nov; this is social-format context only. Do not treat it as query demand. Keep titles/meta/H1s unchanged unless first-party query evidence supports a better match. Analytics are deferred to the 17:00 IST review; no paid analytics connectors, subscriptions, ads or APIs used in this 08:00 run. Do not treat unavailable metrics as zero. Every record now has an explicit trendDirection field; where no exact time-series evidence exists, the direction is marked unverified. Evening review completed 2026-11-26 at 17:00 IST: no GA4 property or Search Console site selected in HYPD; Metricool exposed only the unrelated 'Ishqwala scene' brand; vidIQ returned no connected YouTube channels. SHIF-A views, reach, clicks, sign-ups and customers are unavailable, not zero. No new keyword was added at 17:00 because no exact-query trend evidence was found. The 27 November plan rechecks six existing candidates against fresh public signals and first-party Search Console data only if the Owner selects the existing property.",
   "keywords": [
     {
       "keyword": "Hindi video editor",
@@ -448,5 +448,15 @@
     "metricool": "Only the Ishqwala scene brand was returned; not treated as SHIF-A analytics.",
     "vidIQ": "No connected YouTube channels returned; no channel analytics available.",
     "signupsCustomers": "No connected SHIF-A product analytics endpoint identified; unavailable, not zero."
+  },
+  "eveningReview": {
+    "checkedAt": "2026-11-26T17:00:58+05:30",
+    "ga4": "No selected property; metrics unavailable",
+    "searchConsole": "No selected site; metrics unavailable",
+    "metricool": "Only unrelated Ishqwala scene brand returned; excluded",
+    "vidIQ": "No connected YouTube channels returned",
+    "shifAOwnedSocialAccounts": "Not verified",
+    "metricsStatus": "unavailable-not-zero",
+    "nextPlanDate": "2026-11-27"
   }
 }
