@@ -1,8 +1,8 @@
 {
   "project": "SHIF-A AI",
-  "lastUpdated": "2026-11-26",
-  "updateStatus": "daily-research-and-1700-review-2026-11-26",
-  "note": "Refreshed 2026-11-26. The map now has 26 records: one low-priority aspect-ratio content candidate was added from verified SHIF-A Clip Settings (9:16, 16:9, 1:1); no search volume is claimed. The Hindi long-video-to-Shorts phrase was remapped from the English guide to guide-hindi-shorts.html after checking page language. Four how-to phrases were rechecked against the visible India top-24h Google Trends list; no relevant creator-tool topic appeared there, so exact trend direction remains unverified. The AI video prompt phrase was rechecked using a third-party editorial prompt page dated 20–22 Nov; this is social-format context only. Do not treat it as query demand. Keep titles/meta/H1s unchanged unless first-party query evidence supports a better match. Analytics are deferred to the 17:00 IST review; no paid analytics connectors, subscriptions, ads or APIs used in this 08:00 run. Do not treat unavailable metrics as zero. Every record now has an explicit trendDirection field; where no exact time-series evidence exists, the direction is marked unverified. Evening review completed 2026-11-26 at 17:00 IST: no GA4 property or Search Console site selected in HYPD; Metricool exposed only the unrelated 'Ishqwala scene' brand; vidIQ returned no connected YouTube channels. SHIF-A views, reach, clicks, sign-ups and customers are unavailable, not zero. No new keyword was added at 17:00 because no exact-query trend evidence was found. The 27 November plan rechecks six existing candidates against fresh public signals and first-party Search Console data only if the Owner selects the existing property.",
+  "lastUpdated": "2026-11-27",
+  "updateStatus": "2026-11-27-0800-research-content-drafts",
+  "note": "Refreshed 2026-11-27 at 08:01 IST. The India YouTube top-25 popular-video chart snapshot timestamped 05:36 IST was reviewed; visible entries were mainly music, film trailers, gaming and entertainment, with no clear SHIF-A creator-tool topic. This is a video-popularity chart, not a search-query trend report. No new exact-demand keyword was added; 26 records remain unique. Eight relevant Hindi/English candidates were rechecked, with trend direction explicitly unverified wherever exact-query time-series evidence is absent. The official Google Trends page was not readable in this run, and no Search Console property is selected in the previously checked connector. Hindi quick-start copy is being added to the existing English-first Hindi subtitles and thumbnail guides to close an observed language-fit gap. Titles, meta descriptions, canonical URLs and H1s remain unchanged because no first-party query evidence supports changing them. No paid analytics services, ads or direct external API calls were used. Social posts remain drafts; no merge or deployment.",
   "keywords": [
     {
       "keyword": "Hindi video editor",
@@ -23,14 +23,14 @@
       "language": "hi",
       "intent": "informational how-to",
       "targetPage": "guide-hindi-shorts.html",
-      "source": "Pre Tutorials India YouTube autocomplete sample (Oct 2026) provides topic-level Hinglish 'kaise' wording only; Google Trends India last-24h visible trend list rechecked 2026-11-26 and showed no matching creator-tool topic. Exact phrase volume and direction are not established.",
+      "source": "Pre Tutorials India YouTube autocomplete sample (Oct 2026) provides topic-level Hinglish 'kaise' wording only; Google Trends India last-24h visible trend list rechecked 2026-11-26 and showed no matching creator-tool topic. Exact phrase volume and direction are not established. Rechecked 2026-11-27 08:01 IST: no directly relevant creator-tool topic appeared in the visible India top-25 popular-video chart; this is not exact query-demand evidence.",
       "sourceUrl": "https://pretutorials.com/blog/how-india-searches-youtube-hinglish-data",
-      "checkedAt": "2026-11-26",
-      "trend": "No matching creator-tool query in the visible India top-24h trend entries checked 2026-11-26; exact query demand and time-series direction remain unverified.",
+      "checkedAt": "2026-11-27",
+      "trend": "No matching creator-tool topic in the visible India top-25 popular-video chart checked 2026-11-27 08:01 IST; exact query demand and direction remain unverified.",
       "priority": "high",
-      "evidenceType": "third-party topic-level autocomplete pattern plus current top-trend exclusion check; not search volume",
-      "trendSourceUrl": "https://trends.google.com/trending?geo=IN&hl=hi",
-      "trendDirection": "unverified; no matching creator-tool topic in the visible India top-24h trend entries"
+      "evidenceType": "topic-level Hinglish wording/page-fit evidence plus current popular-video exclusion check; not search volume",
+      "trendSourceUrl": "https://trends.cyberkendra.com/youtube-trends/india",
+      "trendDirection": "unverified; the reviewed chart ranks popular videos rather than exact search queries"
     },
     {
       "keyword": "online video editor",
@@ -65,15 +65,15 @@
       "language": "hi",
       "intent": "informational",
       "targetPage": "guide-hindi-shorts.html",
-      "source": "Pre Tutorials India YouTube autocomplete sample (Oct 2026) provides topic-level Hinglish 'kaise' wording only; Google Trends India last-24h visible trend list rechecked 2026-11-26 and showed no matching creator-tool topic. Exact phrase volume and direction are not established.",
-      "checkedAt": "2026-11-26",
-      "trend": "No matching creator-tool query in the visible India top-24h trend entries checked 2026-11-26; exact query demand and time-series direction remain unverified.",
+      "source": "Pre Tutorials India YouTube autocomplete sample (Oct 2026) provides topic-level Hinglish 'kaise' wording only; Google Trends India last-24h visible trend list rechecked 2026-11-26 and showed no matching creator-tool topic. Exact phrase volume and direction are not established. Rechecked 2026-11-27 08:01 IST: no directly relevant creator-tool topic appeared in the visible India top-25 popular-video chart; this is not exact query-demand evidence.",
+      "checkedAt": "2026-11-27",
+      "trend": "No matching creator-tool topic in the visible India top-25 popular-video chart checked 2026-11-27 08:01 IST; exact query demand and direction remain unverified.",
       "priority": "high",
       "fitCheckedAt": "2026-11-26",
-      "evidenceType": "third-party topic-level autocomplete pattern plus current top-trend exclusion check; not search volume",
+      "evidenceType": "topic-level Hinglish wording/page-fit evidence plus current popular-video exclusion check; not search volume",
       "sourceUrl": "https://pretutorials.com/blog/how-india-searches-youtube-hinglish-data",
-      "trendSourceUrl": "https://trends.google.com/trending?geo=IN&hl=hi",
-      "trendDirection": "unverified; no matching creator-tool topic in the visible India top-24h trend entries"
+      "trendSourceUrl": "https://trends.cyberkendra.com/youtube-trends/india",
+      "trendDirection": "unverified; the reviewed chart ranks popular videos rather than exact search queries"
     },
     {
       "keyword": "YouTube Shorts maker",
@@ -136,15 +136,16 @@
       "language": "hi",
       "intent": "informational how-to",
       "targetPage": "index.html#promptStudio",
-      "source": "Tarun Editz article 'All New Trending Video Editing Prompts 2026' dated 2026-11-20 and updated 2026-11-22; used only as a third-party social/editorial format signal. SHIF-A Video Prompt Builder rechecked 2026-11-26 and creates text prompts only. Exact search demand and time-series direction are unverified.",
+      "source": "Tarun Editz article 'All New Trending Video Editing Prompts 2026' dated 2026-11-20 and updated 2026-11-22; used only as a third-party social/editorial format signal. SHIF-A Video Prompt Builder rechecked 2026-11-26 and creates text prompts only. Exact search demand and time-series direction are unverified. Rechecked 2026-11-27 08:01 IST: the visible India top-25 popular-video list did not contain a creator-tool prompt topic; no query-level trend is established.",
       "sourceUrl": "https://taruneditz.com/all-new-trending-video-editing-prompts/",
-      "checkedAt": "2026-11-26",
-      "trend": "Recent third-party social/editorial prompt-format signal (20–22 Nov); no exact search trend or demand data verified.",
+      "checkedAt": "2026-11-27",
+      "trend": "No matching creator-tool topic in the visible India top-25 popular-video chart checked 2026-11-27 08:01 IST; prior third-party prompt coverage is editorial/social context only.",
       "priority": "medium",
-      "evidenceType": "third-party editorial/social-format signal plus product-fit check; not search volume",
+      "evidenceType": "product-fit plus third-party editorial context; no exact search-query trend evidence",
       "editorialCaveat": "Describe prompt drafting only; do not claim SHIF-A generates video.",
       "fitCheckedAt": "2026-11-26",
-      "trendDirection": "unverified for search; third-party social/editorial signal only"
+      "trendDirection": "unverified for search; the chart ranks videos, not exact queries; keep as a low-priority social/editorial idea only",
+      "trendSourceUrl": "https://trends.cyberkendra.com/youtube-trends/india"
     },
     {
       "keyword": "free thumbnail maker",
@@ -165,28 +166,29 @@
       "language": "hi",
       "intent": "informational",
       "targetPage": "guide-hindi-subtitles.html",
-      "source": "Current page-fit rechecked 2026-11-25 against guide-hindi-subtitles.html; direct query demand not independently verified.",
-      "checkedAt": "2026-11-25",
-      "trend": "No exact query or time-series evidence; existing guide fit confirmed",
+      "source": "Current page-fit rechecked 2026-11-25 against guide-hindi-subtitles.html; direct query demand not independently verified. Rechecked 2026-11-27 08:01 IST: page content is relevant but the current India top-25 popular-video chart does not establish exact Hindi search demand.",
+      "checkedAt": "2026-11-27",
+      "trend": "No matching creator-tool topic in the visible India top-25 popular-video chart checked 2026-11-27 08:01 IST; page relevance is clear, exact query demand is not measured.",
       "priority": "medium",
       "fitCheckedAt": "2026-11-25",
-      "evidenceType": "page-fit verified; search demand unverified",
+      "evidenceType": "page-topic and language-fit check plus current popular-video exclusion check; exact query demand unverified",
       "sourceUrl": "https://trademalikk-svg.github.io/clipx-ai-studio/guide-hindi-subtitles.html",
-      "trendDirection": "unverified; page fit does not establish search trend direction"
+      "trendDirection": "unverified; current source is a video-popularity chart, not exact Hindi search-query data",
+      "trendSourceUrl": "https://trends.cyberkendra.com/youtube-trends/india"
     },
     {
       "keyword": "YouTube thumbnail kaise banaye",
       "language": "hi",
       "intent": "informational how-to",
       "targetPage": "guide-youtube-thumbnail.html",
-      "source": "Pre Tutorials India YouTube autocomplete sample (Oct 2026) provides topic-level Hinglish 'kaise' wording only; Google Trends India last-24h visible trend list rechecked 2026-11-26 and showed no matching creator-tool topic. Exact phrase volume and direction are not established.",
+      "source": "Pre Tutorials India YouTube autocomplete sample (Oct 2026) provides topic-level Hinglish 'kaise' wording only; Google Trends India last-24h visible trend list rechecked 2026-11-26 and showed no matching creator-tool topic. Exact phrase volume and direction are not established. Rechecked 2026-11-27 08:01 IST: no directly relevant creator-tool topic appeared in the visible India top-25 popular-video chart; this is not exact query-demand evidence.",
       "sourceUrl": "https://pretutorials.com/blog/how-india-searches-youtube-hinglish-data",
-      "checkedAt": "2026-11-26",
-      "trend": "No matching creator-tool query in the visible India top-24h trend entries checked 2026-11-26; exact query demand and time-series direction remain unverified.",
+      "checkedAt": "2026-11-27",
+      "trend": "No matching creator-tool topic in the visible India top-25 popular-video chart checked 2026-11-27 08:01 IST; exact query demand and direction remain unverified.",
       "priority": "medium",
-      "evidenceType": "third-party topic-level autocomplete pattern plus current top-trend exclusion check; not search volume",
-      "trendSourceUrl": "https://trends.google.com/trending?geo=IN&hl=hi",
-      "trendDirection": "unverified; no matching creator-tool topic in the visible India top-24h trend entries"
+      "evidenceType": "topic-level Hinglish wording/page-fit evidence plus current popular-video exclusion check; not search volume",
+      "trendSourceUrl": "https://trends.cyberkendra.com/youtube-trends/india",
+      "trendDirection": "unverified; the reviewed chart ranks popular videos rather than exact search queries"
     },
     {
       "keyword": "लंबे वीडियो से YouTube Shorts कैसे बनाएं",
@@ -221,14 +223,15 @@
       "language": "hi",
       "intent": "informational",
       "targetPage": "guide-hindi-subtitles.html",
-      "source": "Hindi long-tail wording mapped to the existing subtitles guide; no connected Search Console query data or independent volume evidence.",
-      "checkedAt": "2026-11-25",
-      "trend": "unverified candidate; no live Hindi query data",
+      "source": "Hindi long-tail wording mapped to the existing subtitles guide; no connected Search Console query data or independent volume evidence. Rechecked 2026-11-27 08:01 IST: page content is relevant but the current India top-25 popular-video chart does not establish exact Hindi search demand.",
+      "checkedAt": "2026-11-27",
+      "trend": "No matching creator-tool topic in the visible India top-25 popular-video chart checked 2026-11-27 08:01 IST; page relevance is clear, exact query demand is not measured.",
       "priority": "medium",
-      "evidenceType": "localized content hypothesis",
+      "evidenceType": "page-topic and language-fit check plus current popular-video exclusion check; exact query demand unverified",
       "fitCheckedAt": "2026-11-25",
       "sourceUrl": "https://trademalikk-svg.github.io/clipx-ai-studio/guide-hindi-subtitles.html",
-      "trendDirection": "unverified; page fit does not establish search trend direction"
+      "trendDirection": "unverified; current source is a video-popularity chart, not exact Hindi search-query data",
+      "trendSourceUrl": "https://trends.cyberkendra.com/youtube-trends/india"
     },
     {
       "keyword": "free AI tools",
@@ -250,14 +253,14 @@
       "language": "hi",
       "intent": "informational how-to",
       "targetPage": "guide-hindi-subtitles.html",
-      "source": "Pre Tutorials India YouTube autocomplete sample (Oct 2026) provides topic-level Hinglish 'kaise' wording only; Google Trends India last-24h visible trend list rechecked 2026-11-26 and showed no matching creator-tool topic. Exact phrase volume and direction are not established.",
+      "source": "Pre Tutorials India YouTube autocomplete sample (Oct 2026) provides topic-level Hinglish 'kaise' wording only; Google Trends India last-24h visible trend list rechecked 2026-11-26 and showed no matching creator-tool topic. Exact phrase volume and direction are not established. Rechecked 2026-11-27 08:01 IST: no directly relevant creator-tool topic appeared in the visible India top-25 popular-video chart; this is not exact query-demand evidence.",
       "sourceUrl": "https://pretutorials.com/blog/how-india-searches-youtube-hinglish-data",
-      "checkedAt": "2026-11-26",
-      "trend": "No matching creator-tool query in the visible India top-24h trend entries checked 2026-11-26; exact query demand and time-series direction remain unverified.",
+      "checkedAt": "2026-11-27",
+      "trend": "No matching creator-tool topic in the visible India top-25 popular-video chart checked 2026-11-27 08:01 IST; exact query demand and direction remain unverified.",
       "priority": "low",
-      "evidenceType": "third-party topic-level autocomplete pattern plus current top-trend exclusion check; not search volume",
-      "trendSourceUrl": "https://trends.google.com/trending?geo=IN&hl=hi",
-      "trendDirection": "unverified; no matching creator-tool topic in the visible India top-24h trend entries"
+      "evidenceType": "topic-level Hinglish wording/page-fit evidence plus current popular-video exclusion check; not search volume",
+      "trendSourceUrl": "https://trends.cyberkendra.com/youtube-trends/india",
+      "trendDirection": "unverified; the reviewed chart ranks popular videos rather than exact search queries"
     },
     {
       "keyword": "AI cartoon video generator",
@@ -358,15 +361,15 @@
       "language": "en",
       "intent": "informational how-to",
       "targetPage": "index.html#clipSettings",
-      "source": "SHIF-A homepage Clip Settings rechecked 2026-11-26: the live interface offers 9:16 Shorts, 16:9 Landscape and 1:1 Square options. Added as a low-priority content candidate for a practical format guide; no exact query-demand evidence.",
+      "source": "SHIF-A homepage Clip Settings rechecked 2026-11-26: the live interface offers 9:16 Shorts, 16:9 Landscape and 1:1 Square options. Added as a low-priority content candidate for a practical format guide; no exact query-demand evidence. Rechecked 2026-11-27 08:01 IST against the India top-25 popular-video snapshot; no creator-tool topic appeared. This does not establish exact query direction.",
       "sourceUrl": "https://trademalikk-svg.github.io/clipx-ai-studio/#clipSettings",
-      "trendSourceUrl": "https://trends.google.com/trending?geo=IN&hl=hi",
-      "checkedAt": "2026-11-26",
+      "trendSourceUrl": "https://trends.cyberkendra.com/youtube-trends/india",
+      "checkedAt": "2026-11-27",
       "fitCheckedAt": "2026-11-26",
-      "trend": "No matching creator-tool query in the visible India top-24h trend entries checked 2026-11-26; exact query demand and time-series direction unverified.",
+      "trend": "No matching creator-tool topic in the visible India top-25 popular-video chart checked 2026-11-27 08:01 IST; product fit remains verified by the live 9:16, 16:9 and 1:1 controls.",
       "priority": "low",
-      "evidenceType": "feature-fit verified; search demand unverified",
-      "trendDirection": "unverified; no matching creator-tool topic in the visible India top-24h trend entries"
+      "evidenceType": "live product feature fit plus current popular-video exclusion check; exact query demand unverified",
+      "trendDirection": "unverified for search; product feature fit is verified, but the reviewed chart is not a query time series"
     }
   ],
   "gscObservations": [
