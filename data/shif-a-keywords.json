@@ -1,8 +1,8 @@
 {
   "project": "SHIF-A AI",
   "lastUpdated": "2026-11-27",
-  "updateStatus": "2026-11-27-0800-research-content-drafts",
-  "note": "Refreshed 2026-11-27 at 08:01 IST. The India YouTube top-25 popular-video chart snapshot timestamped 05:36 IST was reviewed; visible entries were mainly music, film trailers, gaming and entertainment, with no clear SHIF-A creator-tool topic. This is a video-popularity chart, not a search-query trend report. No new exact-demand keyword was added; 26 records remain unique. Eight relevant Hindi/English candidates were rechecked, with trend direction explicitly unverified wherever exact-query time-series evidence is absent. The official Google Trends page was not readable in this run, and no Search Console property is selected in the previously checked connector. Hindi quick-start copy is being added to the existing English-first Hindi subtitles and thumbnail guides to close an observed language-fit gap. Titles, meta descriptions, canonical URLs and H1s remain unchanged because no first-party query evidence supports changing them. No paid analytics services, ads or direct external API calls were used. Social posts remain drafts; no merge or deployment.",
+  "updateStatus": "2026-11-27-1700-evening-review-complete",
+  "note": "Morning research and all 10 content drafts were completed at 08:01 IST. Evening review checked the India YouTube mostPopular chart at 16:38 IST; visible leading topics were music, film trailers and gaming, but this is a popular-video chart, not search-query demand. A dated Google Trends export for India YouTube Search (9 Oct–8 Nov) lists the broad query 'shorts' at relative index 4; this is historical context only. Google Trends Explore exact-phrase comparison was inaccessible. No exact-demand keyword was added, and all exact trend directions remain unverified. HYPD has connected GA4 and Search Console sources but no selected SHIF-A property/site; Metricool returned only the unrelated Ishqwala scene brand; vidIQ returned no connected YouTube channels. Views, reach, clicks, signups and customers are unavailable, not zero. No social posts, merge or deployment. The Growth Manager script reads the static keyword map and has no persistent task-status write; the clipx-ai-studio Supabase project is inactive and its database was inaccessible.",
   "keywords": [
     {
       "keyword": "Hindi video editor",
@@ -442,24 +442,43 @@
       "checkedAt": "2026-11-25",
       "observation": "Content should add substantial value and should not be created merely because a topic is trending.",
       "use": "Draft the prompt guide as a useful article candidate; do not create a thin new page today."
+    },
+    {
+      "source": "Cyber Kendra Trends Desk — YouTube Trending Videos in India",
+      "sourceUrl": "https://trends.cyberkendra.com/youtube-trends/india",
+      "checkedAt": "2026-11-27T16:55:00+05:30",
+      "observation": "The page's 27 Nov 2026 snapshot was updated at 16:38 IST and showed a 25-video India popular chart led by music, film trailers and gaming. The page states that it reads YouTube's public mostPopular chart; it is not an exact search-query report. No directly relevant SHIF-A creator-tool topic was identified.",
+      "use": "Do not add a trend keyword or mark existing phrases as rising from this chart. Keep exact-query trend direction unverified."
+    },
+    {
+      "source": "PageTraffic — Top YouTube Searches, November 2026 (India Google Trends export)",
+      "sourceUrl": "https://www.pagetraffic.com/blog/top-youtube-searches/",
+      "checkedAt": "2026-11-27T16:55:00+05:30",
+      "observation": "The India YouTube Search export covers 9 Oct–8 Nov 2026 and lists the broad query 'shorts' at relative index 4; it is not monthly search volume and was exported on 9 Nov.",
+      "use": "Historical format-level context only. It does not establish rising demand for any exact SHIF-A keyword."
     }
   ],
   "analyticsAvailability": {
-    "checkedAt": "2026-11-25",
-    "googleSearchConsole": "Not refreshed: GSC Wizard returned payment_required because its trial ended; no paid subscription used.",
-    "ga4": "Connected property list did not identify a SHIF-A property; no SHIF-A report queried.",
-    "metricool": "Only the Ishqwala scene brand was returned; not treated as SHIF-A analytics.",
-    "vidIQ": "No connected YouTube channels returned; no channel analytics available.",
-    "signupsCustomers": "No connected SHIF-A product analytics endpoint identified; unavailable, not zero."
+    "checkedAt": "2026-11-27T16:56:00+05:30",
+    "googleSearchConsole": "HYPD reports connected sites but none selected; no SHIF-A query report available.",
+    "ga4": "HYPD reports connected properties but none selected; no SHIF-A GA4 report available.",
+    "metricool": "Only the unrelated Ishqwala scene brand returned; excluded from SHIF-A analytics.",
+    "vidIQ": "No connected YouTube channels returned; channel analytics unavailable.",
+    "signupsCustomers": "No SHIF-A product-analytics endpoint available through connected sources; unavailable, not zero."
   },
   "eveningReview": {
-    "checkedAt": "2026-11-26T17:00:58+05:30",
-    "ga4": "No selected property; metrics unavailable",
-    "searchConsole": "No selected site; metrics unavailable",
-    "metricool": "Only unrelated Ishqwala scene brand returned; excluded",
-    "vidIQ": "No connected YouTube channels returned",
-    "shifAOwnedSocialAccounts": "Not verified",
+    "checkedAt": "2026-11-27T16:56:00+05:30",
+    "ga4": "Connected properties exist in HYPD but none selected; no SHIF-A report queried.",
+    "searchConsole": "Connected sites exist in HYPD but none selected; no SHIF-A query data.",
+    "metricool": "Only unrelated Ishqwala scene brand returned; excluded.",
+    "vidIQ": "No connected YouTube channels returned; analytics unavailable.",
+    "shifAOwnedSocialAccounts": "Not verified; no SHIF-A brand was returned in Metricool.",
     "metricsStatus": "unavailable-not-zero",
-    "nextPlanDate": "2026-11-27"
+    "topPerformingContent": "Not determinable; no SHIF-A-specific analytics available.",
+    "missingDrafts": "None; 2 Shorts, 2 Reels, 2 Facebook posts, 3 Pinterest Pins and 1 SEO article are present.",
+    "communityEngagement": "15-minute checklist drafted; no comments or replies sent because no SHIF-A-owned account was verified.",
+    "trendCheck": "India YouTube mostPopular chart checked 16:55 IST; not a search-query report. Google Trends exact-phrase Explore page inaccessible; exact trend directions remain unverified.",
+    "toolManager": "Growth Manager reads static keyword JSON and has no task-status write. Supabase clipx-ai-studio project is INACTIVE and its database was inaccessible.",
+    "nextPlanDate": "2026-11-28"
   }
 }
